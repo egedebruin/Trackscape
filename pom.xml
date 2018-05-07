@@ -7,6 +7,14 @@
   <artifactId>Trackscape</artifactId>
   <packaging>jar</packaging>
   <version>0.1</version>
-  <name>BEP Trackscape</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <name>BEP Trackscape</name>
   <url>https://github.com/egedebruin/Trackscape</url>
 </project>
