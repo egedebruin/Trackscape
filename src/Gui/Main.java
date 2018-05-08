@@ -35,7 +35,6 @@ public class Main extends Application {
         titlePane.setAlignment(Pos.TOP_CENTER);
         BorderPane videoPane = new BorderPane();
         FlowPane bottomPane = new FlowPane();
-        StackPane stack = new StackPane();
 
         // Structure of panes inside main pane
         mainPane.setTop(titlePane);
@@ -70,8 +69,10 @@ public class Main extends Application {
         videoPane.setTop(menu);
 
         // The Mediaplayer
+        StackPane mediaplayer = new StackPane();
+
         MediaView video_mv = new MediaView();
-        stack.getChildren().addAll(new Rectangle(1000, 600, Color.BLACK), video_mv);
+        mediaplayer.getChildren().addAll(new Rectangle(1000, 600, Color.BLACK), video_mv);
         video_open.setOnAction(t -> {
             FileChooser chooser = new FileChooser();
             File file = chooser.showOpenDialog(primaryStage);
@@ -82,7 +83,7 @@ public class Main extends Application {
                 video_mp.play();
             }
         });
-        videoPane.setBottom(stack);
+        videoPane.setCenter(mediaplayer);
 
         //-------------------- Bottom of the application (button)-------------
         Text text2 = new Text("© TrackScape");
