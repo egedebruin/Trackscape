@@ -31,23 +31,28 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.util.ArrayList;
 
-// Import necessary Java class from src code to call method to send video source to
+// Import necessary Java class from src code
+// to call method to send video source to
 
 /**
- * Main
+ * Main.
  * Class that constructs and builds the GUI
  */
 public class Main extends Application {
-    private MediaView video_mv = new MediaView();
+    /**
+     * videoMv.
+     * Deals with the mediaPlayer
+     */
+    private MediaView videoMv = new MediaView();
 
     /**
-     * start
+     * start.
      * Constructs the structure of the GUI
      * @param primaryStage
      * @throws Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(final Stage primaryStage) throws Exception {
         primaryStage.setTitle("TrackScape");
 
         // Choose best-fitted pane for the application
@@ -61,22 +66,25 @@ public class Main extends Application {
         //root.setRight(...);
 
         // Show the scene
-        Scene scene = new Scene(root,1250, 800);
+        final int width = 1250;
+        final int height = 800;
+        Scene scene = new Scene(root, width, height);
         scene.getStylesheets().add("stylesheet.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     /**
-     * createVideoPane
+     * createVideoPane.
      * Creates the center pane for the root, containing menu and mediaPlayer
-     * @param primaryStage
+     * @param primaryStage starting stage
      * @return videoPane
      */
-    private Pane createVideoPane(Stage primaryStage) {
+    private Pane createVideoPane(final Stage primaryStage) {
         BorderPane videoPane = new BorderPane();
 
-        ArrayList<Pane> menuMediaPane = createMenuMediaPane(videoPane, primaryStage);
+        ArrayList<Pane> menuMediaPane =
+                createMenuMediaPane(videoPane, primaryStage);
 
         videoPane.setTop(menuMediaPane.get(0));
         videoPane.setCenter(menuMediaPane.get(1));
@@ -85,38 +93,42 @@ public class Main extends Application {
     }
 
     /**
-     * createMenuMediaPane
+     * createMenuMediaPane.
      * Creates the Menu pane and mediaPlayer pane
-     * @param videoPane
-     * @param primaryStage
+     * @param videoPane pane that includes menu and mediaplayer
+     * @param primaryStage starting stage
      * @return ArrayList<Pane>
      */
-    private ArrayList<Pane> createMenuMediaPane(Pane videoPane, Stage primaryStage) {
+    private ArrayList<Pane> createMenuMediaPane(final Pane videoPane,
+                                                final Stage primaryStage) {
         ArrayList<Pane> menuMediaList = new ArrayList<>();
 
         // ------------- Create Menu -------------
-        MenuBar video_menuBar = new MenuBar();
-        video_menuBar.prefWidthProperty().bind(videoPane.widthProperty());
+        MenuBar menu = new MenuBar();
+        menu.prefWidthProperty().bind(videoPane.widthProperty());
 
         // Main menu items
-        Menu video_menuFile = new Menu("File");
+        Menu menuFile = new Menu("File");
         Menu data = new Menu("Overview of Statistics");
         // Menu options
-        MenuItem open_video = new MenuItem("Open File...");
-        MenuItem connect_stream = new MenuItem("Connect Stream...");
+        MenuItem openVideo = new MenuItem("Open File...");
+        MenuItem connectStream = new MenuItem("Connect Stream...");
         // Add menu options to main menu items
-        video_menuFile.getItems().addAll(open_video, connect_stream);
-        video_menuBar.getMenus().addAll(video_menuFile, data);
+        menuFile.getItems().addAll(openVideo, connectStream);
+        menu.getMenus().addAll(menuFile, data);
 
         StackPane menuPane = new StackPane();
-        menuPane.getChildren().add(video_menuBar);
+        menuPane.getChildren().add(menu);
 
         // ------------- Create MediaPlayer Pane -------------
         StackPane mediaPlayerPane = new StackPane();
-        mediaPlayerPane.getChildren().addAll(new Rectangle(1000, 600, Color.BLACK), video_mv);
+        final int width = 1000;
+        final int height = 600;
+        mediaPlayerPane.getChildren().
+                addAll(new Rectangle(width, height, Color.BLACK), videoMv);
 
         // When video_open option is clicked
-        openVideo(open_video, primaryStage);
+        openVideo(openVideo, primaryStage);
 
         // Add menuPane and mediaPlayerPane to the list of panes
         menuMediaList.add(menuPane);
@@ -126,34 +138,37 @@ public class Main extends Application {
     }
 
     /**
-     * openVideo
+     * openVideo.
      * Opens the video the user selected in the mediaPlayer
-     * @param open_video
-     * @param primaryStage
+     * @param openVideo menu item to open a video
+     * @param primaryStage starting stage
      */
-    private void openVideo(MenuItem open_video, Stage primaryStage) {
-        open_video.setOnAction(t -> {
+    private void openVideo(final MenuItem openVideo,
+                           final Stage primaryStage) {
+        openVideo.setOnAction(t -> {
             FileChooser chooser = new FileChooser();
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
-                Media video_source = new Media(file.toURI().toString());
-                MediaPlayer video_mp = new MediaPlayer(video_source);
-                video_mv.setMediaPlayer(video_mp);
+                Media videoSource = new Media(file.toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(videoSource);
+                videoMv.setMediaPlayer(mediaPlayer);
             }
         });
     }
 
     /**
-     * createTitlePane
+     * createTitlePane.
      * Creates the top pane of the root
      * @return Pane
      */
     private Pane createTitlePane() {
+        final int size = 80;
+
         FlowPane titlePane = new FlowPane();
         titlePane.setAlignment(Pos.TOP_CENTER);
 
         Text text = new Text("TrackScape");
-        text.setFont(Font.font("Edwardian Script ITC", 80));
+        text.setFont(Font.font("Edwardian Script ITC", size));
         text.setFill(Color.BLACK);
         text.setStroke(Color.LIGHTSLATEGREY);
         text.setStrokeWidth(2);
@@ -164,15 +179,16 @@ public class Main extends Application {
     }
 
     /**
-     * createBottomPane
+     * createBottomPane.
      * Creates the bottom pane of the root
      * @return Pane
      */
     private Pane createBottomPane() {
+        final int size = 20;
         FlowPane bottomPane = new FlowPane();
 
         Text text2 = new Text("© TrackScape");
-        text2.setFont(Font.font("Edwardian Script ITC", 30));
+        text2.setFont(Font.font("Edwardian Script ITC", size));
         text2.setFill(Color.BLACK);
         text2.setStroke(Color.LIGHTSLATEGREY);
         text2.setStrokeWidth(1);
@@ -183,28 +199,38 @@ public class Main extends Application {
     }
 
     /**
-     * createMediaBar()
+     * createMediaBar.
      * Creates a mediaBar for the mediaPlayer
      * @return HBox
      */
     private HBox createMediaBar() {
-        // Create the bar in which the video can be controlled (play, pause, scroll etc.)
+        final int top = 5;
+        final int right = 10;
+        final int bottom = 5;
+        final int left = 10;
+        final int minWidth = 50;
+        final int prefWidth = 130;
+
+        // Create the bar in which the video can be controlled
         HBox mediaBar = new HBox();
         mediaBar.setAlignment(Pos.CENTER);
-        mediaBar.setPadding(new Insets(5, 10, 5, 10));
+        mediaBar.setPadding(new Insets(top, right, bottom, left));
 
         // Create the play button
         final Button playButton = new Button(">");
         playButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) {
-                MediaPlayer mp = video_mv.getMediaPlayer();
+            public void handle(final ActionEvent event) {
+                MediaPlayer mp = videoMv.getMediaPlayer();
                 MediaPlayer.Status status = mp.getStatus();
 
-                if(status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED){
+                if (status == MediaPlayer.Status.UNKNOWN
+                        || status == MediaPlayer.Status.HALTED) {
                     return;
                 }
-                if(status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY || status == MediaPlayer.Status.STOPPED){
+                if (status == MediaPlayer.Status.PAUSED
+                        || status == MediaPlayer.Status.READY
+                        || status == MediaPlayer.Status.STOPPED) {
                     mp.play();
                 } else {
                     mp.pause();
@@ -216,24 +242,25 @@ public class Main extends Application {
         Label spacer = new Label("   ");
         Label timeLabel = new Label("Time: ");
         Label playTime = new Label();
-        playTime.setPrefWidth(130);
-        playTime.setMinWidth(50);
+        playTime.setPrefWidth(prefWidth);
+        playTime.setMinWidth(minWidth);
         Slider timeSlider = new Slider();
         HBox.setHgrow(timeSlider, Priority.ALWAYS);
-        timeSlider.setMinWidth(50);
+        timeSlider.setMinWidth(minWidth);
         timeSlider.setMaxWidth(Double.MAX_VALUE);
 
-        mediaBar.getChildren().addAll(playButton, spacer, timeLabel, timeSlider, playTime);
+        mediaBar.getChildren().
+                addAll(playButton, spacer, timeLabel, timeSlider, playTime);
 
         return mediaBar;
     }
 
     /**
-     * main
+     * main.
      * Launches the application
-     * @param args
+     * @param args arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
 
