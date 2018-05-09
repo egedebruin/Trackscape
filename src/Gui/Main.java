@@ -1,5 +1,7 @@
-package Gui;
+package gui;
 
+import java.io.File;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,17 +9,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -25,11 +27,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser;
-
-import java.io.File;
-import java.util.ArrayList;
+import javafx.stage.Stage;
 
 // Import necessary Java class from src code
 // to call method to send video source to
@@ -48,8 +47,8 @@ public class Main extends Application {
     /**
      * start.
      * Constructs the structure of the GUI
-     * @param primaryStage
-     * @throws Exception
+     * @param primaryStage starting stage
+     * @throws Exception when there are errors
      */
     @Override
     public void start(final Stage primaryStage) throws Exception {
@@ -97,12 +96,10 @@ public class Main extends Application {
      * Creates the Menu pane and mediaPlayer pane
      * @param videoPane pane that includes menu and mediaplayer
      * @param primaryStage starting stage
-     * @return ArrayList<Pane>
+     * @return ArrayList
      */
     private ArrayList<Pane> createMenuMediaPane(final Pane videoPane,
                                                 final Stage primaryStage) {
-        ArrayList<Pane> menuMediaList = new ArrayList<>();
-
         // ------------- Create Menu -------------
         MenuBar menu = new MenuBar();
         menu.prefWidthProperty().bind(videoPane.widthProperty());
@@ -124,13 +121,14 @@ public class Main extends Application {
         StackPane mediaPlayerPane = new StackPane();
         final int width = 1000;
         final int height = 600;
-        mediaPlayerPane.getChildren().
-                addAll(new Rectangle(width, height, Color.BLACK), videoMv);
+        mediaPlayerPane.getChildren()
+                .addAll(new Rectangle(width, height, Color.BLACK), videoMv);
 
         // When video_open option is clicked
         openVideo(openVideo, primaryStage);
 
-        // Add menuPane and mediaPlayerPane to the list of panes
+        // Add menuPane and mediaPlayerPane to list of panes
+        ArrayList<Pane> menuMediaList = new ArrayList<>();
         menuMediaList.add(menuPane);
         menuMediaList.add(mediaPlayerPane);
 
@@ -185,7 +183,6 @@ public class Main extends Application {
      */
     private Pane createBottomPane() {
         final int size = 20;
-        FlowPane bottomPane = new FlowPane();
 
         Text text2 = new Text("© TrackScape");
         text2.setFont(Font.font("Edwardian Script ITC", size));
@@ -193,6 +190,7 @@ public class Main extends Application {
         text2.setStroke(Color.LIGHTSLATEGREY);
         text2.setStrokeWidth(1);
 
+        FlowPane bottomPane = new FlowPane();
         bottomPane.getChildren().addAll(text2, createMediaBar());
 
         return bottomPane;
@@ -242,15 +240,16 @@ public class Main extends Application {
         Label spacer = new Label("   ");
         Label timeLabel = new Label("Time: ");
         Label playTime = new Label();
+        Slider timeSlider = new Slider();
+
+        mediaBar.getChildren()
+                .addAll(playButton, spacer, timeLabel, timeSlider, playTime);
+
         playTime.setPrefWidth(prefWidth);
         playTime.setMinWidth(minWidth);
-        Slider timeSlider = new Slider();
         HBox.setHgrow(timeSlider, Priority.ALWAYS);
         timeSlider.setMinWidth(minWidth);
         timeSlider.setMaxWidth(Double.MAX_VALUE);
-
-        mediaBar.getChildren().
-                addAll(playButton, spacer, timeLabel, timeSlider, playTime);
 
         return mediaBar;
     }
