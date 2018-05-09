@@ -25,5 +25,8 @@ hs_err_pid*
 *.iml
 .idea/
 
-# maven shizzle
+# Maven shizzle
 /target
+
+# OpenCV shizzle
+*.dll
