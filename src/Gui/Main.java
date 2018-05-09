@@ -1,14 +1,13 @@
 package Gui;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -17,7 +16,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 
@@ -80,10 +78,59 @@ public class Main extends Application {
                 Media video_source = new Media(file.toURI().toString());
                 MediaPlayer video_mp = new MediaPlayer(video_source);
                 video_mv.setMediaPlayer(video_mp);
-                video_mp.play();
             }
         });
         videoPane.setCenter(mediaplayer);
+
+        // Create the bar in which the video can be controlled (play, pause, scroll etc.)
+        HBox mediaBar = new HBox();
+        mediaBar.setAlignment(Pos.CENTER);
+        mediaBar.setPadding(new Insets(5, 10, 5, 10));
+
+        // Create the play button
+        final Button playButton = new Button(">");
+        playButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                MediaPlayer mp = video_mv.getMediaPlayer();
+                MediaPlayer.Status status = mp.getStatus();
+
+                if(status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED){
+                    return;
+                }
+
+                if(status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY || status == MediaPlayer.Status.STOPPED){
+                    mp.play();
+                } else {
+                    mp.pause();
+                }
+            }
+        });
+
+        mediaBar.getChildren().add(playButton);
+
+        // Add spacer
+        Label spacer = new Label("   ");
+        mediaBar.getChildren().add(spacer);
+
+        // Add Time label
+        Label timeLabel = new Label("Time: ");
+        mediaBar.getChildren().add(timeLabel);
+
+        // Add time slider
+        Slider timeSlider = new Slider();
+        HBox.setHgrow(timeSlider, Priority.ALWAYS);
+        timeSlider.setMinWidth(50);
+        timeSlider.setMaxWidth(Double.MAX_VALUE);
+        mediaBar.getChildren().add(timeSlider);
+
+        // Add Play label
+        Label playTime = new Label();
+        playTime.setPrefWidth(130);
+        playTime.setMinWidth(50);
+        mediaBar.getChildren().add(playTime);
+
+        videoPane.setBottom(mediaBar);
 
         //-------------------- Bottom of the application (button)-------------
         Text text2 = new Text("© TrackScape");
