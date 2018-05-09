@@ -1,4 +1,4 @@
-package Camera;
+package camera;
 
 import org.junit.jupiter.api.Test;
 
