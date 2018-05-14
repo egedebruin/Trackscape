@@ -1,5 +1,6 @@
 package gui;
 
+import handlers.CameraHandler;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,16 +39,18 @@ import javafx.util.Duration;
  * Class that constructs and builds the GUI
  */
 public class Main extends Application {
+
     /**
      * Class variables.
      */
     private boolean validVid = false;
-    private final int timeframe = 500;
+    private final int timeframe = 300;
     private int counter = 0;
     private ImageView imageView = new ImageView();
     private Timeline timeline = new Timeline(
         new KeyFrame(Duration.millis(timeframe), e -> showFrame())
     );
+    private CameraHandler cameraHandler = new CameraHandler();
 
     /**
      * start.
@@ -158,8 +161,8 @@ public class Main extends Application {
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
                 String fileUrl = file.toURI().toString();
-                //Send fileUrl to CameraHandler (!)
                 validVid = true;
+                cameraHandler.addCamera(fileUrl);
             }
         });
     }
@@ -174,14 +177,14 @@ public class Main extends Application {
                                final Stage primaryStage) {
         connectStream.setOnAction(t -> {
             // Get url from user
-            // Send to CameraHandler
+            // Send to handlers.CameraHandler
             validVid = true;
         });
     }
 
     /**
      * askFrame.
-     * Ask for new frame every 500 milliseconds
+     * Ask for new frame every time unit
      */
     private void askFrame() {
         final int cycles = 100;
@@ -208,15 +211,14 @@ public class Main extends Application {
 
     /**
      * retrieveFrame.
-     * Retrieve last frame from video reader in CameraHandler
+     * Retrieve last frame from video reader in handlers.CameraHandler
      * @return Image
      */
     private Image retrieveFrame() {
         final int width = 750;
         final int height = 500;
-        // Call to method in Main that returns bufferedImage (!)
-        BufferedImage bufferedFrame = new BufferedImage(
-            width, height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bufferedFrame =
+            cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
         Image frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         return frame;
     }
@@ -317,6 +319,9 @@ public class Main extends Application {
      * @param args arguments
      */
     public static void main(final String[] args) {
+        System.load(System.getProperty("user.dir") + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir") + File.separator + "libs" + File.separator + "opencv_java341.dll");
+
         launch(args);
     }
 

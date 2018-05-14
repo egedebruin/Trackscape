@@ -1,3 +1,5 @@
+package handlers;
+
 import camera.Camera;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
