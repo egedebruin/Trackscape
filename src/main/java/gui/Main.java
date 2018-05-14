@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.animation.KeyFrame;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -50,7 +50,7 @@ public class Main extends Application {
 
     /**
      * start.
-     * Constructs the structure of the GUI
+     * Construct the structure of the GUI
      * @param primaryStage starting stage
      */
     @Override
@@ -81,7 +81,7 @@ public class Main extends Application {
 
     /**
      * createVideoPane.
-     * Creates the center pane for the root, containing menu and mediaPlayer
+     * Create the center pane for the root, containing menu and mediaPlayer
      * @param primaryStage starting stage
      * @return videoPane
      */
@@ -99,8 +99,8 @@ public class Main extends Application {
 
     /**
      * createMenuMediaPane.
-     * Creates the Menu pane and mediaPlayer pane
-     * @param videoPane pane that includes menu and mediaplayer
+     * Create the Menu pane and mediaPlayer pane
+     * @param videoPane pane that includes menu and mediaPlayer
      * @param primaryStage starting stage
      * @return ArrayList
      */
@@ -131,8 +131,9 @@ public class Main extends Application {
         mediaPlayerPane.getChildren()
                 .addAll(new Rectangle(width, height, Color.BLACK), imageView);
 
-        // When OpenVideo option is clicked
+        // When menu options are clicked
         openVideo(openVideo, primaryStage);
+        connectStream(connectStream, primaryStage);
 
         // Add menuPane and mediaPlayerPane to list of panes
         ArrayList<Pane> menuMediaList = new ArrayList<>();
@@ -144,7 +145,7 @@ public class Main extends Application {
 
     /**
      * openVideo.
-     * Opens the video the user selected in the mediaPlayer
+     * Get video file url from user
      * @param openVideo menu item to open a video
      * @param primaryStage starting stage
      */
@@ -155,23 +156,39 @@ public class Main extends Application {
             chooser.setTitle("Open Video File");
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
-                Media videoSource = new Media(file.toURI().toString());
-                //Send videoSource to CameraHandler
+                String fileUrl = file.toURI().toString();
+                //Send fileUrl to CameraHandler (!)
             }
-
-            // Ask for new frame every 500 milliseconds
-            Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(500), e -> showFrame())
-            );
-            timeline.setCycleCount(Animation.INDEFINITE);
-            timeline.play();
-
         });
+        askFrame();
+    }
+
+    /**
+     * connectStream.
+     * Get url of the stream from user
+     */
+    private void connectStream(final MenuItem connectStream, final Stage primaryStage) {
+        // Get url from user
+        // Send to CameraHandler
+        askFrame();
+    }
+
+    /**
+     * askFrame.
+     * Ask for new frame every 500 milliseconds
+     */
+    private void askFrame() {
+        int timeFrame = 500;
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.millis(timeFrame), e -> showFrame())
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     /**
      * showFrame.
-     * Retrieves current frame and shows it in ImageView
+     * Retrieve current frame and show in ImageView
      */
     private void showFrame() {
         // Should do this part every few milliseconds (!!!)
@@ -185,7 +202,7 @@ public class Main extends Application {
 
     /**
      * retrieveFrame.
-     * Retrieves last frame from video reader in CameraHandler
+     * Retrieve last frame from video reader in CameraHandler
      * @return Image
      */
     private Image retrieveFrame() {
@@ -198,7 +215,7 @@ public class Main extends Application {
 
     /**
      * createTitlePane.
-     * Creates the top pane of the root
+     * Create the top pane of the root
      * @return Pane
      */
     private Pane createTitlePane() {
@@ -220,7 +237,7 @@ public class Main extends Application {
 
     /**
      * createBottomPane.
-     * Creates the bottom pane of the root
+     * Create the bottom pane of the root
      * @return Pane
      */
     private Pane createBottomPane() {
@@ -240,7 +257,7 @@ public class Main extends Application {
 
     /**
      * createMediaBar.
-     * Creates a mediaBar for the mediaPlayer
+     * Create a mediaBar for the mediaPlayer
      * @return HBox
      */
     private HBox createMediaBar() {
@@ -295,7 +312,7 @@ public class Main extends Application {
 
     /**
      * main.
-     * Launches the application
+     * Launch the application
      * @param args arguments
      */
     public static void main(final String[] args) {
