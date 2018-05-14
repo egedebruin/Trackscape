@@ -4,7 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.animation.Animation;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.animation.KeyFrame;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,6 +33,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 // Import necessary Java class from src code
 // to call method to send video source to
@@ -155,17 +159,41 @@ public class Main extends Application {
                 //Send videoSource to CameraHandler
             }
 
-            File image = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\test.jpg");
-            Image currentFrame = new Image(image.toURI().toString());
-            //Image currentFrame = retrieveFrame();
+            // Ask for new frame every 500 milliseconds
+            Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(500), e -> showFrame())
+            );
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
 
-            imageView.setImage(currentFrame);
-            imageView.setFitWidth(400);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            imageView.setCache(true);
         });
+    }
+
+    /**
+     * showFrame.
+     * Retrieves current frame and shows it in ImageView
+     */
+    private void showFrame() {
+        // Should do this part every few milliseconds (!!!)
+        Image currentFrame = retrieveFrame();
+        imageView.setImage(currentFrame);
+        imageView.setFitWidth(750);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setCache(true);
+    }
+
+    /**
+     * retrieveFrame.
+     * Retrieves last frame from video reader in CameraHandler
+     * @return Image
+     */
+    private Image retrieveFrame() {
+        // Call to method in Main that returns bufferedImage (!)
+        BufferedImage bufferedFrame = new BufferedImage(
+            750, 500, BufferedImage.TYPE_INT_RGB);
+        Image frame = SwingFXUtils.toFXImage(bufferedFrame, null);
+        return frame;
     }
 
     /**
@@ -263,19 +291,6 @@ public class Main extends Application {
         timeSlider.setMaxWidth(Double.MAX_VALUE);
 
         return mediaBar;
-    }
-
-    /**
-     * retrieveFrame.
-     * Retrieves last frame from video reader in CameraHandler
-     * @return Image
-     */
-    private Image retrieveFrame() {
-        // Call to method in Main that returns bufferedImage (!)
-        BufferedImage bufferedFrame = new BufferedImage(
-            500, 500, BufferedImage.TYPE_INT_RGB);
-        Image frame = SwingFXUtils.toFXImage(bufferedFrame, null);
-        return frame;
     }
 
     /**
