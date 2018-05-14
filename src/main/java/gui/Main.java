@@ -47,7 +47,6 @@ public class Main extends Application {
     /**
      * Class variables.
      */
-    private boolean validVid = false;
     private final int timeframe = 300;
     private int counter = 0;
     private ImageView imageView = new ImageView();
@@ -165,7 +164,6 @@ public class Main extends Application {
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
                 String fileUrl = file.toString();
-                validVid = true;
                 cameraHandler.addCamera(fileUrl);
             }
         });
@@ -332,7 +330,7 @@ public class Main extends Application {
         // Create the play/pauze button
         final Button playButton = new Button(">");
         playButton.setOnAction(event -> {
-            if (validVid) {
+            if (!cameraHandler.getCameraList().isEmpty()) {
                 if (timeline.getStatus().toString() != "RUNNING") {
                     askFrame();
                 } else {
