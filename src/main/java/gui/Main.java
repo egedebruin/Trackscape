@@ -1,8 +1,10 @@
 package gui;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,6 +14,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -37,10 +41,9 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
     /**
-     * videoMv.
-     * Deals with the mediaPlayer
+     * Class variables.
      */
-    private MediaView videoMv = new MediaView();
+    private ImageView imageView = new ImageView();
 
     /**
      * start.
@@ -116,10 +119,11 @@ public class Main extends Application {
 
         // ------------- Create MediaPlayer Pane -------------
         StackPane mediaPlayerPane = new StackPane();
-        final int width = 1000;
-        final int height = 600;
+        final int width = 500;
+        final int height = 400;
+
         mediaPlayerPane.getChildren()
-                .addAll(new Rectangle(width, height, Color.BLACK), videoMv);
+                .addAll(new Rectangle(width, height, Color.BLACK), imageView);
 
         // When video_open option is clicked
         openVideo(openVideo, primaryStage);
@@ -141,13 +145,20 @@ public class Main extends Application {
     private void openVideo(final MenuItem openVideo,
                            final Stage primaryStage) {
         openVideo.setOnAction(t -> {
-            FileChooser chooser = new FileChooser();
-            File file = chooser.showOpenDialog(primaryStage);
-            if (file != null) {
-                Media videoSource = new Media(file.toURI().toString());
-                MediaPlayer mediaPlayer = new MediaPlayer(videoSource);
-                videoMv.setMediaPlayer(mediaPlayer);
-            }
+            //FileChooser chooser = new FileChooser();
+            //File file = chooser.showOpenDialog(primaryStage);
+            //if (file != null) {
+                // Call method in CameraHandler with argument Media to send videoSource
+                //Media videoSource = new Media(file.toURI().toString());
+
+                //Image currentFrame = retrieveFrame();
+                Image currentFrame = new Image("file:images/test.jpg");
+                imageView.setImage(currentFrame);
+                imageView.setFitWidth(100);
+                imageView.setPreserveRatio(true);
+                imageView.setSmooth(true);
+                imageView.setCache(true);
+            //}
         });
     }
 
@@ -213,22 +224,22 @@ public class Main extends Application {
 
         // Create the play button
         final Button playButton = new Button(">");
-        playButton.setOnAction(event -> {
-            MediaPlayer mp = videoMv.getMediaPlayer();
-            MediaPlayer.Status status = mp.getStatus();
-
-            if (status == MediaPlayer.Status.UNKNOWN
-                    || status == MediaPlayer.Status.HALTED) {
-                return;
-            }
-            if (status == MediaPlayer.Status.PAUSED
-                    || status == MediaPlayer.Status.READY
-                    || status == MediaPlayer.Status.STOPPED) {
-                mp.play();
-            } else {
-                mp.pause();
-            }
-        });
+//        playButton.setOnAction(event -> {
+//            MediaPlayer mp = videoMv.getMediaPlayer();
+//            MediaPlayer.Status status = mp.getStatus();
+//
+//            if (status == MediaPlayer.Status.UNKNOWN
+//                    || status == MediaPlayer.Status.HALTED) {
+//                return;
+//            }
+//            if (status == MediaPlayer.Status.PAUSED
+//                    || status == MediaPlayer.Status.READY
+//                    || status == MediaPlayer.Status.STOPPED) {
+//                mp.play();
+//            } else {
+//                mp.pause();
+//            }
+//        });
 
         // Add labels and slider to the mediabar
         Label spacer = new Label("   ");
@@ -246,6 +257,19 @@ public class Main extends Application {
         timeSlider.setMaxWidth(Double.MAX_VALUE);
 
         return mediaBar;
+    }
+
+    /**
+     * retrieveFrame.
+     * Retrieves last frame from video reader in CameraHandler
+     * @return Image
+     */
+    private Image retrieveFrame() {
+        // Call to method in Main that returns bufferedImage (!)
+        BufferedImage bufferedFrame = new BufferedImage(
+            500, 500, BufferedImage.TYPE_INT_RGB);
+        Image frame = SwingFXUtils.toFXImage(bufferedFrame, null);
+        return frame;
     }
 
     /**
