@@ -205,13 +205,7 @@ public class Main extends Application {
             submit.setOnAction(t1 -> {
                 String streamUrl = field.getText();
                 streamStage.close();
-
-                if (!(cameraHandler.getCameraList().isEmpty())) {
-                    cameraHandler.addCamera(streamUrl);
-                    cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
-                    validVid = true;
-                    askFrame();
-                }
+                cameraHandler.addCamera(streamUrl);
             });
 
             // Save the url of the RTSP stream by pressing on the enter key
@@ -219,14 +213,7 @@ public class Main extends Application {
                 if (keyEvent.getCode() == KeyCode.ENTER)  {
                     String streamUrl = field.getText();
                     streamStage.close();
-
-                    if (!(cameraHandler.getCameraList().isEmpty())) {
-                        cameraHandler.addCamera(streamUrl);
-                        cameraHandler
-                            .getNewFrame(cameraHandler.getCameraList().get(0));
-                        validVid = true;
-                        askFrame();
-                    }
+                    cameraHandler.addCamera(streamUrl);
                 }
             });
 
