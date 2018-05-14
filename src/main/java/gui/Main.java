@@ -26,7 +26,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -34,9 +33,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-// Import necessary Java class from src code
-// to call method to send video source to
 
 /**
  * Main.
@@ -46,7 +42,11 @@ public class Main extends Application {
     /**
      * Class variables.
      */
+    int timeframe = 500;
     private ImageView imageView = new ImageView();
+    private Timeline timeline = new Timeline(
+        new KeyFrame(Duration.millis(timeframe), e -> showFrame())
+    );
 
     /**
      * start.
@@ -153,13 +153,12 @@ public class Main extends Application {
                            final Stage primaryStage) {
         openVideo.setOnAction(t -> {
             FileChooser chooser = new FileChooser();
-            chooser.setTitle("Open Video File");
+            chooser.setTitle("Select Video File");
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
                 String fileUrl = file.toURI().toString();
                 //Send fileUrl to CameraHandler (!)
             }
-            askFrame();
         });
     }
 
@@ -171,7 +170,6 @@ public class Main extends Application {
         connectStream.setOnAction(t -> {
             // Get url from user
             // Send to CameraHandler
-            askFrame();
         });
     }
 
@@ -180,10 +178,6 @@ public class Main extends Application {
      * Ask for new frame every 500 milliseconds
      */
     private void askFrame() {
-        int timeFrame = 500;
-        Timeline timeline = new Timeline(
-            new KeyFrame(Duration.millis(timeFrame), e -> showFrame())
-        );
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
@@ -276,24 +270,16 @@ public class Main extends Application {
         mediaBar.setAlignment(Pos.CENTER);
         mediaBar.setPadding(new Insets(top, right, bottom, left));
 
-        // Create the play button
+        // Create the play/pauze button
         final Button playButton = new Button(">");
-//        playButton.setOnAction(event -> {
-//            MediaPlayer mp = videoMv.getMediaPlayer();
-//            MediaPlayer.Status status = mp.getStatus();
-//
-//            if (status == MediaPlayer.Status.UNKNOWN
-//                    || status == MediaPlayer.Status.HALTED) {
-//                return;
-//            }
-//            if (status == MediaPlayer.Status.PAUSED
-//                    || status == MediaPlayer.Status.READY
-//                    || status == MediaPlayer.Status.STOPPED) {
-//                mp.play();
-//            } else {
-//                mp.pause();
-//            }
-//        });
+        playButton.setOnAction(event -> {
+            if (timeline.getStatus().toString() != "RUNNING") {
+                askFrame();
+            }
+            else {
+                timeline.pause();
+            }
+        });
 
         // Add labels and slider to the mediabar
         Label spacer = new Label("   ");
