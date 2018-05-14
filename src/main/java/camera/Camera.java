@@ -2,6 +2,8 @@ package camera;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -11,9 +13,9 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
-    private List<CameraObject> cameraObjectList = null;
-    private VideoCapture videoCapture = null;
-    private String link = null;
+    private List<CameraObject> cameraObjectList;
+    private VideoCapture videoCapture;
+    private String link;
     private Mat lastFrame = new Mat();
 
     /**
@@ -48,5 +50,17 @@ public class Camera {
     private Mat loadFrame() {
         videoCapture.read(lastFrame);
         return lastFrame;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Camera)) {
+            return false;
+        }
+        Camera camera = (Camera) o;
+        return Objects.equals(link, camera.link);
     }
 }
