@@ -207,6 +207,7 @@ public class Main extends Application {
                 streamStage.close();
 
                 if (!(cameraHandler.getCameraList().isEmpty())) {
+                    cameraHandler.addCamera(streamUrl);
                     cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
                     validVid = true;
                 }
@@ -219,6 +220,7 @@ public class Main extends Application {
                     streamStage.close();
 
                     if (!(cameraHandler.getCameraList().isEmpty())) {
+                        cameraHandler.addCamera(streamUrl);
                         cameraHandler
                             .getNewFrame(cameraHandler.getCameraList().get(0));
                         validVid = true;
