@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -42,7 +41,9 @@ public class Main extends Application {
     /**
      * Class variables.
      */
-    int timeframe = 500;
+    private boolean validVid = false;
+    private final int timeframe = 500;
+    private int counter = 0;
     private ImageView imageView = new ImageView();
     private Timeline timeline = new Timeline(
         new KeyFrame(Duration.millis(timeframe), e -> showFrame())
@@ -74,7 +75,7 @@ public class Main extends Application {
         File css = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\stylesheet.css");
         scene.getStylesheets().add("file:///"
-            + css.getAbsolutePath().replace("\\","/"));
+            + css.getAbsolutePath().replace("\\", "/"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -158,6 +159,7 @@ public class Main extends Application {
             if (file != null) {
                 String fileUrl = file.toURI().toString();
                 //Send fileUrl to CameraHandler (!)
+                validVid = true;
             }
         });
     }
@@ -165,11 +167,15 @@ public class Main extends Application {
     /**
      * connectStream.
      * Get url of the stream from user
+     * @param connectStream menuOption
+     * @param primaryStage starting stage
      */
-    private void connectStream(final MenuItem connectStream, final Stage primaryStage) {
+    private void connectStream(final MenuItem connectStream,
+                               final Stage primaryStage) {
         connectStream.setOnAction(t -> {
             // Get url from user
             // Send to CameraHandler
+            validVid = true;
         });
     }
 
@@ -178,7 +184,8 @@ public class Main extends Application {
      * Ask for new frame every 500 milliseconds
      */
     private void askFrame() {
-        timeline.setCycleCount(Animation.INDEFINITE);
+        final int cycles = 100;
+        timeline.setCycleCount(cycles);
         timeline.play();
     }
 
@@ -187,8 +194,10 @@ public class Main extends Application {
      * Retrieve current frame and show in ImageView
      */
     private void showFrame() {
-        System.out.println("Test");
-        int width = 750;
+        System.out.println("Framenumber: " + counter);
+        counter = counter + 1;
+
+        final int width = 750;
         Image currentFrame = retrieveFrame();
         imageView.setImage(currentFrame);
         imageView.setFitWidth(width);
@@ -203,9 +212,11 @@ public class Main extends Application {
      * @return Image
      */
     private Image retrieveFrame() {
+        final int width = 750;
+        final int height = 500;
         // Call to method in Main that returns bufferedImage (!)
         BufferedImage bufferedFrame = new BufferedImage(
-            750, 500, BufferedImage.TYPE_INT_RGB);
+            width, height, BufferedImage.TYPE_INT_RGB);
         Image frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         return frame;
     }
@@ -273,11 +284,12 @@ public class Main extends Application {
         // Create the play/pauze button
         final Button playButton = new Button(">");
         playButton.setOnAction(event -> {
-            if (timeline.getStatus().toString() != "RUNNING") {
-                askFrame();
-            }
-            else {
-                timeline.pause();
+            if (validVid == true) {
+                if (timeline.getStatus().toString() != "RUNNING") {
+                    askFrame();
+                } else {
+                    timeline.pause();
+                }
             }
         });
 
