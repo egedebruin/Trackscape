@@ -23,10 +23,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 // Import necessary Java class from src code
@@ -119,13 +121,13 @@ public class Main extends Application {
 
         // ------------- Create MediaPlayer Pane -------------
         StackPane mediaPlayerPane = new StackPane();
-        final int width = 500;
-        final int height = 400;
+        final int width = 300;
+        final int height = 300;
 
         mediaPlayerPane.getChildren()
                 .addAll(new Rectangle(width, height, Color.BLACK), imageView);
 
-        // When video_open option is clicked
+        // When OpenVideo option is clicked
         openVideo(openVideo, primaryStage);
 
         // Add menuPane and mediaPlayerPane to list of panes
@@ -145,15 +147,24 @@ public class Main extends Application {
     private void openVideo(final MenuItem openVideo,
                            final Stage primaryStage) {
         openVideo.setOnAction(t -> {
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Open Video File");
+            File file = chooser.showOpenDialog(primaryStage);
+            if (file != null) {
+                Media videoSource = new Media(file.toURI().toString());
+                //Send videoSource to CameraHandler
+            }
+
             File image = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\test.jpg");
             Image currentFrame = new Image(image.toURI().toString());
+            //Image currentFrame = retrieveFrame();
+
             imageView.setImage(currentFrame);
-            imageView.setFitWidth(100);
+            imageView.setFitWidth(400);
             imageView.setPreserveRatio(true);
             imageView.setSmooth(true);
             imageView.setCache(true);
-
         });
     }
 
