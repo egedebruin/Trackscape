@@ -18,19 +18,23 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -173,12 +177,59 @@ public class Main extends Application {
      * @param connectStream menuOption
      * @param primaryStage starting stage
      */
-    private void connectStream(final MenuItem connectStream,
-                               final Stage primaryStage) {
+    private void connectStream(
+        final MenuItem connectStream, final Stage primaryStage) {
         connectStream.setOnAction(t -> {
-            // Get url from user
-            // Send to handlers.CameraHandler
-            validVid = true;
+            // Set up pop up window
+            final Stage streamStage = new Stage();
+            streamStage.initModality(Modality.APPLICATION_MODAL);
+            streamStage.initOwner(primaryStage);
+
+            // Set up layout of the pop up window
+            final Label fieldLabel = new Label("Enter url of the RTSP stream:");
+            final TextField field = new TextField();
+            Button submit = new Button("Submit");
+
+            final int spacing = 6;
+            final int insetPositions = 10;
+
+            // Set up box in pop up window
+            VBox popUpVBox = new VBox();
+            popUpVBox.setPadding(new Insets(insetPositions,
+                insetPositions, insetPositions, insetPositions));
+            popUpVBox.getChildren().addAll(fieldLabel, field, submit);
+            popUpVBox.setSpacing(spacing);
+            popUpVBox.setAlignment(Pos.CENTER);
+
+            // Save the url of the RTSP stream by clicking on submit
+            submit.setOnAction(t1 -> {
+                String streamUrl = field.getText();
+                streamStage.close();
+
+                cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
+                validVid = true;
+            });
+
+            // Save the url of the RTSP stream by pressing on the enter key
+            field.setOnKeyPressed(keyEvent -> {
+                if (keyEvent.getCode() == KeyCode.ENTER)  {
+                    String streamUrl = field.getText();
+                    streamStage.close();
+
+                    cameraHandler
+                        .getNewFrame(cameraHandler.getCameraList().get(0));
+                    validVid = true;
+                }
+            });
+
+            final int popUpWidth = 500;
+            final int popUpHeight = 100;
+
+            Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
+            streamStage.setScene(popUp);
+            streamStage.show();
+
+            askFrame();
         });
     }
 
@@ -286,7 +337,7 @@ public class Main extends Application {
         // Create the play/pauze button
         final Button playButton = new Button(">");
         playButton.setOnAction(event -> {
-            if (validVid == true) {
+            if (validVid) {
                 if (timeline.getStatus().toString() != "RUNNING") {
                     askFrame();
                 } else {
@@ -319,8 +370,12 @@ public class Main extends Application {
      * @param args arguments
      */
     public static void main(final String[] args) {
-        System.load(System.getProperty("user.dir") + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
-        System.load(System.getProperty("user.dir") + File.separator + "libs" + File.separator + "opencv_java341.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs"
+            + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs"
+            + File.separator + "opencv_java341.dll");
 
         launch(args);
     }
