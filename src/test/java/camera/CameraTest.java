@@ -1,21 +1,48 @@
 package camera;
 
-import org.junit.jupiter.api.Test;
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.io.File;
+import org.junit.jupiter.api.Test;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
 class CameraTest {
 
-	@org.junit.jupiter.api.BeforeEach
-	void setUp() {
-	}
+    private Camera camera;
 
-	@org.junit.jupiter.api.AfterEach
-	void tearDown() {
-	}
+    @org.junit.jupiter.api.BeforeEach
+    void setUp() {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            System.load(System.getProperty("user.dir")
+                + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
+            System.load(System.getProperty("user.dir")
+                + File.separator + "libs" + File.separator + "opencv_java341.dll");
+        }
+    }
 
-	@Test
-	void constructorTest(){
-		assertNotNull(new Camera());
-	}
+    @org.junit.jupiter.api.AfterEach
+    void tearDown() {
+    }
+
+    @Test
+    void constructorTest() {
+        camera = new Camera(null, null);
+        assertNotNull(camera);
+    }
+
+    @Test
+    void getLastFrame() {
+        String link = "files" + File.separator + "webcast.mov";
+        VideoCapture videoCapture = new VideoCapture(link);
+        camera = new Camera(videoCapture, link);
+
+        Mat mat = camera.getLastFrame();
+        assertNotNull(mat);
+
+        Mat mat2 = camera.getLastFrame();
+        assertNotEquals(mat, mat2);
+    }
+
 }
