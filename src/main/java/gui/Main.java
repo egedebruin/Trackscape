@@ -164,7 +164,7 @@ public class Main extends Application {
             chooser.setTitle("Select Video File");
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
-                String fileUrl = file.toURI().toString();
+                String fileUrl = file.toString();
                 validVid = true;
                 cameraHandler.addCamera(fileUrl);
             }
@@ -206,8 +206,10 @@ public class Main extends Application {
                 String streamUrl = field.getText();
                 streamStage.close();
 
-                cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
-                validVid = true;
+                if (!(cameraHandler.getCameraList().isEmpty())) {
+                    cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
+                    validVid = true;
+                }
             });
 
             // Save the url of the RTSP stream by pressing on the enter key
@@ -216,9 +218,11 @@ public class Main extends Application {
                     String streamUrl = field.getText();
                     streamStage.close();
 
-                    cameraHandler
-                        .getNewFrame(cameraHandler.getCameraList().get(0));
-                    validVid = true;
+                    if (!(cameraHandler.getCameraList().isEmpty())) {
+                        cameraHandler
+                            .getNewFrame(cameraHandler.getCameraList().get(0));
+                        validVid = true;
+                    }
                 }
             });
 
@@ -252,12 +256,14 @@ public class Main extends Application {
         counter = counter + 1;
 
         final int width = 750;
-        Image currentFrame = retrieveFrame();
-        imageView.setImage(currentFrame);
-        imageView.setFitWidth(width);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-        imageView.setCache(true);
+        if (!(cameraHandler.getCameraList().isEmpty())) {
+            Image currentFrame = retrieveFrame();
+            imageView.setImage(currentFrame);
+            imageView.setFitWidth(width);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            imageView.setCache(true);
+        }
     }
 
     /**
