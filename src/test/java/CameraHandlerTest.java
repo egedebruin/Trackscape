@@ -1,8 +1,6 @@
 import camera.Camera;
 import org.junit.jupiter.api.Test;
 import org.opencv.videoio.VideoCapture;
-
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,14 +24,6 @@ class CameraHandlerTest {
 	void addCameraTest() {
 		CameraHandler c = new CameraHandler();
 		Camera cam = c.addCamera(streamLink);
-		assertEquals(cam,new Camera(new VideoCapture(),streamLink));
-	}
-
-	@Test
-	void getNewFrameTest() {
-		CameraHandler c = new CameraHandler();
-		Camera cam = c.addCamera(streamLink);
-		BufferedImage bi = c.getNewFrame(cam);
-		assertNotNull(bi);
+		assertNotNull(cam);
 	}
 }
