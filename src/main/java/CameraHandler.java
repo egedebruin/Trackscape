@@ -23,7 +23,7 @@ public class CameraHandler {
      * @return The new camera as a Camera object.
      */
     public Camera addCamera(String link) {
-        VideoCapture videoCapture = new VideoCapture();
+        VideoCapture videoCapture = new VideoCapture(link);
         boolean opened = videoCapture.open(link);
         if (!opened) {
             return null;

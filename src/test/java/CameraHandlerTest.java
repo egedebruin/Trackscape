@@ -7,8 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CameraHandlerTest {
 
-	private final String streamLink = "rtsp://192.168.0.117:554/"
-		+ "user=admin&password=&channel=1&stream=1.sdp?real_stream--rtp-caching=100";
+    private final String videoLink = "files" + File.separator + "webcast.mov";
 
 	static {
 		// These should be at the start of the application,
@@ -23,9 +22,16 @@ class CameraHandlerTest {
 	@Test
 	void addCameraTest() {
 		CameraHandler c = new CameraHandler();
-		Camera cam = new Camera(new VideoCapture(), streamLink);
+
 		assertEquals(0, c.getCameraList().size());
-		c.addCamera(streamLink);
+		c.addCamera(videoLink);
 		assertEquals(1, c.getCameraList().size());
 	}
+
+	@Test
+    void getNewFrameTest() {
+        CameraHandler c = new CameraHandler();
+        Camera cam = new Camera(new VideoCapture(videoLink), videoLink);
+        assertNotNull(c.getNewFrame(cam));
+    }
 }
