@@ -145,26 +145,15 @@ public class Main extends Application {
     private void openVideo(final MenuItem openVideo,
                            final Stage primaryStage) {
         openVideo.setOnAction(t -> {
-            //FileChooser chooser = new FileChooser();
-            //File file = chooser.showOpenDialog(primaryStage);
-            //if (file != null) {
-                // Call method in CameraHandler with argument Media to send videoSource
-                //Media videoSource = new Media(file.toURI().toString());
+            File image = new File(System.getProperty("user.dir")
+                + "\\src\\main\\java\\gui\\images\\test.jpg");
+            Image currentFrame = new Image(image.toURI().toString());
+            imageView.setImage(currentFrame);
+            imageView.setFitWidth(100);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            imageView.setCache(true);
 
-                File img = new File(System.getProperty("user.dir")+"\\src\\main\\gui\\images\\purple.jpg");
-                Image currentFrame = new Image("file:///"+img.getAbsolutePath().replace("\\","/"));
-
-                //Image currentFrame = new Image("http://www.avajava.com/images/avajavalogo.jpg");
-                //Image currentFrame = new Image("test.jpg");
-
-                //Image currentFrame = retrieveFrame();
-
-                imageView.setImage(currentFrame);
-                imageView.setFitWidth(100);
-                imageView.setPreserveRatio(true);
-                imageView.setSmooth(true);
-                imageView.setCache(true);
-            //}
         });
     }
 
