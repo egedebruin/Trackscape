@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
@@ -22,14 +23,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 // Import necessary Java class from src code
@@ -51,7 +48,7 @@ public class Main extends Application {
      * @param primaryStage starting stage
      */
     @Override
-    public void start(final Stage primaryStage) {
+    public void start(final Stage primaryStage) throws IOException {
         primaryStage.setTitle("TrackScape");
 
         // Choose best-fitted pane for the application
@@ -154,8 +151,14 @@ public class Main extends Application {
                 // Call method in CameraHandler with argument Media to send videoSource
                 //Media videoSource = new Media(file.toURI().toString());
 
+                File img = new File(System.getProperty("user.dir")+"\\src\\main\\gui\\images\\purple.jpg");
+                Image currentFrame = new Image("file:///"+img.getAbsolutePath().replace("\\","/"));
+
+                //Image currentFrame = new Image("http://www.avajava.com/images/avajavalogo.jpg");
+                //Image currentFrame = new Image("test.jpg");
+
                 //Image currentFrame = retrieveFrame();
-                Image currentFrame = new Image("file:images/test.jpg");
+
                 imageView.setImage(currentFrame);
                 imageView.setFitWidth(100);
                 imageView.setPreserveRatio(true);
