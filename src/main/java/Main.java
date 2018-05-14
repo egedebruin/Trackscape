@@ -24,20 +24,16 @@ public class Main {
         VideoCapture camera = new VideoCapture();
         System.out.println(camera.open(string));
 
-        JFrame jframe = new JFrame("MyTitle");
+        JFrame jframe = new JFrame("Robins stukje");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JLabel vidpanel = new JLabel();
         jframe.setContentPane(vidpanel);
         jframe.setVisible(true);
 
-        while (true) {
-            if (camera.read(frame)) {
-
-                ImageIcon image = new ImageIcon(toBufferedImage(frame));
-                vidpanel.setIcon(image);
-                vidpanel.repaint();
-
-            }
+        while (camera.read(frame)) {
+            ImageIcon image = new ImageIcon(toBufferedImage(frame));
+            vidpanel.setIcon(image);
+            vidpanel.repaint();
         }
     }
 
