@@ -11,25 +11,17 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -170,12 +162,54 @@ public class Main extends Application {
      * @param connectStream menuOption
      * @param primaryStage starting stage
      */
-    private void connectStream(final MenuItem connectStream,
-                               final Stage primaryStage) {
+    private void connectStream(final MenuItem connectStream, final Stage primaryStage) {
         connectStream.setOnAction(t -> {
-            // Get url from user
-            // Send to CameraHandler
-            validVid = true;
+            // Set up pop up window
+            final Stage streamStage = new Stage();
+            streamStage.initModality(Modality.APPLICATION_MODAL);
+            streamStage.initOwner(primaryStage);
+
+            // Set up layout of the pop up window
+            final Label fieldLabel = new Label("Enter url of the RTSP stream:");
+            final TextField field = new TextField();
+            Button submit = new Button("Submit");
+
+            int spacing = 6;
+            int insetPositions = 10;
+
+            // Set up box in pop up window
+            VBox popUpVBox = new VBox();
+            popUpVBox.setSpacing(spacing);
+            popUpVBox.setAlignment(Pos.CENTER);
+            popUpVBox.setPadding(new Insets(insetPositions, insetPositions, insetPositions, insetPositions));
+            popUpVBox.getChildren().addAll(fieldLabel, field, submit);
+
+            // Save the url of the RTSP stream by clicking on submit
+            submit.setOnAction(t1 -> {
+                String streamUrl = field.getText();
+                streamStage.close();
+
+                // Send to CameraHandler
+            });
+
+            // Save the url of the RTSP stream by pressing on the enter key
+            field.setOnKeyPressed(keyEvent -> {
+                if (keyEvent.getCode() == KeyCode.ENTER)  {
+                    String streamUrl = field.getText();
+                    streamStage.close();
+
+                    // Send to CameraHandler
+                }
+            });
+
+            int popUpWidth = 500;
+            int popUpHeight = 100;
+
+            Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
+            streamStage.setScene(popUp);
+            streamStage.show();
+
+            askFrame();
         });
     }
 
