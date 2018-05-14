@@ -1,34 +1,36 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import camera.Camera;
-import org.junit.jupiter.api.Test;
-import org.opencv.videoio.VideoCapture;
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.opencv.videoio.VideoCapture;
 
 class CameraHandlerTest {
 
     private final String videoLink = "files" + File.separator + "webcast.mov";
 
-	static {
-		// These should be at the start of the application,
-		// so if the main changes this should be included.
-		// Load OpenCV library.
-		System.load(System.getProperty("user.dir")
-			+ File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
-		System.load(System.getProperty("user.dir")
-			+ File.separator + "libs" + File.separator + "opencv_java341.dll");
-	}
+    static {
+        // These should be at the start of the application,
+        // so if the main changes this should be included.
+        // Load OpenCV library.
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_java341.dll");
+    }
 
-	@Test
-	void addCameraTest() {
-		CameraHandler c = new CameraHandler();
+    @Test
+    void addCameraTest() {
+        CameraHandler c = new CameraHandler();
 
-		assertEquals(0, c.getCameraList().size());
-		c.addCamera(videoLink);
-		assertEquals(1, c.getCameraList().size());
-	}
+        assertEquals(0, c.getCameraList().size());
+        c.addCamera(videoLink);
+        assertEquals(1, c.getCameraList().size());
+    }
 
-	@Test
+    @Test
     void getNewFrameTest() {
         CameraHandler c = new CameraHandler();
         Camera cam = new Camera(new VideoCapture(videoLink), videoLink);
