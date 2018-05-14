@@ -210,6 +210,7 @@ public class Main extends Application {
                     cameraHandler.addCamera(streamUrl);
                     cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
                     validVid = true;
+                    askFrame();
                 }
             });
 
@@ -224,6 +225,7 @@ public class Main extends Application {
                         cameraHandler
                             .getNewFrame(cameraHandler.getCameraList().get(0));
                         validVid = true;
+                        askFrame();
                     }
                 }
             });
@@ -234,8 +236,6 @@ public class Main extends Application {
             Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
             streamStage.setScene(popUp);
             streamStage.show();
-
-            askFrame();
         });
     }
 
