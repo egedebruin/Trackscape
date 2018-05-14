@@ -65,7 +65,10 @@ public class Main extends Application {
         final int width = 1250;
         final int height = 800;
         Scene scene = new Scene(root, width, height);
-        scene.getStylesheets().add("stylesheet.css");
+        File css = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\stylesheet.css");
+        scene.getStylesheets().add("file:///"
+            + css.getAbsolutePath().replace("\\","/"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
