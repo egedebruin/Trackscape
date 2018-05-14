@@ -159,8 +159,8 @@ public class Main extends Application {
                 String fileUrl = file.toURI().toString();
                 //Send fileUrl to CameraHandler (!)
             }
+            askFrame();
         });
-        askFrame();
     }
 
     /**
@@ -168,9 +168,11 @@ public class Main extends Application {
      * Get url of the stream from user
      */
     private void connectStream(final MenuItem connectStream, final Stage primaryStage) {
-        // Get url from user
-        // Send to CameraHandler
-        askFrame();
+        connectStream.setOnAction(t -> {
+            // Get url from user
+            // Send to CameraHandler
+            askFrame();
+        });
     }
 
     /**
@@ -191,10 +193,11 @@ public class Main extends Application {
      * Retrieve current frame and show in ImageView
      */
     private void showFrame() {
-        // Should do this part every few milliseconds (!!!)
+        System.out.println("Test");
+        int width = 750;
         Image currentFrame = retrieveFrame();
         imageView.setImage(currentFrame);
-        imageView.setFitWidth(750);
+        imageView.setFitWidth(width);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
