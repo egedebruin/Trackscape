@@ -26,7 +26,14 @@ class CameraHandlerTest {
 	void addCameraTest() {
 		CameraHandler c = new CameraHandler();
 		Camera cam = c.addCamera(streamLink);
-		assertEquals(cam,new Camera(new VideoCapture(),streamLink));
+		assertEquals(new Camera(new VideoCapture(),streamLink), cam);
+	}
+
+	@Test
+	void addUnknownCameraTest() {
+		CameraHandler c = new CameraHandler();
+		Camera cam = c.addCamera("error");
+		assertNull(cam);
 	}
 
 	@Test

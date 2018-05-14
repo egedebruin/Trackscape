@@ -40,7 +40,7 @@ public class Camera {
             lastFrame = newFrame;
         }
 
-        return lastFrame;
+        return lastFrame.clone();
     }
 
     /**
@@ -49,7 +49,7 @@ public class Camera {
      */
     private Mat loadFrame() {
         videoCapture.read(lastFrame);
-        return lastFrame;
+        return lastFrame.clone();
     }
 
     @Override

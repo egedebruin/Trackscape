@@ -2,11 +2,15 @@ package camera;
 
 import java.io.File;
 import org.junit.jupiter.api.Test;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CameraTest {
+
+    private Camera camera;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
@@ -24,6 +28,21 @@ class CameraTest {
 
     @Test
     void constructorTest() {
-        assertNotNull(new Camera(null, null));
+        camera = new Camera(null, null);
+        assertNotNull(camera);
     }
+
+    @Test
+    void getLastFrame() {
+        String link = "files" + File.separator + "webcast.mov";
+        VideoCapture videoCapture = new VideoCapture(link);
+        camera = new Camera(videoCapture, link);
+
+        Mat mat = camera.getLastFrame();
+        assertNotNull(mat);
+
+        Mat mat2 = camera.getLastFrame();
+        assertNotEquals(mat, mat2);
+    }
+
 }
