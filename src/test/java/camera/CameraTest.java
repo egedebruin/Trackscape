@@ -24,8 +24,6 @@ class CameraTest {
 
     @Test
     void constructorTest() {
-        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            assertNotNull(new Camera(null, null));
-        }
+        assertNotNull(new Camera(null, null));
     }
 }
