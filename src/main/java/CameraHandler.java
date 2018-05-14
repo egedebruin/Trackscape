@@ -62,4 +62,8 @@ public class CameraHandler {
 
     }
 
+    public List<Camera> getCameraList(){
+        return cameraList;
+    }
+
 }
