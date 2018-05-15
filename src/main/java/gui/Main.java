@@ -258,7 +258,8 @@ public class Main extends Application {
      */
     private Image retrieveFrame() {
         Image frame;
-        Mat matrixFrame = cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
+        Mat matrixFrame = cameraHandler
+            .getNewFrame(cameraHandler.getCameraList().get(0));
         if (!cameraHandler.getCameraList().get(0).isChanged()) {
             File streamEnd = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\black.png");
@@ -362,15 +363,22 @@ public class Main extends Application {
      * @param videoMatImage The frame in Mat.
      * @return The BufferedImage.
      */
-    private BufferedImage matToBufferedImage(Mat videoMatImage) {
+    private BufferedImage matToBufferedImage(final Mat videoMatImage) {
+        int type;
+        if (videoMatImage.channels() == 1) {
+            type = BufferedImage.TYPE_BYTE_GRAY;
+        } else {
+            type = BufferedImage.TYPE_3BYTE_BGR;
+        }
 
-        int type = videoMatImage.channels() == 1
-            ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
-        int bufferSize = videoMatImage.channels() * videoMatImage.cols() * videoMatImage.rows();
+        int bufferSize = videoMatImage.channels()
+            * videoMatImage.cols() * videoMatImage.rows();
         byte[] buffer = new byte[bufferSize];
         videoMatImage.get(0, 0, buffer);
-        BufferedImage image = new BufferedImage(videoMatImage.cols(), videoMatImage.rows(), type);
-        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+        BufferedImage image = new BufferedImage(
+            videoMatImage.cols(), videoMatImage.rows(), type);
+        final byte[] targetPixels =
+            ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
         return image;
 
