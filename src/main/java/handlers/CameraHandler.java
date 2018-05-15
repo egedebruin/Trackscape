@@ -6,8 +6,14 @@ import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
+/**
+ * Class for handling the cameras. Holds a list of the cameras en controls it.
+ */
 public class CameraHandler {
 
+    /**
+     * The list of the cameras.
+     */
     private List<Camera> cameraList;
 
     /**
@@ -42,14 +48,26 @@ public class CameraHandler {
         return camera.getLastFrame();
     }
 
+    /**
+     * Get the size of the list of cameras.
+     * @return The size of the list.
+     */
     public int listSize() {
         return cameraList.size();
     }
 
+    /**
+     * Clear the list of cameras.
+     */
     public void clearList() {
         cameraList.clear();
     }
 
+    /**
+     * Get a camera from the list.
+     * @param index The index of the camera.
+     * @return The camera.
+     */
     public Camera getCamera(int index) {
         return cameraList.get(index);
     }
