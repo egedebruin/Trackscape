@@ -120,8 +120,9 @@ public class Main extends Application {
         // Menu options
         MenuItem openVideo = new MenuItem("Open File...");
         MenuItem connectStream = new MenuItem("Connect Stream...");
+        MenuItem theStream = new MenuItem("THE Stream");
         // Add menu options to main menu items
-        menuFile.getItems().addAll(openVideo, connectStream);
+        menuFile.getItems().addAll(openVideo, connectStream, theStream);
         menu.getMenus().addAll(menuFile, data);
 
         StackPane menuPane = new StackPane();
@@ -139,6 +140,7 @@ public class Main extends Application {
         // When menu options are clicked
         openVideo(openVideo, primaryStage);
         connectStream(connectStream, primaryStage);
+        theStream(theStream, primaryStage);
 
         // Add menuPane and mediaPlayerPane to list of panes
         ArrayList<Pane> menuMediaList = new ArrayList<>();
@@ -219,6 +221,21 @@ public class Main extends Application {
             Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
             streamStage.setScene(popUp);
             streamStage.show();
+        });
+    }
+
+    /**
+     * theStream.
+     * Enables easy access to our  stream
+     * @param theStream menuItem
+     * @param primaryStage the starting stage
+     */
+    private void theStream(final MenuItem theStream, final Stage primaryStage) {
+        theStream.setOnAction(t -> {
+            String streamUrl = "rtsp://192.168.0.117:554/"
+                + "user=admin&password=&channel=1&stream=1"
+                + ".sdp?real_stream--rtp-caching=100";
+            cameraHandler.addCamera(streamUrl);
         });
     }
 
@@ -381,9 +398,7 @@ public class Main extends Application {
             ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
         return image;
-
     }
-
 
     /**
      * main.
