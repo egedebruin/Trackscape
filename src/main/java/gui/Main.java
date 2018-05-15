@@ -52,6 +52,22 @@ public class Main extends Application {
     private boolean cameraActive = false;
 
     /**
+     * main.
+     * Launch the application
+     * @param args arguments
+     */
+    public static void main(final String[] args) {
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs"
+            + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs"
+            + File.separator + "opencv_java341.dll");
+
+        launch(args);
+    }
+
+    /**
      * start.
      * Construct the structure of the GUI
      * @param primaryStage starting stage
@@ -100,6 +116,47 @@ public class Main extends Application {
 
         return videoPane;
     }
+    /**
+     * createTitlePane.
+     * Create the top pane of the root
+     * @return Pane
+     */
+    private Pane createTitlePane() {
+        final int size = 80;
+
+        FlowPane titlePane = new FlowPane();
+        titlePane.setAlignment(Pos.TOP_CENTER);
+
+        Text text = new Text("TrackScape");
+        text.setFont(Font.font("Edwardian Script ITC", size));
+        text.setFill(Color.BLACK);
+        text.setStroke(Color.LIGHTSLATEGREY);
+        text.setStrokeWidth(2);
+
+        titlePane.getChildren().addAll(text);
+
+        return titlePane;
+    }
+
+    /**
+     * createBottomPane.
+     * Create the bottom pane of the root
+     * @return Pane
+     */
+    private Pane createBottomPane() {
+        final int size = 20;
+
+        Text text2 = new Text("© TrackScape");
+        text2.setFont(Font.font("Edwardian Script ITC", size));
+        text2.setFill(Color.BLACK);
+        text2.setStroke(Color.LIGHTSLATEGREY);
+        text2.setStrokeWidth(1);
+
+        FlowPane bottomPane = new FlowPane();
+        bottomPane.getChildren().addAll(text2, createMediaBar());
+
+        return bottomPane;
+    }
 
     /**
      * createMenuMediaPane.
@@ -147,6 +204,12 @@ public class Main extends Application {
 
         return menuMediaList;
     }
+
+    /*
+     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     !!!Vanaf hieronder moet naar een andere class!!!
+     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+     */
 
     /**
      * openVideo.
@@ -317,48 +380,6 @@ public class Main extends Application {
     }
 
     /**
-     * createTitlePane.
-     * Create the top pane of the root
-     * @return Pane
-     */
-    private Pane createTitlePane() {
-        final int size = 80;
-
-        FlowPane titlePane = new FlowPane();
-        titlePane.setAlignment(Pos.TOP_CENTER);
-
-        Text text = new Text("TrackScape");
-        text.setFont(Font.font("Edwardian Script ITC", size));
-        text.setFill(Color.BLACK);
-        text.setStroke(Color.LIGHTSLATEGREY);
-        text.setStrokeWidth(2);
-
-        titlePane.getChildren().addAll(text);
-
-        return titlePane;
-    }
-
-    /**
-     * createBottomPane.
-     * Create the bottom pane of the root
-     * @return Pane
-     */
-    private Pane createBottomPane() {
-        final int size = 20;
-
-        Text text2 = new Text("© TrackScape");
-        text2.setFont(Font.font("Edwardian Script ITC", size));
-        text2.setFill(Color.BLACK);
-        text2.setStroke(Color.LIGHTSLATEGREY);
-        text2.setStrokeWidth(1);
-
-        FlowPane bottomPane = new FlowPane();
-        bottomPane.getChildren().addAll(text2, createMediaBar());
-
-        return bottomPane;
-    }
-
-    /**
      * Converts a Mat to a BufferedImage.
      * @param videoMatImage The frame in Mat.
      * @return The BufferedImage.
@@ -383,22 +404,4 @@ public class Main extends Application {
         return image;
 
     }
-
-
-    /**
-     * main.
-     * Launch the application
-     * @param args arguments
-     */
-    public static void main(final String[] args) {
-        System.load(System.getProperty("user.dir")
-            + File.separator + "libs"
-            + File.separator + "opencv_ffmpeg341_64.dll");
-        System.load(System.getProperty("user.dir")
-            + File.separator + "libs"
-            + File.separator + "opencv_java341.dll");
-
-        launch(args);
-    }
-
 }
