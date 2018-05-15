@@ -5,8 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
@@ -17,7 +18,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,7 +26,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -36,10 +35,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import javafx.util.Duration;
 
 /**
  * Main.
@@ -50,13 +45,9 @@ public class Main extends Application {
     /**
      * Class variables.
      */
-    private final int timeframe = 40;
     private ImageView imageView = new ImageView();
-    private Timeline timeline = new Timeline(
-        new KeyFrame(Duration.millis(timeframe), e -> showFrame())
-    );
-    private ScheduledExecutorService timer;
     private CameraHandler cameraHandler = new CameraHandler();
+    private ScheduledExecutorService timer;
 
     /**
      * start.
@@ -69,7 +60,6 @@ public class Main extends Application {
 
         // Choose best-fitted pane for the application
         BorderPane root = new BorderPane();
-
         // Structure of panes inside the root pane
         root.setTop(createTitlePane());
         root.setCenter(createVideoPane(primaryStage));
@@ -227,33 +217,23 @@ public class Main extends Application {
         });
     }
 
-    private void updateImage() {
-        Runnable frameGrabber = new Runnable() {
-            @Override
-            public void run() {
-                showFrame();
-            }
-        };
-        this.timer = Executors.newSingleThreadScheduledExecutor();
-        this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
-    }
-
     /**
-     * askFrame.
-     * Ask for new frame every time unit
+     * grabTimeFrame.
+     * Call updateImageView method every period of time to retrieve a new frame
      */
-    private void askFrame() {
-        final int cycles = Timeline.INDEFINITE;
-        timeline.setCycleCount(cycles);
-        timeline.play();
+    private void grabTimeFrame() {
+        final int period = 33;
+        Runnable frameGrabber = () -> updateImageView();
+        this.timer = Executors.newSingleThreadScheduledExecutor();
+        this.timer.scheduleAtFixedRate(
+            frameGrabber, 0, period, TimeUnit.MILLISECONDS);
     }
 
     /**
-     * showFrame.
+     * updateImageView.
      * Retrieve current frame and show in ImageView
      */
-    private void showFrame() {
-
+    private void updateImageView() {
         final int width = 750;
         if (!(cameraHandler.getCameraList().isEmpty())) {
             Image currentFrame = retrieveFrame();
@@ -271,12 +251,39 @@ public class Main extends Application {
      * @return Image
      */
     private Image retrieveFrame() {
-        final int width = 750;
-        final int height = 500;
         BufferedImage bufferedFrame =
             cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
         Image frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         return frame;
+    }
+
+    /**
+     * createMediaBar.
+     * Create a mediaBar for the mediaPlayer
+     * @return HBox
+     */
+    private HBox createMediaBar() {
+        final int top = 5;
+        final int right = 10;
+        final int bottom = 5;
+        final int left = 10;
+
+        // Create mediabar for video options
+        HBox mediaBar = new HBox();
+        mediaBar.setAlignment(Pos.CENTER);
+        mediaBar.setPadding(new Insets(top, right, bottom, left));
+
+        // Create the play/pauze button
+        final Button playButton = new Button(">");
+        playButton.setOnAction(event -> {
+            if (!cameraHandler.getCameraList().isEmpty()) {
+                grabTimeFrame();
+            }
+        });
+
+        mediaBar.getChildren().addAll(playButton);
+
+        return mediaBar;
     }
 
     /**
@@ -319,55 +326,6 @@ public class Main extends Application {
         bottomPane.getChildren().addAll(text2, createMediaBar());
 
         return bottomPane;
-    }
-
-    /**
-     * createMediaBar.
-     * Create a mediaBar for the mediaPlayer
-     * @return HBox
-     */
-    private HBox createMediaBar() {
-        final int top = 5;
-        final int right = 10;
-        final int bottom = 5;
-        final int left = 10;
-        final int minWidth = 50;
-        final int prefWidth = 130;
-
-        // Create the bar in which the video can be controlled
-        HBox mediaBar = new HBox();
-        mediaBar.setAlignment(Pos.CENTER);
-        mediaBar.setPadding(new Insets(top, right, bottom, left));
-
-        // Create the play/pauze button
-        final Button playButton = new Button(">");
-        playButton.setOnAction(event -> {
-            if (!cameraHandler.getCameraList().isEmpty()) {
-                updateImage();
-//                if (timeline.getStatus().toString() != "RUNNING") {
-//                    askFrame();
-//                } else {
-//                    timeline.pause();
-//                }
-            }
-        });
-
-        // Add labels and slider to the mediabar
-        Label spacer = new Label("   ");
-        Label timeLabel = new Label("Time: ");
-        Label playTime = new Label();
-        Slider timeSlider = new Slider();
-
-        mediaBar.getChildren()
-                .addAll(playButton, spacer, timeLabel, timeSlider, playTime);
-
-        playTime.setPrefWidth(prefWidth);
-        playTime.setMinWidth(minWidth);
-        HBox.setHgrow(timeSlider, Priority.ALWAYS);
-        timeSlider.setMinWidth(minWidth);
-        timeSlider.setMaxWidth(Double.MAX_VALUE);
-
-        return mediaBar;
     }
 
     /**
