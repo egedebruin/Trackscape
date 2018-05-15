@@ -29,7 +29,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -130,7 +129,8 @@ public class Main extends Application {
         StackPane mediaPlayerPane = new StackPane();
 
         mediaPlayerPane.getChildren().addAll(imageView);
-        File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\black.png");
         Image black = new Image(streamEnd.toURI().toString());
         imageView.setImage(black);
 
@@ -259,7 +259,8 @@ public class Main extends Application {
         BufferedImage bufferedFrame =
             cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
         if (!cameraHandler.getCameraList().get(0).isChanged()) {
-            File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
+            File streamEnd = new File(System.getProperty("user.dir")
+                + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
             cameraHandler.getCameraList().clear();
             cameraActive = false;
@@ -279,6 +280,7 @@ public class Main extends Application {
         final int right = 10;
         final int bottom = 5;
         final int left = 10;
+        final int width = 500;
 
         // Create mediabar for video options
         HBox mediaBar = new HBox();
@@ -297,10 +299,11 @@ public class Main extends Application {
             if (cameraActive) {
                 cameraHandler.getCameraList().clear();
                 cameraActive = false;
-                File image = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\nostream.png");
+                File image = new File(System.getProperty("user.dir")
+                    + "\\src\\main\\java\\gui\\images\\nostream.png");
                 Image noStreamAvailable = new Image(image.toURI().toString());
                 imageView.setImage(noStreamAvailable);
-                imageView.setFitWidth(500);
+                imageView.setFitWidth(width);
                 imageView.setPreserveRatio(true);
             }
         });
