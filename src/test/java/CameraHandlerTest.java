@@ -25,9 +25,9 @@ class CameraHandlerTest {
     void addCameraTest() {
         CameraHandler c = new CameraHandler();
 
-        assertEquals(0, c.getCameraList().size());
+        assertEquals(0, c.listSize());
         c.addCamera(videoLink);
-        assertEquals(1, c.getCameraList().size());
+        assertEquals(1, c.listSize());
     }
 
     @Test

@@ -44,8 +44,16 @@ public class CameraHandler {
         return camera.getLastFrame();
     }
 
-    public List<Camera> getCameraList() {
-        return cameraList;
+    public int listSize() {
+        return cameraList.size();
+    }
+
+    public void clearList() {
+        cameraList.clear();
+    }
+
+    public Camera getCamera(int index) {
+        return cameraList.get(index);
     }
 
 }
