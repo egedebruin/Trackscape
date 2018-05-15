@@ -17,6 +17,7 @@ public class Camera {
     private VideoCapture videoCapture;
     private String link;
     private Mat lastFrame = new Mat();
+    private boolean changed = false;
 
     /**
      * Constructor for a Camera.
@@ -38,6 +39,9 @@ public class Camera {
 
         if (newFrame != null && newFrame.rows() != 0 && newFrame.cols() != 0) {
             lastFrame = newFrame;
+            changed = true;
+        } else {
+            changed = false;
         }
 
         return lastFrame.clone();
@@ -63,5 +67,9 @@ public class Camera {
         }
         Camera camera = (Camera) o;
         return Objects.equals(link, camera.link);
+    }
+
+    public boolean isChanged() {
+        return changed;
     }
 }
