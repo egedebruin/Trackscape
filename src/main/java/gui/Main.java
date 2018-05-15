@@ -128,11 +128,11 @@ public class Main extends Application {
 
         // ------------- Create MediaPlayer Pane -------------
         StackPane mediaPlayerPane = new StackPane();
-        final int width = 300;
-        final int height = 300;
 
-        mediaPlayerPane.getChildren()
-                .addAll(new Rectangle(width, height, Color.BLACK), imageView);
+        mediaPlayerPane.getChildren().addAll(imageView);
+        File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
+        Image black = new Image(streamEnd.toURI().toString());
+        imageView.setImage(black);
 
         // When menu options are clicked
         openVideo(openVideo, primaryStage);
@@ -261,6 +261,7 @@ public class Main extends Application {
         if (!cameraHandler.getCameraList().get(0).isChanged()) {
             File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
+            cameraHandler.getCameraList().clear();
             cameraActive = false;
         } else {
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
