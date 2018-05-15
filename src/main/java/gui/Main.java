@@ -36,6 +36,9 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.util.Duration;
 
 /**
@@ -53,6 +56,7 @@ public class Main extends Application {
     private Timeline timeline = new Timeline(
         new KeyFrame(Duration.millis(timeframe), e -> showFrame())
     );
+    private ScheduledExecutorService timer;
     private CameraHandler cameraHandler = new CameraHandler();
 
     /**
@@ -224,6 +228,17 @@ public class Main extends Application {
         });
     }
 
+    private void updateImage() {
+        Runnable frameGrabber = new Runnable() {
+            @Override
+            public void run() {
+                showFrame();
+            }
+        };
+        this.timer = Executors.newSingleThreadScheduledExecutor();
+        this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+    }
+
     /**
      * askFrame.
      * Ask for new frame every time unit
@@ -331,11 +346,12 @@ public class Main extends Application {
         final Button playButton = new Button(">");
         playButton.setOnAction(event -> {
             if (!cameraHandler.getCameraList().isEmpty()) {
-                if (timeline.getStatus().toString() != "RUNNING") {
-                    askFrame();
-                } else {
-                    timeline.pause();
-                }
+                updateImage();
+//                if (timeline.getStatus().toString() != "RUNNING") {
+//                    askFrame();
+//                } else {
+//                    timeline.pause();
+//                }
             }
         });
 
