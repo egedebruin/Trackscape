@@ -48,6 +48,7 @@ public class Main extends Application {
     private ImageView imageView = new ImageView();
     private CameraHandler cameraHandler = new CameraHandler();
     private ScheduledExecutorService timer;
+    private boolean cameraActive = false;
 
     /**
      * start.
@@ -238,6 +239,7 @@ public class Main extends Application {
     private void updateImageView() {
         final int width = 750;
         if (!(cameraHandler.getCameraList().isEmpty())) {
+            cameraActive = true;
             Image currentFrame = retrieveFrame();
             imageView.setImage(currentFrame);
             imageView.setFitWidth(width);
@@ -278,7 +280,7 @@ public class Main extends Application {
         // Create the play/pauze button
         final Button playButton = new Button(">");
         playButton.setOnAction(event -> {
-            if (!cameraHandler.getCameraList().isEmpty()) {
+            if (!cameraActive) {
                 grabTimeFrame();
             }
         });
