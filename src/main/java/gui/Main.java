@@ -255,9 +255,16 @@ public class Main extends Application {
      * @return Image
      */
     private Image retrieveFrame() {
-        BufferedImage bufferedFrame =
-            cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
-        Image frame = SwingFXUtils.toFXImage(bufferedFrame, null);
+        Image frame;
+//        if (!cameraHandler.getCameraList().get(0).isChanged()) {
+//            File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
+//            frame = new Image(streamEnd.toURI().toString());
+//            cameraActive = false;
+//        } else {
+            BufferedImage bufferedFrame =
+                cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
+            frame = SwingFXUtils.toFXImage(bufferedFrame, null);
+//        }
         return frame;
     }
 
