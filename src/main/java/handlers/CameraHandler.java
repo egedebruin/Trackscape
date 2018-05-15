@@ -3,7 +3,10 @@ package handlers;
 import camera.Camera;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.opencv.core.Mat;
+import org.opencv.video.BackgroundSubtractorMOG2;
+import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
 
 /**
@@ -45,7 +48,30 @@ public class CameraHandler {
      * @return The new frame as a BufferedImage.
      */
     public Mat getNewFrame(Camera camera) {
-        return camera.getLastFrame();
+        Mat newFrame = camera.getLastFrame();
+        if (camera.getFirstFrame() == null) {
+            camera.setFirstFrame(newFrame);
+        }
+        return getSubtraction(newFrame, camera);
+    }
+
+    public Mat getSubtraction(Mat frame, Camera camera) {
+        Mat background = camera.getFirstFrame();
+        Mat result = frame.clone();
+        ArrayList list = new ArrayList();
+        IntStream.range(0, background.cols()).parallel().forEach(i ->
+            IntStream.range(0, background.rows()).parallel().forEach(j -> {
+            boolean different = false;
+            for (int k = 0; k < background.get(j, i).length; k++) {
+                if (Math.abs(background.get(j, i)[k] - frame.get(j, i)[k]) > 20) {
+                    different = true;
+                }
+            }
+            if (!different) {
+                result.put(j, i, 0, 0, 0);
+            }
+        }));
+        return result;
     }
 
     /**
