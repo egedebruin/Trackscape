@@ -46,6 +46,22 @@ public class Main extends Application {
         + ".sdp?real_stream--rtp-caching=100";
 
     /**
+     * main.
+     * Launch the application
+     * @param args arguments
+     */
+    public static void main(final String[] args) {
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs"
+            + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs"
+            + File.separator + "opencv_java341.dll");
+
+        launch(args);
+    }
+
+    /**
      * start.
      * Construct the structure of the GUI
      * @param primaryStage starting stage
@@ -87,10 +103,54 @@ public class Main extends Application {
         ArrayList<Pane> menuMediaPane =
                 createMenuMediaPane(videoPane, primaryStage);
 
+        // gets the menubar and puts it at the top of the videoPane
         videoPane.setTop(menuMediaPane.get(0));
+        // gets the imageView (location where videos are shown)
+        // and puts it in the center of the videoPane
         videoPane.setCenter(menuMediaPane.get(1));
 
         return videoPane;
+    }
+    /**
+     * createTitlePane.
+     * Create the top pane of the root
+     * @return Pane
+     */
+    private Pane createTitlePane() {
+        final int size = 80;
+
+        FlowPane titlePane = new FlowPane();
+        titlePane.setAlignment(Pos.TOP_CENTER);
+
+        Text text = new Text("TrackScape");
+        text.setFont(Font.font("Edwardian Script ITC", size));
+        text.setFill(Color.BLACK);
+        text.setStroke(Color.LIGHTSLATEGREY);
+        text.setStrokeWidth(2);
+
+        titlePane.getChildren().addAll(text);
+
+        return titlePane;
+    }
+
+    /**
+     * createBottomPane.
+     * Create the bottom pane of the root
+     * @return Pane
+     */
+    private Pane createBottomPane() {
+        final int size = 20;
+
+        Text text2 = new Text("© TrackScape");
+        text2.setFont(Font.font("Edwardian Script ITC", size));
+        text2.setFill(Color.BLACK);
+        text2.setStroke(Color.LIGHTSLATEGREY);
+        text2.setStrokeWidth(1);
+
+        FlowPane bottomPane = new FlowPane();
+        bottomPane.getChildren().addAll(text2, createMediaBar());
+
+        return bottomPane;
     }
 
     /**
@@ -245,63 +305,4 @@ public class Main extends Application {
 
         return mediaBar;
     }
-
-    /**
-     * createTitlePane.
-     * Create the top pane of the root
-     * @return Pane
-     */
-    private Pane createTitlePane() {
-        final int size = 80;
-
-        FlowPane titlePane = new FlowPane();
-        titlePane.setAlignment(Pos.TOP_CENTER);
-
-        Text text = new Text("TrackScape");
-        text.setFont(Font.font("Edwardian Script ITC", size));
-        text.setFill(Color.BLACK);
-        text.setStroke(Color.LIGHTSLATEGREY);
-        text.setStrokeWidth(2);
-
-        titlePane.getChildren().addAll(text);
-
-        return titlePane;
-    }
-
-    /**
-     * createBottomPane.
-     * Create the bottom pane of the root
-     * @return Pane
-     */
-    private Pane createBottomPane() {
-        final int size = 20;
-
-        Text text2 = new Text("© TrackScape");
-        text2.setFont(Font.font("Edwardian Script ITC", size));
-        text2.setFill(Color.BLACK);
-        text2.setStroke(Color.LIGHTSLATEGREY);
-        text2.setStrokeWidth(1);
-
-        FlowPane bottomPane = new FlowPane();
-        bottomPane.getChildren().addAll(text2, createMediaBar());
-
-        return bottomPane;
-    }
-
-    /**
-     * main.
-     * Launch the application
-     * @param args arguments
-     */
-    public static void main(final String[] args) {
-        System.load(System.getProperty("user.dir")
-            + File.separator + "libs"
-            + File.separator + "opencv_ffmpeg341_64.dll");
-        System.load(System.getProperty("user.dir")
-            + File.separator + "libs"
-            + File.separator + "opencv_java341.dll");
-
-        launch(args);
-    }
-
 }
