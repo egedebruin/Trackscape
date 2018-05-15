@@ -111,6 +111,7 @@ public class Main extends Application {
 
         return videoPane;
     }
+
     /**
      * createTitlePane.
      * Create the top pane of the root
