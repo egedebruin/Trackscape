@@ -15,11 +15,17 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
+/**
+ * Controller class for controlling GUI elements.
+ */
 class Controller {
 
     private CameraHandler cameraHandler;
     private boolean cameraActive;
 
+    /**
+     * Constructor method.
+     */
     Controller() {
         cameraHandler = new CameraHandler();
     }
@@ -70,16 +76,29 @@ class Controller {
         return image;
     }
 
+    /**
+     * Method to show a popup in which you can specify a stream url to initialize a connection.
+     * @param streamStage The popup window
+     * @param field the specified url.
+     */
     void createStream(final Stage streamStage, TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
         cameraHandler.addCamera(streamUrl);
     }
 
+    /**
+     * Method to initialize a connection with our active camera(stream).
+     * @param streamUrl THE url
+     */
     void createTheStream(String streamUrl) {
         cameraHandler.addCamera(streamUrl);
     }
 
+    /**
+     * Method to initialize a connection with a video.
+     * @param file the video file
+     */
     void createVideo(File file) {
         String fileUrl = file.toString();
         cameraHandler.addCamera(fileUrl);
@@ -117,6 +136,10 @@ class Controller {
         }
     }
 
+    /**
+     * Method that closes a stream.
+     * @param imageView View where the stream is displayed in
+     */
     void closeStream(ImageView imageView) {
         final int width = 500;
         if (cameraActive) {
