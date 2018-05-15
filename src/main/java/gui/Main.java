@@ -77,6 +77,8 @@ public class Main extends Application {
             + css.getAbsolutePath().replace("\\", "/"));
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(e -> System.exit(0));
     }
 
     /**
@@ -222,7 +224,7 @@ public class Main extends Application {
      * Call updateImageView method every period of time to retrieve a new frame
      */
     private void grabTimeFrame() {
-        final int period = 33;
+        final int period = 1;
         Runnable frameGrabber = () -> updateImageView();
         this.timer = Executors.newSingleThreadScheduledExecutor();
         this.timer.scheduleAtFixedRate(
