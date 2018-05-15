@@ -111,7 +111,10 @@ public class Main extends Application {
         ArrayList<Pane> menuMediaPane =
                 createMenuMediaPane(videoPane, primaryStage);
 
+        // gets the menubar and puts it at the top of the videoPane
         videoPane.setTop(menuMediaPane.get(0));
+        // gets the imageView (location where videos are shown)
+        // and puts it in the center of the videoPane
         videoPane.setCenter(menuMediaPane.get(1));
 
         return videoPane;
@@ -240,12 +243,6 @@ public class Main extends Application {
             }
         });
     }
-
-    /*
-     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     !!!Vanaf hieronder moet naar een andere class!!!
-     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
-     */
 
     /**
      * connectStream.
