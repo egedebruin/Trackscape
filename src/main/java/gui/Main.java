@@ -47,8 +47,7 @@ public class Main extends Application {
     /**
      * Class variables.
      */
-    private final int timeframe = 300;
-    private int counter = 0;
+    private final int timeframe = 40;
     private ImageView imageView = new ImageView();
     private Timeline timeline = new Timeline(
         new KeyFrame(Duration.millis(timeframe), e -> showFrame())
@@ -229,7 +228,7 @@ public class Main extends Application {
      * Ask for new frame every time unit
      */
     private void askFrame() {
-        final int cycles = 100;
+        final int cycles = Timeline.INDEFINITE;
         timeline.setCycleCount(cycles);
         timeline.play();
     }
@@ -239,8 +238,6 @@ public class Main extends Application {
      * Retrieve current frame and show in ImageView
      */
     private void showFrame() {
-        System.out.println("Framenumber: " + counter);
-        counter = counter + 1;
 
         final int width = 750;
         if (!(cameraHandler.getCameraList().isEmpty())) {

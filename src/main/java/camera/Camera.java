@@ -36,7 +36,7 @@ public class Camera {
     public Mat getLastFrame() {
         Mat newFrame = loadFrame();
 
-        if (newFrame != null) {
+        if (newFrame != null && newFrame.rows() != 0 && newFrame.cols() != 0) {
             lastFrame = newFrame;
         }
 
@@ -48,8 +48,9 @@ public class Camera {
      * @return The new frame in Mat format.
      */
     private Mat loadFrame() {
-        videoCapture.read(lastFrame);
-        return lastFrame.clone();
+        Mat loadFrame = new Mat();
+        videoCapture.read(loadFrame);
+        return loadFrame;
     }
 
     @Override
