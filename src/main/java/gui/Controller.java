@@ -1,5 +1,6 @@
 package gui;
 
+import camera.Camera;
 import handlers.CameraHandler;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -28,11 +29,10 @@ class Controller {
      * Retrieve last frame from video reader in handlers.CameraHandler
      * @return Image
      */
-    private Image retrieveFrame() {
+    private Image retrieveFrame(Camera cam) {
         Image frame;
-        Mat matrixFrame = cameraHandler
-            .getNewFrame(cameraHandler.getCamera(0));
-        if (!cameraHandler.getCamera(0).isChanged()) {
+        Mat matrixFrame = cameraHandler.getNewFrame(cam);
+        if (!cam.isChanged()) {
             File streamEnd = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
@@ -106,9 +106,9 @@ class Controller {
      */
     private void updateImageView(ImageView imageView) {
         final int width = 600;
-        if (!(cameraHandler.listSize() == 0)) {
+        for (int i = 0; i<cameraHandler.listSize();i++) {
             cameraActive = true;
-            Image currentFrame = retrieveFrame();
+            Image currentFrame = retrieveFrame(cameraHandler.getCamera(i));
             imageView.setImage(currentFrame);
             imageView.setFitWidth(width);
             imageView.setPreserveRatio(true);

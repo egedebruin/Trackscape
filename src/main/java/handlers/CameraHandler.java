@@ -1,8 +1,6 @@
 package handlers;
 
 import camera.Camera;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Mat;

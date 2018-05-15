@@ -1,7 +1,6 @@
 package gui;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -67,7 +66,7 @@ public class Main extends Application {
      * @param primaryStage starting stage
      */
     @Override
-    public void start(final Stage primaryStage) throws IOException {
+    public void start(final Stage primaryStage) {
         primaryStage.setTitle("TrackScape");
 
         // Choose best-fitted pane for the application
