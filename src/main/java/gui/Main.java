@@ -1,16 +1,10 @@
 package gui;
 
-import handlers.CameraHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,7 +29,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.opencv.core.Mat;
 
 /**
  * Main.
@@ -47,9 +40,10 @@ public class Main extends Application {
      * Class variables.
      */
     private ImageView imageView = new ImageView();
-    private CameraHandler cameraHandler = new CameraHandler();
-    private ScheduledExecutorService timer;
-    private boolean cameraActive = false;
+    private Controller controller = new Controller();
+    private String theStreamString = "rtsp://192.168.0.117:554/"
+        + "user=admin&password=&channel=1&stream=1"
+        + ".sdp?real_stream--rtp-caching=100";
 
     /**
      * start.
@@ -66,8 +60,6 @@ public class Main extends Application {
         root.setTop(createTitlePane());
         root.setCenter(createVideoPane(primaryStage));
         root.setBottom(createBottomPane());
-        //root.setLeft(...);
-        //root.setRight(...);
 
         // Show the scene
         final int width = 1250;
@@ -140,7 +132,7 @@ public class Main extends Application {
         // When menu options are clicked
         openVideo(openVideo, primaryStage);
         connectStream(connectStream, primaryStage);
-        theStream(theStream, primaryStage);
+        theStream(theStream);
 
         // Add menuPane and mediaPlayerPane to list of panes
         ArrayList<Pane> menuMediaList = new ArrayList<>();
@@ -163,8 +155,7 @@ public class Main extends Application {
             chooser.setTitle("Select Video File");
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
-                String fileUrl = file.toString();
-                cameraHandler.addCamera(fileUrl);
+                controller.createVideo(file);
             }
         });
     }
@@ -200,18 +191,12 @@ public class Main extends Application {
             popUpVBox.setAlignment(Pos.CENTER);
 
             // Save the url of the RTSP stream by clicking on submit
-            submit.setOnAction(t1 -> {
-                String streamUrl = field.getText();
-                streamStage.close();
-                cameraHandler.addCamera(streamUrl);
-            });
+            submit.setOnAction(t1 -> controller.createStream(streamStage, field));
 
             // Save the url of the RTSP stream by pressing on the enter key
             field.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode() == KeyCode.ENTER)  {
-                    String streamUrl = field.getText();
-                    streamStage.close();
-                    cameraHandler.addCamera(streamUrl);
+                    controller.createStream(streamStage, field);
                 }
             });
 
@@ -228,66 +213,9 @@ public class Main extends Application {
      * theStream.
      * Enables easy access to our  stream
      * @param theStream menuItem
-     * @param primaryStage the starting stage
      */
-    private void theStream(final MenuItem theStream, final Stage primaryStage) {
-        theStream.setOnAction(t -> {
-            String streamUrl = "rtsp://192.168.0.117:554/"
-                + "user=admin&password=&channel=1&stream=1"
-                + ".sdp?real_stream--rtp-caching=100";
-            cameraHandler.addCamera(streamUrl);
-        });
-    }
-
-    /**
-     * grabTimeFrame.
-     * Call updateImageView method every period of time to retrieve a new frame
-     */
-    private void grabTimeFrame() {
-        final int period = 1;
-        Runnable frameGrabber = () -> updateImageView();
-        timer = Executors.newSingleThreadScheduledExecutor();
-        timer.scheduleAtFixedRate(
-            frameGrabber, 0, period, TimeUnit.MILLISECONDS);
-    }
-
-    /**
-     * updateImageView.
-     * Retrieve current frame and show in ImageView
-     */
-    private void updateImageView() {
-        final int width = 600;
-        if (!(cameraHandler.getCameraList().isEmpty())) {
-            cameraActive = true;
-            Image currentFrame = retrieveFrame();
-            imageView.setImage(currentFrame);
-            imageView.setFitWidth(width);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            imageView.setCache(true);
-        }
-    }
-
-    /**
-     * retrieveFrame.
-     * Retrieve last frame from video reader in handlers.CameraHandler
-     * @return Image
-     */
-    private Image retrieveFrame() {
-        Image frame;
-        Mat matrixFrame = cameraHandler
-            .getNewFrame(cameraHandler.getCameraList().get(0));
-        if (!cameraHandler.getCameraList().get(0).isChanged()) {
-            File streamEnd = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\black.png");
-            frame = new Image(streamEnd.toURI().toString());
-            cameraHandler.getCameraList().clear();
-            cameraActive = false;
-        } else {
-            BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
-            frame = SwingFXUtils.toFXImage(bufferedFrame, null);
-        }
-        return frame;
+    private void theStream(final MenuItem theStream) {
+        theStream.setOnAction((ActionEvent t) -> controller.createTheStream(theStreamString));
     }
 
     /**
@@ -300,7 +228,6 @@ public class Main extends Application {
         final int right = 10;
         final int bottom = 5;
         final int left = 10;
-        final int width = 500;
 
         // Create mediabar for video options
         HBox mediaBar = new HBox();
@@ -309,24 +236,10 @@ public class Main extends Application {
 
         // Create the play/pauze button
         final Button playButton = new Button(">");
-        playButton.setOnAction(event -> {
-            if (!cameraActive) {
-                grabTimeFrame();
-            }
-        });
+        playButton.setOnAction(event -> controller.grabTimeFrame(imageView));
+
         final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> {
-            if (cameraActive) {
-                cameraHandler.getCameraList().clear();
-                cameraActive = false;
-                File image = new File(System.getProperty("user.dir")
-                    + "\\src\\main\\java\\gui\\images\\nostream.png");
-                Image noStreamAvailable = new Image(image.toURI().toString());
-                imageView.setImage(noStreamAvailable);
-                imageView.setFitWidth(width);
-                imageView.setPreserveRatio(true);
-            }
-        });
+        closeStream.setOnAction(event -> controller.closeStream(imageView));
 
         mediaBar.getChildren().addAll(playButton, closeStream);
 
@@ -373,31 +286,6 @@ public class Main extends Application {
         bottomPane.getChildren().addAll(text2, createMediaBar());
 
         return bottomPane;
-    }
-
-    /**
-     * Converts a Mat to a BufferedImage.
-     * @param videoMatImage The frame in Mat.
-     * @return The BufferedImage.
-     */
-    private BufferedImage matToBufferedImage(final Mat videoMatImage) {
-        int type;
-        if (videoMatImage.channels() == 1) {
-            type = BufferedImage.TYPE_BYTE_GRAY;
-        } else {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        }
-
-        int bufferSize = videoMatImage.channels()
-            * videoMatImage.cols() * videoMatImage.rows();
-        byte[] buffer = new byte[bufferSize];
-        videoMatImage.get(0, 0, buffer);
-        BufferedImage image = new BufferedImage(
-            videoMatImage.cols(), videoMatImage.rows(), type);
-        final byte[] targetPixels =
-            ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
-        return image;
     }
 
     /**
