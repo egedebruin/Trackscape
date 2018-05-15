@@ -69,6 +69,10 @@ public class Camera {
         return Objects.equals(link, camera.link);
     }
 
+    /**
+     * Returns if the frame of the camera is changed.
+     * @return If frame is changed.
+     */
     public boolean isChanged() {
         return changed;
     }
