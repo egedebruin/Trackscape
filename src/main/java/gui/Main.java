@@ -227,8 +227,8 @@ public class Main extends Application {
     private void grabTimeFrame() {
         final int period = 1;
         Runnable frameGrabber = () -> updateImageView();
-        this.timer = Executors.newSingleThreadScheduledExecutor();
-        this.timer.scheduleAtFixedRate(
+        timer = Executors.newSingleThreadScheduledExecutor();
+        timer.scheduleAtFixedRate(
             frameGrabber, 0, period, TimeUnit.MILLISECONDS);
     }
 
@@ -284,8 +284,20 @@ public class Main extends Application {
                 grabTimeFrame();
             }
         });
+        final Button closeStream = new Button("Close Stream");
+        closeStream.setOnAction(event -> {
+            if (cameraActive) {
+                cameraHandler.getCameraList().clear();
+                cameraActive = false;
+                File image = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\nostream.png");
+                Image noStreamAvailable = new Image(image.toURI().toString());
+                imageView.setImage(noStreamAvailable);
+                imageView.setFitWidth(500);
+                imageView.setPreserveRatio(true);
+            }
+        });
 
-        mediaBar.getChildren().addAll(playButton);
+        mediaBar.getChildren().addAll(playButton, closeStream);
 
         return mediaBar;
     }
