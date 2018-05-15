@@ -237,7 +237,7 @@ public class Main extends Application {
      * Retrieve current frame and show in ImageView
      */
     private void updateImageView() {
-        final int width = 750;
+        final int width = 600;
         if (!(cameraHandler.getCameraList().isEmpty())) {
             cameraActive = true;
             Image currentFrame = retrieveFrame();
@@ -256,15 +256,15 @@ public class Main extends Application {
      */
     private Image retrieveFrame() {
         Image frame;
-//        if (!cameraHandler.getCameraList().get(0).isChanged()) {
-//            File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
-//            frame = new Image(streamEnd.toURI().toString());
-//            cameraActive = false;
-//        } else {
-            BufferedImage bufferedFrame =
-                cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
+        BufferedImage bufferedFrame =
+            cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
+        if (!cameraHandler.getCameraList().get(0).isChanged()) {
+            File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
+            frame = new Image(streamEnd.toURI().toString());
+            cameraActive = false;
+        } else {
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
-//        }
+        }
         return frame;
     }
 
