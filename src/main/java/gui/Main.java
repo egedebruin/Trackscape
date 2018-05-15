@@ -2,6 +2,7 @@ package gui;
 
 import handlers.CameraHandler;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.opencv.core.Mat;
 
 /**
  * Main.
@@ -256,13 +258,13 @@ public class Main extends Application {
      */
     private Image retrieveFrame() {
         Image frame;
-        BufferedImage bufferedFrame =
-            cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
+        Mat matrixFrame = cameraHandler.getNewFrame(cameraHandler.getCameraList().get(0));
         if (!cameraHandler.getCameraList().get(0).isChanged()) {
             File streamEnd = new File(System.getProperty("user.dir") + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
             cameraActive = false;
         } else {
+            BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         }
         return frame;
@@ -350,6 +352,26 @@ public class Main extends Application {
 
         return bottomPane;
     }
+
+    /**
+     * Converts a Mat to a BufferedImage.
+     * @param videoMatImage The frame in Mat.
+     * @return The BufferedImage.
+     */
+    private BufferedImage matToBufferedImage(Mat videoMatImage) {
+
+        int type = videoMatImage.channels() == 1
+            ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_3BYTE_BGR;
+        int bufferSize = videoMatImage.channels() * videoMatImage.cols() * videoMatImage.rows();
+        byte[] buffer = new byte[bufferSize];
+        videoMatImage.get(0, 0, buffer);
+        BufferedImage image = new BufferedImage(videoMatImage.cols(), videoMatImage.rows(), type);
+        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+        System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
+        return image;
+
+    }
+
 
     /**
      * main.
