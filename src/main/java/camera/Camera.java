@@ -17,6 +17,7 @@ public class Camera {
     private VideoCapture videoCapture;
     private String link;
     private Mat lastFrame = new Mat();
+    private boolean changed = false;
 
     /**
      * Constructor for a Camera.
@@ -36,8 +37,11 @@ public class Camera {
     public Mat getLastFrame() {
         Mat newFrame = loadFrame();
 
-        if (newFrame != null) {
+        if (newFrame != null && newFrame.rows() != 0 && newFrame.cols() != 0) {
             lastFrame = newFrame;
+            changed = true;
+        } else {
+            changed = false;
         }
 
         return lastFrame.clone();
@@ -48,8 +52,9 @@ public class Camera {
      * @return The new frame in Mat format.
      */
     private Mat loadFrame() {
-        videoCapture.read(lastFrame);
-        return lastFrame.clone();
+        Mat loadFrame = new Mat();
+        videoCapture.read(loadFrame);
+        return loadFrame;
     }
 
     @Override
@@ -62,5 +67,13 @@ public class Camera {
         }
         Camera camera = (Camera) o;
         return Objects.equals(link, camera.link);
+    }
+
+    /**
+     * Returns if the frame of the camera is changed.
+     * @return If frame is changed.
+     */
+    public boolean isChanged() {
+        return changed;
     }
 }
