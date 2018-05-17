@@ -216,6 +216,8 @@ class Controller {
             false
         );
 
+        activityChart.getXYPlot().getRangeAxis().setUpperBound(20);
+
         return activityChart;
     }
 

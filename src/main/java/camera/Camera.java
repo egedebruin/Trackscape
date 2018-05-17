@@ -59,7 +59,7 @@ public class Camera {
             changed = false;
         }
 
-        if (frameCounter % 5 == 2) {
+        if (frameCounter % 5 == 0) {
             addActivity(newFrame);
         }
         frameCounter++;
@@ -82,14 +82,21 @@ public class Camera {
         }
         meanChange = meanChange / (double) meanValues.val.length;
 
-        if (firstTime == -1) {
-            firstTime = System.currentTimeMillis();
+        if (meanChange < 0.1) {
+            System.out.println("No peepz in image?");
         }
 
-        long currentTime = System.currentTimeMillis() - firstTime;
+        if (frameCounter > 30) {
+            if (firstTime == -1) {
+                firstTime = System.currentTimeMillis();
+            }
 
-        double[] tuple = {currentTime, meanChange};
-        activity.add(tuple);
+            long currentTime = System.currentTimeMillis() - firstTime;
+
+            double[] tuple = {currentTime / 1000.00, meanChange};
+
+            activity.add(tuple);
+        }
     }
 
     /**
