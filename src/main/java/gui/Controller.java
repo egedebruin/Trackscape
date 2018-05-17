@@ -5,6 +5,7 @@ import handlers.CameraHandler;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -167,35 +168,42 @@ class Controller {
     private void updatePlotView(final ImageView plotView) {
         final int width = 300;
         final int height = 300;
-        final JFreeChart chart = updateGraph();
+        final int cameraNumber = 0;
 
-        // Convert chart to image to show in Gui
-        BufferedImage bufferedImageChart
-            = chart.createBufferedImage(width, height);
-        Image plot = SwingFXUtils.toFXImage(bufferedImageChart, null);
+        if (cameraHandler.listSize() == 0) {
+            return;
+        }
 
-        plotView.setImage(plot);
-        plotView.setFitWidth(width);
-        plotView.setPreserveRatio(true);
-        plotView.setSmooth(true);
-        plotView.setCache(true);
+        if (!cameraHandler.getCamera(cameraNumber).getActivity().isEmpty()) {
+            final JFreeChart chart = updateGraph(
+                cameraHandler.getCamera(cameraNumber).getActivity());
+
+            // Convert chart to image to show in Gui
+            BufferedImage bufferedImageChart
+                = chart.createBufferedImage(width, height);
+            Image plot = SwingFXUtils.toFXImage(bufferedImageChart, null);
+
+            plotView.setImage(plot);
+            plotView.setFitWidth(width);
+            plotView.setPreserveRatio(true);
+            plotView.setSmooth(true);
+            plotView.setCache(true);
+        }
     }
 
     /**
      * Draws graph from data about movement difference.
+     * @param dataPoints the movement data
      * @return ChartPanel the plotted graph
      */
-    public JFreeChart updateGraph() {
+    public JFreeChart updateGraph(final List<double[]> dataPoints) {
+        // Add datapoints to an XYseries
         final XYSeries series =  new XYSeries("Random Data");
-        series.add(1.0, 500.2);
-        series.add(5.0, 694.1);
-        series.add(4.0, 100.0);
-        series.add(12.5, 734.4);
-        series.add(17.3, 453.2);
-        series.add(21.2, 500.2);
-        series.add(21.9, null);
-        series.add(25.6, 734.4);
-        series.add(30.0, 453.2);
+        for (int i = 0; i == dataPoints.size(); i++) {
+            series.add(dataPoints.get(i)[0], dataPoints.get(i)[1]);
+        }
+
+        // Create a chart with the data
         final XYSeriesCollection data = new XYSeriesCollection(series);
         final JFreeChart activityChart = ChartFactory.createXYLineChart(
             "",
@@ -207,6 +215,7 @@ class Controller {
             true,
             false
         );
+
         return activityChart;
     }
 

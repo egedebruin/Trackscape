@@ -29,7 +29,7 @@ public class Camera {
     private BackgroundSubtractorKNN knn =
         Video.createBackgroundSubtractorKNN(1, 1000, false);
     private long firstTime = -1;
-    private int i = 0;
+    private int frameCounter = 0;
 
     /**
      * Constructor for a Camera.
@@ -59,10 +59,10 @@ public class Camera {
             changed = false;
         }
 
-        if (i % 5 == 2) {
+        if (frameCounter % 5 == 2) {
             addActivity(newFrame);
         }
-        i++;
+        frameCounter++;
 
         return lastFrame.clone();
     }
@@ -71,7 +71,7 @@ public class Camera {
      * Adds an activity to the list of activities.
      * @param frame The frame to get the activity from.
      */
-    public void addActivity(Mat frame) {
+    public void addActivity(final Mat frame) {
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
         Scalar meanValues = Core.mean(subtraction);
