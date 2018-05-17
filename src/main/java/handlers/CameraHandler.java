@@ -28,7 +28,8 @@ public class CameraHandler {
     private List<Camera> cameraList;
 
     private HOGDescriptor hogDescriptor = new HOGDescriptor();
-
+    private final Scalar BOXCOLOUR_LOWER = new Scalar(20,100,100);
+    private final Scalar BOXCOLOUR_UPPER = new Scalar(29,255,255);
     private BackgroundSubtractorKNN knn =
         Video.createBackgroundSubtractorKNN(1, 1000, true);
 
@@ -68,8 +69,8 @@ public class CameraHandler {
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
-
-        return getSubtraction(newFrame, camera.getFirstFrame());
+        return getHSVColourFromFrame(bgrToHsv(newFrame));
+//        return getSubtraction(newFrame, camera.getFirstFrame());
     }
 
     public Mat getSubtraction(Mat frame, Mat background) {
@@ -107,6 +108,13 @@ public class CameraHandler {
         Mat hsv = new Mat();
         Imgproc.cvtColor(mat,hsv,Imgproc.COLOR_BGR2HSV);
         return hsv;
+    }
+
+    public Mat getHSVColourFromFrame(Mat hsvMatrix) {
+        Mat dest = new Mat();
+
+        Core.inRange(hsvMatrix,BOXCOLOUR_LOWER,BOXCOLOUR_UPPER,dest);
+        return dest;
     }
 
     /**
