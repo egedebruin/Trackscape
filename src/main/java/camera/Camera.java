@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.video.BackgroundSubtractorKNN;
+import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
 
 /**
@@ -18,20 +22,27 @@ public class Camera {
     private String link;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
+    private List<double[]> activity;
+    private BackgroundSubtractorKNN knn =
+        Video.createBackgroundSubtractorKNN();
+    private long firstTime = -1;
 
     /**
      * Constructor for a Camera.
+     *
      * @param newCapture The VideoCapture of this camera.
-     * @param newLink The link of this camera.
+     * @param newLink    The link of this camera.
      */
     public Camera(VideoCapture newCapture, String newLink) {
         cameraObjectList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
+        activity = new ArrayList<>();
     }
 
     /**
      * Gets the last known frame of this camera.
+     *
      * @return The frame in Mat format.
      */
     public Mat getLastFrame() {
@@ -44,11 +55,39 @@ public class Camera {
             changed = false;
         }
 
+        addActivity(newFrame);
+
         return lastFrame.clone();
     }
 
     /**
+     * Adds an activity to the list of activities.
+     * @param frame The frame to get the activity from.
+     */
+    public void addActivity(Mat frame) {
+        Mat subtraction = new Mat();
+        knn.apply(frame, subtraction);
+        Scalar meanValues = Core.mean(subtraction);
+
+        double meanChange = 0;
+        for (double v : meanValues.val) {
+            meanChange += v;
+        }
+        meanChange = meanChange / (double) meanValues.val.length;
+
+        if (firstTime == -1) {
+            firstTime = System.currentTimeMillis();
+        }
+
+        long currentTime = System.currentTimeMillis() - firstTime;
+
+        double[] tuple = {currentTime, meanChange};
+        activity.add(tuple);
+    }
+
+    /**
      * Reads the videoCapture to load the new frame.
+     *
      * @return The new frame in Mat format.
      */
     private Mat loadFrame() {
@@ -71,9 +110,19 @@ public class Camera {
 
     /**
      * Returns if the frame of the camera is changed.
+     *
      * @return If frame is changed.
      */
     public boolean isChanged() {
         return changed;
+    }
+
+    /**
+     * Gets the activity of this camera.
+     *
+     * @return The activity.
+     */
+    public List<double[]> getActivity() {
+        return activity;
     }
 }
