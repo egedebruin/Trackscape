@@ -24,8 +24,9 @@ public class Camera {
     private boolean changed = false;
     private List<double[]> activity;
     private BackgroundSubtractorKNN knn =
-        Video.createBackgroundSubtractorKNN();
+        Video.createBackgroundSubtractorKNN(1, 1000, false);
     private long firstTime = -1;
+    private int i = 0;
 
     /**
      * Constructor for a Camera.
@@ -55,7 +56,10 @@ public class Camera {
             changed = false;
         }
 
-        addActivity(newFrame);
+        if (i % 5 == 2) {
+            addActivity(newFrame);
+        }
+        i++;
 
         return lastFrame.clone();
     }
