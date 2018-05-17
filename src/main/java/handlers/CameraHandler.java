@@ -99,6 +99,17 @@ public class CameraHandler {
     }
 
     /**
+     * MAthod that changes colourspaces of a Mat from BGR to HSV.
+     * @param mat
+     * @return
+     */
+    public Mat bgrToHsv(Mat mat) {
+        Mat hsv = new Mat();
+        Imgproc.cvtColor(mat,hsv,Imgproc.COLOR_BGR2HSV);
+        return hsv;
+    }
+
+    /**
      * Get the size of the list of cameras.
      *
      * @return The size of the list.
