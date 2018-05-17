@@ -13,6 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.opencv.core.Mat;
 
 /**
@@ -20,6 +25,9 @@ import org.opencv.core.Mat;
  */
 class Controller {
 
+    /**
+     * Class parameters.
+     */
     private CameraHandler cameraHandler;
     private boolean cameraActive;
 
@@ -33,9 +41,10 @@ class Controller {
     /**
      * retrieveFrame.
      * Retrieve last frame from video reader in handlers.CameraHandler
+     * @param cam the camera that is used
      * @return Image
      */
-    private Image retrieveFrame(Camera cam) {
+    private Image retrieveFrame(final Camera cam) {
         Image frame;
         Mat matrixFrame = cameraHandler.getNewFrame(cam);
         if (!cam.isChanged()) {
@@ -77,11 +86,12 @@ class Controller {
     }
 
     /**
-     * Method to show a popup in which you can specify a stream url to initialize a connection.
+     * Method to show a popup in which
+     * you can specify a stream url to initialize a connection.
      * @param streamStage The popup window
      * @param field the specified url.
      */
-    void createStream(final Stage streamStage, TextField field) {
+    void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
         cameraHandler.addCamera(streamUrl);
@@ -91,7 +101,7 @@ class Controller {
      * Method to initialize a connection with our active camera(stream).
      * @param streamUrl THE url
      */
-    void createTheStream(String streamUrl) {
+    void createTheStream(final String streamUrl) {
         cameraHandler.addCamera(streamUrl);
     }
 
@@ -99,7 +109,7 @@ class Controller {
      * Method to initialize a connection with a video.
      * @param file the video file
      */
-    void createVideo(File file) {
+    void createVideo(final File file) {
         String fileUrl = file.toString();
         cameraHandler.addCamera(fileUrl);
     }
@@ -107,12 +117,14 @@ class Controller {
     /**
      * grabTimeFrame.
      * Call updateImageView method every period of time to retrieve a new frame
+     * @param imageView shows the image
+     * @param plotView shows the plot
      */
-    void grabTimeFrame(ImageView imageView) {
+    void grabTimeFrame(final ImageView imageView, final ImageView plotView) {
         if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
-            Runnable frameGrabber = () -> updateImageView(imageView);
+            Runnable frameGrabber = () -> updateViews(imageView, plotView);
             timer = Executors.newSingleThreadScheduledExecutor();
             timer.scheduleAtFixedRate(
                 frameGrabber, 0, period, TimeUnit.MILLISECONDS);
@@ -120,12 +132,23 @@ class Controller {
     }
 
     /**
+     * updateViews.
+     * @param imageView the view for the video
+     * @param plotView the view for the activity plot
+     */
+    void updateViews(final ImageView imageView, final ImageView plotView) {
+        updateImageView(imageView);
+        updatePlotView(plotView);
+    }
+
+    /**
      * updateImageView.
      * Retrieve current frame and show in ImageView
+     * @param imageView shows the image
      */
-    private void updateImageView(ImageView imageView) {
+    private void updateImageView(final ImageView imageView) {
         final int width = 600;
-        for (int i = 0; i<cameraHandler.listSize();i++) {
+        for (int i = 0; i < cameraHandler.listSize(); i++) {
             cameraActive = true;
             Image currentFrame = retrieveFrame(cameraHandler.getCamera(i));
             imageView.setImage(currentFrame);
@@ -137,10 +160,61 @@ class Controller {
     }
 
     /**
+     * updatePlotView.
+     * Updates the plot.
+     * @param plotView the ImageView for the plot
+     */
+    private void updatePlotView(final ImageView plotView) {
+        final int width = 300;
+        final int height = 300;
+        final JFreeChart chart = updateGraph();
+
+        // Convert chart to image to show in Gui
+        BufferedImage bufferedImageChart
+            = chart.createBufferedImage(width, height);
+        Image plot = SwingFXUtils.toFXImage(bufferedImageChart, null);
+
+        plotView.setImage(plot);
+        plotView.setFitWidth(width);
+        plotView.setPreserveRatio(true);
+        plotView.setSmooth(true);
+        plotView.setCache(true);
+    }
+
+    /**
+     * Draws graph from data about movement difference.
+     * @return ChartPanel the plotted graph
+     */
+    public JFreeChart updateGraph() {
+        final XYSeries series =  new XYSeries("Random Data");
+        series.add(1.0, 500.2);
+        series.add(5.0, 694.1);
+        series.add(4.0, 100.0);
+        series.add(12.5, 734.4);
+        series.add(17.3, 453.2);
+        series.add(21.2, 500.2);
+        series.add(21.9, null);
+        series.add(25.6, 734.4);
+        series.add(30.0, 453.2);
+        final XYSeriesCollection data = new XYSeriesCollection(series);
+        final JFreeChart activityChart = ChartFactory.createXYLineChart(
+            "",
+            "Time",
+            "Movement Change",
+            data,
+            PlotOrientation.VERTICAL,
+            true,
+            true,
+            false
+        );
+        return activityChart;
+    }
+
+    /**
      * Method that closes a stream.
      * @param imageView View where the stream is displayed in
      */
-    void closeStream(ImageView imageView) {
+    void closeStream(final ImageView imageView) {
         final int width = 500;
         if (cameraActive) {
             cameraHandler.clearList();
@@ -153,4 +227,5 @@ class Controller {
             imageView.setPreserveRatio(true);
         }
     }
+
 }

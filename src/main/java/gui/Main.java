@@ -39,6 +39,7 @@ public class Main extends Application {
      * Class variables.
      */
     private ImageView imageView = new ImageView();
+    private ImageView plotView = new ImageView();
     private Controller controller = new Controller();
     private String theStreamString = "rtsp://192.168.0.117:554/"
         + "user=admin&password=&channel=1&stream=1"
@@ -75,6 +76,7 @@ public class Main extends Application {
         root.setTop(createTitlePane());
         root.setCenter(createVideoPane(primaryStage));
         root.setBottom(createBottomPane());
+        root.setRight(createDataPane());
 
         // Show the scene
         final int width = 1250;
@@ -88,27 +90,6 @@ public class Main extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(e -> System.exit(0));
-    }
-
-    /**
-     * createVideoPane.
-     * Create the center pane for the root, containing menu and mediaPlayer
-     * @param primaryStage starting stage
-     * @return videoPane
-     */
-    private Pane createVideoPane(final Stage primaryStage) {
-        BorderPane videoPane = new BorderPane();
-
-        ArrayList<Pane> menuMediaPane =
-                createMenuMediaPane(videoPane, primaryStage);
-
-        // gets the menubar and puts it at the top of the videoPane
-        videoPane.setTop(menuMediaPane.get(0));
-        // gets the imageView (location where videos are shown)
-        // and puts it in the center of the videoPane
-        videoPane.setCenter(menuMediaPane.get(1));
-
-        return videoPane;
     }
 
     /**
@@ -134,6 +115,27 @@ public class Main extends Application {
     }
 
     /**
+     * createVideoPane.
+     * Create the center pane for the root, containing menu and mediaPlayer
+     * @param primaryStage starting stage
+     * @return videoPane
+     */
+    private Pane createVideoPane(final Stage primaryStage) {
+        BorderPane videoPane = new BorderPane();
+
+        ArrayList<Pane> menuMediaPane =
+            createMenuMediaPane(videoPane, primaryStage);
+
+        // gets the menubar and puts it at the top of the videoPane
+        videoPane.setTop(menuMediaPane.get(0));
+        // gets the imageView (location where videos are shown)
+        // and puts it in the center of the videoPane
+        videoPane.setCenter(menuMediaPane.get(1));
+
+        return videoPane;
+    }
+
+    /**
      * createBottomPane.
      * Create the bottom pane of the root
      * @return Pane
@@ -151,6 +153,21 @@ public class Main extends Application {
         bottomPane.getChildren().addAll(text2, createMediaBar());
 
         return bottomPane;
+    }
+
+    /**
+     * createDataPane.
+     * Constructs pane where activity graph is plotted
+     * @return Pane dataPane with plotted graph
+     */
+    private Pane createDataPane() {
+        FlowPane dataPane = new FlowPane();
+        dataPane.getChildren().add(plotView);
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\black.png");
+        Image black = new Image(streamEnd.toURI().toString());
+        plotView.setImage(black);
+        return dataPane;
     }
 
     /**
@@ -251,7 +268,8 @@ public class Main extends Application {
             popUpVBox.setAlignment(Pos.CENTER);
 
             // Save the url of the RTSP stream by clicking on submit
-            submit.setOnAction(t1 -> controller.createStream(streamStage, field));
+            submit.setOnAction(t1 ->
+                controller.createStream(streamStage, field));
 
             // Save the url of the RTSP stream by pressing on the enter key
             field.setOnKeyPressed(keyEvent -> {
@@ -275,12 +293,14 @@ public class Main extends Application {
      * @param theStream menuItem
      */
     private void theStream(final MenuItem theStream) {
-        theStream.setOnAction((ActionEvent t) -> controller.createTheStream(theStreamString));
+        theStream.setOnAction((ActionEvent t) ->
+            controller.createTheStream(theStreamString));
     }
 
     /**
      * createMediaBar.
      * Create a mediaBar for the mediaPlayer
+     * with buttons for play and close stream
      * @return HBox
      */
     private HBox createMediaBar() {
@@ -296,7 +316,8 @@ public class Main extends Application {
 
         // Create the play/pauze button
         final Button playButton = new Button(">");
-        playButton.setOnAction(event -> controller.grabTimeFrame(imageView));
+        playButton.setOnAction(event ->
+            controller.grabTimeFrame(imageView, plotView));
 
         final Button closeStream = new Button("Close Stream");
         closeStream.setOnAction(event -> controller.closeStream(imageView));

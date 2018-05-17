@@ -13,6 +13,9 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
+    /**
+     * Class parameters.
+     */
     private List<CameraObject> cameraObjectList;
     private VideoCapture videoCapture;
     private String link;
@@ -24,7 +27,7 @@ public class Camera {
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      */
-    public Camera(VideoCapture newCapture, String newLink) {
+    public Camera(final VideoCapture newCapture, final String newLink) {
         cameraObjectList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
@@ -57,8 +60,13 @@ public class Camera {
         return loadFrame;
     }
 
+    /**
+     * Overriding equals method.
+     * @param o the object to be compared
+     * @return boolean
+     */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
