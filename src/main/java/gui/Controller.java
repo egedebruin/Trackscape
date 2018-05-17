@@ -199,7 +199,7 @@ class Controller {
     public JFreeChart updateGraph(final List<double[]> dataPoints) {
         // Add datapoints to an XYseries
         final XYSeries series =  new XYSeries("Random Data");
-        for (int i = 0; i == dataPoints.size(); i++) {
+        for (int i = 0; i < dataPoints.size(); i++) {
             series.add(dataPoints.get(i)[0], dataPoints.get(i)[1]);
         }
 
