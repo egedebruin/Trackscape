@@ -25,7 +25,15 @@ public class Camera {
     private String link;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
-    private List<double[]> activity;
+    private Mat upperLeft = new Mat();
+    private Mat upperRight = new Mat();
+    private Mat lowerLeft = new Mat();
+    private Mat lowerRight = new Mat();
+    private List<List<double[]>> activity;
+    private List<double[]> activityUpperLeft;
+    private List<double[]> activityUpperRight;
+    private List<double[]> activityLowerLeft;
+    private List<double[]> activityLowerRight;
     private BackgroundSubtractorKNN knn =
         Video.createBackgroundSubtractorKNN(1, 1000, false);
     private long firstTime = -1;
@@ -42,6 +50,10 @@ public class Camera {
         videoCapture = newCapture;
         link = newLink;
         activity = new ArrayList<>();
+        activityUpperLeft = new ArrayList<>();
+        activityUpperRight = new ArrayList<>();
+        activityLowerLeft = new ArrayList<>();
+        activityLowerRight = new ArrayList<>();
     }
 
     /**
@@ -59,19 +71,38 @@ public class Camera {
             changed = false;
         }
 
+        divideFrame(newFrame);
+
         if (frameCounter % 5 == 0) {
-            addActivity(newFrame);
+            addActivity(upperLeft, activityUpperLeft);
+            addActivity(upperRight, activityUpperRight);
+            addActivity(lowerLeft, activityLowerLeft);
+            addActivity(lowerRight, activityLowerRight);
         }
         frameCounter++;
 
         return lastFrame.clone();
     }
 
+    public void divideFrame(Mat frame) {
+      upperLeft = frame.colRange(0, frame.width()/2);
+      upperLeft.rowRange(0, frame.height()/2);
+
+      upperRight = frame.colRange(frame.width()/2, frame.width()-1);
+      upperRight.rowRange(0, frame.height()/2);
+
+      lowerLeft = frame.colRange(0, frame.width()/2);
+      lowerLeft.rowRange(frame.height()/2, frame.height()-1);
+
+      lowerRight = frame.colRange(frame.width()/2, frame.width()-1);
+      lowerRight = frame.rowRange(frame.height()/2, frame.height()-1);
+    }
+
     /**
      * Adds an activity to the list of activities.
      * @param frame The frame to get the activity from.
      */
-    public void addActivity(final Mat frame) {
+    public void addActivity(final Mat frame, List<double[]> activityList) {
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
         Scalar meanValues = Core.mean(subtraction);
@@ -95,7 +126,8 @@ public class Camera {
 
             double[] tuple = {currentTime / 1000.00, meanChange};
 
-            activity.add(tuple);
+            activityList.add(tuple);
+            activity.add(activityList);
         }
     }
 
@@ -141,7 +173,7 @@ public class Camera {
      *
      * @return The activity.
      */
-    public List<double[]> getActivity() {
+    public List<List<double[]>> getActivity() {
         return activity;
     }
 }

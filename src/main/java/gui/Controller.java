@@ -176,7 +176,7 @@ class Controller {
 
         if (!cameraHandler.getCamera(cameraNumber).getActivity().isEmpty()) {
             final JFreeChart chart = updateGraph(
-                cameraHandler.getCamera(cameraNumber).getActivity());
+                cameraHandler.getCamera(cameraNumber).getActivity().get(0)); //only the first list is displayed
 
             // Convert chart to image to show in Gui
             BufferedImage bufferedImageChart
