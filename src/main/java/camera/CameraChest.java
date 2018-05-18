@@ -19,7 +19,7 @@ import org.opencv.imgproc.Imgproc;
 public class CameraChest extends CameraObject {
     private static final Scalar BOXCOLOUR_LOWER = new Scalar(18,100,100);
     private static final Scalar BOXCOLOUR_UPPER = new Scalar(35,255,255);
-    private static final double MINBOXAREA = 300;
+    private static final double MINBOXAREA = 3000;
     static Boolean isOpened = false;
 
     /**
