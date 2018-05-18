@@ -7,20 +7,12 @@ import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfDouble;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.MatOfRect;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.HOGDescriptor;
-import org.opencv.video.BackgroundSubtractorKNN;
-import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
-
-import static camera.CameraChest.MINBOXSIZE;
 
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
@@ -32,16 +24,13 @@ public class CameraHandler {
      */
     private List<Camera> cameraList;
     private CameraChest cameraChest = new CameraChest();
-    private HOGDescriptor hogDescriptor = new HOGDescriptor();
-
-    private BackgroundSubtractorKNN knn =
-        Video.createBackgroundSubtractorKNN(1, 1000, true);
 
     /**
      * Constructor for the CameraHandler class.
      */
     public CameraHandler() {
         cameraList = new ArrayList<>();
+        HOGDescriptor hogDescriptor = new HOGDescriptor();
         hogDescriptor.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
     }
 
@@ -87,7 +76,7 @@ public class CameraHandler {
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
      *                            but the boxes are already found
      */
-    public void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame) {
+    private void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame) {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame,contours,contourMat,
@@ -108,7 +97,7 @@ public class CameraHandler {
             org.opencv.core.Rect rect = Imgproc.boundingRect(points);
 
             // Don't draw boxes around area smaller than MINBOXSIZE pixels
-            if (rect.height*rect.width < MINBOXSIZE) {
+            if (rect.height * rect.width < CameraChest.MINBOXSIZE) {
                 return;
             }
             System.out.println("Chest is opened");
@@ -117,43 +106,11 @@ public class CameraHandler {
     }
 
     /**
-     * Method that subtracts a background from a frame.
-     * @param frame the frame that needs the background subtracted
-     * @param background    the background that neeeds to be subtracted from the frame
-     * @return
-     */
-    public Mat getSubtraction(Mat frame, Mat background) {
-        MatOfRect rects = new MatOfRect();
-        MatOfDouble matOfDouble = new MatOfDouble();
-
-        Mat result = new Mat();
-
-        knn.apply(frame, result);
-
-        List<Rect> list = rects.toList();
-
-        for (int i = 0; i < list.size(); i++) {
-            if (matOfDouble.toList().get(i) > 1) {
-                System.out.println(matOfDouble.toList().get(i));
-                Rect rectangle = list.get(i);
-                Point point1 = new Point();
-                Point point2 = new Point();
-                point1.x = rectangle.x;
-                point1.y = rectangle.y;
-                point2.x = rectangle.x + rectangle.width;
-                point2.y = rectangle.y + rectangle.height;
-                Imgproc.rectangle(frame, point1, point2, new Scalar(0, 255, 0), 2);
-            }
-        }
-        return frame;
-    }
-
-    /**
      * Method that changes colourspaces of a Mat from BGR to HSV.
      * @param mat matrix to be converted to hsv colour space
-     * @return
+     * @return Mat a hsv colour space representation of the previously bgr matrix
      */
-    public Mat bgrToHsv(Mat mat) {
+    private Mat bgrToHsv(Mat mat) {
         Mat hsv = new Mat();
         Imgproc.cvtColor(mat,hsv,Imgproc.COLOR_BGR2HSV);
         return hsv;
@@ -164,7 +121,7 @@ public class CameraHandler {
      * @param hsvMatrix a frame in hsv colour space
      * @return the black/white frame showing chest candidates
      */
-    public Mat getChestsFromFrame(Mat hsvMatrix) {
+    private Mat getChestsFromFrame(Mat hsvMatrix) {
         Mat dest = new Mat();
         Core.inRange(hsvMatrix,CameraChest.BOXCOLOUR_LOWER,CameraChest.BOXCOLOUR_UPPER,dest);
 
