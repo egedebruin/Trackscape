@@ -1,3 +1,4 @@
+import static camera.CameraObject.bgrToHsv;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,7 +18,6 @@ import org.opencv.videoio.VideoCapture;
 class CameraHandlerTest {
 
     private final String videoLink = "files" + File.separator + "webcast.mov";
-    private final String shortVideoLink = "files" + File.separator + "postit.mov";
 
     static {
         // These should be at the start of the application,
@@ -46,33 +46,9 @@ class CameraHandlerTest {
     }
 
     @Test
-    void bgrToHsvTest() throws IOException {
-        VideoCapture videoCapture = new VideoCapture(shortVideoLink);
-        Camera camera = new Camera(videoCapture, shortVideoLink);
-
-        Mat mat = camera.getLastFrame();
-
-        assertNotNull(mat);
-
-        //turns mat in into hsv colour space
-        Mat mat2 = new CameraHandler().bgrToHsv(mat);
-        assertNotEquals(mat,mat2);
-    }
-
-    @Test
-    void includeChestContoursInFrameCallTest() {
-        CameraHandler ch = new CameraHandler();
-        Camera camera = ch.addCamera(shortVideoLink);
-        ch.getNewFrame(camera);
-
-        //if cameraChest.isOpened it means that includeContoursInFrame gets called.
-        assertTrue(ch.cameraChest.isOpened);
-    }
-
-    @Test
     void clearListTest() {
         CameraHandler ch = new CameraHandler();
-        ch.addCamera(shortVideoLink);
+        ch.addCamera(videoLink);
 
         assertTrue(ch.listSize() > 0);
         ch.clearList();
@@ -82,7 +58,7 @@ class CameraHandlerTest {
     @Test
     void getCameraTest() {
         CameraHandler ch = new CameraHandler();
-        Camera camera = ch.addCamera(shortVideoLink);
+        Camera camera = ch.addCamera(videoLink);
         assertEquals(camera,ch.getCamera(0));
     }
 
