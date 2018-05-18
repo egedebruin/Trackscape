@@ -74,8 +74,8 @@ public class Main extends Application {
 
         // Set the scene and show primaryStage
         primaryStage.setTitle("TrackScape");
-        primaryStage.setScene(monitorScene
-            .createMonitorScene(width, height, primaryStage, stylesheet));
+        primaryStage.setScene(inputScene
+            .createInputScene(width, height, primaryStage, stylesheet));
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> System.exit(0));
     }

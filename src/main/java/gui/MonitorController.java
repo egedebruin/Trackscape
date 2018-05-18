@@ -154,7 +154,6 @@ public class MonitorController {
             imageView.setImage(noStreamAvailable);
             imageView.setFitWidth(width);
             imageView.setPreserveRatio(true);
-
         }
     }
 }
