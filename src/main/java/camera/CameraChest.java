@@ -7,6 +7,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
@@ -18,8 +19,8 @@ import org.opencv.imgproc.Imgproc;
 public class CameraChest extends CameraObject {
     private static final Scalar BOXCOLOUR_LOWER = new Scalar(18,100,100);
     private static final Scalar BOXCOLOUR_UPPER = new Scalar(35,255,255);
-    private static final int MINBOXSIZE = 10;
-    public static Boolean isOpened = false;
+    private static final double MINBOXAREA = 300;
+    static Boolean isOpened = false;
 
     /**
      * Method that checks for boxes in a frame.
@@ -58,6 +59,7 @@ public class CameraChest extends CameraObject {
         Imgproc.findContours(blackWhiteChestFrame,contours,contourMat,
             Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_SIMPLE);
 
+        Rect rect = new Rect();
         MatOfPoint2f approxCurve = new MatOfPoint2f();
         for (MatOfPoint contour: contours) {
             MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
@@ -70,14 +72,18 @@ public class CameraChest extends CameraObject {
             MatOfPoint points = new MatOfPoint(approxCurve.toArray());
 
             // Get bounding rect of contour
-            org.opencv.core.Rect rect = Imgproc.boundingRect(points);
-
-            // Don't draw boxes around area smaller than MINBOXSIZE pixels
-            if (rect.height * rect.width < CameraChest.MINBOXSIZE) {
-                return;
+            Rect newrect = Imgproc.boundingRect(points);
+            // Save the larger contour for printing purposes
+            if (newrect.area() > rect.area()) {
+                rect = newrect;
             }
-            System.out.println("Chest is opened");
-            Imgproc.rectangle(frame, rect.tl(), rect.br(), new Scalar(0, 0, 255), 2);
+
+        }
+        // Rect is the bounding box over the largest contour,
+        // show it when the area is at least minboxarea
+        if (rect.area() > MINBOXAREA) {
+            System.out.println("Chest is opened, area: " + rect.area());
+            Imgproc.rectangle(frame, rect.tl(), rect.br(), new Scalar(255, 0, 255), 2);
         }
     }
 
