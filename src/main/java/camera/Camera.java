@@ -30,11 +30,13 @@ public class Camera {
     private Mat lowerLeft = new Mat();
     private Mat lowerRight = new Mat();
     private List<List<double[]>> activity;
-    private List<double[]> activityUpperLeft;
-    private List<double[]> activityUpperRight;
-    private List<double[]> activityLowerLeft;
-    private List<double[]> activityLowerRight;
-    private BackgroundSubtractorKNN knn =
+    private BackgroundSubtractorKNN knn0 =
+        Video.createBackgroundSubtractorKNN(1, 1000, false);
+    private BackgroundSubtractorKNN knn1 =
+        Video.createBackgroundSubtractorKNN(1, 1000, false);
+    private BackgroundSubtractorKNN knn2 =
+        Video.createBackgroundSubtractorKNN(1, 1000, false);
+    private BackgroundSubtractorKNN knn3 =
         Video.createBackgroundSubtractorKNN(1, 1000, false);
     private long firstTime = -1;
     private int frameCounter = 0;
@@ -50,10 +52,9 @@ public class Camera {
         videoCapture = newCapture;
         link = newLink;
         activity = new ArrayList<>();
-        activityUpperLeft = new ArrayList<>();
-        activityUpperRight = new ArrayList<>();
-        activityLowerLeft = new ArrayList<>();
-        activityLowerRight = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            activity.add(new ArrayList<>());
+        }
     }
 
     /**
@@ -74,10 +75,10 @@ public class Camera {
         divideFrame(newFrame);
 
         if (frameCounter % 5 == 0) {
-            addActivity(upperLeft, activityUpperLeft);
-            addActivity(upperRight, activityUpperRight);
-            addActivity(lowerLeft, activityLowerLeft);
-            addActivity(lowerRight, activityLowerRight);
+            addActivity(upperLeft, 0, knn0);
+            addActivity(upperRight, 1, knn1);
+            addActivity(lowerLeft, 2, knn2);
+            addActivity(lowerRight, 3, knn3);
         }
         frameCounter++;
 
@@ -86,36 +87,35 @@ public class Camera {
 
     public void divideFrame(Mat frame) {
       upperLeft = frame.colRange(0, frame.width()/2);
-      upperLeft.rowRange(0, frame.height()/2);
+      upperLeft = upperLeft.rowRange(0, frame.height()/2);
 
       upperRight = frame.colRange(frame.width()/2, frame.width()-1);
-      upperRight.rowRange(0, frame.height()/2);
+      upperRight = upperRight.rowRange(0, frame.height()/2);
 
       lowerLeft = frame.colRange(0, frame.width()/2);
-      lowerLeft.rowRange(frame.height()/2, frame.height()-1);
+      lowerLeft = lowerLeft.rowRange(frame.height()/2, frame.height()-1);
 
       lowerRight = frame.colRange(frame.width()/2, frame.width()-1);
-      lowerRight = frame.rowRange(frame.height()/2, frame.height()-1);
+      lowerRight = lowerRight.rowRange(frame.height()/2, frame.height()-1);
     }
 
     /**
      * Adds an activity to the list of activities.
      * @param frame The frame to get the activity from.
      */
-    public void addActivity(final Mat frame, List<double[]> activityList) {
+    public void addActivity(final Mat frame, int i, BackgroundSubtractorKNN knn) {
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
         Scalar meanValues = Core.mean(subtraction);
 
-        double meanChange = 0;
+        double change = 0;
         for (double v : meanValues.val) {
-            meanChange += v;
+            change += v;
         }
-        meanChange = meanChange / (double) meanValues.val.length;
 
-        if (meanChange < 0.1) {
-            System.out.println("No peepz in image?");
-        }
+//        if (change < 0.1) {
+//            System.out.println("No peepz in image?");
+//        }
 
         if (frameCounter > 30) {
             if (firstTime == -1) {
@@ -124,10 +124,10 @@ public class Camera {
 
             long currentTime = System.currentTimeMillis() - firstTime;
 
-            double[] tuple = {currentTime / 1000.00, meanChange};
+            double[] tuple = {currentTime / 1000.00, change};
 
-            activityList.add(tuple);
-            activity.add(activityList);
+            System.out.println(change);
+            activity.get(i).add(tuple);
         }
     }
 
