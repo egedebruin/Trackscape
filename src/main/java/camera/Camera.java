@@ -25,21 +25,12 @@ public class Camera {
     private String link;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
-    private Mat upperLeft = new Mat();
-    private Mat upperRight = new Mat();
-    private Mat lowerLeft = new Mat();
-    private Mat lowerRight = new Mat();
+    private List<Mat> frameParts = new ArrayList<>();
     private List<List<double[]>> activity;
-    private BackgroundSubtractorKNN knn0 =
-        Video.createBackgroundSubtractorKNN(1, 1000, false);
-    private BackgroundSubtractorKNN knn1 =
-        Video.createBackgroundSubtractorKNN(1, 1000, false);
-    private BackgroundSubtractorKNN knn2 =
-        Video.createBackgroundSubtractorKNN(1, 1000, false);
-    private BackgroundSubtractorKNN knn3 =
-        Video.createBackgroundSubtractorKNN(1, 1000, false);
+    private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
     private long firstTime = -1;
     private int frameCounter = 0;
+    private final int FRAMES = 4;
 
     /**
      * Constructor for a Camera.
@@ -52,8 +43,10 @@ public class Camera {
         videoCapture = newCapture;
         link = newLink;
         activity = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < FRAMES; i++) {
+            frameParts.add(new Mat());
             activity.add(new ArrayList<>());
+            knns.add(Video.createBackgroundSubtractorKNN(1, 1000, false));
         }
     }
 
@@ -75,10 +68,9 @@ public class Camera {
         divideFrame(newFrame);
 
         if (frameCounter % 5 == 0) {
-            addActivity(upperLeft, 0, knn0);
-            addActivity(upperRight, 1, knn1);
-            addActivity(lowerLeft, 2, knn2);
-            addActivity(lowerRight, 3, knn3);
+            for (int i = 0; i < FRAMES; i++) {
+                addActivity(frameParts.get(i), i, knns.get(i));
+            }
         }
         frameCounter++;
 
@@ -86,21 +78,22 @@ public class Camera {
     }
 
     public void divideFrame(Mat frame) {
-      upperLeft = frame.colRange(0, frame.width()/2);
-      upperLeft = upperLeft.rowRange(0, frame.height()/2);
+        for (int i = 0; i < FRAMES; i++) {
+            int midCol = frame.width() / (FRAMES/2);
+            int midRow = frame.height() / (FRAMES/2);
 
-      upperRight = frame.colRange(frame.width()/2, frame.width()-1);
-      upperRight = upperRight.rowRange(0, frame.height()/2);
+            int col = ((i * midCol) - ((i * midCol) % frame.width())) / (FRAMES/2);
+            int row = (i * midRow) % frame.height();
 
-      lowerLeft = frame.colRange(0, frame.width()/2);
-      lowerLeft = lowerLeft.rowRange(frame.height()/2, frame.height()-1);
-
-      lowerRight = frame.colRange(frame.width()/2, frame.width()-1);
-      lowerRight = lowerRight.rowRange(frame.height()/2, frame.height()-1);
+            Mat result = frame.colRange(col, col + midCol);
+            result = result.rowRange(row, row + midRow);
+            frameParts.set(i, result);
+        }
     }
 
     /**
      * Adds an activity to the list of activities.
+     *
      * @param frame The frame to get the activity from.
      */
     public void addActivity(final Mat frame, int i, BackgroundSubtractorKNN knn) {
@@ -126,7 +119,6 @@ public class Camera {
 
             double[] tuple = {currentTime / 1000.00, change};
 
-            System.out.println(change);
             activity.get(i).add(tuple);
         }
     }
@@ -144,6 +136,7 @@ public class Camera {
 
     /**
      * Overriding equals method.
+     *
      * @param o the object to be compared
      * @return boolean
      */
