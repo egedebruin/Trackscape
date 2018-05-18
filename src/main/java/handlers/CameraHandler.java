@@ -11,7 +11,6 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.HOGDescriptor;
 import org.opencv.videoio.VideoCapture;
 
 /**
@@ -30,8 +29,6 @@ public class CameraHandler {
      */
     public CameraHandler() {
         cameraList = new ArrayList<>();
-        HOGDescriptor hogDescriptor = new HOGDescriptor();
-        hogDescriptor.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
     }
 
     /**
