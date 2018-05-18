@@ -10,6 +10,7 @@ import org.opencv.core.Scalar;
 public class CameraChest extends CameraObject {
     public static final Scalar BOXCOLOUR_LOWER = new Scalar(18,100,100);
     public static final Scalar BOXCOLOUR_UPPER = new Scalar(35,255,255);
+    public static final int MINBOXSIZE = 160;
     public Boolean isOpened = false;
 
     /**

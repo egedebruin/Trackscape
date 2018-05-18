@@ -20,6 +20,8 @@ import org.opencv.video.BackgroundSubtractorKNN;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
 
+import static camera.CameraChest.MINBOXSIZE;
+
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
  */
@@ -74,7 +76,6 @@ public class CameraHandler {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         cameraChest.detectChest(dest);
         if (cameraChest.isOpened) {
-            System.out.println("Chest is opened");
             includeChestContoursInFrame(newFrame, dest);
         }
         return newFrame;
@@ -106,6 +107,11 @@ public class CameraHandler {
             // Get bounding rect of contour
             org.opencv.core.Rect rect = Imgproc.boundingRect(points);
 
+            // Don't draw boxes around area smaller than MINBOXSIZE pixels
+            if (rect.height*rect.width < MINBOXSIZE) {
+                return;
+            }
+            System.out.println("Chest is opened");
             Imgproc.rectangle(frame, rect.tl(), rect.br(), new Scalar(0, 0, 255), 2);
         }
     }
