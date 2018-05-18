@@ -16,6 +16,7 @@ public class Camera {
     private List<CameraObject> cameraObjectList;
     private VideoCapture videoCapture;
     private String link;
+    private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
 
@@ -75,5 +76,13 @@ public class Camera {
      */
     public boolean isChanged() {
         return changed;
+    }
+
+    public Mat getFirstFrame() {
+        return firstFrame;
+    }
+
+    public void setFirstFrame(Mat firstFrame) {
+        this.firstFrame = firstFrame;
     }
 }

@@ -1,8 +1,10 @@
 package handlers;
 
 import camera.Camera;
+import camera.CameraChest;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -15,6 +17,7 @@ public class CameraHandler {
      * The list of the cameras.
      */
     private List<Camera> cameraList;
+    public CameraChest cameraChest = new CameraChest();
 
     /**
      * Constructor for the CameraHandler class.
@@ -25,6 +28,7 @@ public class CameraHandler {
 
     /**
      * Add a new camera to use for streaming.
+     *
      * @param link The link of the camera.
      * @return The new camera as a Camera object.
      */
@@ -41,17 +45,24 @@ public class CameraHandler {
 
     /**
      * Get a new frame from the camera.
+     *
      * @param camera The camera to get the new frame from.
      * @return The new frame as a BufferedImage.
      */
     public Mat getNewFrame(Camera camera) {
-        return camera.getLastFrame();
+        Mat newFrame = camera.getLastFrame();
+        if (camera.getFirstFrame() == null) {
+            camera.setFirstFrame(newFrame);
+        }
+        CameraChest.checkForChests(newFrame);
+        return newFrame;
     }
 
     /**
-     * Get the size of the list of cameras.
-     * @return The size of the list.
-     */
+    * Get the size of the list of cameras.
+    *
+    * @return The size of the list.
+    */
     public int listSize() {
         return cameraList.size();
     }
@@ -65,6 +76,7 @@ public class CameraHandler {
 
     /**
      * Get a camera from the list.
+     *
      * @param index The index of the camera.
      * @return The camera.
      */
