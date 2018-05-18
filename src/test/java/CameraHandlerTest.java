@@ -36,4 +36,5 @@ class CameraHandlerTest {
         Camera cam = new Camera(new VideoCapture(videoLink), videoLink);
         assertNotNull(c.getNewFrame(cam));
     }
+
 }
