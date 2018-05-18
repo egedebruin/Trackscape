@@ -20,6 +20,9 @@ import org.opencv.core.Mat;
  */
 class Controller {
 
+    /**
+     * Class parameters.
+     */
     private CameraHandler cameraHandler;
     private boolean cameraActive;
 
@@ -125,7 +128,7 @@ class Controller {
      */
     private void updateImageView(ImageView imageView) {
         final int width = 600;
-        for (int i = 0; i<cameraHandler.listSize();i++) {
+        for (int i = 0; i < cameraHandler.listSize(); i++) {
             cameraActive = true;
             Image currentFrame = retrieveFrame(cameraHandler.getCamera(i));
             imageView.setImage(currentFrame);
@@ -151,6 +154,7 @@ class Controller {
             imageView.setImage(noStreamAvailable);
             imageView.setFitWidth(width);
             imageView.setPreserveRatio(true);
+
         }
     }
 }
