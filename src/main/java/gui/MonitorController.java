@@ -16,9 +16,9 @@ import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
 /**
- * Controller class for controlling GUI elements.
+ * MonitorController class for controlling GUI elements.
  */
-class Controller {
+public class MonitorController {
 
     /**
      * Class parameters.
@@ -29,7 +29,7 @@ class Controller {
     /**
      * Constructor method.
      */
-    Controller() {
+    MonitorController() {
         cameraHandler = new CameraHandler();
     }
 
