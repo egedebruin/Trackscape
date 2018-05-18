@@ -48,6 +48,8 @@ public class Camera {
             activity.add(new ArrayList<>());
             knns.add(Video.createBackgroundSubtractorKNN(1, 1000, false));
         }
+        activity.add(new ArrayList<>());
+        knns.add(Video.createBackgroundSubtractorKNN(1, 1000, false));
     }
 
     /**
@@ -72,6 +74,7 @@ public class Camera {
                 addActivity(frameParts.get(i), i, knns.get(i));
             }
         }
+        addActivity(newFrame, FRAMES, knns.get(FRAMES));
         frameCounter++;
 
         return lastFrame.clone();
@@ -79,10 +82,10 @@ public class Camera {
 
     public void divideFrame(Mat frame) {
         for (int i = 0; i < FRAMES; i++) {
-            int midCol = frame.width() / (FRAMES/2);
-            int midRow = frame.height() / (FRAMES/2);
+            int midCol = frame.width() / (int) Math.sqrt(FRAMES);
+            int midRow = frame.height() / (int) Math.sqrt(FRAMES);
 
-            int col = ((i * midCol) - ((i * midCol) % frame.width())) / (FRAMES/2);
+            int col = ((i * midCol) - ((i * midCol) % frame.width())) / (int) Math.sqrt(FRAMES);
             int row = (i * midRow) % frame.height();
 
             Mat result = frame.colRange(col, col + midCol);
@@ -105,10 +108,6 @@ public class Camera {
         for (double v : meanValues.val) {
             change += v;
         }
-
-//        if (change < 0.1) {
-//            System.out.println("No peepz in image?");
-//        }
 
         if (frameCounter > 30) {
             if (firstTime == -1) {
