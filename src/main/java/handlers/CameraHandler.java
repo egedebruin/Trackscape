@@ -23,7 +23,7 @@ public class CameraHandler {
      * The list of the cameras.
      */
     private List<Camera> cameraList;
-    private CameraChest cameraChest = new CameraChest();
+    public CameraChest cameraChest = new CameraChest();
 
     /**
      * Constructor for the CameraHandler class.
@@ -76,7 +76,7 @@ public class CameraHandler {
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
      *                            but the boxes are already found
      */
-    private void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame) {
+    public void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame) {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame,contours,contourMat,
@@ -110,7 +110,7 @@ public class CameraHandler {
      * @param mat matrix to be converted to hsv colour space
      * @return Mat a hsv colour space representation of the previously bgr matrix
      */
-    private Mat bgrToHsv(Mat mat) {
+    public Mat bgrToHsv(Mat mat) {
         Mat hsv = new Mat();
         Imgproc.cvtColor(mat,hsv,Imgproc.COLOR_BGR2HSV);
         return hsv;
