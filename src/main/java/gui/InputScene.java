@@ -90,10 +90,11 @@ public class InputScene {
     private Pane createInputPane(final int width, final int height,
                                  final Stage primaryStage,
                                  final String stylesheet) {
+        final int gapSize = 15;
         GridPane formPane = new GridPane();
         formPane.setAlignment(Pos.BASELINE_CENTER);
-        formPane.setHgap(15);
-        formPane.setVgap(15);
+        formPane.setHgap(gapSize);
+        formPane.setVgap(gapSize);
 
         Text description = new Text("Welcome to TrackScape! "
             + "Please set up the Escape Room parameters.");
@@ -101,8 +102,8 @@ public class InputScene {
         description.setTextAlignment(TextAlignment.CENTER);
 
         Button submit = new Button("Proceed");
-        submit.setOnAction(event -> proceed(
-            width, height, primaryStage, stylesheet));
+        submit.setOnAction(event -> controller.proceedToMonitorScene(
+            monitorScene, width, height, primaryStage, stylesheet));
         formPane.add(submit, 1, 7, 3, 3);
 
         // The fields of the form
@@ -120,21 +121,6 @@ public class InputScene {
         formPane.add(chestTextField, 1, 5);
 
         return formPane;
-    }
-
-    /**
-     * proceed.
-     * Move on to the next stage
-     * @param width of the scene
-     * @param height of the scene
-     * @param primaryStage starting stage
-     * @param stylesheet current stylesheet
-     */
-    final void proceed(final int width, final int height,
-                 final Stage primaryStage, final String stylesheet) {
-        primaryStage.setScene(
-            monitorScene.createMonitorScene(
-                width, height, primaryStage, stylesheet));
     }
 
     /**
