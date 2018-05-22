@@ -13,9 +13,6 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
-    /**
-     * Class parameters.
-     */
     private List<CameraObject> cameraObjectList;
     private VideoCapture videoCapture;
     private String link;
@@ -28,7 +25,7 @@ public class Camera {
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      */
-    public Camera(final VideoCapture newCapture, final String newLink) {
+    public Camera(VideoCapture newCapture, String newLink) {
         cameraObjectList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
@@ -62,7 +59,7 @@ public class Camera {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -81,19 +78,11 @@ public class Camera {
         return changed;
     }
 
-    /**
-     * getFirstFrame.
-     * @return firstFrame
-     */
     public Mat getFirstFrame() {
         return firstFrame;
     }
 
-    /**
-     * setFirstFrame.
-     * @param firstFrame the first frame
-     */
-    public void setFirstFrame(final Mat firstFrame) {
+    public void setFirstFrame(Mat firstFrame) {
         this.firstFrame = firstFrame;
     }
 }

@@ -1,0 +1,10 @@
+diff a/src/main/java/camera/CameraChest.java b/src/main/java/camera/CameraChest.java	(rejected hunks)
+@@ -32,7 +32,7 @@
+      *
+      * @param newFrame the frame that gets checked for the presence of boxes.
+      */
+-    public static void checkForChests(Mat newFrame) {
++    public static void checkForChests(final Mat newFrame) {
+         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
+         detectChest(dest);
+         if (isOpened) {
