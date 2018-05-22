@@ -1,22 +1,20 @@
 package camera;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import handlers.CameraHandler;
 import java.io.File;
+import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class CameraTest {
 
     private Camera camera;
     private CameraHandler cameraHandler;
-    private final String videoLink = "files" + File.separator + "webcast.mov";
+    private final String videoLink = "files" + File.separator + "postit.mov";
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
@@ -88,7 +86,12 @@ class CameraTest {
     }
 
     @Test
-    void isChangedFalseTest() {
+    void videoGetsIsChangeFalseWhenNoMoreFramesAreNew() {
+        //the video that is being loaded in is 4 seconds long in duration
+        assertTimeout(Duration.ofSeconds(5), this::loopToEndOfVideo);
+    }
+
+    private void loopToEndOfVideo() {
         cameraHandler = new CameraHandler();
         Camera cam = cameraHandler.addCamera(videoLink);
         //sets isChanged to true
@@ -98,8 +101,6 @@ class CameraTest {
         while (cam.isChanged()) {
             cameraHandler.getNewFrame(cam);
         }
-        assertFalse(cam.isChanged());
-
     }
 
 }
