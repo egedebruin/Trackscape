@@ -86,7 +86,7 @@ public class Controller {
      * @param streamStage The popup window
      * @param field the specified url.
      */
-    private void createStream(final Stage streamStage, final TextField field) {
+    public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
         cameraHandler.addCamera(streamUrl);
@@ -96,7 +96,7 @@ public class Controller {
      * Method to initialize a connection with our active camera(stream).
      * @param streamUrl THE url
      */
-    private void createTheStream(final String streamUrl) {
+    public void createTheStream(final String streamUrl) {
         cameraHandler.addCamera(streamUrl);
     }
 
@@ -104,7 +104,7 @@ public class Controller {
      * Method to initialize a connection with a video.
      * @param file the video file
      */
-    private void createVideo(final File file) {
+    public void createVideo(final File file) {
         String fileUrl = file.toString();
         cameraHandler.addCamera(fileUrl);
     }
@@ -114,7 +114,7 @@ public class Controller {
      * Call updateImageView method every period of time to retrieve a new frame
      * @param imageView panel that shows the frame
      */
-    private void grabTimeFrame(final ImageView imageView) {
+    public void grabTimeFrame(final ImageView imageView) {
         if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
@@ -147,7 +147,7 @@ public class Controller {
      * Method that closes a stream.
      * @param imageView View where the stream is displayed in
      */
-    private void closeStream(final ImageView imageView) {
+    public void closeStream(final ImageView imageView) {
         final int width = 500;
         if (cameraActive) {
             cameraHandler.clearList();
