@@ -80,13 +80,20 @@ public class Camera {
         return lastFrame.clone();
     }
 
+    /**
+     * Method in which a frame get divided into FRAMES equally large parts.
+     * FRAMES should be a number where the sqrt is an integer
+     *
+     * @param frame the input frame
+     */
     public void divideFrame(Mat frame) {
         for (int i = 0; i < FRAMES; i++) {
-            int midCol = frame.width() / (int) Math.sqrt(FRAMES);
-            int midRow = frame.height() / (int) Math.sqrt(FRAMES);
+            int sqrt = (int) Math.sqrt(FRAMES);
+            int midCol = frame.width() / sqrt;
+            int midRow = frame.height() / sqrt;
 
-            int col = ((i * midCol) - ((i * midCol) % frame.width())) / (int) Math.sqrt(FRAMES);
-            int row = (i * midRow) % frame.height();
+            int col = midCol * (i % sqrt);
+            int row = (i*sqrt)/FRAMES * midRow;
 
             Mat result = frame.colRange(col, col + midCol);
             result = result.rowRange(row, row + midRow);
