@@ -1,7 +1,9 @@
 package camera;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -17,9 +19,9 @@ import org.opencv.imgproc.Imgproc;
  * Class for describing a chest found in a camerastream/video/image.
  */
 public class CameraChest extends CameraObject {
-    private static final Scalar BOXCOLOUR_LOWER = new Scalar(18,100,100);
-    private static final Scalar BOXCOLOUR_UPPER = new Scalar(35,255,255);
-    private static final double MINBOXAREA = 3000;
+    private static final Scalar BOXCOLOUR_LOWER = new Scalar(19,100,60);
+    private static final Scalar BOXCOLOUR_UPPER = new Scalar(36,255,205);
+    private static final double MINBOXAREA = 900;
     static Boolean isOpened = false;
 
     /**
@@ -29,11 +31,11 @@ public class CameraChest extends CameraObject {
      *
      * @param newFrame the frame that gets checked for the presence of boxes.
      */
-    public static void checkForChests(Mat newFrame) {
+    public static void checkForChests(Mat newFrame, int noOfChests) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         detectChest(dest);
         if (isOpened) {
-            includeChestContoursInFrame(newFrame, dest);
+            includeChestContoursInFrame(newFrame, dest, noOfChests);
         }
     }
 
@@ -53,14 +55,14 @@ public class CameraChest extends CameraObject {
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
      *                            but the boxes are already found
      */
-    private static void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame) {
+    private static void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame, int noOfChests) {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame,contours,contourMat,
             Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_SIMPLE);
 
-        Rect rect = new Rect();
         MatOfPoint2f approxCurve = new MatOfPoint2f();
+        Rect rect = new Rect();
         for (MatOfPoint contour: contours) {
             MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
 

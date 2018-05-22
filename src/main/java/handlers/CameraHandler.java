@@ -54,7 +54,7 @@ public class CameraHandler {
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
-        CameraChest.checkForChests(newFrame);
+        CameraChest.checkForChests(newFrame, camera.getNoOfChestsInRoom());
         return newFrame;
     }
 

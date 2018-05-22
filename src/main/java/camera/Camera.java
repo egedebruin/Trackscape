@@ -19,9 +19,11 @@ public class Camera {
     private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
+    private int noOfChestsInRoom = 1, noOfPersonsInRoom = 5;
 
     /**
      * Constructor for a Camera.
+     *
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      */
@@ -29,6 +31,20 @@ public class Camera {
         cameraObjectList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
+    }
+
+    /**
+     * Constructor for a Camera.
+     *
+     * @param newCapture The VideoCapture of this camera.
+     * @param newLink The link of this camera.
+     */
+    public Camera(VideoCapture newCapture, String newLink, int noOfChestsInRoom, int noOfPersonsInRoom) {
+        cameraObjectList = new ArrayList<>();
+        videoCapture = newCapture;
+        link = newLink;
+        this.noOfChestsInRoom = noOfChestsInRoom;
+        this.noOfPersonsInRoom = noOfPersonsInRoom;
     }
 
     /**
@@ -84,5 +100,9 @@ public class Camera {
 
     public void setFirstFrame(Mat firstFrame) {
         this.firstFrame = firstFrame;
+    }
+
+    public int getNoOfChestsInRoom() {
+        return noOfChestsInRoom;
     }
 }
