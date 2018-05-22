@@ -17,13 +17,10 @@ import org.opencv.imgproc.Imgproc;
  * Class for describing a chest found in a camerastream/video/image.
  */
 public class CameraChest extends CameraObject {
-    /**
-     * Class parameters.
-     */
-    private static final Scalar BOXCOLOUR_LOWER = new Scalar(18, 100, 100);
-    private static final Scalar BOXCOLOUR_UPPER = new Scalar(35, 255, 255);
+    private static final Scalar BOXCOLOUR_LOWER = new Scalar(18,100,100);
+    private static final Scalar BOXCOLOUR_UPPER = new Scalar(35,255,255);
     private static final double MINBOXAREA = 3000;
-    private static Boolean isOpened = false;
+    static Boolean isOpened = false;
 
     /**
      * Method that checks for boxes in a frame.
