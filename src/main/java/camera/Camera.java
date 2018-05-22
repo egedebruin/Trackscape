@@ -175,4 +175,12 @@ public class Camera {
     public List<List<double[]>> getActivity() {
         return activity;
     }
+
+    /**
+     * Get the frameParts list.
+     * @return frameParts.
+     */
+    public List<Mat> getFrameParts() {
+        return frameParts;
+    }
 }

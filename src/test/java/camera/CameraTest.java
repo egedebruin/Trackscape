@@ -1,9 +1,12 @@
 package camera;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -63,6 +66,30 @@ class CameraTest {
 
         Mat mat2 = camera.getLastFrame();
         assertNotEquals(mat, mat2);
+    }
+
+    /**
+     * Test if divideFrame divides all pixels equally.
+     */
+    @Test
+    void divideFrameTest() {
+        String link = "files" + File.separator + "webcast.mov";
+        VideoCapture videoCapture = new VideoCapture(link);
+        camera = new Camera(videoCapture, link);
+        Mat frame = camera.getLastFrame();
+        assertNotNull(frame);
+
+        camera.divideFrame(camera.getLastFrame());
+        List<Mat> fp = camera.getFrameParts();
+        assertNotNull(fp);
+
+        int frameSize = frame.width() * frame.height();
+        int sumOfFrameParts = 0;
+        for (int i = 0; i < fp.size(); i++) {
+            sumOfFrameParts = sumOfFrameParts + (fp.get(i).height() * fp.get(i).width());
+        }
+
+        assertEquals(fp.get(0).size(), fp.get(1).size());   //equal divisions
     }
 
 }
