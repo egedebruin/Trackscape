@@ -1,14 +1,17 @@
 package handlers;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * Class for handling Json config files.
@@ -18,7 +21,7 @@ public class JsonHandler {
     /**
      * Class variables.
      */
-    private JsonElement jsonElement;
+    private JSONArray jsonElement;
 
     /**
      * Constructor for JsonHandler.
@@ -26,11 +29,11 @@ public class JsonHandler {
      */
     public JsonHandler(String fileName) {
         File file = new File(fileName);
-        JsonParser parser = new JsonParser();
+        JSONParser parser = new JSONParser();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            jsonElement = parser.parse(reader);
-        } catch (FileNotFoundException e) {
+            jsonElement = (JSONArray) parser.parse(reader);
+        } catch (Exception e) {
             jsonElement = null;
         }
     }
@@ -41,12 +44,12 @@ public class JsonHandler {
      * @return List of the links to the cameras.
      */
     public List<String> getCameraLinks(int roomId) {
-        JsonElement room = getRoomById(roomId);
+        JSONObject room = getRoomById(roomId);
         List<String> cameras = new ArrayList<>();
-        JsonElement element = room.getAsJsonObject().get("cameras");
-        for (JsonElement camera : element.getAsJsonArray()) {
-            String link = camera.getAsJsonObject().get("link").getAsString();
-            cameras.add(link);
+        JSONArray array = (JSONArray) room.get("cameras");
+        for (Object o : array) {
+            JSONObject object = (JSONObject) o;
+            cameras.add((String) object.get("link"));
         }
         return cameras;
     }
@@ -57,8 +60,10 @@ public class JsonHandler {
      * @return The amount of people.
      */
     public int getAmountPeople(int roomId) {
-        JsonElement room = getRoomById(roomId);
-        return room.getAsJsonObject().get("people").getAsInt();
+        JSONObject room = getRoomById(roomId);
+        long amount = (long) room.get("people");
+        int result = Math.toIntExact(amount);
+        return result;
     }
 
     /**
@@ -67,8 +72,10 @@ public class JsonHandler {
      * @return The amount of chests.
      */
     public int getAmountChests(int roomId) {
-        JsonElement room = getRoomById(roomId);
-        return room.getAsJsonObject().get("chests").getAsInt();
+        JSONObject room = getRoomById(roomId);
+        long amount = (long) room.get("chests");
+        int result = Math.toIntExact(amount);
+        return result;
     }
 
     /**
@@ -76,10 +83,10 @@ public class JsonHandler {
      * @param roomId The id of the room.
      * @return The Json element of the room.
      */
-    private JsonElement getRoomById(int roomId) {
-        JsonArray array = jsonElement.getAsJsonArray();
-        for (JsonElement room : array) {
-            if (room.getAsJsonObject().get("roomId").getAsInt() == roomId) {
+    private JSONObject getRoomById(int roomId) {
+        for (Object o : jsonElement) {
+            JSONObject room = (JSONObject) o;
+            if ((long) room.get("roomId") == roomId) {
                 return room;
             }
         }
@@ -90,7 +97,7 @@ public class JsonHandler {
      * Get the json element.
      * @return The json element.
      */
-    public JsonElement getJsonElement() {
+    public JSONArray getJsonElement() {
         return jsonElement;
     }
 }
