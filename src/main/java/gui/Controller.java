@@ -16,9 +16,9 @@ import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
 /**
- * MonitorController class for controlling GUI elements.
+ * Controller class for controlling GUI elements.
  */
-public class MonitorController {
+public class Controller {
 
     /**
      * Class parameters.
@@ -29,16 +29,17 @@ public class MonitorController {
     /**
      * Constructor method.
      */
-    MonitorController() {
+    Controller() {
         cameraHandler = new CameraHandler();
     }
 
     /**
      * retrieveFrame.
      * Retrieve last frame from video reader in handlers.CameraHandler
+     * @param cam the camera used
      * @return Image
      */
-    private Image retrieveFrame(Camera cam) {
+    private Image retrieveFrame(final Camera cam) {
         Image frame;
         Mat matrixFrame = cameraHandler.getNewFrame(cam);
         if (!cam.isChanged()) {
@@ -80,11 +81,12 @@ public class MonitorController {
     }
 
     /**
-     * Method to show a popup in which you can specify a stream url to initialize a connection.
+     * Method to show a popup in which
+     * you can specify a stream url to initialize a connection.
      * @param streamStage The popup window
      * @param field the specified url.
      */
-    void createStream(final Stage streamStage, TextField field) {
+    private void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
         cameraHandler.addCamera(streamUrl);
@@ -94,7 +96,7 @@ public class MonitorController {
      * Method to initialize a connection with our active camera(stream).
      * @param streamUrl THE url
      */
-    void createTheStream(String streamUrl) {
+    private void createTheStream(final String streamUrl) {
         cameraHandler.addCamera(streamUrl);
     }
 
@@ -102,7 +104,7 @@ public class MonitorController {
      * Method to initialize a connection with a video.
      * @param file the video file
      */
-    void createVideo(File file) {
+    private void createVideo(final File file) {
         String fileUrl = file.toString();
         cameraHandler.addCamera(fileUrl);
     }
@@ -110,8 +112,9 @@ public class MonitorController {
     /**
      * grabTimeFrame.
      * Call updateImageView method every period of time to retrieve a new frame
+     * @param imageView panel that shows the frame
      */
-    void grabTimeFrame(ImageView imageView) {
+    private void grabTimeFrame(final ImageView imageView) {
         if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
@@ -125,8 +128,9 @@ public class MonitorController {
     /**
      * updateImageView.
      * Retrieve current frame and show in ImageView
+     * @param imageView panel that shows the frame
      */
-    private void updateImageView(ImageView imageView) {
+    private void updateImageView(final ImageView imageView) {
         final int width = 600;
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             cameraActive = true;
@@ -143,7 +147,7 @@ public class MonitorController {
      * Method that closes a stream.
      * @param imageView View where the stream is displayed in
      */
-    void closeStream(ImageView imageView) {
+    private void closeStream(final ImageView imageView) {
         final int width = 500;
         if (cameraActive) {
             cameraHandler.clearList();
@@ -156,4 +160,5 @@ public class MonitorController {
             imageView.setPreserveRatio(true);
         }
     }
+
 }

@@ -22,7 +22,17 @@ public class InputScene {
     /**
      * Class parameters.
      */
-    private MonitorScene monitorScene = new MonitorScene();
+    private Controller controller;
+    private MonitorScene monitorScene;
+
+    /**
+     * Constructor.
+     * @param ctrl the controller
+     */
+    public InputScene(final Controller ctrl) {
+        this.controller = ctrl;
+        this.monitorScene = new MonitorScene(this.controller);
+    }
 
     /**
      * createInputScene.

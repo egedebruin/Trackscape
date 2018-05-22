@@ -36,10 +36,18 @@ public class MonitorScene {
      * Class parameters.
      */
     private ImageView imageView = new ImageView();
-    private MonitorController controller = new MonitorController();
     private String theStreamString = "rtsp://192.168.0.117:554/"
         + "user=admin&password=&channel=1&stream=1"
         + ".sdp?real_stream--rtp-caching=100";
+    private Controller controller;
+
+    /**
+     * Constructor.
+     * @param crtl the controller
+     */
+    public MonitorScene(final Controller crtl) {
+        this.controller = crtl;
+    }
 
     /**
      * monitorScene.

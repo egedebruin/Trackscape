@@ -1,32 +1,7 @@
 package gui;
 
 import java.io.File;
-import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -42,8 +17,8 @@ public class Main extends Application {
         + "\\src\\main\\java\\gui\\stylesheet.css");
     private String stylesheet = "file:///"
         + css.getAbsolutePath().replace("\\", "/");
-    private MonitorScene monitorScene = new MonitorScene();
-    private InputScene inputScene = new InputScene();
+    private Controller controller = new Controller();
+    private InputScene inputScene = new InputScene(controller);
 
     /**
      * main.
