@@ -3,7 +3,6 @@ package camera;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.PriorityQueue;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -22,6 +21,7 @@ public class CameraChest extends CameraObject {
     private static final Scalar BOXCOLOUR_LOWER = new Scalar(19,100,60);
     private static final Scalar BOXCOLOUR_UPPER = new Scalar(36,255,205);
     private static final double MINBOXAREA = 900;
+    private static final Comparator<Rect> comparator = new RectComparator();
     static Boolean isOpened = false;
 
     /**
@@ -55,14 +55,15 @@ public class CameraChest extends CameraObject {
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
      *                            but the boxes are already found
      */
-    private static void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame, int noOfChests) {
+    private static void includeChestContoursInFrame(Mat frame, Mat blackWhiteChestFrame,
+                                                    int noOfChests) {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame,contours,contourMat,
             Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_SIMPLE);
 
         MatOfPoint2f approxCurve = new MatOfPoint2f();
-        Rect rect = new Rect();
+        ArrayList<Rect> rects = new ArrayList<>(noOfChests);
         for (MatOfPoint contour: contours) {
             MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
 
@@ -76,16 +77,22 @@ public class CameraChest extends CameraObject {
             // Get bounding rect of contour
             Rect newrect = Imgproc.boundingRect(points);
             // Save the larger contour for printing purposes
-            if (newrect.area() > rect.area()) {
-                rect = newrect;
+            if (rects.size() < noOfChests) {
+                rects.add(newrect);
+            } else {
+                if (newrect.area() > rects.get(rects.size() - 1).area()) {
+                    rects.set(rects.size() - 1,newrect);
+                    rects.sort(comparator);
+                }
             }
 
         }
         // Rect is the bounding box over the largest contour,
         // show it when the area is at least minboxarea
-        if (rect.area() > MINBOXAREA) {
-            System.out.println("Chest is opened, area: " + rect.area());
-            Imgproc.rectangle(frame, rect.tl(), rect.br(), new Scalar(255, 0, 255), 2);
+        for (Rect rect : rects) {
+            if (rect.area() > MINBOXAREA) {
+                Imgproc.rectangle(frame, rect.tl(), rect.br(), new Scalar(255, 0, 255), 2);
+            }
         }
     }
 

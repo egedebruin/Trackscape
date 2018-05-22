@@ -19,7 +19,8 @@ public class Camera {
     private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
-    private int noOfChestsInRoom = 1, noOfPersonsInRoom = 5;
+    private int noOfChestsInRoom = 3;
+    private int noOfPersonsInRoom = 5;
 
     /**
      * Constructor for a Camera.
@@ -39,7 +40,8 @@ public class Camera {
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      */
-    public Camera(VideoCapture newCapture, String newLink, int noOfChestsInRoom, int noOfPersonsInRoom) {
+    public Camera(VideoCapture newCapture, String newLink,
+                  int noOfChestsInRoom, int noOfPersonsInRoom) {
         cameraObjectList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;

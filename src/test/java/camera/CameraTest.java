@@ -1,5 +1,11 @@
 package camera;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import handlers.CameraHandler;
 import java.io.File;
 import java.time.Duration;
@@ -7,8 +13,6 @@ import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CameraTest {
 
