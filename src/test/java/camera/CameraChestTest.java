@@ -30,6 +30,6 @@ class CameraChestTest {
         ch.getNewFrame(camera);
 
         //if cameraChest.isOpened it means that includeContoursInFrame gets called.
-        assertTrue(ch.cameraChest.isOpened);
+        assertTrue(ch.cameraChest.getIsOpened());
     }
 }

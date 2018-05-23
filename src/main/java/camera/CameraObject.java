@@ -13,9 +13,9 @@ public abstract class CameraObject {
      * @param mat matrix to be converted to hsv colour space
      * @return Mat a hsv colour space representation of the previously bgr matrix
      */
-    public static Mat bgrToHsv(Mat mat) {
+    public static Mat bgrToHsv(final Mat mat) {
         Mat hsv = new Mat();
-        Imgproc.cvtColor(mat,hsv,Imgproc.COLOR_BGR2HSV);
+        Imgproc.cvtColor(mat ,hsv, Imgproc.COLOR_BGR2HSV);
         return hsv;
     }
 }

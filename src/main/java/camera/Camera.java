@@ -25,7 +25,7 @@ public class Camera {
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      */
-    public Camera(VideoCapture newCapture, String newLink) {
+    public Camera(final VideoCapture newCapture, final String newLink) {
         cameraObjectList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
@@ -59,7 +59,7 @@ public class Camera {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -78,11 +78,19 @@ public class Camera {
         return changed;
     }
 
+    /**
+     * Get the first frame known of the camera.
+     * @return The Mat of the first frame.
+     */
     public Mat getFirstFrame() {
         return firstFrame;
     }
 
-    public void setFirstFrame(Mat firstFrame) {
-        this.firstFrame = firstFrame;
+    /**
+     * Set the first frame of the camera.
+     * @param frame The Mat of the new first frame.
+     */
+    public void setFirstFrame(final Mat frame) {
+        this.firstFrame = frame;
     }
 }

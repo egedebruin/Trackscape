@@ -17,7 +17,7 @@ public class CameraHandler {
      * The list of the cameras.
      */
     private List<Camera> cameraList;
-    public CameraChest cameraChest = new CameraChest();
+    private CameraChest cameraChest = new CameraChest();
 
     /**
      * Constructor for the CameraHandler class.
@@ -32,7 +32,7 @@ public class CameraHandler {
      * @param link The link of the camera.
      * @return The new camera as a Camera object.
      */
-    public Camera addCamera(String link) {
+    public Camera addCamera(final String link) {
         VideoCapture videoCapture = new VideoCapture(link);
         boolean opened = videoCapture.open(link);
         if (!opened) {
@@ -49,7 +49,7 @@ public class CameraHandler {
      * @param camera The camera to get the new frame from.
      * @return The new frame as a BufferedImage.
      */
-    public Mat getNewFrame(Camera camera) {
+    public Mat getNewFrame(final Camera camera) {
         Mat newFrame = camera.getLastFrame();
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
@@ -80,7 +80,7 @@ public class CameraHandler {
      * @param index The index of the camera.
      * @return The camera.
      */
-    public Camera getCamera(int index) {
+    public Camera getCamera(final int index) {
         return cameraList.get(index);
     }
 
