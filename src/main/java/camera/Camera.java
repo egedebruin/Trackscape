@@ -42,7 +42,7 @@ public class Camera {
      */
     public Camera(VideoCapture newCapture, String newLink,
                   int noOfChestsInRoom, int noOfPersonsInRoom) {
-        cameraObjectList = new ArrayList<>();
+        cameraObjectDetectorList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
         this.noOfChestsInRoom = noOfChestsInRoom;
