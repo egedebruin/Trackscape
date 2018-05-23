@@ -146,22 +146,23 @@ public class MonitorScene {
      */
     private Pane createTimerPane() {
         FlowPane timerPane = new FlowPane();
-        timerPane.setAlignment(Pos.CENTER_LEFT);
+        timerPane.setAlignment(Pos.TOP_CENTER);
 
+        Label description = new Label("Time playing:");
         Label l = new Label("00:00:00");
         controller.setTimerLabel(l);
 
-        final int spacing = 5;
-        HBox hBox = new HBox();
-        hBox.setSpacing(spacing);
+        String cssLayout = "-fx-border-color: #000000;\n"
+                + "-fx-border-insets: 5;\n"
+                + "-fx-border-width: 2;\n";
 
         VBox vBox = new VBox();
+        vBox.setStyle(cssLayout);
+        final int spacing = 5;
         vBox.setSpacing(spacing);
-        vBox.getChildren().addAll(l, hBox);
+        vBox.getChildren().add(l);
 
-        hBox.prefWidthProperty().bind(vBox.widthProperty());
-        timerPane.getChildren().add(vBox);
-
+        timerPane.getChildren().addAll(description, vBox);
         return timerPane;
     }
 
