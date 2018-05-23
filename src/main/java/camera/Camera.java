@@ -13,25 +13,32 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
+    private static final int DEFAULTNOOFCHESTS = 3;
+    private static final int DEFAULTNOOFPERSONS = 5;
     private List<CameraObjectDetector> cameraObjectDetectorList;
     private VideoCapture videoCapture;
     private String link;
     private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
-    private int noOfChestsInRoom = 3;
-    private int noOfPersonsInRoom = 5;
+    private int noOfChestsInRoom;
+    private int noOfPersonsInRoom;
 
     /**
-     * Constructor for a Camera.
+     * Constructor for a camera with possibility to specify no chests and persons.
      *
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
+     * @param noOfChests The amount of chests present in the room.
+     * @param noOfPersons The amount of Persons in a room.
      */
-    public Camera(final VideoCapture newCapture, final String newLink) {
-        cameraObjectDetectorList = new ArrayList<>();
-        videoCapture = newCapture;
-        link = newLink;
+    public Camera(final VideoCapture newCapture, final String newLink,
+                  final int noOfChests, final int noOfPersons) {
+        this.cameraObjectDetectorList = new ArrayList<>();
+        this.videoCapture = newCapture;
+        this.link = newLink;
+        this.noOfChestsInRoom = noOfChests;
+        this.noOfPersonsInRoom = noOfPersons;
     }
 
     /**
@@ -40,13 +47,12 @@ public class Camera {
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      */
-    public Camera(VideoCapture newCapture, String newLink,
-                  int noOfChestsInRoom, int noOfPersonsInRoom) {
-        cameraObjectDetectorList = new ArrayList<>();
-        videoCapture = newCapture;
-        link = newLink;
-        this.noOfChestsInRoom = noOfChestsInRoom;
-        this.noOfPersonsInRoom = noOfPersonsInRoom;
+    public Camera(final VideoCapture newCapture, final String newLink) {
+        this.cameraObjectDetectorList = new ArrayList<>();
+        this.videoCapture = newCapture;
+        this.link = newLink;
+        this.noOfChestsInRoom = DEFAULTNOOFCHESTS;
+        this.noOfPersonsInRoom = DEFAULTNOOFPERSONS;
     }
 
     /**
@@ -112,7 +118,11 @@ public class Camera {
         this.firstFrame = frame;
     }
 
+    /**
+     * Getter for noOfChestsInRoom.
+     * @return this.noOfChestsInRoom
+     */
     public int getNoOfChestsInRoom() {
-        return noOfChestsInRoom;
+        return this.noOfChestsInRoom;
     }
 }

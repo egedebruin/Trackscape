@@ -1,10 +1,11 @@
 package camera;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import handlers.CameraHandler;
 import java.io.File;
@@ -19,6 +20,9 @@ import org.opencv.videoio.VideoCapture;
  */
 class CameraTest {
 
+    private static final int DEFAULTNOOFCHEST = 10;
+    private static final int DEFAULTNOOFPERSONS = 8;
+    private static final int VIDEOLENGTH = 5;
     private Camera camera;
     private CameraHandler cameraHandler;
     private final String videoLink = "files" + File.separator + "postit.mov";
@@ -44,6 +48,16 @@ class CameraTest {
     }
 
     /**
+     * Tests if a camera is correctly constructed when extra parameters are given.
+     */
+    @Test
+    void constructorPlusTest() {
+        camera = new Camera(null, null, DEFAULTNOOFCHEST, DEFAULTNOOFPERSONS);
+        assertNotNull(camera);
+        assertEquals(camera.getNoOfChestsInRoom(), DEFAULTNOOFCHEST);
+    }
+
+    /**
      * Tests if the latest frame is returned as a non null Mat whenever getLastFrame is called.
      */
     @Test
@@ -65,7 +79,8 @@ class CameraTest {
     @Test
     void equalsFalseDifferentCameraTest() {
         Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
-        Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo");
+        Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo",
+            DEFAULTNOOFCHEST, DEFAULTNOOFPERSONS);
         assertFalse(cam1.equals(cam2));
     }
 
@@ -117,9 +132,12 @@ class CameraTest {
     @Test
     void videoGetsIsChangeFalseWhenNoMoreFramesAreNew() {
         //the video that is being loaded in is 4 seconds long in duration
-        assertTimeout(Duration.ofSeconds(5), this::loopToEndOfVideo);
+        assertTimeout(Duration.ofSeconds(VIDEOLENGTH), this::loopToEndOfVideo);
     }
 
+    /**
+     * Method that loops till the end of a the videolink video.
+     */
     private void loopToEndOfVideo() {
         cameraHandler = new CameraHandler();
         Camera cam = cameraHandler.addCamera(videoLink);

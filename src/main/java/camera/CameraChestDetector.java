@@ -18,13 +18,13 @@ import org.opencv.imgproc.Imgproc;
  * Class for describing a chest found in a camerastream/video/image.
  */
 public class CameraChestDetector extends CameraObjectDetector {
-    private static final Scalar CHESTCOLOUR_LOWER = new Scalar(19,100,60);
-    private static final Scalar CHESTCOLOUR_UPPER = new Scalar(36,255,205);
+    private static final Scalar CHESTCOLOUR_LOWER = new Scalar(19, 100, 60);
+    private static final Scalar CHESTCOLOUR_UPPER = new Scalar(36, 255, 205);
     private static final Scalar CHESTBOXCOLOUR = new Scalar(255, 0, 255);
     private static final double MINCHESTAREA = 900;
     private static final double APPROXSCALE = 0.02;
     private Boolean isOpened = false;
-    private static final Comparator<Rect> comparator = new RectComparator();
+    private final Comparator<Rect> comparator = new RectComparator();
 
     /**
      * Method that checks for boxes in a frame.
@@ -32,8 +32,9 @@ public class CameraChestDetector extends CameraObjectDetector {
      * a bounding box will be drawn around it
      *
      * @param newFrame the frame that gets checked for the presence of boxes.
+     * @param noOfChests the number of chests in the room.
      */
-    public void checkForChests(final Mat newFrame, int noOfChests) {
+    public void checkForChests(final Mat newFrame, final int noOfChests) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         detectChest(dest);
         if (isOpened) {
@@ -53,9 +54,10 @@ public class CameraChestDetector extends CameraObjectDetector {
 
     /**
      * Method that draws bounding boxes around all chests in a frame.
-     * @param frame the frame that needs bounding boxes
+     * @param frame the frame that needs bounding boxes.
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
-     *                            but the boxes are already found
+     *                            but the boxes are already found.
+     * @param noOfChests the number of chests in the room.
      */
     private void includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {
@@ -86,7 +88,7 @@ public class CameraChestDetector extends CameraObjectDetector {
                 // if all spots are filled only add newrect if
                 // it is larger than the smallest of the biggest
                 if (newrect.area() > rects.get(rects.size() - 1).area()) {
-                    rects.set(rects.size() - 1,newrect);
+                    rects.set(rects.size() - 1, newrect);
                     rects.sort(comparator);
                 }
             }
@@ -94,7 +96,7 @@ public class CameraChestDetector extends CameraObjectDetector {
         }
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
-                Imgproc.rectangle(frame, rect.tl(), rect.br(), new Scalar(255, 0, 255), 2);
+                Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
             }
         }
     }
