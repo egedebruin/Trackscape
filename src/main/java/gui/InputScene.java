@@ -47,7 +47,7 @@ public class InputScene {
                             final Stage primaryStage, final String stylesheet) {
         BorderPane root = new BorderPane();
         root.setTop(createTopPane());
-        root.setCenter(createInputPane(width, height,
+        root.setCenter(createInputPane(
             primaryStage, stylesheet));
         root.setBottom(createBottomPane());
 
@@ -81,14 +81,11 @@ public class InputScene {
      * createInputPane.
      * Construct the pane where host can give input about the game
      * for the inputScene
-     * @param width of the scene
-     * @param height of the scene
      * @param primaryStage starting stage
      * @param stylesheet current stylesheet
      * @return inputPane
      */
-    private Pane createInputPane(final int width, final int height,
-                                 final Stage primaryStage,
+    private Pane createInputPane(final Stage primaryStage,
                                  final String stylesheet) {
         final int gapSize = 15;
         GridPane formPane = new GridPane();
@@ -107,7 +104,7 @@ public class InputScene {
 
         Button submit = new Button("Proceed");
         submit.setOnAction(event -> controller.proceedToMonitorScene(
-            monitorScene, width, height, primaryStage, stylesheet));
+            monitorScene, primaryStage, stylesheet));
         formPane.add(submit, 1, rowIndex, colspan, rowspan);
 
         return addFieldsOfFormToFormPane(formPane);
