@@ -13,7 +13,7 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
-    private List<CameraObject> cameraObjectList;
+    private List<CameraObjectDetector> cameraObjectDetectorList;
     private VideoCapture videoCapture;
     private String link;
     private Mat firstFrame;
@@ -26,7 +26,7 @@ public class Camera {
      * @param newLink The link of this camera.
      */
     public Camera(final VideoCapture newCapture, final String newLink) {
-        cameraObjectList = new ArrayList<>();
+        cameraObjectDetectorList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
     }

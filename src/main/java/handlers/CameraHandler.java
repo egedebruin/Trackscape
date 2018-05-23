@@ -1,7 +1,7 @@
 package handlers;
 
 import camera.Camera;
-import camera.CameraChest;
+import camera.CameraChestDetector;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class CameraHandler {
      * The list of the cameras.
      */
     private List<Camera> cameraList;
-    private CameraChest cameraChest = new CameraChest();
+    private CameraChestDetector cameraChestDetector = new CameraChestDetector();
 
     /**
      * Constructor for the CameraHandler class.
@@ -54,7 +54,7 @@ public class CameraHandler {
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
-        CameraChest.checkForChests(newFrame);
+        cameraChestDetector.checkForChests(newFrame);
         return newFrame;
     }
 
@@ -82,6 +82,14 @@ public class CameraHandler {
      */
     public Camera getCamera(final int index) {
         return cameraList.get(index);
+    }
+
+    /**
+     * Getter for cameraChestDetector.
+     * @return this.cameraChestDetector
+     */
+    public CameraChestDetector getCameraChestDetector() {
+        return this.cameraChestDetector;
     }
 
 }

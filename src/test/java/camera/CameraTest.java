@@ -53,28 +53,28 @@ class CameraTest {
 
     @Test
     void equalsFalseDifCamTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
-        Camera cam2 = new Camera(new VideoCapture(),"linkToCamTwo");
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
+        Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo");
         assertFalse(cam1.equals(cam2));
     }
 
     @Test
     void equalsFalseNoCamTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
-        CameraChest cameraChest = new CameraChest();
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
+        CameraChestDetector cameraChest = new CameraChestDetector();
         assertFalse(cam1.equals(cameraChest));
     }
 
     @Test
     void equalsTrueDifObjTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
-        Camera cam2 = new Camera(new VideoCapture(),"linkToCamOne");
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
+        Camera cam2 = new Camera(new VideoCapture(), "linkToCamOne");
         assertTrue(cam1.equals(cam2));
     }
 
     @Test
     void equalsTrueSameObjTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
         assertTrue(cam1.equals(cam1));
     }
 

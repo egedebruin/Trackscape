@@ -16,12 +16,13 @@ import org.opencv.imgproc.Imgproc;
 /**
  * Class for describing a chest found in a camerastream/video/image.
  */
-public class CameraChest extends CameraObject {
+public class CameraChestDetector extends CameraObjectDetector {
     private static final Scalar CHESTCOLOUR_LOWER = new Scalar(18, 100, 100);
     private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 255);
     private static final Scalar CHESTBOXCOLOUR = new Scalar(255, 0, 255);
     private static final double MINBOXAREA = 3000;
     private static final double MINCHESTAREA = 300;
+    private static final double APPROXSCALE = 0.02;
     private Boolean isOpened = false;
 
     /**
@@ -68,7 +69,7 @@ public class CameraChest extends CameraObject {
             MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
 
             //Processing on mMOP2f1 which is in type MatOfPoint2f
-            double approxDistance = Imgproc.arcLength(contour2f, true) * 0.02;
+            double approxDistance = Imgproc.arcLength(contour2f, true) * APPROXSCALE;
             Imgproc.approxPolyDP(contour2f, approxCurve, approxDistance, true);
 
             //Convert back to MatOfPoint
@@ -97,7 +98,7 @@ public class CameraChest extends CameraObject {
      */
     private Mat getChestsFromFrame(final Mat hsvMatrix) {
         Mat dest = new Mat();
-        Core.inRange(hsvMatrix, CameraChest.CHESTCOLOUR_LOWER, CameraChest.CHESTCOLOUR_UPPER, dest);
+        Core.inRange(hsvMatrix, CHESTCOLOUR_LOWER, CHESTCOLOUR_UPPER, dest);
 
         return dest;
     }

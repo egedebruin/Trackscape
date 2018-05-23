@@ -1,6 +1,6 @@
 package camera;
 
-import static camera.CameraObject.bgrToHsv;
+import static camera.CameraObjectDetector.bgrToHsv;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,8 +12,10 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 
-
-class CameraObjectTest {
+/**
+ * Class for testing cameraObjectDetector.
+ */
+class CameraObjectDetectorTest {
 
     private final String shortVideoLink = "files" + File.separator + "postit.mov";
 
@@ -38,6 +40,6 @@ class CameraObjectTest {
 
         //turns mat in into hsv colour space
         Mat mat2 = bgrToHsv(mat);
-        assertNotEquals(mat,mat2);
+        assertNotEquals(mat, mat2);
     }
 }

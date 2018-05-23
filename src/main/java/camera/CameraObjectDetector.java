@@ -6,7 +6,7 @@ import org.opencv.imgproc.Imgproc;
 /**
  * Abstract class describing an object found in a camerastream/video/image.
  */
-public abstract class CameraObject {
+public abstract class CameraObjectDetector {
 
     /**
      * Method that changes colourspaces of a Mat from BGR to HSV.
@@ -15,7 +15,7 @@ public abstract class CameraObject {
      */
     public static Mat bgrToHsv(final Mat mat) {
         Mat hsv = new Mat();
-        Imgproc.cvtColor(mat ,hsv, Imgproc.COLOR_BGR2HSV);
+        Imgproc.cvtColor(mat, hsv, Imgproc.COLOR_BGR2HSV);
         return hsv;
     }
 }

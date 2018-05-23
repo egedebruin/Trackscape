@@ -10,6 +10,9 @@ import java.io.File;
 import org.junit.jupiter.api.Test;
 import org.opencv.videoio.VideoCapture;
 
+/**
+ * Class for testing CameraHandler.
+ */
 class CameraHandlerTest {
 
     private final String videoLink = "files" + File.separator + "webcast.mov";
@@ -54,7 +57,7 @@ class CameraHandlerTest {
     void getCameraTest() {
         CameraHandler ch = new CameraHandler();
         Camera camera = ch.addCamera(videoLink);
-        assertEquals(camera,ch.getCamera(0));
+        assertEquals(camera, ch.getCamera(0));
     }
 
     @Test
