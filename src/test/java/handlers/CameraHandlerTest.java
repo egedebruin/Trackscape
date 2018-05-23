@@ -1,6 +1,7 @@
 package handlers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -83,5 +84,14 @@ class CameraHandlerTest {
         Camera camera = ch.addCamera("WrongVideoLink");
         assertNull(camera);
         assertEquals(0, ch.listSize());
+    }
+
+    /**
+     * Test that the camera handler isn't active from the start.
+     */
+    @Test
+    void testIsActive() {
+        CameraHandler ch = new CameraHandler();
+        assertFalse(ch.isActive());
     }
 }

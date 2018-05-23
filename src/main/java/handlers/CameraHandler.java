@@ -18,12 +18,14 @@ public class CameraHandler {
      */
     private List<Camera> cameraList;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
+    private boolean active;
 
     /**
      * Constructor for the CameraHandler class.
      */
     public CameraHandler() {
         cameraList = new ArrayList<>();
+        active = false;
     }
 
     /**
@@ -92,4 +94,11 @@ public class CameraHandler {
         return this.cameraChestDetector;
     }
 
+    /**
+     * Returns if there is activity in these cameras.
+     * @return True if there is activity, false otherwise.
+     */
+    public boolean isActive() {
+        return active;
+    }
 }

@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -25,12 +26,20 @@ public class Controller {
      */
     private CameraHandler cameraHandler;
     private boolean cameraActive;
+    private long beginTime = -1;
+    private AnimationTimer animationTimer;
 
     /**
      * Constructor method.
      */
     Controller() {
         cameraHandler = new CameraHandler();
+        animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {
+                //changeTime(now - beginTime);
+            }
+        };
     }
 
     /**
@@ -48,7 +57,12 @@ public class Controller {
             frame = new Image(streamEnd.toURI().toString());
             cameraHandler.clearList();
             cameraActive = false;
+            animationTimer.stop();
         } else {
+            if (cameraHandler.isActive() && beginTime == -1) {
+                beginTime = System.nanoTime();
+                animationTimer.start();
+            }
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         }
