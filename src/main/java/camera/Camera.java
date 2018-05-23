@@ -1,7 +1,5 @@
 package camera;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import org.opencv.core.Mat;
@@ -14,15 +12,12 @@ import org.opencv.videoio.VideoCapture;
 public class Camera {
 
     private static final int DEFAULTNOOFCHESTS = 3;
-    private static final int DEFAULTNOOFPERSONS = 5;
-    private List<CameraObjectDetector> cameraObjectDetectorList;
     private VideoCapture videoCapture;
     private String link;
     private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
     private int noOfChestsInRoom;
-    private int noOfPersonsInRoom;
 
     /**
      * Constructor for a camera with possibility to specify no chests and persons.
@@ -30,15 +25,12 @@ public class Camera {
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      * @param noOfChests The amount of chests present in the room.
-     * @param noOfPersons The amount of Persons in a room.
      */
     public Camera(final VideoCapture newCapture, final String newLink,
-                  final int noOfChests, final int noOfPersons) {
-        this.cameraObjectDetectorList = new ArrayList<>();
+                  final int noOfChests) {
         this.videoCapture = newCapture;
         this.link = newLink;
         this.noOfChestsInRoom = noOfChests;
-        this.noOfPersonsInRoom = noOfPersons;
     }
 
     /**
@@ -48,11 +40,9 @@ public class Camera {
      * @param newLink The link of this camera.
      */
     public Camera(final VideoCapture newCapture, final String newLink) {
-        this.cameraObjectDetectorList = new ArrayList<>();
         this.videoCapture = newCapture;
         this.link = newLink;
         this.noOfChestsInRoom = DEFAULTNOOFCHESTS;
-        this.noOfPersonsInRoom = DEFAULTNOOFPERSONS;
     }
 
     /**

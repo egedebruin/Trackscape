@@ -21,7 +21,6 @@ import org.opencv.videoio.VideoCapture;
 class CameraTest {
 
     private static final int DEFAULTNOOFCHEST = 10;
-    private static final int DEFAULTNOOFPERSONS = 8;
     private static final int VIDEOLENGTH = 5;
     private Camera camera;
     private CameraHandler cameraHandler;
@@ -52,7 +51,7 @@ class CameraTest {
      */
     @Test
     void constructorPlusTest() {
-        camera = new Camera(null, null, DEFAULTNOOFCHEST, DEFAULTNOOFPERSONS);
+        camera = new Camera(null, null, DEFAULTNOOFCHEST);
         assertNotNull(camera);
         assertEquals(camera.getNoOfChestsInRoom(), DEFAULTNOOFCHEST);
     }
@@ -80,7 +79,7 @@ class CameraTest {
     void equalsFalseDifferentCameraTest() {
         Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
         Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo",
-            DEFAULTNOOFCHEST, DEFAULTNOOFPERSONS);
+            DEFAULTNOOFCHEST);
         assertFalse(cam1.equals(cam2));
     }
 

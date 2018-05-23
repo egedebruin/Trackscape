@@ -18,7 +18,6 @@ class CameraObjectDetectorTest {
 
     private final String shortVideoLink = "files" + File.separator + "postit.mov";
     private static final int DEFAULTNOOFCHEST = 10;
-    private static final int DEFAULTNOOFPERSONS = 8;
 
     static {
         // These should be at the start of the application,
@@ -37,7 +36,7 @@ class CameraObjectDetectorTest {
     @Test
     void bgrToHsvTest() {
         VideoCapture videoCapture = new VideoCapture(shortVideoLink);
-        Camera cam = new Camera(videoCapture, shortVideoLink, DEFAULTNOOFCHEST, DEFAULTNOOFPERSONS);
+        Camera cam = new Camera(videoCapture, shortVideoLink, DEFAULTNOOFCHEST);
 
         Mat mat = cam.getLastFrame();
 

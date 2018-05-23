@@ -81,22 +81,31 @@ public class CameraChestDetector extends CameraObjectDetector {
             // Get bounding rect of contour
             Rect newrect = Imgproc.boundingRect(points);
             // If not all spots are filled add newrect to the biggest rects.
-            if (rects.size() < noOfChests) {
-                rects.add(newrect);
-                rects.sort(comparator);
-            } else {
-                // if all spots are filled only add newrect if
-                // it is larger than the smallest of the biggest
-                if (newrect.area() > rects.get(rects.size() - 1).area()) {
-                    rects.set(rects.size() - 1, newrect);
-                    rects.sort(comparator);
-                }
-            }
-
+            addToRects(newrect, rects, noOfChests);
         }
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
                 Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
+            }
+        }
+    }
+
+    /**
+     * Method that adds a new rect to rects if the new rect is big enough.
+     * @param newrect   The candidate rect that might be added to rects.
+     * @param rects     array of the noOfChests biggest rects.
+     * @param noOfChests    number of chests.
+     */
+    private void addToRects(final Rect newrect, final ArrayList<Rect> rects, final int noOfChests) {
+        if (rects.size() < noOfChests) {
+            rects.add(newrect);
+            rects.sort(comparator);
+        } else {
+            // if all spots are filled only add newrect if
+            // it is larger than the smallest of the biggest
+            if (newrect.area() > rects.get(rects.size() - 1).area()) {
+                rects.set(rects.size() - 1, newrect);
+                rects.sort(comparator);
             }
         }
     }
