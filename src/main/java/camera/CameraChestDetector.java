@@ -20,8 +20,7 @@ public class CameraChestDetector extends CameraObjectDetector {
     private static final Scalar CHESTCOLOUR_LOWER = new Scalar(18, 100, 100);
     private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 255);
     private static final Scalar CHESTBOXCOLOUR = new Scalar(255, 0, 255);
-    private static final double MINBOXAREA = 3000;
-    private static final double MINCHESTAREA = 300;
+    private static final double MINCHESTAREA = 900;
     private static final double APPROXSCALE = 0.02;
     private Boolean isOpened = false;
 
@@ -85,7 +84,7 @@ public class CameraChestDetector extends CameraObjectDetector {
         }
         // Rect is the bounding box over the largest contour,
         // show it when the area is at least minboxarea
-        if (rect.area() > MINBOXAREA) {
+        if (rect.area() > MINCHESTAREA) {
             System.out.println("Chest is opened, area: " + rect.area());
             Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
         }
