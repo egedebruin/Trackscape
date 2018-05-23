@@ -34,7 +34,7 @@ public class Controller {
     private long beginTime = -1;
     private AnimationTimer animationTimer;
     private Label timerLabel;
-    private VBox logBox;
+    private VBox informationBox;
 
     /**
      * Constructor method.
@@ -46,7 +46,7 @@ public class Controller {
             @Override
             public void handle(final long now) {
                 changeTime(now - beginTime);
-                checkLog();
+                checkInformation();
             }
         };
     }
@@ -63,7 +63,7 @@ public class Controller {
         Mat matrixFrame = cameraHandler.getNewFrame(cam);
         if (!cam.isChanged()) {
             File streamEnd = new File(System.getProperty("user.dir")
-                    + "\\src\\main\\java\\gui\\images\\black.png");
+                + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
             cameraHandler.clearList();
             cameraActive = false;
@@ -94,13 +94,13 @@ public class Controller {
         }
 
         int bufferSize = videoMatImage.channels()
-                * videoMatImage.cols() * videoMatImage.rows();
+            * videoMatImage.cols() * videoMatImage.rows();
         byte[] buffer = new byte[bufferSize];
         videoMatImage.get(0, 0, buffer);
         BufferedImage image = new BufferedImage(
-                videoMatImage.cols(), videoMatImage.rows(), type);
+            videoMatImage.cols(), videoMatImage.rows(), type);
         final byte[] targetPixels =
-                ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+            ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
         return image;
     }
@@ -150,7 +150,7 @@ public class Controller {
             Runnable frameGrabber = () -> updateImageView(imageView);
             timer = Executors.newSingleThreadScheduledExecutor();
             timer.scheduleAtFixedRate(
-                    frameGrabber, 0, period, TimeUnit.MILLISECONDS);
+                frameGrabber, 0, period, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -184,7 +184,7 @@ public class Controller {
             cameraHandler.clearList();
             cameraActive = false;
             File image = new File(System.getProperty("user.dir")
-                    + "\\src\\main\\java\\gui\\images\\nostream.png");
+                + "\\src\\main\\java\\gui\\images\\nostream.png");
             Image noStreamAvailable = new Image(image.toURI().toString());
             imageView.setImage(noStreamAvailable);
             imageView.setFitWidth(width);
@@ -207,8 +207,8 @@ public class Controller {
                                      final Stage primaryStage,
                                      final String stylesheet) {
         primaryStage.setScene(
-                ms.createMonitorScene(
-                        width, height, primaryStage, stylesheet));
+            ms.createMonitorScene(
+                width, height, primaryStage, stylesheet));
     }
 
     /**
@@ -220,22 +220,36 @@ public class Controller {
         timerLabel.setText(getTimeString(elapsedTime));
     }
 
-    public void addLog(String text) {
+    /**
+     * Add information to correct VBox.
+     *
+     * @param text The text to add.
+     */
+    public void addInformation(final String text) {
         long elapsedTime = System.nanoTime() - beginTime;
         String newText = getTimeString(elapsedTime) + ": " + text;
         Label label = new Label(newText);
         label.setFont(Font.font("Verdana", 10));
-        logBox.getChildren().add(label);
+        informationBox.getChildren().add(label);
     }
 
-    public void checkLog() {
+    /**
+     * Check if there is information to be shown.
+     */
+    public void checkInformation() {
         String log = informationHandler.getInformation();
 
         if (!log.equals("empty")) {
-            addLog(log);
+            addInformation(log);
         }
     }
 
+    /**
+     * Convert nano seconds to right time string.
+     *
+     * @param time Time in nano seconds.
+     * @return Correct time string.
+     */
     public String getTimeString(final long time) {
         final int sixtySeconds = 60;
         final int nineSeconds = 9;
@@ -261,15 +275,20 @@ public class Controller {
     }
 
     /**
-     * Sets the timerLabel with a specific label.
+     * Set the timerLabel with a specific label.
      *
-     * @param label the label to be set
+     * @param newLabel the label to be set
      */
-    public void setTimerLabel(final Label label) {
-        this.timerLabel = label;
+    public void setTimerLabel(final Label newLabel) {
+        this.timerLabel = newLabel;
     }
 
-    public void setLogBox(VBox logBox) {
-        this.logBox = logBox;
+    /**
+     * Set the informationBox with a specific box.
+     *
+     * @param infoBox The box to be set.
+     */
+    public void setInformationBox(final VBox infoBox) {
+        this.informationBox = infoBox;
     }
 }

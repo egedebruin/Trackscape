@@ -22,8 +22,9 @@ public class CameraHandler {
 
     /**
      * Constructor for the CameraHandler class.
+     * @param information The informationHandler.
      */
-    public CameraHandler(InformationHandler information) {
+    public CameraHandler(final InformationHandler information) {
         cameraList = new ArrayList<>();
         active = false;
         informationHandler = information;
