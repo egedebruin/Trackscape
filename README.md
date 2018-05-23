@@ -1,6 +1,11 @@
 # Trackscape
 BEP
 
+[![BCH compliance](https://bettercodehub.com/edge/badge/egedebruin/Trackscape?branch=master)](https://bettercodehub.com/)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/wyfdfhpg79289ceg?svg=true)](https://ci.appveyor.com/project/Jasperkroes/trackscape)
+
+
 
 **OpenCV**
 

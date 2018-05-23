@@ -8,8 +8,10 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-
-class CameraChestTest {
+/**
+ *
+ */
+class CameraChestDetectorTest {
 
     private final String shortVideoLink = "files" + File.separator + "postit.mov";
 
@@ -23,6 +25,9 @@ class CameraChestTest {
             + File.separator + "libs" + File.separator + "opencv_java341.dll");
     }
 
+    /**
+     * Test that checks whether includecontoursinframe gets called.
+     */
     @Test
     void includeChestContoursInFrameCallTest() {
         CameraHandler ch = new CameraHandler();
@@ -30,6 +35,6 @@ class CameraChestTest {
         ch.getNewFrame(camera);
 
         //if cameraChest.isOpened it means that includeContoursInFrame gets called.
-        assertTrue(ch.cameraChest.isOpened);
+        assertTrue(ch.getCameraChestDetector().getIsOpened());
     }
 }
