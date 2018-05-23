@@ -24,7 +24,7 @@ import org.opencv.core.Mat;
 /**
  * Controller class for controlling GUI elements.
  */
-class Controller {
+public class Controller {
 
     /**
      * Class parameters.
@@ -92,7 +92,7 @@ class Controller {
      * @param streamStage The popup window
      * @param field the specified url.
      */
-    void createStream(final Stage streamStage, final TextField field) {
+    public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
         cameraHandler.addCamera(streamUrl);
@@ -102,7 +102,7 @@ class Controller {
      * Method to initialize a connection with our active camera(stream).
      * @param streamUrl THE url
      */
-    void createTheStream(final String streamUrl) {
+    public void createTheStream(final String streamUrl) {
         cameraHandler.addCamera(streamUrl);
     }
 
@@ -110,7 +110,7 @@ class Controller {
      * Method to initialize a connection with a video.
      * @param file the video file
      */
-    void createVideo(final File file) {
+    public void createVideo(final File file) {
         String fileUrl = file.toString();
         cameraHandler.addCamera(fileUrl);
     }
@@ -118,7 +118,7 @@ class Controller {
     /**
      * grabTimeFrame.
      * Call updateImageView method every period of time to retrieve a new frame
-     * @param imageView shows the image
+     * @param imageView panel that shows the frame
      * @param plotView shows the plot
      */
     void grabTimeFrame(final ImageView imageView, final ImageView plotView) {
@@ -145,7 +145,7 @@ class Controller {
     /**
      * updateImageView.
      * Retrieve current frame and show in ImageView
-     * @param imageView shows the image
+     * @param imageView panel that shows the frame
      */
     private void updateImageView(final ImageView imageView) {
         final int width = 600;
@@ -227,7 +227,7 @@ class Controller {
      * Method that closes a stream.
      * @param imageView View where the stream is displayed in
      */
-    void closeStream(final ImageView imageView) {
+    public void closeStream(final ImageView imageView) {
         final int width = 500;
         if (cameraActive) {
             cameraHandler.clearList();
@@ -239,6 +239,24 @@ class Controller {
             imageView.setFitWidth(width);
             imageView.setPreserveRatio(true);
         }
+    }
+
+    /**
+     * proceedToMonitorScene.
+     * Move on to the next stage
+     * @param ms the monitorScene
+     * @param width of the scene
+     * @param height of the scene
+     * @param primaryStage starting stage
+     * @param stylesheet current stylesheet
+     */
+    final void proceedToMonitorScene(final MonitorScene ms,
+                                     final int width, final int height,
+                                     final Stage primaryStage,
+                                     final String stylesheet) {
+        primaryStage.setScene(
+            ms.createMonitorScene(
+                width, height, primaryStage, stylesheet));
     }
 
 }

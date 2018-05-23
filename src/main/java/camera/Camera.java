@@ -20,9 +20,10 @@ public class Camera {
     /**
      * Class parameters.
      */
-    private List<CameraObject> cameraObjectList;
+    private List<CameraObjectDetector> cameraObjectDetectorList;
     private VideoCapture videoCapture;
     private String link;
+    private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
     private List<Mat> frameParts = new ArrayList<>();
@@ -39,7 +40,7 @@ public class Camera {
      * @param newLink    The link of this camera.
      */
     public Camera(final VideoCapture newCapture, final String newLink) {
-        cameraObjectList = new ArrayList<>();
+        cameraObjectDetectorList = new ArrayList<>();
         videoCapture = newCapture;
         link = newLink;
         activity = new ArrayList<>();
@@ -65,6 +66,7 @@ public class Camera {
             changed = true;
         } else {
             changed = false;
+            return lastFrame.clone();
         }
 
         divideFrame(newFrame);
@@ -93,7 +95,7 @@ public class Camera {
             int midRow = frame.height() / sqrt;
 
             int col = midCol * (i % sqrt);
-            int row = (i*sqrt)/FRAMES * midRow;
+            int row = (i * sqrt) / FRAMES * midRow;
 
             Mat result = frame.colRange(col, col + midCol);
             result = result.rowRange(row, row + midRow);
@@ -101,11 +103,6 @@ public class Camera {
         }
     }
 
-    /**
-     * Adds an activity to the list of activities.
-     *
-     * @param frame The frame to get the activity from.
-     */
     public void addActivity(final Mat frame, int i, BackgroundSubtractorKNN knn) {
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
@@ -182,5 +179,21 @@ public class Camera {
      */
     public List<Mat> getFrameParts() {
         return frameParts;
+    }
+
+    /**
+     * Get the first frame known of the camera.
+     * @return The Mat of the first frame.
+     */
+    public Mat getFirstFrame() {
+        return firstFrame;
+    }
+
+    /**
+     * Set the first frame of the camera.
+     * @param frame The Mat of the new first frame.
+     */
+    public void setFirstFrame(final Mat frame) {
+        this.firstFrame = frame;
     }
 }
