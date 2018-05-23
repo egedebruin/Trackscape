@@ -17,6 +17,8 @@ public class JsonHandlerTest {
      * Class variables.
      */
     private final String jsonFile = "files/example.json";
+    private final int jsonPeople = 5;
+    private final int jsonChests = 3;
     private JsonHandler handler;
 
     /**
@@ -45,7 +47,7 @@ public class JsonHandlerTest {
     void getAmountPeopleTest() {
         handler = new JsonHandler(jsonFile);
         int people = handler.getAmountPeople(0);
-        assertEquals(5, people);
+        assertEquals(jsonPeople, people);
     }
 
     /**
@@ -55,7 +57,7 @@ public class JsonHandlerTest {
     void getAmountChestsTest() {
         handler = new JsonHandler(jsonFile);
         int chests = handler.getAmountChests(0);
-        assertEquals(3, chests);
+        assertEquals(jsonChests, chests);
     }
 
     /**

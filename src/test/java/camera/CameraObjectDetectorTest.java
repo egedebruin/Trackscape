@@ -1,19 +1,20 @@
 package camera;
 
-import static camera.CameraObject.bgrToHsv;
+import static camera.CameraObjectDetector.bgrToHsv;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 
-
-class CameraObjectTest {
+/**
+ * Class for testing cameraObjectDetector.
+ */
+class CameraObjectDetectorTest {
 
     private final String shortVideoLink = "files" + File.separator + "postit.mov";
 
@@ -27,8 +28,12 @@ class CameraObjectTest {
             + File.separator + "libs" + File.separator + "opencv_java341.dll");
     }
 
+    /**
+     * Tests if when bgrtohsv is called a non null hsv frame is returned.
+     * This hsv Mat should be different than the bgr Mat
+     */
     @Test
-    void bgrToHsvTest() throws IOException {
+    void bgrToHsvTest() {
         VideoCapture videoCapture = new VideoCapture(shortVideoLink);
         Camera camera = new Camera(videoCapture, shortVideoLink);
 
@@ -38,6 +43,6 @@ class CameraObjectTest {
 
         //turns mat in into hsv colour space
         Mat mat2 = bgrToHsv(mat);
-        assertNotEquals(mat,mat2);
+        assertNotEquals(mat, mat2);
     }
 }

@@ -11,6 +11,9 @@ import java.io.File;
 import org.junit.jupiter.api.Test;
 import org.opencv.videoio.VideoCapture;
 
+/**
+ * Class for testing CameraHandler.
+ */
 class CameraHandlerTest {
 
     private final String videoLink = "files" + File.separator + "webcast.mov";
@@ -25,6 +28,9 @@ class CameraHandlerTest {
             + File.separator + "libs" + File.separator + "opencv_java341.dll");
     }
 
+    /**
+     * Tests if a camera is added when addCamera is used.
+     */
     @Test
     void addCameraTest() {
         CameraHandler c = new CameraHandler();
@@ -34,6 +40,10 @@ class CameraHandlerTest {
         assertEquals(1, c.listSize());
     }
 
+    /**
+     * Tests if a non null frame is returned.
+     * Checks this when getNewFrame is called with a correctly initialized camera
+     */
     @Test
     void getNewFrameTest() {
         CameraHandler c = new CameraHandler();
@@ -41,6 +51,9 @@ class CameraHandlerTest {
         assertNotNull(c.getNewFrame(cam));
     }
 
+    /**
+     * Tests if the cameraList gets cleared whenever clearList() is called.
+     */
     @Test
     void clearListTest() {
         CameraHandler ch = new CameraHandler();
@@ -48,20 +61,27 @@ class CameraHandlerTest {
 
         assertTrue(ch.listSize() > 0);
         ch.clearList();
-        assertTrue(ch.listSize() == 0);
+        assertEquals(0, ch.listSize());
     }
 
+    /**
+     * Tests if a camera is correctly returned after getCamera(int index) is called.
+     */
     @Test
     void getCameraTest() {
         CameraHandler ch = new CameraHandler();
         Camera camera = ch.addCamera(videoLink);
-        assertEquals(camera,ch.getCamera(0));
+        assertEquals(camera, ch.getCamera(0));
     }
 
+    /**
+     * Tests if whenever a camera with a wrong link is being added this camera isn't actually added.
+     */
     @Test
     void addNullCameraTest() {
         CameraHandler ch = new CameraHandler();
         Camera camera = ch.addCamera("WrongVideoLink");
         assertNull(camera);
+        assertEquals(0, ch.listSize());
     }
 }

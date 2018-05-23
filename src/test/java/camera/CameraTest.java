@@ -12,32 +12,38 @@ import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
+/**
+ * Class for testing Camera.
+ */
 class CameraTest {
 
     private Camera camera;
     private CameraHandler cameraHandler;
     private final String videoLink = "files" + File.separator + "webcast.mov";
 
-    @org.junit.jupiter.api.BeforeEach
-    void setUp() {
-        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            System.load(System.getProperty("user.dir")
-                + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
-            System.load(System.getProperty("user.dir")
-                + File.separator + "libs" + File.separator + "opencv_java341.dll");
-        }
+
+    static {
+        // These should be at the start of the application,
+        // so if the main changes this should be included.
+        // Load OpenCV library.
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_java341.dll");
     }
 
-    @org.junit.jupiter.api.AfterEach
-    void tearDown() {
-    }
-
+    /**
+     * Tests if a camera is correctly constructed.
+     */
     @Test
     void constructorTest() {
         camera = new Camera(null, null);
         assertNotNull(camera);
     }
 
+    /**
+     * Tests if the latest frame is returned as a non null Mat whenever getLastFrame is called.
+     */
     @Test
     void getLastFrame() {
         String link = "files" + File.separator + "webcast.mov";
@@ -51,33 +57,48 @@ class CameraTest {
         assertNotEquals(mat, mat2);
     }
 
+    /**
+     * Tests if equals returns false when 2 different cameras are compared.
+     */
     @Test
-    void equalsFalseDifCamTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
-        Camera cam2 = new Camera(new VideoCapture(),"linkToCamTwo");
+    void equalsFalseDifferentCameraTest() {
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
+        Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo");
         assertFalse(cam1.equals(cam2));
     }
 
+    /**
+     * Tests if equals returns false when Camera is compared to non Camera Object.
+     */
     @Test
-    void equalsFalseNoCamTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
-        CameraChest cameraChest = new CameraChest();
+    void equalsFalseNoCameraTest() {
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
+        CameraChestDetector cameraChest = new CameraChestDetector();
         assertFalse(cam1.equals(cameraChest));
     }
 
+    /**
+     * Tests if equals returns true when 2 different cameras with the same link are compared.
+     */
     @Test
     void equalsTrueDifObjTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
-        Camera cam2 = new Camera(new VideoCapture(),"linkToCamOne");
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
+        Camera cam2 = new Camera(new VideoCapture(), "linkToCamOne");
         assertTrue(cam1.equals(cam2));
     }
 
+    /**
+     * Tests if equals returns true if a Camera is compared to itself.
+     */
     @Test
     void equalsTrueSameObjTest() {
-        Camera cam1 = new Camera(new VideoCapture(),"linkToCamOne");
+        Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
         assertTrue(cam1.equals(cam1));
     }
 
+    /**
+     * Tests if isChanged is changed to true when a new frame is loaded.
+     */
     @Test
     void isChangedTrueTest() {
         cameraHandler = new CameraHandler();
@@ -87,6 +108,10 @@ class CameraTest {
         assertTrue(cam.isChanged());
     }
 
+    /**
+     * Tests if isChanged is changed to false.
+     * This should happen when getNewFrame gets called and all frames have already been handled.
+     */
     @Test
     void isChangedFalseTest() {
         cameraHandler = new CameraHandler();

@@ -2,16 +2,12 @@ package handlers;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  * Class for handling Json config files.
@@ -27,7 +23,7 @@ public class JsonHandler {
      * Constructor for JsonHandler.
      * @param fileName The name of the json config file.
      */
-    public JsonHandler(String fileName) {
+    public JsonHandler(final String fileName) {
         File file = new File(fileName);
         JSONParser parser = new JSONParser();
         try {
@@ -43,7 +39,7 @@ public class JsonHandler {
      * @param roomId The Id of the room.
      * @return List of the links to the cameras.
      */
-    public List<String> getCameraLinks(int roomId) {
+    public List<String> getCameraLinks(final int roomId) {
         JSONObject room = getRoomById(roomId);
         List<String> cameras = new ArrayList<>();
         JSONArray array = (JSONArray) room.get("cameras");
@@ -59,7 +55,7 @@ public class JsonHandler {
      * @param roomId The id of the room.
      * @return The amount of people.
      */
-    public int getAmountPeople(int roomId) {
+    public int getAmountPeople(final int roomId) {
         JSONObject room = getRoomById(roomId);
         long amount = (long) room.get("people");
         int result = Math.toIntExact(amount);
@@ -71,7 +67,7 @@ public class JsonHandler {
      * @param roomId The id of the room.
      * @return The amount of chests.
      */
-    public int getAmountChests(int roomId) {
+    public int getAmountChests(final int roomId) {
         JSONObject room = getRoomById(roomId);
         long amount = (long) room.get("chests");
         int result = Math.toIntExact(amount);
@@ -83,7 +79,7 @@ public class JsonHandler {
      * @param roomId The id of the room.
      * @return The Json element of the room.
      */
-    private JSONObject getRoomById(int roomId) {
+    private JSONObject getRoomById(final int roomId) {
         for (Object o : jsonElement) {
             JSONObject room = (JSONObject) o;
             if ((long) room.get("roomId") == roomId) {
