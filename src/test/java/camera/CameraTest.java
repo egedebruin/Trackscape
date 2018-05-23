@@ -96,14 +96,19 @@ class CameraTest {
         for (int i = 0; i < frames; i++) {
             camera.loadFrame();
         }
-        Mat frame = camera.loadFrame();
+        Mat frame1 = camera.loadFrame();
+        Mat frame2 = camera.loadFrame();
         int parts = camera.getFrames();
 
         assertNotNull(camera.getActivity());
-        assertEquals(camera.getActivity().get(0), new ArrayList());
+        assertEquals(camera.getActivity().get(parts), new ArrayList());
+
+        camera.setFrameCounter(0);
+        camera.addActivity(frame1, parts, camera.getKnns().get(parts));
+        assertEquals(camera.getActivity().get(parts), new ArrayList());
 
         camera.setFrameCounter(Integer.MAX_VALUE);
-        camera.addActivity(frame, parts, camera.getKnns().get(parts));
+        camera.addActivity(frame2, parts, camera.getKnns().get(parts));
 
         assertNotEquals(camera.getActivity().get(parts), new ArrayList());
     }
