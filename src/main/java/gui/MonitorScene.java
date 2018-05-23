@@ -16,14 +16,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,7 +27,7 @@ import javafx.stage.Stage;
 /**
  * Class that constructs the monitorScene.
  */
-public class MonitorScene {
+public class MonitorScene extends gui.Scene {
     /**
      * Class parameters.
      */
@@ -39,14 +35,13 @@ public class MonitorScene {
     private String theStreamString = "rtsp://192.168.0.117:554/"
         + "user=admin&password=&channel=1&stream=1"
         + ".sdp?real_stream--rtp-caching=100";
-    private Controller controller;
 
     /**
      * Constructor.
-     * @param crtl the controller
+     * @param controller the controller
      */
-    public MonitorScene(final Controller crtl) {
-        this.controller = crtl;
+    public MonitorScene(final Controller controller) {
+        super(controller);
     }
 
     /**
@@ -63,7 +58,7 @@ public class MonitorScene {
                                     final Stage primaryStage,
                                     final String stylesheet) {
         BorderPane root = new BorderPane();
-        root.setTop(createTitlePane());
+        root.setTop(createTopPane());
         root.setCenter(createVideoPane(primaryStage));
         root.setBottom(createBottomPane());
 
@@ -71,48 +66,6 @@ public class MonitorScene {
         monitorScene.getStylesheets().add(stylesheet);
 
         return monitorScene;
-    }
-
-    /**
-     * createTitlePane.
-     * Create the top pane of the root
-     * @return Pane
-     */
-    private Pane createTitlePane() {
-        final int size = 100;
-
-        FlowPane titlePane = new FlowPane();
-        titlePane.setAlignment(Pos.TOP_CENTER);
-
-        Text text = new Text("TrackScape");
-        text.setFont(Font.font("Edwardian Script ITC", size));
-        text.setFill(Color.BLACK);
-        text.setStroke(Color.LIGHTSLATEGREY);
-        text.setStrokeWidth(2);
-
-        titlePane.getChildren().addAll(text);
-
-        return titlePane;
-    }
-
-    /**
-     * createBottomPane.
-     * Create the bottom pane of the root
-     * @return Pane
-     */
-    private Pane createBottomPane() {
-        final int size = 15;
-
-        Text text2 = new Text("© TrackScape");
-        text2.setFont(Font.font("Verdana", size));
-        text2.setFill(Color.BLACK);
-        text2.setStroke(Color.LIGHTSLATEGREY);
-        text2.setStrokeWidth(1);
-
-        FlowPane bottomPane = new FlowPane();
-        bottomPane.getChildren().addAll(text2);
-
-        return bottomPane;
     }
 
     /**
@@ -200,7 +153,7 @@ public class MonitorScene {
             chooser.setTitle("Select Video File");
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
-                controller.createVideo(file);
+                getController().createVideo(file);
             }
         });
     }
@@ -236,13 +189,13 @@ public class MonitorScene {
             popUpVBox.setAlignment(Pos.CENTER);
 
             // Save the url of the RTSP stream by clicking on submit
-            submit.setOnAction(t1 -> controller
+            submit.setOnAction(t1 -> getController()
                 .createStream(streamStage, field));
 
             // Save the url of the RTSP stream by pressing on the enter key
             field.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode() == KeyCode.ENTER)  {
-                    controller.createStream(streamStage, field);
+                    getController().createStream(streamStage, field);
                 }
             });
 
@@ -262,7 +215,7 @@ public class MonitorScene {
      */
     private void theStream(final MenuItem theStream) {
         theStream.setOnAction((ActionEvent t)
-            -> controller.createTheStream(theStreamString));
+            -> getController().createTheStream(theStreamString));
     }
 
     /**
@@ -283,10 +236,10 @@ public class MonitorScene {
 
         // Create the play/pauze button
         final Button playButton = new Button(">");
-        playButton.setOnAction(event -> controller.grabTimeFrame(imageView));
+        playButton.setOnAction(event -> getController().grabTimeFrame(imageView));
 
         final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> controller.closeStream(imageView));
+        closeStream.setOnAction(event -> getController().closeStream(imageView));
 
         mediaBar.getChildren().addAll(playButton, closeStream);
 
