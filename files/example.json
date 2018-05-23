@@ -1,0 +1,25 @@
+[
+  {
+    "roomId": 0,
+    "cameras": [
+      {
+        "link": "testlink"
+      },
+      {
+        "link": "testlink"
+      }
+    ],
+    "people": 5,
+    "chests": 3
+  },
+  {
+    "roomId": 1,
+    "cameras": [
+      {
+        "link": "testlink"
+      }
+    ],
+    "people": 4,
+    "chests": 2
+  }
+]

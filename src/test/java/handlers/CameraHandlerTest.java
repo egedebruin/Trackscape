@@ -1,3 +1,5 @@
+package handlers;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -5,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 import camera.Camera;
-import handlers.CameraHandler;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 import org.opencv.videoio.VideoCapture;
