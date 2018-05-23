@@ -152,14 +152,8 @@ public class MonitorScene {
         Label l = new Label("00:00:00");
         controller.setTimerLabel(l);
 
-        String cssLayout = "-fx-border-color: #000000;\n"
-                + "-fx-border-insets: 5;\n"
-                + "-fx-border-width: 2;\n";
-
         VBox vBox = new VBox();
-        vBox.setStyle(cssLayout);
-        final int spacing = 5;
-        vBox.setSpacing(spacing);
+        vBox.getStyleClass().add("timer");
         vBox.getChildren().add(l);
 
         timerPane.getChildren().addAll(description, vBox);
