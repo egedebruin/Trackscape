@@ -25,7 +25,7 @@ public class CameraHandler {
      */
     public CameraHandler() {
         cameraList = new ArrayList<>();
-        active = false;
+        active = true;
     }
 
     /**

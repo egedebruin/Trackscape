@@ -6,12 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -134,8 +134,35 @@ public class MonitorScene {
         // and puts it in the center of the videoPane
         videoPane.setCenter(menuMediaPane.get(1));
         videoPane.setBottom(createMediaBar());
+        videoPane.setLeft(createTimerPane());
 
         return videoPane;
+    }
+
+    /**
+     * Creates the pane in which the timer will be shown.
+     *
+     * @return timerPane
+     */
+    private Pane createTimerPane() {
+        FlowPane timerPane = new FlowPane();
+        timerPane.setAlignment(Pos.CENTER_LEFT);
+
+        Label l = new Label("00:00:00");
+        controller.setTimerLabel(l);
+
+        final int spacing = 5;
+        HBox hBox = new HBox();
+        hBox.setSpacing(spacing);
+
+        VBox vBox = new VBox();
+        vBox.setSpacing(spacing);
+        vBox.getChildren().addAll(l, hBox);
+
+        hBox.prefWidthProperty().bind(vBox.widthProperty());
+        timerPane.getChildren().add(vBox);
+
+        return timerPane;
     }
 
     /**
