@@ -110,6 +110,15 @@ public class InputScene {
             monitorScene, width, height, primaryStage, stylesheet));
         formPane.add(submit, 1, rowIndex, colspan, rowspan);
 
+        return addFieldsOfFormToFormPane(formPane);
+    }
+
+    /**
+     * Method that adds form fields to the formpane.
+     * @param formPane the pane where field should be added to.
+     * @return the formpane with added fields
+     */
+    private GridPane addFieldsOfFormToFormPane(final GridPane formPane) {
         final int rowIndexRoom = 3;
         final int rowIndexPeople = 4;
         final int rowIndexChest = 5;
