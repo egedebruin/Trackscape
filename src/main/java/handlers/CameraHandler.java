@@ -4,7 +4,6 @@ import camera.Camera;
 import camera.CameraChestDetector;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -17,15 +16,17 @@ public class CameraHandler {
      * The list of the cameras.
      */
     private List<Camera> cameraList;
+    private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active;
 
     /**
      * Constructor for the CameraHandler class.
      */
-    public CameraHandler() {
+    public CameraHandler(InformationHandler information) {
         cameraList = new ArrayList<>();
         active = false;
+        informationHandler = information;
     }
 
     /**
@@ -42,6 +43,7 @@ public class CameraHandler {
         }
         Camera camera = new Camera(videoCapture, link);
         cameraList.add(camera);
+        informationHandler.addInformation("Added camera");
         return camera;
     }
 

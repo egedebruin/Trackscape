@@ -2,20 +2,21 @@ package gui;
 
 import camera.Camera;
 import handlers.CameraHandler;
-
+import handlers.InformationHandler;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
@@ -28,20 +29,24 @@ public class Controller {
      * Class parameters.
      */
     private CameraHandler cameraHandler;
+    private InformationHandler informationHandler;
     private boolean cameraActive;
     private long beginTime = -1;
     private AnimationTimer animationTimer;
     private Label timerLabel;
+    private VBox logBox;
 
     /**
      * Constructor method.
      */
     Controller() {
-        cameraHandler = new CameraHandler();
+        informationHandler = new InformationHandler();
+        cameraHandler = new CameraHandler(informationHandler);
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(final long now) {
                 changeTime(now - beginTime);
+                checkLog();
             }
         };
     }
@@ -212,12 +217,32 @@ public class Controller {
      * @param elapsedTime the elapsed time
      */
     public void changeTime(final long elapsedTime) {
+        timerLabel.setText(getTimeString(elapsedTime));
+    }
+
+    public void addLog(String text) {
+        long elapsedTime = System.nanoTime() - beginTime;
+        String newText = getTimeString(elapsedTime) + ": " + text;
+        Label label = new Label(newText);
+        label.setFont(Font.font("Verdana", 10));
+        logBox.getChildren().add(label);
+    }
+
+    public void checkLog() {
+        String log = informationHandler.getInformation();
+
+        if (!log.equals("empty")) {
+            addLog(log);
+        }
+    }
+
+    public String getTimeString(final long time) {
         final int sixtySeconds = 60;
         final int nineSeconds = 9;
 
-        int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(elapsedTime) % sixtySeconds;
-        int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(elapsedTime) % sixtySeconds;
-        int hours = (int) TimeUnit.NANOSECONDS.toHours(elapsedTime);
+        int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(time) % sixtySeconds;
+        int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(time) % sixtySeconds;
+        int hours = (int) TimeUnit.NANOSECONDS.toHours(time);
 
         String sec = Integer.toString(seconds);
         String min = Integer.toString(minutes);
@@ -232,9 +257,7 @@ public class Controller {
         if (hours <= nineSeconds) {
             hr = "0" + hours;
         }
-
-        timerLabel.setText(hr + ":" + min + ":" + sec);
-
+        return hr + ":" + min + ":" + sec;
     }
 
     /**
@@ -244,5 +267,9 @@ public class Controller {
      */
     public void setTimerLabel(final Label label) {
         this.timerLabel = label;
+    }
+
+    public void setLogBox(VBox logBox) {
+        this.logBox = logBox;
     }
 }
