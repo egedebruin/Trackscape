@@ -28,4 +28,12 @@ public class InformationHandler {
         }
         return queue.poll();
     }
+
+    /**
+     * Get the full information queue.
+     * @return the queue.
+     */
+    public Queue<String> getQueue() {
+        return queue;
+    }
 }
