@@ -1,0 +1,15 @@
+[
+  {
+    "roomId": 0,
+    "cameras": [
+      {
+        "link": "files/postit.mov"
+      },
+      {
+        "link": "files/webcast.mov"
+      }
+    ],
+    "people": 42,
+    "chests": 9
+  }
+]
