@@ -55,7 +55,7 @@ public class CameraHandler {
             camera.setFirstFrame(newFrame);
         }
         cameraChestDetector.checkForChests(newFrame);
-        return newFrame;
+        return cameraChestDetector.subtractFrame(newFrame, camera.getFirstFrame());
     }
 
     /**
