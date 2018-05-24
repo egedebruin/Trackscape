@@ -109,7 +109,7 @@ public class MonitorScene extends BaseScene {
         vBox.setPadding(new Insets(top, 0, bottom, 0));
         vBox.getChildren().add(l);
 
-        timerPane.getChildren().addAll(description, vBox, createLoggerPane());
+        timerPane.getChildren().addAll(description, vBox, createLoggerPane(), createApproveButton());
         return timerPane;
     }
 
@@ -137,6 +137,20 @@ public class MonitorScene extends BaseScene {
         loggerPane.getChildren().add(logText);
 
         return loggerPane;
+    }
+
+    private Pane createApproveButton() {
+        FlowPane buttonPane = new FlowPane();
+        buttonPane.setAlignment(Pos.BOTTOM_CENTER);
+        buttonPane.setPadding(new Insets(10, 0, 0, 0));
+
+        Button approveButton = new Button();
+        approveButton.setText("Knopje");
+//        approveButton.setPadding(new Insets(10, 0, 0, 0));
+
+        buttonPane.getChildren().add(approveButton);
+
+        return buttonPane;
     }
 
     /**
