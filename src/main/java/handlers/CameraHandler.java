@@ -24,6 +24,7 @@ public class CameraHandler {
      * Constructor for CameraHandler without information.
      */
     public CameraHandler() {
+        informationHandler = new InformationHandler();
         active = false;
     }
 
