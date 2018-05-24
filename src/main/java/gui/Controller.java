@@ -66,6 +66,7 @@ public class Controller {
             cameraHandler.clearList();
             cameraActive = false;
             animationTimer.stop();
+            beginTime = -1;
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
@@ -195,6 +196,8 @@ public class Controller {
             imageView.setImage(noStreamAvailable);
             imageView.setFitWidth(width);
             imageView.setPreserveRatio(true);
+            animationTimer.stop();
+            beginTime = -1;
         }
     }
 
