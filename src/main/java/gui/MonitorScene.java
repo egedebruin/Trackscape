@@ -2,16 +2,12 @@ package gui;
 
 import java.io.File;
 import java.util.ArrayList;
+
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -134,7 +130,7 @@ public class MonitorScene {
         // and puts it in the center of the videoPane
         videoPane.setCenter(menuMediaPane.get(1));
         videoPane.setBottom(createMediaBar());
-        videoPane.setLeft(createTimerPane());
+        videoPane.setLeft(createTimeLoggerPane());
 
         return videoPane;
     }
@@ -144,7 +140,7 @@ public class MonitorScene {
      *
      * @return timerPane
      */
-    private Pane createTimerPane() {
+    private Pane createTimeLoggerPane() {
         FlowPane timerPane = new FlowPane();
         timerPane.setAlignment(Pos.TOP_CENTER);
 
@@ -156,8 +152,34 @@ public class MonitorScene {
         vBox.getStyleClass().add("timer");
         vBox.getChildren().add(l);
 
-        timerPane.getChildren().addAll(description, vBox);
+        timerPane.getChildren().addAll(description, vBox, createLoggerPane());
         return timerPane;
+    }
+
+    /**
+     * Creates the logger pane in which logs will be shown.
+     *
+     * @return loggerPane The logger pane
+     */
+    private Pane createLoggerPane() {
+        FlowPane loggerPane = new FlowPane();
+        loggerPane.setAlignment(Pos.CENTER);
+
+        TextArea logText = new TextArea();
+        logText.setEditable(false);
+        logText.setText("Test");
+
+        final int width = 350;
+        final int height = 500;
+
+        logText.setPrefSize(width, height);
+
+        // Automatically scrolls to bottom when items are added to the textArea
+        logText.setScrollTop(Double.MIN_VALUE);
+
+        loggerPane.getChildren().add(logText);
+
+        return loggerPane;
     }
 
     /**
