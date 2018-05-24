@@ -1,6 +1,7 @@
 package handlers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,6 +29,15 @@ class CameraHandlerTest {
             + File.separator + "libs" + File.separator + "opencv_java341.dll");
     }
 
+    /**
+     * Test the constructor with information handler.
+     */
+    @Test
+    void constructorTest() {
+        InformationHandler handler = new InformationHandler();
+        CameraHandler c = new CameraHandler(handler);
+        assertEquals(handler, c.getInformationHandler());
+    }
     /**
      * Tests if a camera is added when addCamera is used.
      */
@@ -83,5 +93,14 @@ class CameraHandlerTest {
         Camera camera = ch.addCamera("WrongVideoLink");
         assertNull(camera);
         assertEquals(0, ch.listSize());
+    }
+
+    /**
+     * Test that the camera handler isn't active from the start.
+     */
+    @Test
+    void testIsActive() {
+        CameraHandler ch = new CameraHandler();
+        assertFalse(ch.isActive());
     }
 }

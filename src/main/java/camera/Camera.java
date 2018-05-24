@@ -32,6 +32,7 @@ public class Camera {
     private static final int FRAMES = 4;
     private int numOfChestsInRoom;
     private final int threshold = 1000;
+    private double lastActivity = 0;
 
     /**
      * Constructor for a camera with possibility to specify no chests and persons.
@@ -109,7 +110,8 @@ public class Camera {
             for (int i = 0; i < FRAMES; i++) {
                 addActivity(frameParts.get(i), i, knns.get(i));
             }
-            addActivity(newFrame, FRAMES, knns.get(FRAMES));
+            lastActivity = addActivity(newFrame, FRAMES, knns.get(FRAMES));
+
         }
 
         frameCounter++;
@@ -141,8 +143,9 @@ public class Camera {
      * @param frame the current frame
      * @param partNumber current part of the frame
      * @param knn the backgroundsubstractor
+     * @return double of the change
      */
-    public void addActivity(final Mat frame, final int partNumber,
+    public double addActivity(final Mat frame, final int partNumber,
                             final BackgroundSubtractorKNN knn) {
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
@@ -166,7 +169,9 @@ public class Camera {
             double[] tuple = {TimeUnit.MILLISECONDS.toSeconds(currentTime), change};
 
             activity.get(partNumber).add(tuple);
+            return change;
         }
+        return 0;
     }
 
     /**
@@ -270,5 +275,13 @@ public class Camera {
      */
     public int getNumOfChestsInRoom() {
         return this.numOfChestsInRoom;
+    }
+
+    /**
+     * Getter for lastActivity.
+     * @return the last activity.
+     */
+    public double getLastActivity() {
+        return lastActivity;
     }
 }
