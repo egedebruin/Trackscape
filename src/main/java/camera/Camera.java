@@ -37,7 +37,7 @@ public class Camera {
      * Constructor for a Camera.
      *
      * @param newCapture The VideoCapture of this camera.
-     * @param newLink    The link of this camera.
+     * @param newLink The link of this camera.
      */
     public Camera(final VideoCapture newCapture, final String newLink) {
         final int threshold = 1000;
@@ -81,7 +81,7 @@ public class Camera {
      * Add all activities for every part of the frame.
      * @param newFrame The frame to get the activity from.
      */
-    private void addActivities(Mat newFrame) {
+    private void addActivities(final Mat newFrame) {
         final int modulus = 5;
 
         if (frameCounter % modulus == 0) {
@@ -118,10 +118,11 @@ public class Camera {
     /**
      * Add current activity to list.
      * @param frame the current frame
-     * @param i current part of the frame
+     * @param partNumber current part of the frame
      * @param knn the backgroundsubstractor
      */
-    public void addActivity(final Mat frame, final int i, final BackgroundSubtractorKNN knn) {
+    public void addActivity(final Mat frame, final int partNumber,
+                            final BackgroundSubtractorKNN knn) {
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
         Scalar meanValues = Core.mean(subtraction);
@@ -142,7 +143,7 @@ public class Camera {
 
             double[] tuple = {currentTime / timeWindow, change};
 
-            activity.get(i).add(tuple);
+            activity.get(partNumber).add(tuple);
         }
     }
 
