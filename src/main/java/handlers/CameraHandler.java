@@ -21,7 +21,7 @@ public class CameraHandler {
     private boolean active;
 
     /**
-     * Constructor for CameraHandler without information.
+     * Constructor for CameraHandler without specified information handler.
      */
     public CameraHandler() {
         informationHandler = new InformationHandler();
@@ -29,7 +29,7 @@ public class CameraHandler {
     }
 
     /**
-     * Constructor for the CameraHandler class with information.
+     * Constructor for the CameraHandler class with specified information handler.
      * @param information The informationHandler.
      */
     public CameraHandler(final InformationHandler information) {
@@ -118,5 +118,13 @@ public class CameraHandler {
      */
     public InformationHandler getInformationHandler() {
         return informationHandler;
+    }
+
+    /**
+     * Set the active boolean to true or false.
+     * @param newActive active will become this, true or false.
+     */
+    public void setActive(boolean newActive) {
+        this.active = newActive;
     }
 }

@@ -108,8 +108,8 @@ public class Controller {
      * Method to show a popup in which
      * you can specify a stream url to initialize a connection.
      *
-     * @param streamStage The popup window
-     * @param field       the specified url.
+     * @param streamStage the popup window
+     * @param field the specified url.
      */
     public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
@@ -206,7 +206,7 @@ public class Controller {
      * Move on to the next stage
      * @param ms the monitorScene
      * @param primaryStage starting stage
-     * @param stylesheet   current stylesheet
+     * @param stylesheet current stylesheet
      */
     final void proceedToMonitorScene(final MonitorScene ms, final Stage primaryStage,
                                      final String stylesheet) {

@@ -20,7 +20,7 @@ public class InformationHandler {
 
     /**
      * Get information from the queue and remove if it exists, otherwise returns empty.
-     * @return The information.
+     * @return Information string.
      */
     public String getInformation() {
         if (queue.isEmpty()) {
