@@ -107,9 +107,9 @@ public class Camera {
 
         if (frameCounter % frequency == 0) {
             for (int i = 0; i < FRAMES; i++) {
-                addActivity(frameParts.get(i), i, knns.get(i));
+                addActivity(i);
             }
-            addActivity(newFrame, FRAMES, knns.get(FRAMES));
+            addActivity(FRAMES);
         }
 
         frameCounter++;
@@ -138,14 +138,11 @@ public class Camera {
 
     /**
      * Add current activity to list.
-     * @param frame the current frame
      * @param partNumber current part of the frame
-     * @param knn the backgroundsubstractor
      */
-    public void addActivity(final Mat frame, final int partNumber,
-                            final BackgroundSubtractorKNN knn) {
+    public void addActivity(final int partNumber) {
         Mat subtraction = new Mat();
-        knn.apply(frame, subtraction);
+        knns.get(partNumber).apply(frameParts.get(partNumber), subtraction);
         Scalar meanValues = Core.mean(subtraction);
 
         double change = 0;
