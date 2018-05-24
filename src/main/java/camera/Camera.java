@@ -60,7 +60,6 @@ public class Camera {
      * @return The frame in Mat format.
      */
     public Mat getLastFrame() {
-        final int modulus = 5;
         Mat newFrame = loadFrame();
 
         if (newFrame != null && newFrame.rows() != 0 && newFrame.cols() != 0) {
@@ -73,15 +72,26 @@ public class Camera {
 
         divideFrame(newFrame);
 
+        addActivities(newFrame);
+
+        return lastFrame.clone();
+    }
+
+    /**
+     * Add all activities for every part of the frame.
+     * @param newFrame The frame to get the activity from.
+     */
+    private void addActivities(Mat newFrame) {
+        final int modulus = 5;
+
         if (frameCounter % modulus == 0) {
             for (int i = 0; i < frames; i++) {
                 addActivity(frameParts.get(i), i, knns.get(i));
             }
         }
+
         addActivity(newFrame, frames, knns.get(frames));
         frameCounter++;
-
-        return lastFrame.clone();
     }
 
     /**
