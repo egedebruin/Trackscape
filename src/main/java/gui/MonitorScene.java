@@ -102,8 +102,11 @@ public class MonitorScene extends BaseScene {
         Label l = new Label("00:00:00");
         getController().setTimerLabel(l);
 
+        final int top = 5;
+        final int bottom = 5;
+
         VBox vBox = new VBox();
-        vBox.getStyleClass().add("timer");
+        vBox.setPadding(new Insets(top, 0, bottom, 0));
         vBox.getChildren().add(l);
 
         timerPane.getChildren().addAll(description, vBox, createLoggerPane());
