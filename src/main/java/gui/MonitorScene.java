@@ -167,7 +167,7 @@ public class MonitorScene {
 
         TextArea logText = new TextArea();
         logText.setEditable(false);
-        logText.setText("Test");
+        controller.setInformationBox(logText);
 
         final int width = 350;
         final int height = 500;

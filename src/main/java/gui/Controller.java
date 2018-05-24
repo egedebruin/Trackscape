@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,7 +35,7 @@ public class Controller {
     private long beginTime = -1;
     private AnimationTimer animationTimer;
     private Label timerLabel;
-    private VBox informationBox;
+    private TextArea informationArea;
 
     /**
      * Constructor method.
@@ -228,9 +229,7 @@ public class Controller {
     public void addInformation(final String text) {
         long elapsedTime = System.nanoTime() - beginTime;
         String newText = getTimeString(elapsedTime) + ": " + text;
-        Label label = new Label(newText);
-        label.setFont(Font.font("Verdana", 10));
-        informationBox.getChildren().add(label);
+        informationArea.appendText(newText + "\n");
     }
 
     /**
@@ -286,9 +285,9 @@ public class Controller {
     /**
      * Set the informationBox with a specific box.
      *
-     * @param infoBox The box to be set.
+     * @param infoArea The box to be set.
      */
-    public void setInformationBox(final VBox infoBox) {
-        this.informationBox = infoBox;
+    public void setInformationBox(final TextArea infoArea) {
+        this.informationArea= infoArea;
     }
 }
