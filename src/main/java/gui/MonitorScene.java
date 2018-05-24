@@ -1,5 +1,6 @@
 package gui;
 
+import handlers.JsonHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -34,10 +35,12 @@ public class MonitorScene extends BaseScene {
      * Class parameters.
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
-    private int cameras = 2;
     private String theStreamString = "rtsp://192.168.0.117:554/"
         + "user=admin&password=&channel=1&stream=1"
         + ".sdp?real_stream--rtp-caching=100";
+    private int cameras = 0;
+    private int people = 0;
+    private int chests = 0;
 
     /**
      * Constructor.
@@ -77,7 +80,7 @@ public class MonitorScene extends BaseScene {
         BorderPane videoPane = new BorderPane();
 
         ArrayList<Pane> menuMediaPane =
-            createMenuMediaPane(videoPane, primaryStage);
+            createMenuAndMediaPane(videoPane, primaryStage);
 
         // get the menubar and put it at the top of the videoPane
         videoPane.setTop(menuMediaPane.get(0));
@@ -92,33 +95,27 @@ public class MonitorScene extends BaseScene {
     }
 
     /**
-     * createMenuMediaPane.
+     * createMenuAndMediaPane.
      * Create the Menu pane and mediaPlayer pane
      * @param videoPane pane that includes menu and mediaPlayer
      * @param primaryStage starting stage
      * @return ArrayList
      */
-    private ArrayList<Pane> createMenuMediaPane(final Pane videoPane,
-                                                final Stage primaryStage) {
-        // ------------- Create Menu -------------
-        MenuBar menu = new MenuBar();
-        menu.prefWidthProperty().bind(videoPane.widthProperty());
+    private ArrayList<Pane> createMenuAndMediaPane(final Pane videoPane,
+                                                   final Stage primaryStage) {
+        // Add menuPane and mediaPlayerPane to a list
+        ArrayList<Pane> menuMediaList = new ArrayList<>();
+        menuMediaList.add(createMenu(videoPane, primaryStage));
+        menuMediaList.add(createImageViewers());
 
-        // Main menu items
-        Menu cam1 = new Menu("Camera 1");
-        Menu cam2 = new Menu("Camera 2");
-        // Menu options
-        MenuItem openVideo = new MenuItem("Open File...");
-        MenuItem connectStream = new MenuItem("Connect Stream...");
-        MenuItem theStream = new MenuItem("THE Stream");
-        // Add menu options to main menu items
-        cam1.getItems().addAll(openVideo, connectStream, theStream);
-        menu.getMenus().addAll(cam1, cam2);
+        return menuMediaList;
+    }
 
-        StackPane menuPane = new StackPane();
-        menuPane.getChildren().add(menu);
-
-        // ------------- Create MediaPlayer Pane -------------
+    /**
+     * Create the pane that holds all imageViewers.
+     * @return mediaPlayerPane
+     */
+    private Pane createImageViewers() {
         final int gap = 3;
         final int inset = 5;
         FlowPane mediaPlayerPane = new FlowPane();
@@ -129,17 +126,83 @@ public class MonitorScene extends BaseScene {
         initializeImageViewers(imageViews);
         mediaPlayerPane.getChildren().addAll(imageViews);
 
+        return mediaPlayerPane;
+    }
+
+    /**
+     * Construct the menu for the application.
+     * @param videoPane the pane that will hold the menu
+     * @param primaryStage starting stage
+     * @return menuPane
+     */
+    private Pane createMenu(final Pane videoPane, final Stage primaryStage) {
+        MenuBar menu = new MenuBar();
+        menu.prefWidthProperty().bind(videoPane.widthProperty());
+
+        Menu settings = new Menu("Settings");
+        MenuItem clearImageViewers = new MenuItem("Reset application");
+        MenuItem closeApp = new MenuItem("Close application");
+        settings.getItems().addAll(clearImageViewers, closeApp);
+
+        // Configuration menu options
+        Menu config = new Menu("Configure the Escape Room");
+        MenuItem configFile = new MenuItem("Load configuration file...");
+        Menu configManual = new Menu("Manual configuration...");
+        MenuItem standardFile = new MenuItem("Use standard configuration");
+        config.getItems().addAll(configFile, configManual, standardFile);
+
+        // Set up manual configuration
+        Menu cameraSettings = new Menu("Add camera");
+        MenuItem openVideo = new MenuItem("Open File...");
+        MenuItem connectStream = new MenuItem("Connect Stream...");
+        MenuItem theStream = new MenuItem("THE Stream");
+        cameraSettings.getItems().addAll(openVideo, connectStream, theStream);
+        configManual.getItems().addAll(cameraSettings);
+
+        // Add al submenus to main menu bar
+        menu.getMenus().addAll(settings, config);
+
+        StackPane menuPane = new StackPane();
+        menuPane.getChildren().add(menu);
+
         // When menu options are clicked
+        resetCameras(clearImageViewers);
+        closeApp(closeApp);
+
+        openConfig(configFile, primaryStage);
         openVideo(openVideo, primaryStage);
         connectStream(connectStream, primaryStage);
         theStream(theStream);
 
-        // Add menuPane and mediaPlayerPane to list of panes
-        ArrayList<Pane> menuMediaList = new ArrayList<>();
-        menuMediaList.add(menuPane);
-        menuMediaList.add(mediaPlayerPane);
+        return menuPane;
+    }
 
-        return menuMediaList;
+    /**
+     * createMediaBar.
+     * Create a mediaBar for the mediaPlayer
+     * @return HBox
+     */
+    private HBox createMediaBar() {
+        final int top = 5;
+        final int right = 10;
+        final int bottom = 5;
+        final int left = 10;
+
+        // Create mediabar for video options
+        HBox mediaBar = new HBox();
+        mediaBar.setAlignment(Pos.CENTER);
+        mediaBar.setPadding(new Insets(top, right, bottom, left));
+
+        // Create the play/pauze button
+        final Button playButton = new Button(">");
+        playButton.setOnAction(event -> getController().grabTimeFrame(imageViews));
+
+        final Button closeStream = new Button("Close Stream");
+        closeStream.setOnAction(event -> getController().closeStream(imageViews));
+
+        mediaBar.getChildren().addAll(playButton, closeStream);
+
+        return mediaBar;
     }
 
     /**
@@ -147,6 +210,7 @@ public class MonitorScene extends BaseScene {
      * @param views the imageViews
      */
     private void initializeImageViewers(final ArrayList<ImageView> views) {
+        views.clear();
         for (int k = 0; k < cameras; k++) {
             views.add(new ImageView());
         }
@@ -163,6 +227,47 @@ public class MonitorScene extends BaseScene {
             views.get(i).setSmooth(true);
             views.get(i).setCache(false);
         }
+    }
+
+    /**
+     * Remove all current cameras.
+     * @param clearImageViewers the current imageViewers
+     */
+    private void resetCameras(final MenuItem clearImageViewers) {
+        clearImageViewers.setOnAction(event -> getController().clearCameras());
+        for (ImageView iv : imageViews) {
+            iv.setImage(null);
+        }
+    }
+
+    /**
+     * Shut down application.
+     * @param closeApp menu item
+     */
+    private void closeApp(final MenuItem closeApp) {
+        closeApp.setOnAction(event -> System.exit(0));
+    }
+
+    /**
+     * Let user select a configuration file.
+     * @param configFile the file
+     * @param primaryStage the starting stage
+     */
+    private void openConfig(final MenuItem configFile, final Stage primaryStage) {
+        configFile.setOnAction(event -> {
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Select Configuration File (JSon format)");
+            File file = chooser.showOpenDialog(primaryStage);
+            JsonHandler jsonHandler = new JsonHandler(file.toString());
+
+            chests = jsonHandler.getAmountChests(0);
+            people = jsonHandler.getAmountPeople(0);
+            cameras = jsonHandler.getCameraLinks(0).size();
+
+            for (int k = 0; k < jsonHandler.getCameraLinks(0).size(); k++) {
+                getController().createCamera(jsonHandler.getCameraLinks(0).get(k));
+            }
+        });
     }
 
     /**
@@ -241,34 +346,6 @@ public class MonitorScene extends BaseScene {
     private void theStream(final MenuItem theStream) {
         theStream.setOnAction((ActionEvent t)
             -> getController().createTheStream(theStreamString));
-    }
-
-    /**
-     * createMediaBar.
-     * Create a mediaBar for the mediaPlayer
-     * @return HBox
-     */
-    private HBox createMediaBar() {
-        final int top = 5;
-        final int right = 10;
-        final int bottom = 5;
-        final int left = 10;
-
-        // Create mediabar for video options
-        HBox mediaBar = new HBox();
-        mediaBar.setAlignment(Pos.CENTER);
-        mediaBar.setPadding(new Insets(top, right, bottom, left));
-
-        // Create the play/pauze button
-        final Button playButton = new Button(">");
-        playButton.setOnAction(event -> getController().grabTimeFrame(imageViews));
-
-        final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> getController().closeStream(imageViews));
-
-        mediaBar.getChildren().addAll(playButton, closeStream);
-
-        return mediaBar;
     }
 
 }

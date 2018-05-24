@@ -112,6 +112,14 @@ public class Controller {
     }
 
     /**
+     * Method to initialize a connection with a video or stream.
+     * @param url to file or stream
+     */
+    public void createCamera(final String url) {
+        cameraHandler.addCamera(url);
+    }
+
+    /**
      * grabTimeFrame.
      * Call updateImageViews method every period of time to retrieve a new frame
      * @param imageViews list of panels that show the frames
@@ -146,9 +154,7 @@ public class Controller {
      */
     public void closeStream(final ArrayList<ImageView> imageViews) {
         if (cameraActive) {
-            cameraActive = false;
-            cameraHandler.clearList();
-
+            clearCameras();
             File image = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\nostream.png");
             Image noStreamAvailable = new Image(image.toURI().toString());
@@ -158,6 +164,14 @@ public class Controller {
                 imageViews.get(i).setImage(noStreamAvailable);
             }
         }
+    }
+
+    /**
+     * Clear the list of cameras.
+     */
+    public void clearCameras() {
+        cameraHandler.clearList();
+        cameraActive = false;
     }
 
     /**
