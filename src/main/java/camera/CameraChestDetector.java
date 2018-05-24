@@ -30,12 +30,15 @@ public class CameraChestDetector extends CameraObjectDetector {
      * a bounding box will be drawn around it
      *
      * @param newFrame the frame that gets checked for the presence of boxes.
+     * @param subtraction the subtraction of this frame.
      */
-    public void checkForChests(final Mat newFrame) {
+    public void checkForChests(final Mat newFrame, final Mat subtraction) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
-        detectChest(dest);
+        Mat subtracted = new Mat();
+        Core.bitwise_and(dest, subtraction, subtracted);
+        detectChest(subtracted);
         if (isOpened) {
-            includeChestContoursInFrame(newFrame, dest);
+            includeChestContoursInFrame(newFrame, subtracted);
         }
     }
 
