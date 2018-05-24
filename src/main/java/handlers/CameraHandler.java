@@ -15,19 +15,25 @@ public class CameraHandler {
     /**
      * The list of the cameras.
      */
-    private List<Camera> cameraList;
+    private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active;
 
     /**
-     * Constructor for the CameraHandler class.
+     * Constructor for CameraHandler without information.
+     */
+    public CameraHandler() {
+        active = false;
+    }
+
+    /**
+     * Constructor for the CameraHandler class with information.
      * @param information The informationHandler.
      */
     public CameraHandler(final InformationHandler information) {
-        cameraList = new ArrayList<>();
-        active = false;
         informationHandler = information;
+        active = false;
     }
 
     /**
