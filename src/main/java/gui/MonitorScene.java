@@ -39,9 +39,6 @@ public class MonitorScene extends BaseScene {
         + "user=admin&password=&channel=1&stream=1"
         + ".sdp?real_stream--rtp-caching=100";
     private FlowPane mediaPlayerPane = new FlowPane();
-    private int cameras = 0;
-    private int people = 0;
-    private int chests = 0;
 
     /**
      * Constructor.
@@ -138,29 +135,27 @@ public class MonitorScene extends BaseScene {
     private Pane createMenuPane(final Pane videoPane, final Stage primaryStage) {
         // Menu options for settings
         Menu settings = new Menu("Settings");
-        MenuItem clearImageViewers = new MenuItem("Reset application");
-        MenuItem closeApp = new MenuItem("Close application");
+        MenuItem clearImageViewers = new MenuItem("Reset Application");
+        MenuItem closeApp = new MenuItem("Close Application");
         settings.getItems().addAll(clearImageViewers, closeApp);
 
         // Menu options for automatic configuration
         Menu config = new Menu("Configure the Escape Room");
-        MenuItem configFile = new MenuItem("Load configuration file...");
-        Menu configManual = new Menu("Manual configuration...");
-        MenuItem standardFile = new MenuItem("Use standard configuration");
-        config.getItems().addAll(configFile, configManual, standardFile);
+        MenuItem configFile = new MenuItem("Load Configuration File...");
+        MenuItem standardFile = new MenuItem("Use Standard Configuration");
+        config.getItems().addAll(configFile, standardFile);
 
         // Menu options for manual configuration
-        Menu cameraSettings = new Menu("Add camera");
-        MenuItem openVideo = new MenuItem("Open File...");
-        MenuItem connectStream = new MenuItem("Connect Stream...");
-        MenuItem theStream = new MenuItem("THE Stream");
-        cameraSettings.getItems().addAll(openVideo, connectStream, theStream);
-        configManual.getItems().addAll(cameraSettings);
+        Menu configManual = new Menu("Manual Configuration");
+        MenuItem openVideo = new MenuItem("Add Video File...");
+        MenuItem connectStream = new MenuItem("Add Stream...");
+        MenuItem theStream = new MenuItem("Add THE Stream");
+        configManual.getItems().addAll(openVideo, connectStream, theStream);
 
         // Add al submenus to main menu bar
         MenuBar menu = new MenuBar();
         menu.prefWidthProperty().bind(videoPane.widthProperty());
-        menu.getMenus().addAll(settings, config);
+        menu.getMenus().addAll(settings, config, configManual);
         StackPane menuPane = new StackPane();
         menuPane.getChildren().add(menu);
 
@@ -194,10 +189,16 @@ public class MonitorScene extends BaseScene {
 
         // Create the play/pauze button
         final Button playButton = new Button(">");
-        playButton.setOnAction(event -> getController().grabTimeFrame(imageViews));
+        playButton.setOnAction(event -> {
+            initializeImageViewers();
+            getController().grabTimeFrame(imageViews);
+        });
 
         final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> getController().closeStream(imageViews));
+        closeStream.setOnAction(event -> {
+            getController().closeStream(imageViews);
+            mediaPlayerPane.getChildren().clear();
+        });
 
         mediaBar.getChildren().addAll(playButton, closeStream);
 
@@ -211,7 +212,7 @@ public class MonitorScene extends BaseScene {
         mediaPlayerPane.getChildren().clear();
 
         imageViews.clear();
-        for (int k = 0; k < cameras; k++) {
+        for (int k = 0; k < getController().getCameras(); k++) {
             imageViews.add(new ImageView());
         }
 
@@ -227,6 +228,7 @@ public class MonitorScene extends BaseScene {
             imageViews.get(i).setSmooth(true);
             imageViews.get(i).setCache(false);
         }
+        mediaPlayerPane.getChildren().addAll(imageViews);
     }
 
     /**
@@ -234,10 +236,10 @@ public class MonitorScene extends BaseScene {
      * @param clearImageViewers the current imageViewers
      */
     private void resetCameras(final MenuItem clearImageViewers) {
-        clearImageViewers.setOnAction(event -> getController().clearCameras());
-        for (ImageView iv : imageViews) {
-            iv.setImage(null);
-        }
+        clearImageViewers.setOnAction(event -> {
+            getController().closeStream(imageViews);
+            mediaPlayerPane.getChildren().clear();
+        });
     }
 
     /**
@@ -279,18 +281,14 @@ public class MonitorScene extends BaseScene {
      * @param jsonHandler the current jsonHandler
      */
     private void configure(final JsonHandler jsonHandler) {
-        chests = jsonHandler.getAmountChests(0);
-        people = jsonHandler.getAmountPeople(0);
-        cameras = jsonHandler.getCameraLinks(0).size();
+        int chests = jsonHandler.getAmountChests(0);
+        int people = jsonHandler.getAmountPeople(0);
+        int cameras = jsonHandler.getCameraLinks(0).size();
+        getController().setParameters(people, chests);
 
-        for (int k = 0; k < jsonHandler.getCameraLinks(0).size(); k++) {
+        for (int k = 0; k < cameras; k++) {
             getController().createCamera(jsonHandler.getCameraLinks(0).get(k));
         }
-
-        // Display the corresponding imageViewers
-        mediaPlayerPane.getChildren().removeAll();
-        initializeImageViewers();
-        mediaPlayerPane.getChildren().addAll(imageViews);
     }
 
     /**
@@ -307,7 +305,6 @@ public class MonitorScene extends BaseScene {
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
                 getController().createVideo(file);
-                cameras++;
             }
         });
     }

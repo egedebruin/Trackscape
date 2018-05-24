@@ -27,6 +27,8 @@ public class Controller {
      */
     private CameraHandler cameraHandler;
     private boolean cameraActive;
+    private int people = 0;
+    private int chests = 0;
 
     /**
      * Constructor method.
@@ -154,24 +156,9 @@ public class Controller {
      */
     public void closeStream(final ArrayList<ImageView> imageViews) {
         if (cameraActive) {
-            clearCameras();
-            File image = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\nostream.png");
-            Image noStreamAvailable = new Image(image.toURI().toString());
-
-            final int viewPanels = imageViews.size();
-            for (int i = 0; i < viewPanels; i++) {
-                imageViews.get(i).setImage(noStreamAvailable);
-            }
+            cameraHandler.clearList();
+            cameraActive = false;
         }
-    }
-
-    /**
-     * Clear the list of cameras.
-     */
-    public void clearCameras() {
-        cameraHandler.clearList();
-        cameraActive = false;
     }
 
     /**
@@ -186,6 +173,24 @@ public class Controller {
         primaryStage.setScene(
             ms.createMonitorScene(
                 primaryStage, stylesheet));
+    }
+
+    /**
+     * Set the basic parameters from an escape room configuration file.
+     * @param peopleNum the number of people
+     * @param chestNum the number of chests
+     */
+    public void setParameters(final int peopleNum, final int chestNum) {
+        this.people = peopleNum;
+        this.chests = chestNum;
+    }
+
+    /**
+     * Get the number of active cameras.
+     * @return number of cameras
+     */
+    public int getCameras() {
+        return cameraHandler.listSize();
     }
 
 }
