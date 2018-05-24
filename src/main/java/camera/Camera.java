@@ -1,7 +1,5 @@
 package camera;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import org.opencv.core.Mat;
@@ -13,22 +11,38 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
-    private List<CameraObjectDetector> cameraObjectDetectorList;
+    private static final int DEFAULTNUMOFCHESTS = 3;
     private VideoCapture videoCapture;
     private String link;
     private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
+    private int numOfChestsInRoom;
+
+    /**
+     * Constructor for a camera with possibility to specify no chests and persons.
+     *
+     * @param newCapture The VideoCapture of this camera.
+     * @param newLink The link of this camera.
+     * @param numOfChests The amount of chests present in the room.
+     */
+    public Camera(final VideoCapture newCapture, final String newLink,
+                  final int numOfChests) {
+        this.videoCapture = newCapture;
+        this.link = newLink;
+        this.numOfChestsInRoom = numOfChests;
+    }
 
     /**
      * Constructor for a Camera.
+     *
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
      */
     public Camera(final VideoCapture newCapture, final String newLink) {
-        cameraObjectDetectorList = new ArrayList<>();
-        videoCapture = newCapture;
-        link = newLink;
+        this.videoCapture = newCapture;
+        this.link = newLink;
+        this.numOfChestsInRoom = DEFAULTNUMOFCHESTS;
     }
 
     /**
@@ -92,5 +106,13 @@ public class Camera {
      */
     public void setFirstFrame(final Mat frame) {
         this.firstFrame = frame;
+    }
+
+    /**
+     * Getter for numOfChestsInRoom.
+     * @return this.numOfChestsInRoom
+     */
+    public int getNumOfChestsInRoom() {
+        return this.numOfChestsInRoom;
     }
 }

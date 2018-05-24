@@ -51,22 +51,17 @@ public class MonitorScene extends BaseScene {
     /**
      * monitorScene.
      * Creates the scene where host can monitor the game.
-     * @param width of the scene
-     * @param height of the scene
      * @param primaryStage starting stage
      * @param stylesheet current stylesheet
      * @return monitorScene
      */
-    public Scene createMonitorScene(final int width,
-                                    final int height,
-                                    final Stage primaryStage,
-                                    final String stylesheet) {
+    public Scene createMonitorScene(final Stage primaryStage, final String stylesheet) {
         BorderPane root = new BorderPane();
         root.setTop(createTopPane());
         root.setCenter(createVideoPane(primaryStage));
         root.setBottom(createBottomPane());
 
-        Scene monitorScene = new Scene(root, width, height);
+        Scene monitorScene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
         monitorScene.getStylesheets().add(stylesheet);
 
         return monitorScene;
