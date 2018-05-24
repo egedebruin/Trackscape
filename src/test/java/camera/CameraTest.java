@@ -53,7 +53,7 @@ class CameraTest {
     void constructorPlusTest() {
         camera = new Camera(null, null, DEFAULTNOOFCHEST);
         assertNotNull(camera);
-        assertEquals(camera.getNoOfChestsInRoom(), DEFAULTNOOFCHEST);
+        assertEquals(camera.getNumOfChestsInRoom(), DEFAULTNOOFCHEST);
     }
 
     /**

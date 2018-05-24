@@ -11,26 +11,26 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
-    private static final int DEFAULTNOOFCHESTS = 3;
+    private static final int DEFAULTNUMOFCHESTS = 3;
     private VideoCapture videoCapture;
     private String link;
     private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
-    private int noOfChestsInRoom;
+    private int numOfChestsInRoom;
 
     /**
      * Constructor for a camera with possibility to specify no chests and persons.
      *
      * @param newCapture The VideoCapture of this camera.
      * @param newLink The link of this camera.
-     * @param noOfChests The amount of chests present in the room.
+     * @param numOfChests The amount of chests present in the room.
      */
     public Camera(final VideoCapture newCapture, final String newLink,
-                  final int noOfChests) {
+                  final int numOfChests) {
         this.videoCapture = newCapture;
         this.link = newLink;
-        this.noOfChestsInRoom = noOfChests;
+        this.numOfChestsInRoom = numOfChests;
     }
 
     /**
@@ -42,7 +42,7 @@ public class Camera {
     public Camera(final VideoCapture newCapture, final String newLink) {
         this.videoCapture = newCapture;
         this.link = newLink;
-        this.noOfChestsInRoom = DEFAULTNOOFCHESTS;
+        this.numOfChestsInRoom = DEFAULTNUMOFCHESTS;
     }
 
     /**
@@ -109,10 +109,10 @@ public class Camera {
     }
 
     /**
-     * Getter for noOfChestsInRoom.
-     * @return this.noOfChestsInRoom
+     * Getter for numOfChestsInRoom.
+     * @return this.numOfChestsInRoom
      */
-    public int getNoOfChestsInRoom() {
-        return this.noOfChestsInRoom;
+    public int getNumOfChestsInRoom() {
+        return this.numOfChestsInRoom;
     }
 }

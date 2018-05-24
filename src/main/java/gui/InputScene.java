@@ -79,7 +79,7 @@ public class InputScene extends BaseScene {
         description.setTextAlignment(TextAlignment.CENTER);
 
         Button submit = new Button("Proceed");
-        submit.setOnAction(event -> controller.proceedToMonitorScene(
+        submit.setOnAction(event -> getController().proceedToMonitorScene(
             monitorScene, primaryStage, stylesheet));
         formPane.add(submit, 1, rowIndex, colspan, rowspan);
 
