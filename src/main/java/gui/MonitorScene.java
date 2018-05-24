@@ -161,7 +161,7 @@ public class MonitorScene extends BaseScene {
             views.get(i).setFitHeight(height);
             views.get(i).setPreserveRatio(true);
             views.get(i).setSmooth(true);
-            views.get(i).setCache(true);
+            views.get(i).setCache(false);
         }
     }
 
