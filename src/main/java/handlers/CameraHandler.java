@@ -54,8 +54,9 @@ public class CameraHandler {
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
+        Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
         cameraChestDetector.checkForChests(newFrame);
-        return cameraChestDetector.subtractFrame(newFrame, camera.getFirstFrame());
+        return newFrame;
     }
 
     /**

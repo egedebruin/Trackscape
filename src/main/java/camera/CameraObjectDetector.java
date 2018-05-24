@@ -4,11 +4,15 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.video.BackgroundSubtractorKNN;
+import org.opencv.video.Video;
 
 /**
  * Abstract class describing an object found in a camerastream/video/image.
  */
 public abstract class CameraObjectDetector {
+
+    private BackgroundSubtractorKNN knn = Video.createBackgroundSubtractorKNN();
 
     /**
      * Method that changes colourspaces of a Mat from BGR to HSV.
@@ -25,22 +29,12 @@ public abstract class CameraObjectDetector {
      * Subtracts the subtractor frame from the frame, returns a black and white image where white
      * pixels are new pixels.
      * @param frame The frame to be subtracted.
-     * @param subtractor The frame which subtracts.
      * @return The result of the subtraction.
      */
-    public Mat subtractFrame(final Mat frame, final Mat subtractor) {
-        final Scalar lowerLimit = new Scalar(1, 60, 60);
-        final Scalar upperLimit = new Scalar(179, 255, 255);
-
-        Mat result = new Mat();
-
-        Mat hsv = new Mat();
-        Imgproc.cvtColor(frame, hsv, Imgproc.COLOR_BGR2HSV);
-
-        Core.absdiff(hsv, subtractor, result);
-
+    public Mat subtractFrame(final Mat frame) {
         Mat subtraction = new Mat();
-        Core.inRange(result, lowerLimit, upperLimit, subtraction);
+
+        knn.apply(frame, subtraction);
 
         return subtraction;
     }
