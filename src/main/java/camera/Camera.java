@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import java.util.concurrent.TimeUnit;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -82,15 +83,15 @@ public class Camera {
      * @param newFrame The frame to get the activity from.
      */
     private void addActivities(final Mat newFrame) {
-        final int modulus = 5;
+        final int frequency = 5;
 
-        if (frameCounter % modulus == 0) {
+        if (frameCounter % frequency == 0) {
             for (int i = 0; i < FRAMES; i++) {
                 addActivity(frameParts.get(i), i, knns.get(i));
             }
+            addActivity(newFrame, FRAMES, knns.get(FRAMES));
         }
 
-        addActivity(newFrame, FRAMES, knns.get(FRAMES));
         frameCounter++;
     }
 
@@ -133,7 +134,6 @@ public class Camera {
         }
 
         final int minFrames = 30;
-        final double timeWindow = 1000.00;
 
         // Only add the activity to the list when at least some frames are processed.
         if (frameCounter > minFrames) {
@@ -143,7 +143,7 @@ public class Camera {
 
             long currentTime = System.currentTimeMillis() - firstTime;
 
-            double[] tuple = {currentTime / timeWindow, change};
+            double[] tuple = {TimeUnit.MILLISECONDS.toSeconds(currentTime), change};
 
             activity.get(partNumber).add(tuple);
         }
