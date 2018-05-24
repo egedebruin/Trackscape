@@ -23,6 +23,7 @@ public class Main extends Application {
     /**
      * main.
      * Launch the application
+     *
      * @param args arguments
      */
     public static void main(final String[] args) {
@@ -39,6 +40,7 @@ public class Main extends Application {
     /**
      * start.
      * Construct the structure of the GUI
+     *
      * @param primaryStage starting stage
      */
     @Override
@@ -54,5 +56,4 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> System.exit(0));
     }
-
 }

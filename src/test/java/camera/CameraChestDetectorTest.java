@@ -1,12 +1,11 @@
 package camera;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import handlers.CameraHandler;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *

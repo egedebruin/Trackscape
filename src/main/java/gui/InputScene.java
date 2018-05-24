@@ -6,11 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -18,11 +15,10 @@ import javafx.stage.Stage;
 /**
  * Class that constructs the inputScene.
  */
-public class InputScene {
+public class InputScene extends BaseScene {
     /**
      * Class parameters.
      */
-    private Controller controller;
     private MonitorScene monitorScene;
 
     /**
@@ -30,8 +26,8 @@ public class InputScene {
      * @param ctrl the controller
      */
     public InputScene(final Controller ctrl) {
-        this.controller = ctrl;
-        this.monitorScene = new MonitorScene(this.controller);
+        super(ctrl);
+        this.monitorScene = new MonitorScene(getController());
     }
 
     /**
@@ -47,7 +43,7 @@ public class InputScene {
                             final Stage primaryStage, final String stylesheet) {
         BorderPane root = new BorderPane();
         root.setTop(createTopPane());
-        root.setCenter(createInputPane(width, height,
+        root.setCenter(createInputPane(
             primaryStage, stylesheet));
         root.setBottom(createBottomPane());
 
@@ -58,37 +54,14 @@ public class InputScene {
     }
 
     /**
-     * createTopPane.
-     * Create the top pane of the root
-     * @return topPane
-     */
-    private Pane createTopPane() {
-        final int size = 100;
-        Text text = new Text("TrackScape");
-        text.setFont(Font.font("Edwardian Script ITC", size));
-        text.setFill(Color.BLACK);
-        text.setStroke(Color.LIGHTSLATEGREY);
-        text.setStrokeWidth(2);
-
-        FlowPane topPane = new FlowPane();
-        topPane.getChildren().addAll(text);
-        topPane.setAlignment(Pos.CENTER);
-
-        return topPane;
-    }
-
-    /**
      * createInputPane.
      * Construct the pane where host can give input about the game
      * for the inputScene
-     * @param width of the scene
-     * @param height of the scene
      * @param primaryStage starting stage
      * @param stylesheet current stylesheet
      * @return inputPane
      */
-    private Pane createInputPane(final int width, final int height,
-                                 final Stage primaryStage,
+    private Pane createInputPane(final Stage primaryStage,
                                  final String stylesheet) {
         final int gapSize = 15;
         GridPane formPane = new GridPane();
@@ -106,8 +79,8 @@ public class InputScene {
         description.setTextAlignment(TextAlignment.CENTER);
 
         Button submit = new Button("Proceed");
-        submit.setOnAction(event -> controller.proceedToMonitorScene(
-            monitorScene, width, height, primaryStage, stylesheet));
+        submit.setOnAction(event -> getController().proceedToMonitorScene(
+            monitorScene, primaryStage, stylesheet));
         formPane.add(submit, 1, rowIndex, colspan, rowspan);
 
         return addFieldsOfFormToFormPane(formPane);
@@ -138,26 +111,6 @@ public class InputScene {
         formPane.add(chestTextField, 1, rowIndexChest);
 
         return formPane;
-    }
-
-    /**
-     * createBottomPane.
-     * Create the bottom pane of the root
-     * @return Pane
-     */
-    private Pane createBottomPane() {
-        final int size = 15;
-
-        Text text2 = new Text("© TrackScape");
-        text2.setFont(Font.font("Verdana", size));
-        text2.setFill(Color.BLACK);
-        text2.setStroke(Color.LIGHTSLATEGREY);
-        text2.setStrokeWidth(1);
-
-        FlowPane bottomPane = new FlowPane();
-        bottomPane.getChildren().addAll(text2);
-
-        return bottomPane;
     }
 
 }

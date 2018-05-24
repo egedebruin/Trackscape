@@ -55,8 +55,12 @@ public class Controller {
     /**
      * retrieveFrame.
      * Retrieve last frame from video reader in handlers.CameraHandler
+<<<<<<< HEAD
      *
      * @param cam the camera used
+=======
+     * @param cam the camera that is used
+>>>>>>> master
      * @return Image
      */
     private Image retrieveFrame(final Camera cam) {
@@ -144,15 +148,23 @@ public class Controller {
      *
      * @param imageView panel that shows the frame
      */
-    public void grabTimeFrame(final ImageView imageView) {
+    void grabTimeFrame(final ImageView imageView) {
         if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
-            Runnable frameGrabber = () -> updateImageView(imageView);
+            Runnable frameGrabber = () -> updateView(imageView);
             timer = Executors.newSingleThreadScheduledExecutor();
             timer.scheduleAtFixedRate(
                 frameGrabber, 0, period, TimeUnit.MILLISECONDS);
         }
+    }
+
+    /**
+     * updateView.
+     * @param imageView the view for the video
+     */
+    void updateView(final ImageView imageView) {
+        updateImageView(imageView);
     }
 
     /**
@@ -196,20 +208,15 @@ public class Controller {
     /**
      * proceedToMonitorScene.
      * Move on to the next stage
-     *
-     * @param ms           the monitorScene
-     * @param width        of the scene
-     * @param height       of the scene
+     * @param ms the monitorScene
      * @param primaryStage starting stage
      * @param stylesheet   current stylesheet
      */
-    final void proceedToMonitorScene(final MonitorScene ms,
-                                     final int width, final int height,
-                                     final Stage primaryStage,
+    final void proceedToMonitorScene(final MonitorScene ms, final Stage primaryStage,
                                      final String stylesheet) {
         primaryStage.setScene(
             ms.createMonitorScene(
-                width, height, primaryStage, stylesheet));
+                primaryStage, stylesheet));
     }
 
     /**
