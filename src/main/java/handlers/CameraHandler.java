@@ -111,4 +111,12 @@ public class CameraHandler {
     public boolean isActive() {
         return active;
     }
+
+    /**
+     * Get the information Handler.
+     * @return The information handler.
+     */
+    public InformationHandler getInformationHandler() {
+        return informationHandler;
+    }
 }

@@ -16,8 +16,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
@@ -55,12 +53,7 @@ public class Controller {
     /**
      * retrieveFrame.
      * Retrieve last frame from video reader in handlers.CameraHandler
-<<<<<<< HEAD
-     *
-     * @param cam the camera used
-=======
      * @param cam the camera that is used
->>>>>>> master
      * @return Image
      */
     private Image retrieveFrame(final Camera cam) {
@@ -295,6 +288,6 @@ public class Controller {
      * @param infoArea The box to be set.
      */
     public void setInformationBox(final TextArea infoArea) {
-        this.informationArea= infoArea;
+        this.informationArea = infoArea;
     }
 }

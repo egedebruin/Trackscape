@@ -30,6 +30,15 @@ class CameraHandlerTest {
     }
 
     /**
+     * Test the constructor with information handler.
+     */
+    @Test
+    void constructorTest() {
+        InformationHandler handler = new InformationHandler();
+        CameraHandler c = new CameraHandler(handler);
+        assertEquals(handler, c.getInformationHandler());
+    }
+    /**
      * Tests if a camera is added when addCamera is used.
      */
     @Test
