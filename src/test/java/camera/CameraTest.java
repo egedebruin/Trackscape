@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CameraTest {
 
     private static final int DEFAULTNOOFCHEST = 10;
-    private static final int VIDEOLENGTH = 5;
+    private static final int VIDEOLENGTH = 25;
     private Camera camera;
     private CameraHandler cameraHandler;
     private final String videoLink = "files" + File.separator + "postit.mov";
