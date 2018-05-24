@@ -36,7 +36,7 @@ public class Controller {
     /**
      * retrieveFrame.
      * Retrieve last frame from video reader in handlers.CameraHandler
-     * @param cam the camera used
+     * @param cam the camera that is used
      * @return Image
      */
     private Image retrieveFrame(final Camera cam) {
@@ -114,15 +114,23 @@ public class Controller {
      * Call updateImageView method every period of time to retrieve a new frame
      * @param imageView panel that shows the frame
      */
-    public void grabTimeFrame(final ImageView imageView) {
+    void grabTimeFrame(final ImageView imageView) {
         if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
-            Runnable frameGrabber = () -> updateImageView(imageView);
+            Runnable frameGrabber = () -> updateView(imageView);
             timer = Executors.newSingleThreadScheduledExecutor();
             timer.scheduleAtFixedRate(
                 frameGrabber, 0, period, TimeUnit.MILLISECONDS);
         }
+    }
+
+    /**
+     * updateView.
+     * @param imageView the view for the video
+     */
+    void updateView(final ImageView imageView) {
+        updateImageView(imageView);
     }
 
     /**
