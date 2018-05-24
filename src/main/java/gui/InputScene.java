@@ -6,11 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -18,11 +15,10 @@ import javafx.stage.Stage;
 /**
  * Class that constructs the inputScene.
  */
-public class InputScene {
+public class InputScene extends BaseScene {
     /**
      * Class parameters.
      */
-    private Controller controller;
     private MonitorScene monitorScene;
 
     /**
@@ -30,8 +26,8 @@ public class InputScene {
      * @param ctrl the controller
      */
     public InputScene(final Controller ctrl) {
-        this.controller = ctrl;
-        this.monitorScene = new MonitorScene(this.controller);
+        super(ctrl);
+        this.monitorScene = new MonitorScene(getController());
     }
 
     /**
@@ -55,26 +51,6 @@ public class InputScene {
         inputScene.getStylesheets().add(stylesheet);
 
         return inputScene;
-    }
-
-    /**
-     * createTopPane.
-     * Create the top pane of the root
-     * @return topPane
-     */
-    private Pane createTopPane() {
-        final int size = 100;
-        Text text = new Text("TrackScape");
-        text.setFont(Font.font("Edwardian Script ITC", size));
-        text.setFill(Color.BLACK);
-        text.setStroke(Color.LIGHTSLATEGREY);
-        text.setStrokeWidth(2);
-
-        FlowPane topPane = new FlowPane();
-        topPane.getChildren().addAll(text);
-        topPane.setAlignment(Pos.CENTER);
-
-        return topPane;
     }
 
     /**
@@ -135,26 +111,6 @@ public class InputScene {
         formPane.add(chestTextField, 1, rowIndexChest);
 
         return formPane;
-    }
-
-    /**
-     * createBottomPane.
-     * Create the bottom pane of the root
-     * @return Pane
-     */
-    private Pane createBottomPane() {
-        final int size = 15;
-
-        Text text2 = new Text("© TrackScape");
-        text2.setFont(Font.font("Verdana", size));
-        text2.setFill(Color.BLACK);
-        text2.setStroke(Color.LIGHTSLATEGREY);
-        text2.setStrokeWidth(1);
-
-        FlowPane bottomPane = new FlowPane();
-        bottomPane.getChildren().addAll(text2);
-
-        return bottomPane;
     }
 
 }
