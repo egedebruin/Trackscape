@@ -59,6 +59,6 @@ class CameraObjectDetectorTest {
 
         Mat mat = camera.getLastFrame();
 
-        assertNotEquals(cameraObjectDetector.subtractFrame(mat, mat), mat);
+        assertNotEquals(cameraObjectDetector.subtractFrame(mat), mat);
     }
 }
