@@ -173,18 +173,14 @@ public class Controller {
      * proceedToMonitorScene.
      * Move on to the next stage
      * @param ms the monitorScene
-     * @param width of the scene
-     * @param height of the scene
      * @param primaryStage starting stage
      * @param stylesheet current stylesheet
      */
-    final void proceedToMonitorScene(final MonitorScene ms,
-                                     final int width, final int height,
-                                     final Stage primaryStage,
+    final void proceedToMonitorScene(final MonitorScene ms, final Stage primaryStage,
                                      final String stylesheet) {
         primaryStage.setScene(
             ms.createMonitorScene(
-                width, height, primaryStage, stylesheet));
+                primaryStage, stylesheet));
     }
 
 }

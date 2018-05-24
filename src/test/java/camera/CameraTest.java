@@ -1,6 +1,5 @@
 package camera;
 
-
 import handlers.CameraHandler;
 import java.io.File;
 import java.util.ArrayList;
@@ -21,12 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class CameraTest {
 
-    /**
-     * Class parameters.
-     */
+    private static final int DEFAULTNOOFCHEST = 10;
+    private static final int VIDEOLENGTH = 5;
     private Camera camera;
     private CameraHandler cameraHandler;
-    private final String videoLink = "files" + File.separator + "webcast.mov";
+    private final String videoLink = "files" + File.separator + "postit.mov";
 
     static {
         // These should be at the start of the application,
@@ -45,6 +43,16 @@ class CameraTest {
     void constructorTest() {
         camera = new Camera(null, null);
         assertNotNull(camera);
+    }
+
+    /**
+     * Tests if a camera is correctly constructed when extra parameters are given.
+     */
+    @Test
+    void constructorPlusTest() {
+        camera = new Camera(null, null, DEFAULTNOOFCHEST);
+        assertNotNull(camera);
+        assertEquals(camera.getNumOfChestsInRoom(), DEFAULTNOOFCHEST);
     }
 
     /**
@@ -119,7 +127,8 @@ class CameraTest {
     @Test
     void equalsFalseDifferentCameraTest() {
         Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
-        Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo");
+        Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo",
+            DEFAULTNOOFCHEST);
         assertFalse(cam1.equals(cam2));
     }
 
@@ -169,7 +178,15 @@ class CameraTest {
      * This should happen when getNewFrame gets called and all frames have already been handled.
      */
     @Test
-    void isChangedFalseTest() {
+    void videoGetsIsChangeFalseWhenNoMoreFramesAreNew() {
+        //the video that is being loaded in is 4 seconds long in duration
+        assertTimeout(Duration.ofSeconds(VIDEOLENGTH), this::loopToEndOfVideo);
+    }
+
+    /**
+     * Method that loops till the end of a the videolink video.
+     */
+    private void loopToEndOfVideo() {
         cameraHandler = new CameraHandler();
         Camera cam = cameraHandler.addCamera(videoLink);
         //sets isChanged to true
@@ -179,8 +196,6 @@ class CameraTest {
         while (cam.isChanged()) {
             cameraHandler.getNewFrame(cam);
         }
-        assertFalse(cam.isChanged());
-
     }
 
 }

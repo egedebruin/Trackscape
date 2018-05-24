@@ -1,7 +1,5 @@
 package camera;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import java.util.concurrent.TimeUnit;
@@ -18,10 +16,7 @@ import org.opencv.videoio.VideoCapture;
  */
 public class Camera {
 
-    /**
-     * Class parameters.
-     */
-    private List<CameraObjectDetector> cameraObjectDetectorList;
+    private static final int DEFAULTNUMOFCHESTS = 3;
     private VideoCapture videoCapture;
     private String link;
     private Mat firstFrame;
@@ -33,6 +28,30 @@ public class Camera {
     private long firstTime = -1;
     private int frameCounter = 0;
     private static final int FRAMES = 4;
+    private int numOfChestsInRoom;
+    private final int threshold = 1000;
+
+    /**
+     * Constructor for a camera with possibility to specify no chests and persons.
+     *
+     * @param newCapture The VideoCapture of this camera.
+     * @param newLink The link of this camera.
+     * @param numOfChests The amount of chests present in the room.
+     */
+    public Camera(final VideoCapture newCapture, final String newLink,
+                  final int numOfChests) {
+        this.videoCapture = newCapture;
+        this.link = newLink;
+        this.numOfChestsInRoom = numOfChests;
+        this.activity = new ArrayList<>();
+        for (int i = 0; i < FRAMES; i++) {
+            frameParts.add(new Mat());
+            activity.add(new ArrayList<>());
+            knns.add(Video.createBackgroundSubtractorKNN(1, threshold, false));
+        }
+        activity.add(new ArrayList<>());
+        knns.add(Video.createBackgroundSubtractorKNN(1, threshold, false));
+    }
 
     /**
      * Constructor for a Camera.
@@ -41,11 +60,9 @@ public class Camera {
      * @param newLink The link of this camera.
      */
     public Camera(final VideoCapture newCapture, final String newLink) {
-        final int threshold = 1000;
-        cameraObjectDetectorList = new ArrayList<>();
-        videoCapture = newCapture;
-        link = newLink;
-        activity = new ArrayList<>();
+        this.videoCapture = newCapture;
+        this.link = newLink;
+        this.activity = new ArrayList<>();
         for (int i = 0; i < FRAMES; i++) {
             frameParts.add(new Mat());
             activity.add(new ArrayList<>());
@@ -242,5 +259,12 @@ public class Camera {
      */
     public void setFrameCounter(final int newFrameCounter) {
         this.frameCounter = newFrameCounter;
+   
+    /**
+     * Getter for numOfChestsInRoom.
+     * @return this.numOfChestsInRoom
+     */
+    public int getNumOfChestsInRoom() {
+        return this.numOfChestsInRoom;
     }
 }
