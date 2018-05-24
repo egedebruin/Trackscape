@@ -271,6 +271,4 @@ public class Camera {
     public int getNumOfChestsInRoom() {
         return this.numOfChestsInRoom;
     }
-
-
 }
