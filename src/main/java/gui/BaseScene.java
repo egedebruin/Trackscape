@@ -10,17 +10,17 @@ import javafx.scene.text.Text;
 /**
  * Abstract class for Scenes with repeated methods.
  */
-public abstract class Scene {
+public abstract class BaseScene {
     /**
      * Class parameters.
      */
     private Controller controller;
 
     /**
-     * Constructor for Scene.
+     * Constructor for BaseScene.
      * @param crtl the controller
      */
-    public Scene(final Controller crtl) {
+    public BaseScene(final Controller crtl) {
         this.controller = crtl;
     }
 

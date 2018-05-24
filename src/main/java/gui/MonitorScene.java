@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 /**
  * Class that constructs the monitorScene.
  */
-public class MonitorScene extends gui.Scene {
+public class MonitorScene extends BaseScene {
     /**
      * Class parameters.
      */

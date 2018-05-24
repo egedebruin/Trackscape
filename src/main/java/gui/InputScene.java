@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 /**
  * Class that constructs the inputScene.
  */
-public class InputScene extends gui.Scene {
+public class InputScene extends BaseScene {
     /**
      * Class parameters.
      */
