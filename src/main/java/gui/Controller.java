@@ -2,18 +2,20 @@ package gui;
 
 import camera.Camera;
 import handlers.CameraHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class for controlling GUI elements.
@@ -112,13 +114,13 @@ public class Controller {
     /**
      * grabTimeFrame.
      * Call updateImageView method every period of time to retrieve a new frame
-     * @param imageView panel that shows the frame
+     * @param imageViews list of panels that show the frames
      */
-    public void grabTimeFrame(final ImageView imageView) {
+    public void grabTimeFrame(final ArrayList<ImageView> imageViews) {
         if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
-            Runnable frameGrabber = () -> updateImageView(imageView);
+            Runnable frameGrabber = () -> updateImageView(imageViews);
             timer = Executors.newSingleThreadScheduledExecutor();
             timer.scheduleAtFixedRate(
                 frameGrabber, 0, period, TimeUnit.MILLISECONDS);
@@ -128,36 +130,33 @@ public class Controller {
     /**
      * updateImageView.
      * Retrieve current frame and show in ImageView
-     * @param imageView panel that shows the frame
+     * @param imageViews list of panels that show the frames
      */
-    private void updateImageView(final ImageView imageView) {
-        final int width = 600;
+    private void updateImageView(final ArrayList<ImageView> imageViews) {
+        cameraActive = true;
         for (int i = 0; i < cameraHandler.listSize(); i++) {
-            cameraActive = true;
             Image currentFrame = retrieveFrame(cameraHandler.getCamera(i));
-            imageView.setImage(currentFrame);
-            imageView.setFitWidth(width);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            imageView.setCache(true);
+            imageViews.get(i).setImage(currentFrame);
         }
     }
 
     /**
      * Method that closes a stream.
-     * @param imageView View where the stream is displayed in
+     * @param imageViews All the views where streams are displayed in
      */
-    public void closeStream(final ImageView imageView) {
-        final int width = 500;
+    public void closeStream(final ArrayList<ImageView> imageViews) {
         if (cameraActive) {
-            cameraHandler.clearList();
             cameraActive = false;
+            cameraHandler.clearList();
+
             File image = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\nostream.png");
             Image noStreamAvailable = new Image(image.toURI().toString());
-            imageView.setImage(noStreamAvailable);
-            imageView.setFitWidth(width);
-            imageView.setPreserveRatio(true);
+
+            final int viewPanels = imageViews.size();
+            for (int i = 0; i < viewPanels; i++) {
+                imageViews.get(i).setImage(noStreamAvailable);
+            }
         }
     }
 

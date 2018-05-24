@@ -1,8 +1,10 @@
 package gui;
 
-import java.io.File;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 /**
  * Main.
@@ -52,7 +54,7 @@ public class Main extends Application {
         primaryStage.setScene(inputScene
             .createInputScene(width, height, primaryStage, stylesheet));
         primaryStage.show();
-        primaryStage.setOnCloseRequest(e -> System.exit(0));
+        primaryStage.setOnCloseRequest(e -> Platform.exit());
     }
 
 }

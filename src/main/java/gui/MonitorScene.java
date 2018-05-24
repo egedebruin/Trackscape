@@ -33,7 +33,6 @@ public class MonitorScene extends BaseScene {
     /**
      * Class parameters.
      */
-    private ImageView imageView = new ImageView();
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private int cameras = 2;
     private String theStreamString = "rtsp://192.168.0.117:554/"
@@ -156,9 +155,13 @@ public class MonitorScene extends BaseScene {
             + "\\src\\main\\java\\gui\\images\\black.png");
         Image black = new Image(streamEnd.toURI().toString());
 
+        final int height = 300;
         for (int i = 0; i < views.size(); i++) {
             views.get(i).setImage(black);
-            views.get(i).preserveRatioProperty();
+            views.get(i).setFitHeight(height);
+            views.get(i).setPreserveRatio(true);
+            views.get(i).setSmooth(true);
+            views.get(i).setCache(true);
         }
     }
 
@@ -258,32 +261,14 @@ public class MonitorScene extends BaseScene {
 
         // Create the play/pauze button
         final Button playButton = new Button(">");
-        playButton.setOnAction(event -> getController().grabTimeFrame(imageViews.get(0)));
+        playButton.setOnAction(event -> getController().grabTimeFrame(imageViews));
 
         final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> getController().closeStream(imageViews.get(0)));
+        closeStream.setOnAction(event -> getController().closeStream(imageViews));
 
         mediaBar.getChildren().addAll(playButton, closeStream);
 
         return mediaBar;
-    }
-
-    /**
-     * Start displaying video in all imageviews.
-     */
-    private void startAllCameras() {
-        for (int k = 0; k < imageViews.size(); k++) {
-            getController().grabTimeFrame(imageViews.get(k));
-        }
-    }
-
-    /**
-     * Stop displaying video in all imageviews.
-     */
-    private void stopAllCameras() {
-        for (int k = 0; k < imageViews.size(); k++) {
-            getController().closeStream(imageViews.get(k));
-        }
     }
 
 }
