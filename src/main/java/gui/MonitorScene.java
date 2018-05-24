@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -88,8 +89,59 @@ public class MonitorScene extends BaseScene {
 
         // create the mediabar and put it at the bottom of the videoPane
         videoPane.setBottom(createMediaBar());
+        videoPane.setLeft(createTimeLoggerPane());
 
         return videoPane;
+    }
+
+    /**
+     * Creates the pane in which the timer will be shown.
+     *
+     * @return timerPane
+     */
+    private Pane createTimeLoggerPane() {
+        FlowPane timerPane = new FlowPane();
+        timerPane.setAlignment(Pos.TOP_CENTER);
+
+        Label description = new Label("Time playing:");
+        Label l = new Label("00:00:00");
+        getController().setTimerLabel(l);
+
+        final int top = 5;
+        final int bottom = 5;
+
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(top, 0, bottom, 0));
+        vBox.getChildren().add(l);
+
+        timerPane.getChildren().addAll(description, vBox, createLoggerPane());
+        return timerPane;
+    }
+
+    /**
+     * Creates the logger pane in which logs will be shown.
+     *
+     * @return loggerPane The logger pane
+     */
+    private Pane createLoggerPane() {
+        FlowPane loggerPane = new FlowPane();
+        loggerPane.setAlignment(Pos.CENTER);
+
+        TextArea logText = new TextArea();
+        logText.setEditable(false);
+        getController().setInformationBox(logText);
+
+        final int width = 350;
+        final int height = 400;
+
+        logText.setPrefSize(width, height);
+
+        // Automatically scrolls to bottom when items are added to the textArea
+        logText.setScrollTop(Double.MIN_VALUE);
+
+        loggerPane.getChildren().add(logText);
+
+        return loggerPane;
     }
 
     /**
@@ -196,7 +248,7 @@ public class MonitorScene extends BaseScene {
 
         final Button closeStream = new Button("Close Stream");
         closeStream.setOnAction(event -> {
-            getController().closeStream(imageViews);
+            getController().closeStream();
             mediaPlayerPane.getChildren().clear();
         });
 
@@ -237,7 +289,7 @@ public class MonitorScene extends BaseScene {
      */
     private void resetCameras(final MenuItem clearImageViewers) {
         clearImageViewers.setOnAction(event -> {
-            getController().closeStream(imageViews);
+            getController().closeStream();
             mediaPlayerPane.getChildren().clear();
         });
     }

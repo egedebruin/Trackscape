@@ -2,20 +2,23 @@ package gui;
 
 import camera.Camera;
 import handlers.CameraHandler;
+import handlers.InformationHandler;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class for controlling GUI elements.
@@ -26,15 +29,28 @@ public class Controller {
      * Class parameters.
      */
     private CameraHandler cameraHandler;
+    private InformationHandler informationHandler;
     private boolean cameraActive;
     private int people = 0;
     private int chests = 0;
+    private long beginTime = -1;
+    private AnimationTimer animationTimer;
+    private Label timerLabel;
+    private TextArea informationArea;
 
     /**
      * Constructor method.
      */
     Controller() {
-        cameraHandler = new CameraHandler();
+        informationHandler = new InformationHandler();
+        cameraHandler = new CameraHandler(informationHandler);
+        animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {
+                changeTime(now - beginTime);
+                checkInformation();
+            }
+        };
     }
 
     /**
@@ -52,7 +68,13 @@ public class Controller {
             frame = new Image(streamEnd.toURI().toString());
             cameraHandler.clearList();
             cameraActive = false;
+            animationTimer.stop();
+            beginTime = -1;
         } else {
+            if (cameraHandler.isActive() && beginTime == -1) {
+                beginTime = System.nanoTime();
+                animationTimer.start();
+            }
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         }
@@ -61,6 +83,7 @@ public class Controller {
 
     /**
      * Converts a Mat to a BufferedImage.
+     *
      * @param videoMatImage The frame in Mat.
      * @return The BufferedImage.
      */
@@ -87,7 +110,8 @@ public class Controller {
     /**
      * Method to show a popup in which
      * you can specify a stream url to initialize a connection.
-     * @param streamStage The popup window
+     *
+     * @param streamStage the popup window
      * @param field the specified url.
      */
     public void createStream(final Stage streamStage, final TextField field) {
@@ -98,6 +122,7 @@ public class Controller {
 
     /**
      * Method to initialize a connection with our active camera(stream).
+     *
      * @param streamUrl THE url
      */
     public void createTheStream(final String streamUrl) {
@@ -106,6 +131,7 @@ public class Controller {
 
     /**
      * Method to initialize a connection with a video.
+     *
      * @param file the video file
      */
     public void createVideo(final File file) {
@@ -139,7 +165,7 @@ public class Controller {
 
     /**
      * updateImageViews.
-     * Retrieve current frame and show in ImageView
+     * Retrieve current frames and show in ImageViews
      * @param imageViews list of panels that show the frames
      */
     private void updateImageViews(final ArrayList<ImageView> imageViews) {
@@ -152,12 +178,13 @@ public class Controller {
 
     /**
      * Method that closes a stream.
-     * @param imageViews All the views where streams are displayed in
      */
-    public void closeStream(final ArrayList<ImageView> imageViews) {
+    public void closeStream() {
         if (cameraActive) {
             cameraHandler.clearList();
             cameraActive = false;
+            animationTimer.stop();
+            beginTime = -1;
         }
     }
 
@@ -191,6 +218,85 @@ public class Controller {
      */
     public int getCameras() {
         return cameraHandler.listSize();
+    }
+
+    /**
+     * Changes the time of the timer.
+     *
+     * @param elapsedTime the elapsed time
+     */
+    public void changeTime(final long elapsedTime) {
+        timerLabel.setText(getTimeString(elapsedTime));
+    }
+
+    /**
+     * Add information to correct VBox.
+     *
+     * @param text The text to add.
+     */
+    public void addInformation(final String text) {
+        long elapsedTime = System.nanoTime() - beginTime;
+        String newText = getTimeString(elapsedTime) + ": " + text;
+        informationArea.appendText(newText + "\n");
+    }
+
+    /**
+     * Check if there is information to be shown.
+     */
+    public void checkInformation() {
+        String log = informationHandler.getInformation();
+
+        if (!log.equals("empty")) {
+            addInformation(log);
+        }
+    }
+
+    /**
+     * Convert nano seconds to right time string.
+     *
+     * @param time Time in nano seconds.
+     * @return Correct time string.
+     */
+    public String getTimeString(final long time) {
+        final int sixtySeconds = 60;
+        final int nineSeconds = 9;
+
+        int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(time) % sixtySeconds;
+        int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(time) % sixtySeconds;
+        int hours = (int) TimeUnit.NANOSECONDS.toHours(time);
+
+        String sec = Integer.toString(seconds);
+        String min = Integer.toString(minutes);
+        String hr = Integer.toString(hours);
+
+        if (seconds <= nineSeconds) {
+            sec = "0" + seconds;
+        }
+        if (minutes <= nineSeconds) {
+            min = "0" + minutes;
+        }
+        if (hours <= nineSeconds) {
+            hr = "0" + hours;
+        }
+        return hr + ":" + min + ":" + sec;
+    }
+
+    /**
+     * Set the timerLabel with a specific label.
+     *
+     * @param newLabel the label to be set
+     */
+    public void setTimerLabel(final Label newLabel) {
+        this.timerLabel = newLabel;
+    }
+
+    /**
+     * Set the informationBox with a specific box.
+     *
+     * @param infoArea The box to be set.
+     */
+    public void setInformationBox(final TextArea infoArea) {
+        this.informationArea = infoArea;
     }
 
 }

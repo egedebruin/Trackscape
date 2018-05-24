@@ -4,7 +4,6 @@ import camera.Camera;
 import camera.CameraChestDetector;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -16,14 +15,26 @@ public class CameraHandler {
     /**
      * The list of the cameras.
      */
-    private List<Camera> cameraList;
+    private List<Camera> cameraList = new ArrayList<>();
+    private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
+    private boolean active;
 
     /**
-     * Constructor for the CameraHandler class.
+     * Constructor for CameraHandler without specified information handler.
      */
     public CameraHandler() {
-        cameraList = new ArrayList<>();
+        informationHandler = new InformationHandler();
+        active = false;
+    }
+
+    /**
+     * Constructor for the CameraHandler class with specified information handler.
+     * @param information The informationHandler.
+     */
+    public CameraHandler(final InformationHandler information) {
+        informationHandler = information;
+        active = false;
     }
 
     /**
@@ -40,6 +51,7 @@ public class CameraHandler {
         }
         Camera camera = new Camera(videoCapture, link);
         cameraList.add(camera);
+        informationHandler.addInformation("Added camera");
         return camera;
     }
 
@@ -51,10 +63,14 @@ public class CameraHandler {
      */
     public Mat getNewFrame(final Camera camera) {
         Mat newFrame = camera.getLastFrame();
+        if (camera.getLastActivity() > 1) {
+            active = true;
+        }
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
-        cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
+        Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
+        cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
         return newFrame;
     }
 
@@ -92,4 +108,19 @@ public class CameraHandler {
         return this.cameraChestDetector;
     }
 
+    /**
+     * Returns if there is activity in these cameras.
+     * @return True if there is activity, false otherwise.
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Get the information Handler.
+     * @return The information handler.
+     */
+    public InformationHandler getInformationHandler() {
+        return informationHandler;
+    }
 }
