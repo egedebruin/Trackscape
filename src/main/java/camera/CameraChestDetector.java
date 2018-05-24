@@ -1,6 +1,7 @@
 package camera;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.opencv.core.Core;
@@ -17,12 +18,13 @@ import org.opencv.imgproc.Imgproc;
  * Class for describing a chest found in a camerastream/video/image.
  */
 public class CameraChestDetector extends CameraObjectDetector {
-    private static final Scalar CHESTCOLOUR_LOWER = new Scalar(18, 100, 100);
-    private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 255);
+    private static final Scalar CHESTCOLOUR_LOWER = new Scalar(19, 100, 60);
+    private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 205);
     private static final Scalar CHESTBOXCOLOUR = new Scalar(255, 0, 255);
-    private static final double MINCHESTAREA = 900;
+    private static final double MINCHESTAREA = 600;
     private static final double APPROXSCALE = 0.02;
     private Boolean isOpened = false;
+    private final Comparator<Rect> comparator = new RectComparator();
 
     /**
      * Method that checks for boxes in a frame.
@@ -30,15 +32,16 @@ public class CameraChestDetector extends CameraObjectDetector {
      * a bounding box will be drawn around it
      *
      * @param newFrame the frame that gets checked for the presence of boxes.
+     * @param noOfChests the number of chests in the room.
      * @param subtraction the subtraction of this frame.
      */
-    public void checkForChests(final Mat newFrame, final Mat subtraction) {
+    public void checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
         Core.bitwise_and(dest, subtraction, subtracted);
         detectChest(subtracted);
         if (isOpened) {
-            includeChestContoursInFrame(newFrame, subtracted);
+            includeChestContoursInFrame(newFrame, subtracted, noOfChests);
         }
     }
 
@@ -54,19 +57,20 @@ public class CameraChestDetector extends CameraObjectDetector {
 
     /**
      * Method that draws bounding boxes around all chests in a frame.
-     * @param frame the frame that needs bounding boxes
+     * @param frame the frame that needs bounding boxes.
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
-     *                            but the boxes are already found
+     *                            but the boxes are already found.
+     * @param noOfChests the number of chests in the room.
      */
-    private void includeChestContoursInFrame(final Mat frame,
-                                                    final Mat blackWhiteChestFrame) {
+    private void includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
+                                                    final int noOfChests) {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
             Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        Rect rect = new Rect();
         MatOfPoint2f approxCurve = new MatOfPoint2f();
+        ArrayList<Rect> rects = new ArrayList<>(noOfChests);
         for (MatOfPoint contour: contours) {
             MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
 
@@ -79,17 +83,33 @@ public class CameraChestDetector extends CameraObjectDetector {
 
             // Get bounding rect of contour
             Rect newrect = Imgproc.boundingRect(points);
-            // Save the larger contour for printing purposes
-            if (newrect.area() > rect.area()) {
-                rect = newrect;
-            }
-
+            // If not all spots are filled add newrect to the biggest rects.
+            addToRects(newrect, rects, noOfChests);
         }
-        // Rect is the bounding box over the largest contour,
-        // show it when the area is at least minboxarea
-        if (rect.area() > MINCHESTAREA) {
-            System.out.println("Chest is opened, area: " + rect.area());
-            Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
+        for (Rect rect : rects) {
+            if (rect.area() > MINCHESTAREA) {
+                Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
+            }
+        }
+    }
+
+    /**
+     * Method that adds a new rect to rects if the new rect is big enough.
+     * @param newrect   The candidate rect that might be added to rects.
+     * @param rects     array of the noOfChests biggest rects.
+     * @param noOfChests    number of chests.
+     */
+    private void addToRects(final Rect newrect, final ArrayList<Rect> rects, final int noOfChests) {
+        if (rects.size() < noOfChests) {
+            rects.add(newrect);
+            rects.sort(comparator);
+        } else {
+            // if all spots are filled only add newrect if
+            // it is larger than the smallest of the biggest
+            if (newrect.area() > rects.get(rects.size() - 1).area()) {
+                rects.set(rects.size() - 1, newrect);
+                rects.sort(comparator);
+            }
         }
     }
 
