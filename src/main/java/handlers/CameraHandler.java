@@ -63,6 +63,9 @@ public class CameraHandler {
      */
     public Mat getNewFrame(final Camera camera) {
         Mat newFrame = camera.getLastFrame();
+        if (camera.getLastActivity() > 1) {
+            active = true;
+        }
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
@@ -118,13 +121,5 @@ public class CameraHandler {
      */
     public InformationHandler getInformationHandler() {
         return informationHandler;
-    }
-
-    /**
-     * Set the active boolean to true or false.
-     * @param newActive active will become this, true or false.
-     */
-    public void setActive(boolean newActive) {
-        this.active = newActive;
     }
 }

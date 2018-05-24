@@ -124,7 +124,7 @@ public class MonitorScene extends BaseScene {
         getController().setInformationBox(logText);
 
         final int width = 350;
-        final int height = 500;
+        final int height = 400;
 
         logText.setPrefSize(width, height);
 
