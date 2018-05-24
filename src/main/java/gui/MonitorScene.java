@@ -36,7 +36,6 @@ public class MonitorScene {
      * Class parameters.
      */
     private ImageView imageView = new ImageView();
-    private ImageView plotView = new ImageView();
     private String theStreamString = "rtsp://192.168.0.117:554/"
         + "user=admin&password=&channel=1&stream=1"
         + ".sdp?real_stream--rtp-caching=100";
@@ -67,27 +66,11 @@ public class MonitorScene {
         root.setTop(createTitlePane());
         root.setCenter(createVideoPane(primaryStage));
         root.setBottom(createBottomPane());
-        root.setRight(createDataPane());
 
         Scene monitorScene = new Scene(root, width, height);
         monitorScene.getStylesheets().add(stylesheet);
 
         return monitorScene;
-    }
-
-    /**
-     * createDataPane.
-     * Constructs pane where activity graph is plotted
-     * @return Pane dataPane with plotted graph
-     */
-    private Pane createDataPane() {
-        FlowPane dataPane = new FlowPane();
-        dataPane.getChildren().add(plotView);
-        File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\black.png");
-        Image black = new Image(streamEnd.toURI().toString());
-        plotView.setImage(black);
-        return dataPane;
     }
 
     /**
@@ -300,7 +283,7 @@ public class MonitorScene {
 
         // Create the play/pauze button
         final Button playButton = new Button(">");
-        playButton.setOnAction(event -> controller.grabTimeFrame(imageView, plotView));
+        playButton.setOnAction(event -> controller.grabTimeFrame(imageView));
 
         final Button closeStream = new Button("Close Stream");
         closeStream.setOnAction(event -> controller.closeStream(imageView));
