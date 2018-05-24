@@ -31,7 +31,7 @@ public class Camera {
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
     private long firstTime = -1;
     private int frameCounter = 0;
-    private final int frames = 4;
+    private static final int FRAMES = 4;
 
     /**
      * Constructor for a Camera.
@@ -45,7 +45,7 @@ public class Camera {
         videoCapture = newCapture;
         link = newLink;
         activity = new ArrayList<>();
-        for (int i = 0; i < frames; i++) {
+        for (int i = 0; i < FRAMES; i++) {
             frameParts.add(new Mat());
             activity.add(new ArrayList<>());
             knns.add(Video.createBackgroundSubtractorKNN(1, threshold, false));
@@ -85,12 +85,12 @@ public class Camera {
         final int modulus = 5;
 
         if (frameCounter % modulus == 0) {
-            for (int i = 0; i < frames; i++) {
+            for (int i = 0; i < FRAMES; i++) {
                 addActivity(frameParts.get(i), i, knns.get(i));
             }
         }
 
-        addActivity(newFrame, frames, knns.get(frames));
+        addActivity(newFrame, FRAMES, knns.get(FRAMES));
         frameCounter++;
     }
 
@@ -101,13 +101,13 @@ public class Camera {
      * @param frame the input frame
      */
     public void divideFrame(final Mat frame) {
-        for (int i = 0; i < frames; i++) {
-            int sqrt = (int) Math.sqrt(frames);
+        for (int i = 0; i < FRAMES; i++) {
+            int sqrt = (int) Math.sqrt(FRAMES);
             int midCol = frame.width() / sqrt;
             int midRow = frame.height() / sqrt;
 
             int col = midCol * (i % sqrt);
-            int row = (i * sqrt) / frames * midRow;
+            int row = (i * sqrt) / FRAMES * midRow;
 
             Mat result = frame.colRange(col, col + midCol);
             result = result.rowRange(row, row + midRow);
@@ -233,7 +233,7 @@ public class Camera {
      * @return frames
      */
     public int getFrames() {
-        return frames;
+        return FRAMES;
     }
 
     /**
