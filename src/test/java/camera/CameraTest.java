@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test for the Camera class.
+ * Class for testing Camera.
  */
 class CameraTest {
 

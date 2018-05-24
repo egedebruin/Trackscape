@@ -118,7 +118,7 @@ public class Controller {
         if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
-            Runnable frameGrabber = () -> updateViews(imageView);
+            Runnable frameGrabber = () -> updateView(imageView);
             timer = Executors.newSingleThreadScheduledExecutor();
             timer.scheduleAtFixedRate(
                 frameGrabber, 0, period, TimeUnit.MILLISECONDS);
@@ -126,10 +126,10 @@ public class Controller {
     }
 
     /**
-     * updateViews.
+     * updateView.
      * @param imageView the view for the video
      */
-    void updateViews(final ImageView imageView) {
+    void updateView(final ImageView imageView) {
         updateImageView(imageView);
     }
 

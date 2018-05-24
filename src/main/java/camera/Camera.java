@@ -134,6 +134,8 @@ public class Camera {
 
         final int minFrames = 30;
         final double timeWindow = 1000.00;
+
+        // Only add the activity to the list when at least some frames are processed.
         if (frameCounter > minFrames) {
             if (firstTime == -1) {
                 firstTime = System.currentTimeMillis();
