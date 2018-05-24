@@ -19,7 +19,7 @@ public class Main extends Application {
     private String stylesheet = "file:///"
         + css.getAbsolutePath().replace("\\", "/");
     private Controller controller = new Controller();
-    private InputScene inputScene = new InputScene(controller);
+    private MonitorScene monitorScene = new MonitorScene(controller);
 
     /**
      * main.
@@ -46,14 +46,14 @@ public class Main extends Application {
      */
     @Override
     public void start(final Stage primaryStage) {
-        // Create the inputScene and monitorScene
-        final int width = 1250;
-        final int height = 800;
+        final int width = 1450;
+        final int height = 900;
+        primaryStage.setWidth(width);
+        primaryStage.setHeight(height);
 
         // Set the scene and show primaryStage
         primaryStage.setTitle("TrackScape");
-        primaryStage.setScene(inputScene
-            .createInputScene(width, height, primaryStage, stylesheet));
+        primaryStage.setScene(monitorScene.createMonitorScene(primaryStage, stylesheet));
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> System.exit(0));
     }
