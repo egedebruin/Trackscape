@@ -328,7 +328,7 @@ public class Controller {
      * @param isVideoPlaying boolean value for whether videos are playing
      */
     public void setVideoPlaying(final boolean isVideoPlaying) {
-        this.videoPlaying = isvideoPlaying;
+        this.videoPlaying = isVideoPlaying;
     }
 
 }
