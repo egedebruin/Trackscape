@@ -132,12 +132,4 @@ public class CameraChestDetector extends CameraObjectDetector {
 
         return dest;
     }
-
-    /**
-     * Get if the chest is opened.
-     * @return True if opened, false otherwise.
-     */
-    public Boolean getIsOpened() {
-        return isOpened;
-    }
 }
