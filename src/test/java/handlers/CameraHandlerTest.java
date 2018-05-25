@@ -48,6 +48,8 @@ class CameraHandlerTest {
         assertEquals(0, c.listSize());
         c.addCamera(videoLink);
         assertEquals(1, c.listSize());
+        c.addCamera(videoLink, 3);
+        assertEquals(2, c.listSize());
     }
 
     /**

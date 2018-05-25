@@ -55,6 +55,13 @@ public class CameraHandler {
         return camera;
     }
 
+    /**
+     * Add a new camera to use for streaming.
+     *
+     * @param link The link of the camera.
+     * @param chests Amount of chests.
+     * @return The new camera as a Camera object.
+     */
     public Camera addCamera(final String link, final int chests) {
         VideoCapture videoCapture = new VideoCapture(link);
         boolean opened = videoCapture.open(link);
