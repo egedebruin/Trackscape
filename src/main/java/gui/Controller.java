@@ -303,4 +303,12 @@ public class Controller {
         this.informationArea = infoArea;
     }
 
+    /**
+     * Get the status of the camera.
+     * @return cameraActive
+     */
+    public boolean getCameraActive() {
+        return cameraActive;
+    }
+
 }

@@ -352,7 +352,7 @@ public class MonitorScene extends BaseScene {
             FileChooser chooser = new FileChooser();
             chooser.setTitle("Select Video File");
             File file = chooser.showOpenDialog(primaryStage);
-            if (file != null) {
+            if (file != null && (!getController().getCameraActive())) {
                 getController().createVideo(file);
                 setCameraStatus();
             }
@@ -390,14 +390,20 @@ public class MonitorScene extends BaseScene {
             popUpVBox.setAlignment(Pos.CENTER);
 
             // Save the url of the RTSP stream by clicking on submit
-            submit.setOnAction(t1 -> getController()
-                .createStream(streamStage, field));
+            submit.setOnAction(t1 -> {
+                if (!getController().getCameraActive()) {
+                    getController().createStream(streamStage, field);
+                    setCameraStatus();
+                }
+            });
 
             // Save the url of the RTSP stream by pressing on the enter key
             field.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode() == KeyCode.ENTER)  {
-                    getController().createStream(streamStage, field);
-                    setCameraStatus();
+                    if (!getController().getCameraActive()) {
+                        getController().createStream(streamStage, field);
+                        setCameraStatus();
+                    }
                 }
             });
 
@@ -418,8 +424,10 @@ public class MonitorScene extends BaseScene {
     private void theStream(final MenuItem theStream) {
         theStream.setOnAction((ActionEvent t)
             -> {
-            getController().createTheStream(theStreamString);
-            setCameraStatus();
+            if (!getController().getCameraActive()) {
+                getController().createTheStream(theStreamString);
+                setCameraStatus();
+            }
         });
     }
 
