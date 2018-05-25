@@ -179,13 +179,11 @@ public class Controller {
      * Method that closes a stream.
      */
     public void closeStream() {
-        if (cameraActive) {
             cameraHandler.clearList();
             cameraHandler.setActive(false);
             cameraActive = false;
             animationTimer.stop();
             beginTime = -1;
-        }
     }
 
     /**

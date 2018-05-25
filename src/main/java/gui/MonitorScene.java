@@ -427,8 +427,13 @@ public class MonitorScene extends BaseScene {
      * Display in a label how many cameras are active.
      */
     private void setCameraStatus() {
-        cameraStatus = new Label(getController().getCameras()
-            + " camera(s) are currently ready to be activated.");
+        String text;
+        if (getController().getCameras() == 1) {
+            text = "1 camera is currently ready to be activated.";
+        } else {
+            text = getController().getCameras() + " cameras are currently ready to be activated.";
+        }
+        cameraStatus = new Label(text);
         mediaPlayerPane.getChildren().clear();
         mediaPlayerPane.getChildren().add(cameraStatus);
     }
