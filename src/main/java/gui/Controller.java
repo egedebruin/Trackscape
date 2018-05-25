@@ -67,10 +67,7 @@ public class Controller {
             File streamEnd = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
-            cameraHandler.clearList();
-            cameraActive = false;
-            animationTimer.stop();
-            beginTime = -1;
+            closeStream();
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
@@ -143,9 +140,10 @@ public class Controller {
     /**
      * Method to initialize a connection with a video or stream.
      * @param url to file or stream
+     * @param numChests amount of chests
      */
-    public void createCamera(final String url) {
-        cameraHandler.addCamera(url);
+    public void createCamera(final String url, final int numChests) {
+        cameraHandler.addCamera(url, numChests);
     }
 
     /**
@@ -183,6 +181,7 @@ public class Controller {
     public void closeStream() {
         if (cameraActive) {
             cameraHandler.clearList();
+            cameraHandler.setActive(false);
             cameraActive = false;
             animationTimer.stop();
             beginTime = -1;
@@ -213,7 +212,7 @@ public class Controller {
         int cameras = jsonHandler.getCameraLinks(0).size();
 
         for (int k = 0; k < cameras; k++) {
-            createCamera(jsonHandler.getCameraLinks(0).get(k));
+            createCamera(jsonHandler.getCameraLinks(0).get(k), jsonHandler.getAmountChests(0));
         }
     }
 

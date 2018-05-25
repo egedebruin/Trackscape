@@ -56,6 +56,25 @@ public class CameraHandler {
     }
 
     /**
+     * Add a new camera to use for streaming.
+     *
+     * @param link The link of the camera.
+     * @param chests Amount of chests.
+     * @return The new camera as a Camera object.
+     */
+    public Camera addCamera(final String link, final int chests) {
+        VideoCapture videoCapture = new VideoCapture(link);
+        boolean opened = videoCapture.open(link);
+        if (!opened) {
+            return null;
+        }
+        Camera camera = new Camera(videoCapture, link, chests);
+        cameraList.add(camera);
+        informationHandler.addInformation("Added camera");
+        return camera;
+    }
+
+    /**
      * Get a new frame from the camera.
      *
      * @param camera The camera to get the new frame from.
@@ -114,6 +133,14 @@ public class CameraHandler {
      */
     public boolean isActive() {
         return active;
+    }
+
+    /**
+     * Set the active variable to true or false.
+     * @param newActive the new value for active.
+     */
+    public void setActive(final boolean newActive) {
+        this.active = newActive;
     }
 
     /**
