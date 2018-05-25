@@ -21,6 +21,8 @@ public class CameraHandler {
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active;
     private ArrayList<Boolean> chestDetected;
+    private final int frequency = 10;
+    private final int firstDetection = 100;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -71,7 +73,7 @@ public class CameraHandler {
             camera.setFirstFrame(newFrame);
         }
 
-        if (camera.getFrameCounter() % 10 == 0) {
+        if (camera.getFrameCounter() % frequency == 0) {
             camera.divideFrame(newFrame);
 
             camera.addActivities(newFrame);
@@ -82,7 +84,7 @@ public class CameraHandler {
 
             Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
 
-            if (camera.getFrameCounter() > 100) {
+            if (camera.getFrameCounter() > firstDetection) {
                 // Put true or false in the chestdetected arraylist on index cameraindex depending
                 // on whether a chest is detected or not.
                 if (chestDetected.size() > cameraList.indexOf(camera)) {

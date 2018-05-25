@@ -12,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class CameraChestDetectorTest {
 
-    private final String shortVideoLinkWithBoxes = "files" + File.separator + "escaperoomwithopenbox.mov";
+    private final String shortVideoLinkWithBoxes = "files" + File.separator
+        + "escaperoomwithopenbox.mov";
 
     static {
         // These should be at the start of the application,

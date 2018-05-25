@@ -250,7 +250,7 @@ public class Controller {
         }
     }
 
-    public void confirmedChest(Button button) {
+    public void confirmedChest(final Button button) {
         addInformation("Found chest.");
         button.setVisible(false);
     }
@@ -303,7 +303,7 @@ public class Controller {
         this.informationArea = infoArea;
     }
 
-    public void setApproveButton(Button approveButton) {
+    public void setApproveButton(final Button approveButton) {
         this.approveButton = approveButton;
     }
 }

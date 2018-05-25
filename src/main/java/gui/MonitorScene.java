@@ -3,7 +3,6 @@ package gui;
 import java.io.File;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -110,7 +109,8 @@ public class MonitorScene extends BaseScene {
         vBox.setPadding(new Insets(top, 0, bottom, 0));
         vBox.getChildren().add(l);
 
-        timerPane.getChildren().addAll(description, vBox, createLoggerPane(), createApproveButton());
+        timerPane.getChildren().addAll(description, vBox, createLoggerPane(),
+            createApproveButton());
 
         return timerPane;
     }
@@ -142,9 +142,10 @@ public class MonitorScene extends BaseScene {
     }
 
     public Pane createApproveButton() {
+        final int topPadding = 10;
         FlowPane buttonPane = new FlowPane();
         buttonPane.setAlignment(Pos.BOTTOM_CENTER);
-        buttonPane.setPadding(new Insets(10, 0, 0, 0));
+        buttonPane.setPadding(new Insets(topPadding, 0, 0, 0));
 
         Button approveButton = new Button();
         approveButton.setText("Confirm chest opened");
