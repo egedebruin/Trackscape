@@ -2,10 +2,11 @@ package handlers;
 
 import camera.Camera;
 import camera.CameraChestDetector;
-import java.util.ArrayList;
-import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
@@ -19,6 +20,7 @@ public class CameraHandler {
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active;
+    private boolean chestDetected;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -26,6 +28,7 @@ public class CameraHandler {
     public CameraHandler() {
         informationHandler = new InformationHandler();
         active = false;
+        chestDetected = false;
     }
 
     /**
@@ -35,6 +38,7 @@ public class CameraHandler {
     public CameraHandler(final InformationHandler information) {
         informationHandler = information;
         active = false;
+        chestDetected = false;
     }
 
     /**
@@ -76,7 +80,7 @@ public class CameraHandler {
                 active = true;
             }
 
-            cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
+            chestDetected = cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
             if (camera.getFrameCounter() > 100 && cameraChestDetector.getIsOpened()) {
                 informationHandler.addInformation("Found chest.");
             }
@@ -125,6 +129,10 @@ public class CameraHandler {
      */
     public boolean isActive() {
         return active;
+    }
+
+    public boolean isChestDetected() {
+        return chestDetected;
     }
 
     /**
