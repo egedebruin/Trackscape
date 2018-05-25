@@ -80,9 +80,10 @@ public class CameraHandler {
                 active = true;
             }
 
-            chestDetected = cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
-            if (camera.getFrameCounter() > 100 && cameraChestDetector.getIsOpened()) {
-                informationHandler.addInformation("Found chest.");
+            boolean detected = cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
+
+            if (camera.getFrameCounter() > 100) {
+                chestDetected = detected;
             }
         }
 
