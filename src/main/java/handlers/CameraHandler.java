@@ -128,14 +128,6 @@ public class CameraHandler {
     }
 
     /**
-     * Getter for cameraChestDetector.
-     * @return this.cameraChestDetector
-     */
-    public CameraChestDetector getCameraChestDetector() {
-        return this.cameraChestDetector;
-    }
-
-    /**
      * Returns if there is activity in these cameras.
      * @return True if there is activity, false otherwise.
      */
