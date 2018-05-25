@@ -255,7 +255,7 @@ public class Controller {
      * @param button the button that gets turned invisible
      */
     public void confirmedChest(final Button button) {
-        addInformation("Found chest.");
+        addInformation("Found chest");
         button.setVisible(false);
     }
 
