@@ -146,7 +146,6 @@ public class MonitorScene extends BaseScene {
 
         Button approveButton = new Button();
         approveButton.setText("Knopje");
-//        approveButton.setPadding(new Insets(10, 0, 0, 0));
 
         buttonPane.getChildren().add(approveButton);
 
