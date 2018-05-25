@@ -70,6 +70,9 @@ public class CameraHandler {
             camera.setFirstFrame(newFrame);
         }
         cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
+        if (camera.getFrameCounter() > 20 && cameraChestDetector.getIsOpened()) {
+            informationHandler.addInformation("Found chest.");
+        }
         return newFrame;
     }
 

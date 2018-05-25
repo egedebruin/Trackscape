@@ -284,4 +284,12 @@ public class Camera {
     public double getLastActivity() {
         return lastActivity;
     }
+
+    /**
+     * Getter for frameCounter.
+     * @return the frame counter.
+     */
+    public int getFrameCounter() {
+        return frameCounter;
+    }
 }
