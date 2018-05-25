@@ -40,6 +40,7 @@ public class MonitorScene extends BaseScene {
         + "user=admin&password=&channel=1&stream=1"
         + ".sdp?real_stream--rtp-caching=100";
     private FlowPane mediaPlayerPane = new FlowPane();
+    private Label cameraStatus;
 
     /**
      * Constructor.
@@ -87,9 +88,10 @@ public class MonitorScene extends BaseScene {
         // and put it in the center of the videoPane
         videoPane.setCenter(menuMediaPane.get(1));
 
-        // create the mediabar and put it at the bottom of the videoPane
+        // create the functionality panes for the videoPane
         videoPane.setBottom(createMediaBar());
         videoPane.setLeft(createTimeLoggerPane());
+        videoPane.setRight(new FlowPane()); // escape room tatus will be displayed here
 
         return videoPane;
     }
@@ -172,8 +174,8 @@ public class MonitorScene extends BaseScene {
         mediaPlayerPane.setVgap(gap);
         mediaPlayerPane.setHgap(gap);
         mediaPlayerPane.setAlignment(Pos.CENTER);
-        initializeImageViewers();
-        mediaPlayerPane.getChildren().addAll(imageViews);
+
+        showCameraIcon();
 
         return mediaPlayerPane;
     }
@@ -233,14 +235,16 @@ public class MonitorScene extends BaseScene {
         final int right = 10;
         final int bottom = 5;
         final int left = 10;
+        final int spacing = 10;
 
         // Create mediabar for video options
         HBox mediaBar = new HBox();
         mediaBar.setAlignment(Pos.CENTER);
         mediaBar.setPadding(new Insets(top, right, bottom, left));
+        mediaBar.setSpacing(spacing);
 
         // Create the play/pauze button
-        final Button playButton = new Button(">");
+        final Button playButton = new Button("Start Cameras");
         playButton.setOnAction(event -> {
             initializeImageViewers();
             getController().grabTimeFrame(imageViews);
@@ -250,6 +254,7 @@ public class MonitorScene extends BaseScene {
         closeStream.setOnAction(event -> {
             getController().closeStream();
             mediaPlayerPane.getChildren().clear();
+            showCameraIcon();
         });
 
         mediaBar.getChildren().addAll(playButton, closeStream);
@@ -291,6 +296,7 @@ public class MonitorScene extends BaseScene {
         clearImageViewers.setOnAction(event -> {
             getController().closeStream();
             mediaPlayerPane.getChildren().clear();
+            showCameraIcon();
         });
     }
 
@@ -314,6 +320,7 @@ public class MonitorScene extends BaseScene {
             File file = chooser.showOpenDialog(primaryStage);
             JsonHandler jsonHandler = new JsonHandler(file.toString());
             getController().configure(jsonHandler);
+            setCameraStatus();
         });
     }
 
@@ -325,6 +332,7 @@ public class MonitorScene extends BaseScene {
         standardFile.setOnAction(event -> {
             JsonHandler jsonHandler = new JsonHandler("files/standard.json");
             getController().configure(jsonHandler);
+            setCameraStatus();
         });
     }
 
@@ -342,6 +350,7 @@ public class MonitorScene extends BaseScene {
             File file = chooser.showOpenDialog(primaryStage);
             if (file != null) {
                 getController().createVideo(file);
+                setCameraStatus();
             }
         });
     }
@@ -384,6 +393,7 @@ public class MonitorScene extends BaseScene {
             field.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode() == KeyCode.ENTER)  {
                     getController().createStream(streamStage, field);
+                    setCameraStatus();
                 }
             });
 
@@ -403,7 +413,35 @@ public class MonitorScene extends BaseScene {
      */
     private void theStream(final MenuItem theStream) {
         theStream.setOnAction((ActionEvent t)
-            -> getController().createTheStream(theStreamString));
+            -> {
+            getController().createTheStream(theStreamString);
+            setCameraStatus();
+        });
+    }
+
+    /**
+     * Display in a label how many cameras are active.
+     */
+    private void setCameraStatus() {
+        cameraStatus = new Label(getController().getCameras()
+            + " cameras are currently ready to be activated.");
+        mediaPlayerPane.getChildren().clear();
+        mediaPlayerPane.getChildren().add(cameraStatus);
+    }
+
+    /**
+     * Display icon of camera when no cameras are active yet.
+     */
+    private void showCameraIcon() {
+        final int width = 100;
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\cameraIcon.png");
+        Image cameraIcon = new Image(streamEnd.toURI().toString());
+        ImageView startImage = new ImageView();
+        startImage.setFitWidth(width);
+        startImage.setPreserveRatio(true);
+        startImage.setImage(cameraIcon);
+        mediaPlayerPane.getChildren().add(startImage);
     }
 
 }
