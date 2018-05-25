@@ -428,7 +428,7 @@ public class MonitorScene extends BaseScene {
      */
     private void setCameraStatus() {
         cameraStatus = new Label(getController().getCameras()
-            + " cameras are currently ready to be activated.");
+            + " camera(s) are currently ready to be activated.");
         mediaPlayerPane.getChildren().clear();
         mediaPlayerPane.getChildren().add(cameraStatus);
     }
