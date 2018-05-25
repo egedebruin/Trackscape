@@ -3,6 +3,8 @@ package gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 
 /**
@@ -46,8 +48,10 @@ public class Main extends Application {
      */
     @Override
     public void start(final Stage primaryStage) {
-        final int width = 1450;
-        final int height = 900;
+        GraphicsDevice gd = GraphicsEnvironment
+            .getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        final int width = gd.getDisplayMode().getWidth();
+        final int height = gd.getDisplayMode().getHeight();
         primaryStage.setWidth(width);
         primaryStage.setHeight(height);
 
