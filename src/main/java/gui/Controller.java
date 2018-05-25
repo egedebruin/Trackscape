@@ -39,6 +39,7 @@ public class Controller {
     private Label timerLabel;
     private TextArea informationArea;
     private boolean configurated = false;
+    private boolean videoPlaying = false;
 
     /**
      * Constructor method.
@@ -187,6 +188,7 @@ public class Controller {
             beginTime = -1;
             informationArea.setText("");
             configurated = false;
+            videoPlaying = false;
     }
 
     /**
@@ -311,6 +313,22 @@ public class Controller {
      */
     public boolean getConfigurated() {
         return configurated;
+    }
+
+    /**
+     * Get the status of the videoPlaying.
+     * @return videoPlaying
+     */
+    public boolean isVideoPlaying() {
+        return videoPlaying;
+    }
+
+    /**
+     * Set the status of the videoPlaying.
+     * @param isVideoPlaying boolean value for whether videos are playing
+     */
+    public void setVideoPlaying(final boolean isVideoPlaying) {
+        this.videoPlaying = videoPlaying;
     }
 
 }

@@ -41,7 +41,6 @@ public class MonitorScene extends BaseScene {
         + ".sdp?real_stream--rtp-caching=100";
     private FlowPane mediaPlayerPane = new FlowPane();
     private Label cameraStatus;
-    private boolean pushedPlay = false;
 
     /**
      * Constructor.
@@ -249,8 +248,8 @@ public class MonitorScene extends BaseScene {
         playButton.setOnAction(event -> {
             if (getController().getCameras() == 0) {
                 showCameraIcon();
-            } else if (!pushedPlay) {
-                pushedPlay = true;
+            } else if (!getController().isVideoPlaying()) {
+                getController().setVideoPlaying(true);
                 initializeImageViewers();
                 getController().grabTimeFrame(imageViews);
             }
@@ -313,7 +312,7 @@ public class MonitorScene extends BaseScene {
      */
     private void openConfig(final MenuItem configFile, final Stage primaryStage) {
         configFile.setOnAction(event -> {
-            if (!pushedPlay && !getController().getConfigurated()) {
+            if (!getController().isVideoPlaying() && !getController().getConfigurated()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Configuration File (JSon format)");
                 File file = chooser.showOpenDialog(primaryStage);
@@ -331,7 +330,7 @@ public class MonitorScene extends BaseScene {
      */
     private void standardConfig(final MenuItem standardFile) {
         standardFile.setOnAction(event -> {
-            if (!pushedPlay && !getController().getConfigurated()) {
+            if (!getController().isVideoPlaying() && !getController().getConfigurated()) {
                 JsonHandler jsonHandler = new JsonHandler("files/standard.json");
                 getController().configure(jsonHandler);
                 setCameraStatus();
@@ -348,7 +347,7 @@ public class MonitorScene extends BaseScene {
     private void openVideo(final MenuItem openVideo,
                            final Stage primaryStage) {
         openVideo.setOnAction(t -> {
-            if (!pushedPlay) {
+            if (!getController().isVideoPlaying()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Video File");
                 File file = chooser.showOpenDialog(primaryStage);
@@ -369,7 +368,7 @@ public class MonitorScene extends BaseScene {
     private void connectStream(
         final MenuItem connectStream, final Stage primaryStage) {
         connectStream.setOnAction(t -> {
-            if (!pushedPlay) {
+            if (!getController().isVideoPlaying()) {
                 // Set up pop up window
                 final Stage streamStage = new Stage();
                 streamStage.initModality(Modality.APPLICATION_MODAL);
@@ -423,7 +422,7 @@ public class MonitorScene extends BaseScene {
     private void theStream(final MenuItem theStream) {
         theStream.setOnAction((ActionEvent t)
             -> {
-            if (!pushedPlay) {
+            if (!getController().isVideoPlaying()) {
                 getController().createTheStream(theStreamString);
                 setCameraStatus();
             }
@@ -468,7 +467,6 @@ public class MonitorScene extends BaseScene {
         getController().closeStream();
         mediaPlayerPane.getChildren().clear();
         showCameraIcon();
-        pushedPlay = false;
     }
 
 }
