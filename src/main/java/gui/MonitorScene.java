@@ -3,6 +3,7 @@ package gui;
 import java.io.File;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -148,6 +149,7 @@ public class MonitorScene extends BaseScene {
         Button approveButton = new Button();
         approveButton.setText("Confirm chest opened");
         approveButton.setVisible(false);
+        approveButton.setOnAction(event -> getController().confirmedChest(approveButton));
 
         buttonPane.getChildren().add(approveButton);
 

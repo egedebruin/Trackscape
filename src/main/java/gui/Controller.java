@@ -244,12 +244,17 @@ public class Controller {
         String log = informationHandler.getInformation();
 
         if (!log.equals("empty")) {
-            addInformation(log);
+            if(log.equals("Found chest.")) {
+                approveButton.setVisible(true);
+            } else {
+                addInformation(log);
+            }
         }
+    }
 
-        if(log.equals("Found chest.")) {
-            approveButton.setVisible(true);
-        }
+    public void confirmedChest(Button button) {
+        addInformation("Found chest.");
+        button.setVisible(false);
     }
 
     /**
