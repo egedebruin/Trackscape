@@ -64,6 +64,8 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
      *                            but the boxes are already found.
      * @param noOfChests the number of chests in the room.
+     *
+     * @return true iff a boundingbox is drawn.
      */
     private boolean includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {

@@ -141,6 +141,10 @@ public class CameraHandler {
         return active;
     }
 
+    /**
+     * /Loop through the isChestdetected arraylist to check if there is at least 1 chest detected.
+     * @return true if there is at least 1 chest detected, false otherwise
+     */
     public boolean isChestDetected() {
         return chestDetected.contains(true);
     }

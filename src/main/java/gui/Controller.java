@@ -250,6 +250,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Turns the button invisible after it is clicked.
+     * @param button the button that gets turned invisible
+     */
     public void confirmedChest(Button button) {
         addInformation("Found chest.");
         button.setVisible(false);
@@ -303,7 +307,11 @@ public class Controller {
         this.informationArea = infoArea;
     }
 
-    public void setApproveButton(Button approveButton) {
-        this.approveButton = approveButton;
+    /**
+     * Setter for approveButton.
+     * @param button the button that gets assigned to this.approveButton
+     */
+    public void setApproveButton(Button button) {
+        this.approveButton = button;
     }
 }

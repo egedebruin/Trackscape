@@ -1,9 +1,6 @@
 package gui;
 
-import java.io.File;
-import java.util.ArrayList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,6 +23,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Class that constructs the monitorScene.
@@ -141,6 +141,10 @@ public class MonitorScene extends BaseScene {
         return loggerPane;
     }
 
+    /**
+     * Method to create an approveButton inside a new Pane.
+     * @return the Pane where the button is made on.
+     */
     public Pane createApproveButton() {
         FlowPane buttonPane = new FlowPane();
         buttonPane.setAlignment(Pos.BOTTOM_CENTER);
