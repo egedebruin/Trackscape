@@ -80,10 +80,11 @@ public class CameraHandler {
                 active = true;
             }
 
-            boolean detected = cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
+            Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
 
             if (camera.getFrameCounter() > 100) {
-                chestDetected = detected;
+                chestDetected = cameraChestDetector.
+                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
             }
         }
 
