@@ -117,6 +117,14 @@ public class CameraHandler {
     }
 
     /**
+     * Set the active variable to true or false.
+     * @param newActive the new value for active.
+     */
+    public void setActive(final boolean newActive) {
+        this.active = newActive;
+    }
+
+    /**
      * Get the information Handler.
      * @return The information handler.
      */

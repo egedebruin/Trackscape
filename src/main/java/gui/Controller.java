@@ -66,10 +66,7 @@ public class Controller {
             File streamEnd = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
-            cameraHandler.clearList();
-            cameraActive = false;
-            animationTimer.stop();
-            beginTime = -1;
+            closeStream();
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
@@ -182,6 +179,7 @@ public class Controller {
     public void closeStream() {
         if (cameraActive) {
             cameraHandler.clearList();
+            cameraHandler.setActive(false);
             cameraActive = false;
             animationTimer.stop();
             beginTime = -1;
