@@ -92,9 +92,7 @@ public class Camera {
             return lastFrame.clone();
         }
 
-        divideFrame(newFrame);
-
-        addActivities(newFrame);
+        frameCounter++;
 
         return lastFrame.clone();
     }
@@ -103,18 +101,12 @@ public class Camera {
      * Add all activities for every part of the frame.
      * @param newFrame The frame to get the activity from.
      */
-    private void addActivities(final Mat newFrame) {
-        final int frequency = 5;
-
-        if (frameCounter % frequency == 0) {
-            for (int i = 0; i < FRAMES; i++) {
-                addActivity(frameParts.get(i), i, knns.get(i));
-            }
-            lastActivity = addActivity(newFrame, FRAMES, knns.get(FRAMES));
-
+    public void addActivities(final Mat newFrame) {
+        for (int i = 0; i < FRAMES; i++) {
+            addActivity(frameParts.get(i), i, knns.get(i));
         }
+        lastActivity = addActivity(newFrame, FRAMES, knns.get(FRAMES));
 
-        frameCounter++;
     }
 
     /**

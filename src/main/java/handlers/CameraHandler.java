@@ -63,16 +63,25 @@ public class CameraHandler {
      */
     public Mat getNewFrame(final Camera camera) {
         Mat newFrame = camera.getLastFrame();
-        if (camera.getLastActivity() > 1) {
-            active = true;
-        }
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
-        cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
-        if (camera.getFrameCounter() > 20 && cameraChestDetector.getIsOpened()) {
-            informationHandler.addInformation("Found chest.");
+
+        if (camera.getFrameCounter() % 10 == 0) {
+            camera.divideFrame(newFrame);
+
+            camera.addActivities(newFrame);
+
+            if (camera.getLastActivity() > 1) {
+                active = true;
+            }
+
+            cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom());
+            if (camera.getFrameCounter() > 100 && cameraChestDetector.getIsOpened()) {
+                informationHandler.addInformation("Found chest.");
+            }
         }
+
         return newFrame;
     }
 
