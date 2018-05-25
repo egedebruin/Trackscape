@@ -184,6 +184,7 @@ public class Controller {
             cameraActive = false;
             animationTimer.stop();
             beginTime = -1;
+            informationArea.setText("");
     }
 
     /**
