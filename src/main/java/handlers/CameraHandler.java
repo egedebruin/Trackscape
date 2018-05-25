@@ -20,7 +20,7 @@ public class CameraHandler {
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active;
-    private boolean chestDetected;
+    private ArrayList<Boolean> chestDetected;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -28,7 +28,7 @@ public class CameraHandler {
     public CameraHandler() {
         informationHandler = new InformationHandler();
         active = false;
-        chestDetected = false;
+        chestDetected = new ArrayList<>();
     }
 
     /**
@@ -38,7 +38,7 @@ public class CameraHandler {
     public CameraHandler(final InformationHandler information) {
         informationHandler = information;
         active = false;
-        chestDetected = false;
+        chestDetected = new ArrayList<>();
     }
 
     /**
@@ -83,8 +83,16 @@ public class CameraHandler {
             Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
 
             if (camera.getFrameCounter() > 100) {
-                chestDetected = cameraChestDetector.
-                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
+                // Put true or false in the chestdetected arraylist on index cameraindex depending
+                // on whether a chest is detected or not.
+                if (chestDetected.size() > cameraList.indexOf(camera)) {
+                    chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
+                        checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+                } else {
+                    // If the camera is new, add a index position for it to the arraylist
+                    chestDetected.add(cameraList.indexOf(camera), cameraChestDetector.
+                        checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+                }
             }
         }
 
@@ -134,7 +142,7 @@ public class CameraHandler {
     }
 
     public boolean isChestDetected() {
-        return chestDetected;
+        return chestDetected.contains(true);
     }
 
     /**
