@@ -1,9 +1,5 @@
 package camera;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -11,6 +7,10 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 
 
@@ -34,12 +34,14 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param newFrame the frame that gets checked for the presence of boxes.
      * @param noOfChests the number of chests in the room.
      */
-    public void checkForChests(final Mat newFrame, final int noOfChests) {
+    public boolean checkForChests(final Mat newFrame, final int noOfChests) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         detectChest(dest);
+        boolean isDetected = false;
         if (isOpened) {
-            includeChestContoursInFrame(newFrame, dest, noOfChests);
+            isDetected = includeChestContoursInFrame(newFrame, dest, noOfChests);
         }
+        return isDetected;
     }
 
     /**
@@ -59,8 +61,9 @@ public class CameraChestDetector extends CameraObjectDetector {
      *                            but the boxes are already found.
      * @param noOfChests the number of chests in the room.
      */
-    private void includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
+    private boolean includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {
+        boolean isContourDrawn = false;
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
@@ -86,8 +89,10 @@ public class CameraChestDetector extends CameraObjectDetector {
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
                 Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
+                isContourDrawn = true;
             }
         }
+        return isContourDrawn;
     }
 
     /**

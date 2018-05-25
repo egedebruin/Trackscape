@@ -3,12 +3,6 @@ package gui;
 import camera.Camera;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
@@ -19,6 +13,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class for controlling GUI elements.
@@ -77,6 +78,7 @@ public class Controller {
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         }
+        approveButton.setVisible(cameraHandler.isChestDetected());
         return frame;
     }
 
@@ -245,10 +247,6 @@ public class Controller {
 
         if (!log.equals("empty")) {
             addInformation(log);
-        }
-
-        if(log.equals("Found chest.")) {
-            approveButton.setVisible(true);
         }
     }
 
