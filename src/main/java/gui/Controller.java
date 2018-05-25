@@ -186,6 +186,7 @@ public class Controller {
             animationTimer.stop();
             beginTime = -1;
             informationArea.setText("");
+            timerLabel.setText("00:00:00");
             configurated = false;
     }
 
