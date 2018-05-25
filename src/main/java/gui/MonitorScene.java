@@ -246,8 +246,12 @@ public class MonitorScene extends BaseScene {
         // Create the play/pauze button
         final Button playButton = new Button("Start Cameras");
         playButton.setOnAction(event -> {
-            initializeImageViewers();
-            getController().grabTimeFrame(imageViews);
+            if (getController().getCameras() == 0) {
+                showCameraIcon();
+            } else {
+                initializeImageViewers();
+                getController().grabTimeFrame(imageViews);
+            }
         });
 
         final Button closeStream = new Button("Close Stream");
@@ -441,6 +445,7 @@ public class MonitorScene extends BaseScene {
         startImage.setFitWidth(width);
         startImage.setPreserveRatio(true);
         startImage.setImage(cameraIcon);
+        mediaPlayerPane.getChildren().clear();
         mediaPlayerPane.getChildren().add(startImage);
     }
 
