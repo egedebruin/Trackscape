@@ -207,6 +207,7 @@ public class Controller {
      * @param handler the current jsonHandler
      */
     public void configure(final JsonHandler handler) {
+        cameraHandler.clearList();
         jsonHandler = handler;
 
         int cameras = jsonHandler.getCameraLinks(0).size();
