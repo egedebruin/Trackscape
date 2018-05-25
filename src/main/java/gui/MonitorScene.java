@@ -255,11 +255,7 @@ public class MonitorScene extends BaseScene {
         });
 
         final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> {
-            getController().closeStream();
-            mediaPlayerPane.getChildren().clear();
-            showCameraIcon();
-        });
+        closeStream.setOnAction(event -> endStream());
 
         mediaBar.getChildren().addAll(playButton, closeStream);
 
@@ -297,11 +293,7 @@ public class MonitorScene extends BaseScene {
      * @param clearImageViewers the current imageViewers
      */
     private void resetCameras(final MenuItem clearImageViewers) {
-        clearImageViewers.setOnAction(event -> {
-            getController().closeStream();
-            mediaPlayerPane.getChildren().clear();
-            showCameraIcon();
-        });
+        clearImageViewers.setOnAction(event -> endStream());
     }
 
     /**
@@ -352,7 +344,7 @@ public class MonitorScene extends BaseScene {
             FileChooser chooser = new FileChooser();
             chooser.setTitle("Select Video File");
             File file = chooser.showOpenDialog(primaryStage);
-            if (file != null && (!getController().getCameraActive())) {
+            if (file != null) {
                 getController().createVideo(file);
                 setCameraStatus();
             }
@@ -460,6 +452,15 @@ public class MonitorScene extends BaseScene {
         startImage.setImage(cameraIcon);
         mediaPlayerPane.getChildren().clear();
         mediaPlayerPane.getChildren().add(startImage);
+    }
+
+    /**
+     * Close the stream(s) and reset the application.
+     */
+    private void endStream() {
+        getController().closeStream();
+        mediaPlayerPane.getChildren().clear();
+        showCameraIcon();
     }
 
 }
