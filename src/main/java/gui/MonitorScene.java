@@ -313,7 +313,7 @@ public class MonitorScene extends BaseScene {
             chooser.setTitle("Select Configuration File (JSon format)");
             File file = chooser.showOpenDialog(primaryStage);
             JsonHandler jsonHandler = new JsonHandler(file.toString());
-            configure(jsonHandler);
+            getController().configure(jsonHandler);
         });
     }
 
@@ -324,23 +324,8 @@ public class MonitorScene extends BaseScene {
     private void standardConfig(final MenuItem standardFile) {
         standardFile.setOnAction(event -> {
             JsonHandler jsonHandler = new JsonHandler("files/standard.json");
-            configure(jsonHandler);
+            getController().configure(jsonHandler);
         });
-    }
-
-    /**
-     * Load the configuration file.
-     * @param jsonHandler the current jsonHandler
-     */
-    private void configure(final JsonHandler jsonHandler) {
-        int chests = jsonHandler.getAmountChests(0);
-        int people = jsonHandler.getAmountPeople(0);
-        int cameras = jsonHandler.getCameraLinks(0).size();
-        getController().setParameters(people, chests);
-
-        for (int k = 0; k < cameras; k++) {
-            getController().createCamera(jsonHandler.getCameraLinks(0).get(k));
-        }
     }
 
     /**

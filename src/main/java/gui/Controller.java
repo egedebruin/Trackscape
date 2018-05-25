@@ -3,12 +3,7 @@ package gui;
 import camera.Camera;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import handlers.JsonHandler;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
@@ -18,7 +13,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class for controlling GUI elements.
@@ -29,10 +31,9 @@ public class Controller {
      * Class parameters.
      */
     private CameraHandler cameraHandler;
+    private JsonHandler jsonHandler;
     private InformationHandler informationHandler;
     private boolean cameraActive;
-    private int people = 0;
-    private int chests = 0;
     private long beginTime = -1;
     private AnimationTimer animationTimer;
     private Label timerLabel;
@@ -203,13 +204,17 @@ public class Controller {
     }
 
     /**
-     * Set the basic parameters from an escape room configuration file.
-     * @param peopleNum the number of people
-     * @param chestNum the number of chests
+     * Load the configuration file.
+     * @param handler the current jsonHandler
      */
-    public void setParameters(final int peopleNum, final int chestNum) {
-        this.people = peopleNum;
-        this.chests = chestNum;
+    public void configure(final JsonHandler handler) {
+        jsonHandler = handler;
+
+        int cameras = jsonHandler.getCameraLinks(0).size();
+
+        for (int k = 0; k < cameras; k++) {
+            createCamera(jsonHandler.getCameraLinks(0).get(k));
+        }
     }
 
     /**
