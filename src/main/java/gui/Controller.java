@@ -33,7 +33,6 @@ public class Controller {
     private CameraHandler cameraHandler;
     private JsonHandler jsonHandler;
     private InformationHandler informationHandler;
-    private boolean cameraActive;
     private long beginTime = -1;
     private AnimationTimer animationTimer;
     private Label timerLabel;
@@ -154,14 +153,12 @@ public class Controller {
      * @param imageViews list of panels that show the frames
      */
     public void grabTimeFrame(final ArrayList<ImageView> imageViews) {
-        if (!cameraActive) {
             ScheduledExecutorService timer;
             final int period = 1;
             Runnable frameGrabber = () -> updateImageViews(imageViews);
             timer = Executors.newSingleThreadScheduledExecutor();
             timer.scheduleAtFixedRate(
                 frameGrabber, 0, period, TimeUnit.MILLISECONDS);
-        }
     }
 
     /**
@@ -170,7 +167,6 @@ public class Controller {
      * @param imageViews list of panels that show the frames
      */
     private void updateImageViews(final ArrayList<ImageView> imageViews) {
-        cameraActive = true;
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             Image currentFrame = retrieveFrame(cameraHandler.getCamera(i));
             imageViews.get(i).setImage(currentFrame);
@@ -183,7 +179,6 @@ public class Controller {
     public void closeStream() {
             cameraHandler.clearList();
             cameraHandler.setActive(false);
-            cameraActive = false;
             animationTimer.stop();
             beginTime = -1;
             informationArea.setText("");
