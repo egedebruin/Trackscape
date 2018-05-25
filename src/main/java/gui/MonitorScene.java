@@ -313,7 +313,7 @@ public class MonitorScene extends BaseScene {
      */
     private void openConfig(final MenuItem configFile, final Stage primaryStage) {
         configFile.setOnAction(event -> {
-            if (!pushedPlay) {
+            if (!pushedPlay && !getController().getConfigurated()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Configuration File (JSon format)");
                 File file = chooser.showOpenDialog(primaryStage);
