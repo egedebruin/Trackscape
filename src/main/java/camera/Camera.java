@@ -28,7 +28,7 @@ public class Camera {
     private List<List<double[]>> activity;
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
     private long firstTime = -1;
-    private int frameCounter = 0;
+    private int frameCounter = -1;
     private static final int FRAMES = 4;
     private int numOfChestsInRoom;
     private final int threshold = 1000;
