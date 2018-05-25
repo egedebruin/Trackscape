@@ -37,6 +37,7 @@ public class Controller {
     private Label timerLabel;
     private TextArea informationArea;
     private Button approveButton;
+    private Button notApproveButton;
 
     /**
      * Constructor method.
@@ -78,7 +79,11 @@ public class Controller {
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         }
-        approveButton.setVisible(cameraHandler.isChestDetected());
+        if (cameraHandler.isChestDetected()) {
+            approveButton.setVisible(true);
+            notApproveButton.setVisible(true);
+        }
+        //approveButton.setVisible(cameraHandler.isChestDetected());
         return frame;
     }
 
@@ -254,9 +259,15 @@ public class Controller {
      * Turns the button invisible after it is clicked.
      * @param button the button that gets turned invisible
      */
-    public void confirmedChest(final Button button) {
+    public void confirmedChest() {
         addInformation("Found chest.");
-        button.setVisible(false);
+        approveButton.setVisible(false);
+        notApproveButton.setVisible(false);
+    }
+
+    public void unConfirm() {
+        approveButton.setVisible(false);
+        notApproveButton.setVisible(false);
     }
 
     /**
@@ -313,5 +324,13 @@ public class Controller {
      */
     public void setApproveButton(final Button button) {
         this.approveButton = button;
+    }
+
+    /**
+     * Setter for notApproveButton
+     * @param button the button that gets assigned to this.notApproveButton
+     */
+    public void setNotApproveButton(Button button) {
+        this.notApproveButton = button;
     }
 }

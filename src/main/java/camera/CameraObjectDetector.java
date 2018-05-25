@@ -10,7 +10,7 @@ import org.opencv.video.Video;
  */
 public abstract class CameraObjectDetector {
 
-    private BackgroundSubtractorKNN knn = Video.createBackgroundSubtractorKNN();
+    private BackgroundSubtractorKNN knn = Video.createBackgroundSubtractorKNN(1, 1000, true);
 
     /**
      * Method that changes colourspaces of a Mat from BGR to HSV.
