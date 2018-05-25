@@ -110,6 +110,7 @@ public class MonitorScene extends BaseScene {
         vBox.getChildren().add(l);
 
         timerPane.getChildren().addAll(description, vBox, createLoggerPane(), createApproveButton());
+
         return timerPane;
     }
 
@@ -139,15 +140,18 @@ public class MonitorScene extends BaseScene {
         return loggerPane;
     }
 
-    private Pane createApproveButton() {
+    public Pane createApproveButton() {
         FlowPane buttonPane = new FlowPane();
         buttonPane.setAlignment(Pos.BOTTOM_CENTER);
         buttonPane.setPadding(new Insets(10, 0, 0, 0));
 
         Button approveButton = new Button();
-        approveButton.setText("Knopje");
+        approveButton.setText("Confirm chest opened");
+        approveButton.setVisible(false);
 
         buttonPane.getChildren().add(approveButton);
+
+        getController().setApproveButton(approveButton);
 
         return buttonPane;
     }

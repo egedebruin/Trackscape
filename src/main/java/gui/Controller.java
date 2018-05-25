@@ -11,6 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -34,6 +35,7 @@ public class Controller {
     private AnimationTimer animationTimer;
     private Label timerLabel;
     private TextArea informationArea;
+    private Button approveButton;
 
     /**
      * Constructor method.
@@ -244,6 +246,10 @@ public class Controller {
         if (!log.equals("empty")) {
             addInformation(log);
         }
+
+        if(log.equals("Found chest.")) {
+            approveButton.setVisible(true);
+        }
     }
 
     /**
@@ -292,5 +298,9 @@ public class Controller {
      */
     public void setInformationBox(final TextArea infoArea) {
         this.informationArea = infoArea;
+    }
+
+    public void setApproveButton(Button approveButton) {
+        this.approveButton = approveButton;
     }
 }
