@@ -339,7 +339,7 @@ public class MonitorScene extends BaseScene {
         getController().setParameters(people, chests);
 
         for (int k = 0; k < cameras; k++) {
-            getController().createCamera(jsonHandler.getCameraLinks(0).get(k));
+            getController().createCamera(jsonHandler.getCameraLinks(0).get(k), chests);
         }
     }
 

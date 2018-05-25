@@ -55,6 +55,18 @@ public class CameraHandler {
         return camera;
     }
 
+    public Camera addCamera(final String link, final int chests) {
+        VideoCapture videoCapture = new VideoCapture(link);
+        boolean opened = videoCapture.open(link);
+        if (!opened) {
+            return null;
+        }
+        Camera camera = new Camera(videoCapture, link, chests);
+        cameraList.add(camera);
+        informationHandler.addInformation("Added camera");
+        return camera;
+    }
+
     /**
      * Get a new frame from the camera.
      *

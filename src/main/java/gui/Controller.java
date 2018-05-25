@@ -139,9 +139,10 @@ public class Controller {
     /**
      * Method to initialize a connection with a video or stream.
      * @param url to file or stream
+     * @param numChests amount of chests
      */
-    public void createCamera(final String url) {
-        cameraHandler.addCamera(url);
+    public void createCamera(final String url, final int numChests) {
+        cameraHandler.addCamera(url, numChests);
     }
 
     /**
