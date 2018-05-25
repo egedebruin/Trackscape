@@ -331,7 +331,7 @@ public class MonitorScene extends BaseScene {
      */
     private void standardConfig(final MenuItem standardFile) {
         standardFile.setOnAction(event -> {
-            if (!pushedPlay) {
+            if (!pushedPlay && !getController().getConfigurated()) {
                 JsonHandler jsonHandler = new JsonHandler("files/standard.json");
                 getController().configure(jsonHandler);
                 setCameraStatus();

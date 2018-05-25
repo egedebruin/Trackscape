@@ -38,6 +38,7 @@ public class Controller {
     private AnimationTimer animationTimer;
     private Label timerLabel;
     private TextArea informationArea;
+    private boolean configurated = false;
 
     /**
      * Constructor method.
@@ -185,6 +186,7 @@ public class Controller {
             animationTimer.stop();
             beginTime = -1;
             informationArea.setText("");
+            configurated = false;
     }
 
     /**
@@ -213,6 +215,7 @@ public class Controller {
         for (int k = 0; k < cameras; k++) {
             createCamera(jsonHandler.getCameraLinks(0).get(k), jsonHandler.getAmountChests(0));
         }
+        configurated = true;
     }
 
     /**
@@ -303,11 +306,11 @@ public class Controller {
     }
 
     /**
-     * Get the status of the camera.
-     * @return cameraActive
+     * Get the status of the configuration.
+     * @return configurated
      */
-    public boolean getCameraActive() {
-        return cameraActive;
+    public boolean getConfigurated() {
+        return configurated;
     }
 
 }
