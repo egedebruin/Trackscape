@@ -3,11 +3,11 @@ package gui;
 import camera.Camera;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
+import handlers.JsonHandler;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
@@ -28,12 +28,14 @@ public class Controller {
      * Class parameters.
      */
     private CameraHandler cameraHandler;
+    private JsonHandler jsonHandler;
     private InformationHandler informationHandler;
-    private boolean cameraActive;
     private long beginTime = -1;
     private AnimationTimer animationTimer;
     private Label timerLabel;
     private TextArea informationArea;
+    private boolean configurated = false;
+    private boolean videoPlaying = false;
 
     /**
      * Constructor method.
@@ -41,13 +43,6 @@ public class Controller {
     Controller() {
         informationHandler = new InformationHandler();
         cameraHandler = new CameraHandler(informationHandler);
-        animationTimer = new AnimationTimer() {
-            @Override
-            public void handle(final long now) {
-                changeTime(now - beginTime);
-                checkInformation();
-            }
-        };
     }
 
     /**
@@ -63,14 +58,10 @@ public class Controller {
             File streamEnd = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
-            cameraHandler.clearList();
-            cameraActive = false;
-            animationTimer.stop();
-            beginTime = -1;
+            closeStream();
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
-                animationTimer.start();
             }
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
@@ -137,68 +128,57 @@ public class Controller {
     }
 
     /**
+     * Method to initialize a connection with a video or stream.
+     * @param url to file or stream
+     * @param numChests amount of chests
+     */
+    public void createCamera(final String url, final int numChests) {
+        cameraHandler.addCamera(url, numChests);
+    }
+
+    /**
      * grabTimeFrame.
-     * Call updateImageView method every period of time to retrieve a new frame
-     *
-     * @param imageView panel that shows the frame
+     * Call updateImageViews method every period of time to retrieve a new frame
+     * @param imageViews list of panels that show the frames
      */
-    void grabTimeFrame(final ImageView imageView) {
-        if (!cameraActive) {
-            ScheduledExecutorService timer;
-            final int period = 1;
-            Runnable frameGrabber = () -> updateView(imageView);
-            timer = Executors.newSingleThreadScheduledExecutor();
-            timer.scheduleAtFixedRate(
-                frameGrabber, 0, period, TimeUnit.MILLISECONDS);
-        }
+    public void grabTimeFrame(final ArrayList<ImageView> imageViews) {
+        animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {
+                updateImageViews(imageViews);
+                if (beginTime != -1) {
+                    changeTime(now - beginTime);
+                    checkInformation();
+                }
+            }
+        };
+        animationTimer.start();
     }
 
     /**
-     * updateView.
-     * @param imageView the view for the video
+     * updateImageViews.
+     * Retrieve current frames and show in ImageViews
+     * @param imageViews list of panels that show the frames
      */
-    void updateView(final ImageView imageView) {
-        updateImageView(imageView);
-    }
-
-    /**
-     * updateImageView.
-     * Retrieve current frame and show in ImageView
-     *
-     * @param imageView panel that shows the frame
-     */
-    private void updateImageView(final ImageView imageView) {
-        final int width = 600;
+    private void updateImageViews(final ArrayList<ImageView> imageViews) {
         for (int i = 0; i < cameraHandler.listSize(); i++) {
-            cameraActive = true;
             Image currentFrame = retrieveFrame(cameraHandler.getCamera(i));
-            imageView.setImage(currentFrame);
-            imageView.setFitWidth(width);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            imageView.setCache(true);
+            imageViews.get(i).setImage(currentFrame);
         }
     }
 
     /**
      * Method that closes a stream.
-     *
-     * @param imageView View where the stream is displayed in
      */
-    public void closeStream(final ImageView imageView) {
-        final int width = 500;
-        if (cameraActive) {
+    public void closeStream() {
             cameraHandler.clearList();
-            cameraActive = false;
-            File image = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\nostream.png");
-            Image noStreamAvailable = new Image(image.toURI().toString());
-            imageView.setImage(noStreamAvailable);
-            imageView.setFitWidth(width);
-            imageView.setPreserveRatio(true);
+            cameraHandler.setActive(false);
             animationTimer.stop();
             beginTime = -1;
-        }
+            informationArea.setText("");
+            timerLabel.setText("00:00:00");
+            configurated = false;
+            videoPlaying = false;
     }
 
     /**
@@ -213,6 +193,29 @@ public class Controller {
         primaryStage.setScene(
             ms.createMonitorScene(
                 primaryStage, stylesheet));
+    }
+
+    /**
+     * Load the configuration file.
+     * @param handler the current jsonHandler
+     */
+    public void configure(final JsonHandler handler) {
+        jsonHandler = handler;
+
+        int cameras = jsonHandler.getCameraLinks(0).size();
+
+        for (int k = 0; k < cameras; k++) {
+            createCamera(jsonHandler.getCameraLinks(0).get(k), jsonHandler.getAmountChests(0));
+        }
+        configurated = true;
+    }
+
+    /**
+     * Get the number of active cameras.
+     * @return number of cameras
+     */
+    public int getCameras() {
+        return cameraHandler.listSize();
     }
 
     /**
@@ -293,4 +296,29 @@ public class Controller {
     public void setInformationBox(final TextArea infoArea) {
         this.informationArea = infoArea;
     }
+
+    /**
+     * Get the status of the configuration.
+     * @return configurated
+     */
+    public boolean getConfigurated() {
+        return configurated;
+    }
+
+    /**
+     * Get the status of the videoPlaying.
+     * @return videoPlaying
+     */
+    public boolean isVideoPlaying() {
+        return videoPlaying;
+    }
+
+    /**
+     * Set the status of the videoPlaying.
+     * @param isVideoPlaying boolean value for whether videos are playing
+     */
+    public void setVideoPlaying(final boolean isVideoPlaying) {
+        this.videoPlaying = isVideoPlaying;
+    }
+
 }

@@ -33,21 +33,18 @@ public class InputScene extends BaseScene {
     /**
      * createInputScene.
      * Creates the scene where host can initialize the game.
-     * @param width of the scene
-     * @param height of the scene
      * @param primaryStage starting stage
      * @param stylesheet current stylesheet
      * @return inputScene
      */
-    public Scene createInputScene(final int width, final int height,
-                            final Stage primaryStage, final String stylesheet) {
+    public Scene createInputScene(final Stage primaryStage, final String stylesheet) {
         BorderPane root = new BorderPane();
         root.setTop(createTopPane());
         root.setCenter(createInputPane(
             primaryStage, stylesheet));
         root.setBottom(createBottomPane());
 
-        Scene inputScene = new Scene(root, width, height);
+        Scene inputScene = new Scene(root, primaryStage.getWidth(), primaryStage.getHeight());
         inputScene.getStylesheets().add(stylesheet);
 
         return inputScene;
