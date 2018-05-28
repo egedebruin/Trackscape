@@ -4,11 +4,6 @@ import camera.Camera;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
 import handlers.JsonHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
@@ -19,6 +14,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class for controlling GUI elements.
@@ -247,6 +248,12 @@ public class Controller {
         informationArea.appendText(newText + "\n");
     }
 
+    /**
+     * Method that removes all text from the information area.
+     */
+    public void clearInformationArea() {
+        informationArea.clear();
+    }
     /**
      * Check if there is information to be shown.
      */
