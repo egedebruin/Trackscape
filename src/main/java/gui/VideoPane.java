@@ -215,7 +215,9 @@ public class VideoPane {
         vBox.setPadding(new Insets(top, 0, bottom, 0));
         vBox.getChildren().add(l);
 
-        timerPane.getChildren().addAll(description, vBox, createLoggerPane());
+        timerPane.getChildren().addAll(description, vBox, createLoggerPane(),
+            createApproveButton());
+
         return timerPane;
     }
 
@@ -233,7 +235,7 @@ public class VideoPane {
         controller.setInformationBox(logText);
 
         final int width = 350;
-        final int height = 400;
+        final int height = 300;
 
         logText.setPrefSize(width, height);
 
@@ -243,6 +245,35 @@ public class VideoPane {
         loggerPane.getChildren().add(logText);
 
         return loggerPane;
+    }
+
+
+    /**
+     * Method to create an approveButton inside a new Pane.
+     * @return the Pane where the button is made on.
+     */
+    public Pane createApproveButton() {
+        final int topPadding = 10;
+        FlowPane buttonPane = new FlowPane();
+        buttonPane.setAlignment(Pos.BOTTOM_CENTER);
+        buttonPane.setPadding(new Insets(topPadding, 0, 0, 0));
+
+        Button approveButton = new Button();
+        approveButton.setText("Confirm chest opened");
+        approveButton.setVisible(false);
+        approveButton.setOnAction(event -> controller.confirmedChest());
+
+        Button notApprove = new Button();
+        notApprove.setText("Not Confirm");
+        notApprove.setVisible(false);
+        notApprove.setOnAction(event -> controller.unConfirm());
+
+        buttonPane.getChildren().addAll(approveButton, notApprove);
+
+        controller.setApproveButton(approveButton);
+        controller.setNotApproveButton(notApprove);
+
+        return buttonPane;
     }
 
     /**
@@ -277,7 +308,10 @@ public class VideoPane {
      * @param clearImageViewers the current imageViewers
      */
     private void resetCameras(final MenuItem clearImageViewers) {
-        clearImageViewers.setOnAction(event -> endStream());
+        clearImageViewers.setOnAction(event -> {
+            controller.clearInformationArea();
+            endStream();
+        });
     }
 
     /**

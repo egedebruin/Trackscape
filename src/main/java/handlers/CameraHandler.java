@@ -2,10 +2,11 @@ package handlers;
 
 import camera.Camera;
 import camera.CameraChestDetector;
-import java.util.ArrayList;
-import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
@@ -19,6 +20,9 @@ public class CameraHandler {
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active;
+    private ArrayList<Boolean> chestDetected;
+    private final int frequency = 10;
+    private final int firstDetection = 100;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -26,6 +30,7 @@ public class CameraHandler {
     public CameraHandler() {
         informationHandler = new InformationHandler();
         active = false;
+        chestDetected = new ArrayList<>();
     }
 
     /**
@@ -35,6 +40,7 @@ public class CameraHandler {
     public CameraHandler(final InformationHandler information) {
         informationHandler = information;
         active = false;
+        chestDetected = new ArrayList<>();
     }
 
     /**
@@ -82,14 +88,34 @@ public class CameraHandler {
      */
     public Mat getNewFrame(final Camera camera) {
         Mat newFrame = camera.getLastFrame();
-        if (camera.getLastActivity() > 1) {
-            active = true;
-        }
         if (camera.getFirstFrame() == null) {
             camera.setFirstFrame(newFrame);
         }
-        Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
-        cameraChestDetector.checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
+
+        if (camera.getFrameCounter() % frequency == 0) {
+            camera.divideFrame(newFrame);
+
+            camera.addActivities(newFrame);
+            if (camera.getLastActivity() > 2) {
+                active = true;
+            }
+
+            Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
+
+            if (camera.getFrameCounter() > firstDetection) {
+                // Put true or false in the chestdetected arraylist on index cameraindex depending
+                // on whether a chest is detected or not.
+                if (chestDetected.size() > cameraList.indexOf(camera)) {
+                    chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
+                        checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+                } else {
+                    // If the camera is new, add a index position for it to the arraylist
+                    chestDetected.add(cameraList.indexOf(camera), cameraChestDetector.
+                        checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+                }
+            }
+        }
+
         return newFrame;
     }
 
@@ -120,19 +146,19 @@ public class CameraHandler {
     }
 
     /**
-     * Getter for cameraChestDetector.
-     * @return this.cameraChestDetector
-     */
-    public CameraChestDetector getCameraChestDetector() {
-        return this.cameraChestDetector;
-    }
-
-    /**
      * Returns if there is activity in these cameras.
      * @return True if there is activity, false otherwise.
      */
     public boolean isActive() {
         return active;
+    }
+
+    /**
+     * Loop through the isChestdetected arraylist to check if there is at least 1 chest detected.
+     * @return true if there is at least 1 chest detected, false otherwise
+     */
+    public boolean isChestDetected() {
+        return chestDetected.contains(true);
     }
 
     /**

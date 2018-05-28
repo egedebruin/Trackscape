@@ -6,6 +6,7 @@ import handlers.InformationHandler;
 import handlers.JsonHandler;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -35,6 +36,8 @@ public class Controller {
     private AnimationTimer animationTimer;
     private Label timerLabel;
     private TextArea informationArea;
+    private Button approveButton;
+    private Button notApproveButton;
     private boolean configurated = false;
     private boolean videoPlaying = false;
     private CameraController cameraController;
@@ -62,12 +65,17 @@ public class Controller {
                 + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
             closeStream();
+            return frame;
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
             }
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
+        }
+        if (cameraHandler.isChestDetected()) {
+            approveButton.setVisible(true);
+            notApproveButton.setVisible(true);
         }
         return frame;
     }
@@ -155,6 +163,7 @@ public class Controller {
                 }
             }
         };
+        clearInformationArea();
         animationTimer.start();
     }
 
@@ -178,10 +187,11 @@ public class Controller {
             cameraHandler.setActive(false);
             animationTimer.stop();
             beginTime = -1;
-            informationArea.setText("");
             timerLabel.setText("00:00:00");
             configurated = false;
             videoPlaying = false;
+            approveButton.setVisible(false);
+            notApproveButton.setVisible(false);
     }
 
     /**
@@ -242,6 +252,12 @@ public class Controller {
     }
 
     /**
+     * Method that removes all text from the information area.
+     */
+    public void clearInformationArea() {
+        informationArea.clear();
+    }
+    /**
      * Check if there is information to be shown.
      */
     public void checkInformation() {
@@ -250,6 +266,23 @@ public class Controller {
         if (!log.equals("empty")) {
             addInformation(log);
         }
+    }
+
+    /**
+     * Turns the button invisible after it is clicked.
+     */
+    public void confirmedChest() {
+        addInformation("Found chest.");
+        approveButton.setVisible(false);
+        notApproveButton.setVisible(false);
+    }
+
+    /**
+     * Turns button invisible without notification of found chest.
+     */
+    public void unConfirm() {
+        approveButton.setVisible(false);
+        notApproveButton.setVisible(false);
     }
 
     /**
@@ -301,6 +334,14 @@ public class Controller {
     }
 
     /**
+     * Setter for approveButton.
+     * @param button the button that gets assigned to this.approveButton
+     */
+    public void setApproveButton(final Button button) {
+        this.approveButton = button;
+    }
+
+    /**
      * Get the status of the configuration.
      * @return configurated
      */
@@ -324,4 +365,12 @@ public class Controller {
         this.videoPlaying = isVideoPlaying;
     }
 
+    /**
+     * Setter for notApproveButton.
+     *
+     * @param button the button that gets assigned to this.notApproveButton
+     */
+    public void setNotApproveButton(final Button button) {
+        this.notApproveButton = button;
+    }
 }
