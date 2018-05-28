@@ -3,7 +3,6 @@ package camera;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -75,22 +74,16 @@ public class CameraChestDetector extends CameraObjectDetector {
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
             Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        MatOfPoint2f approxCurve = new MatOfPoint2f();
         ArrayList<Rect> rects = new ArrayList<>(noOfChests);
         for (MatOfPoint contour: contours) {
-            MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
-
-            //Processing on mMOP2f1 which is in type MatOfPoint2f
-            double approxDistance = Imgproc.arcLength(contour2f, true) * APPROXSCALE;
-            Imgproc.approxPolyDP(contour2f, approxCurve, approxDistance, true);
-
-            //Convert back to MatOfPoint
-            MatOfPoint points = new MatOfPoint(approxCurve.toArray());
+            MatOfPoint contourPoints = new MatOfPoint(contour.toArray());
 
             // Get bounding rect of contour
-            Rect newrect = Imgproc.boundingRect(points);
+            Rect newrect = Imgproc.boundingRect(contourPoints);
             // If not all spots are filled add newrect to the biggest rects.
-            addToRects(newrect, rects, noOfChests);
+            if (newrect.area() > MINCHESTAREA) {
+                addToRects(newrect, rects, noOfChests);
+            }
         }
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {

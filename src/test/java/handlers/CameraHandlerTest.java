@@ -1,16 +1,16 @@
 package handlers;
 
+import camera.Camera;
+import org.junit.jupiter.api.Test;
+import org.opencv.videoio.VideoCapture;
+
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
-import camera.Camera;
-import java.io.File;
-import org.junit.jupiter.api.Test;
-import org.opencv.videoio.VideoCapture;
 
 /**
  * Class for testing CameraHandler.
@@ -43,11 +43,14 @@ class CameraHandlerTest {
      */
     @Test
     void addCameraTest() {
+        final int chestNumber = 3;
         CameraHandler c = new CameraHandler();
 
         assertEquals(0, c.listSize());
         c.addCamera(videoLink);
         assertEquals(1, c.listSize());
+        c.addCamera(videoLink, chestNumber);
+        assertEquals(2, c.listSize());
     }
 
     /**
