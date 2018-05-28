@@ -5,6 +5,7 @@ import handlers.CameraHandler;
 import handlers.InformationHandler;
 import handlers.JsonHandler;
 import javafx.animation.AnimationTimer;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -46,13 +47,6 @@ public class Controller {
     Controller() {
         informationHandler = new InformationHandler();
         cameraHandler = new CameraHandler(informationHandler);
-        animationTimer = new AnimationTimer() {
-            @Override
-            public void handle(final long now) {
-                changeTime(now - beginTime);
-                checkInformation();
-            }
-        };
     }
 
     /**
@@ -72,7 +66,6 @@ public class Controller {
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
-                animationTimer.start();
             }
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
@@ -153,12 +146,17 @@ public class Controller {
      * @param imageViews list of panels that show the frames
      */
     public void grabTimeFrame(final ArrayList<ImageView> imageViews) {
-            ScheduledExecutorService timer;
-            final int period = 1;
-            Runnable frameGrabber = () -> updateImageViews(imageViews);
-            timer = Executors.newSingleThreadScheduledExecutor();
-            timer.scheduleAtFixedRate(
-                frameGrabber, 0, period, TimeUnit.MILLISECONDS);
+        animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {
+                updateImageViews(imageViews);
+                if (beginTime != -1) {
+                    changeTime(now - beginTime);
+                    checkInformation();
+                }
+            }
+        };
+        animationTimer.start();
     }
 
     /**
