@@ -325,7 +325,10 @@ public class MonitorScene extends BaseScene {
      * @param clearImageViewers the current imageViewers
      */
     private void resetCameras(final MenuItem clearImageViewers) {
-        clearImageViewers.setOnAction(event -> endStream());
+        clearImageViewers.setOnAction(event -> {
+            getController().clearInformationArea();
+            endStream();
+        });
     }
 
     /**
