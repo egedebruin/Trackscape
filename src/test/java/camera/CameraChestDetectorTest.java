@@ -12,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class CameraChestDetectorTest {
 
-    private final String shortVideoLink = "files" + File.separator + "postit.mov";
+    private final String shortVideoLinkWithBoxes = "files" + File.separator
+        + "escaperoomwithopenbox.mov";
 
     static {
         // These should be at the start of the application,
@@ -30,10 +31,17 @@ class CameraChestDetectorTest {
     @Test
     void includeChestContoursInFrameCallTest() {
         CameraHandler ch = new CameraHandler();
-        Camera camera = ch.addCamera(shortVideoLink);
+        Camera camera = ch.addCamera(shortVideoLinkWithBoxes);
+        boolean isDetected = false;
         ch.getNewFrame(camera);
+        while (ch.getCamera(0).isChanged()) {
+            ch.getNewFrame(camera);
+            if (ch.isChestDetected()) {
+                isDetected = true;
+                break;
+            }
+        }
 
-        //if cameraChest.isOpened it means that includeContoursInFrame gets called.
-        assertTrue(ch.getCameraChestDetector().getIsOpened());
+        assertTrue(isDetected);
     }
 }
