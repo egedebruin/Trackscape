@@ -4,11 +4,6 @@ import camera.Camera;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
 import handlers.JsonHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
@@ -18,6 +13,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class for controlling GUI elements.
@@ -36,6 +37,7 @@ public class Controller {
     private TextArea informationArea;
     private boolean configurated = false;
     private boolean videoPlaying = false;
+    private CameraController cameraController;
 
     /**
      * Constructor method.
@@ -43,6 +45,7 @@ public class Controller {
     Controller() {
         informationHandler = new InformationHandler();
         cameraHandler = new CameraHandler(informationHandler);
+        cameraController = new CameraController(cameraHandler);
     }
 
     /**
