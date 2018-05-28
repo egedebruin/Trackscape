@@ -62,6 +62,7 @@ public class Controller {
                 + "\\src\\main\\java\\gui\\images\\black.png");
             frame = new Image(streamEnd.toURI().toString());
             closeStream();
+            return frame;
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
@@ -332,7 +333,6 @@ public class Controller {
     }
 
     /**
-<<<<<<< HEAD
      * Get the status of the configuration.
      * @return configurated
      */
