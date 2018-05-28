@@ -137,7 +137,7 @@ public class MonitorScene extends BaseScene {
         getController().setInformationBox(logText);
 
         final int width = 350;
-        final int height = 400;
+        final int height = 300;
 
         logText.setPrefSize(width, height);
 
@@ -162,11 +162,17 @@ public class MonitorScene extends BaseScene {
         Button approveButton = new Button();
         approveButton.setText("Confirm chest opened");
         approveButton.setVisible(false);
-        approveButton.setOnAction(event -> getController().confirmedChest(approveButton));
+        approveButton.setOnAction(event -> getController().confirmedChest());
 
-        buttonPane.getChildren().add(approveButton);
+        Button notApprove = new Button();
+        notApprove.setText("Not Confirm");
+        notApprove.setVisible(false);
+        notApprove.setOnAction(event -> getController().unConfirm());
+
+        buttonPane.getChildren().addAll(approveButton, notApprove);
 
         getController().setApproveButton(approveButton);
+        getController().setNotApproveButton(notApprove);
 
         return buttonPane;
     }

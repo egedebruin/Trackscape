@@ -20,13 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 /**
  * Controller class for controlling GUI elements.
  */
@@ -45,6 +38,7 @@ public class Controller {
     private Button approveButton;
     private boolean configurated = false;
     private boolean videoPlaying = false;
+    private Button notApproveButton;
 
     /**
      * Constructor method.
@@ -75,7 +69,10 @@ public class Controller {
             BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
             frame = SwingFXUtils.toFXImage(bufferedFrame, null);
         }
-        approveButton.setVisible(cameraHandler.isChestDetected());
+        if (cameraHandler.isChestDetected()) {
+            approveButton.setVisible(true);
+            notApproveButton.setVisible(true);
+        }
         return frame;
     }
 
@@ -261,11 +258,19 @@ public class Controller {
 
     /**
      * Turns the button invisible after it is clicked.
-     * @param button the button that gets turned invisible
      */
-    public void confirmedChest(final Button button) {
-        addInformation("Found chest");
-        button.setVisible(false);
+    public void confirmedChest() {
+        addInformation("Found chest.");
+        approveButton.setVisible(false);
+        notApproveButton.setVisible(false);
+    }
+
+    /**
+     * Turns button invisible without notification of found chest.
+     */
+    public void unConfirm() {
+        approveButton.setVisible(false);
+        notApproveButton.setVisible(false);
     }
 
     /**
@@ -325,6 +330,7 @@ public class Controller {
     }
 
     /**
+<<<<<<< HEAD
      * Get the status of the configuration.
      * @return configurated
      */
@@ -346,5 +352,14 @@ public class Controller {
      */
     public void setVideoPlaying(final boolean isVideoPlaying) {
         this.videoPlaying = isVideoPlaying;
+    }
+
+    /**
+     * Setter for notApproveButton.
+     *
+     * @param button the button that gets assigned to this.notApproveButton
+     */
+    public void setNotApproveButton(final Button button) {
+        this.notApproveButton = button;
     }
 }
