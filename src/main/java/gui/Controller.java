@@ -4,8 +4,12 @@ import camera.Camera;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
 import handlers.JsonHandler;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -14,14 +18,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class for controlling GUI elements.
