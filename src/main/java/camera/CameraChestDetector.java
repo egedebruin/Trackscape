@@ -21,7 +21,6 @@ public class CameraChestDetector extends CameraObjectDetector {
     private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 205);
     private static final Scalar CHESTBOXCOLOUR = new Scalar(255, 0, 255);
     private static final double MINCHESTAREA = 600;
-    private static final double APPROXSCALE = 0.02;
     private Boolean isOpened = false;
     private final Comparator<Rect> comparator = new RectComparator();
 
