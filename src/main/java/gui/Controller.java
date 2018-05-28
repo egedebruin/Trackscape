@@ -161,7 +161,7 @@ public class Controller {
                 }
             }
         };
-        informationArea.setText("");
+        clearInformationArea();
         animationTimer.start();
     }
 
