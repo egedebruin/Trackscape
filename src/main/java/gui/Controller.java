@@ -159,6 +159,7 @@ public class Controller {
                 }
             }
         };
+        informationArea.setText("");
         animationTimer.start();
     }
 
@@ -182,10 +183,11 @@ public class Controller {
             cameraHandler.setActive(false);
             animationTimer.stop();
             beginTime = -1;
-            informationArea.setText("");
             timerLabel.setText("00:00:00");
             configurated = false;
             videoPlaying = false;
+            approveButton.setVisible(false);
+            notApproveButton.setVisible(false);
     }
 
     /**

@@ -96,8 +96,6 @@ public class CameraHandler {
             camera.divideFrame(newFrame);
 
             camera.addActivities(newFrame);
-
-            //System.out.println(camera.getLastActivity());
             if (camera.getLastActivity() > 2) {
                 active = true;
             }
