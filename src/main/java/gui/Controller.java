@@ -83,7 +83,6 @@ public class Controller {
             approveButton.setVisible(true);
             notApproveButton.setVisible(true);
         }
-        //approveButton.setVisible(cameraHandler.isChestDetected());
         return frame;
     }
 
@@ -257,7 +256,6 @@ public class Controller {
 
     /**
      * Turns the button invisible after it is clicked.
-     * @param button the button that gets turned invisible
      */
     public void confirmedChest() {
         addInformation("Found chest.");
@@ -265,6 +263,9 @@ public class Controller {
         notApproveButton.setVisible(false);
     }
 
+    /**
+     * Turns button invisible without notification of found chest.
+     */
     public void unConfirm() {
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
@@ -327,10 +328,10 @@ public class Controller {
     }
 
     /**
-     * Setter for notApproveButton
+     * Setter for notApproveButton.
      * @param button the button that gets assigned to this.notApproveButton
      */
-    public void setNotApproveButton(Button button) {
+    public void setNotApproveButton(final Button button) {
         this.notApproveButton = button;
     }
 }
