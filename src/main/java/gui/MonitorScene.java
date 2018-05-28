@@ -1,6 +1,7 @@
 package gui;
 
 import handlers.JsonHandler;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -41,6 +42,7 @@ public class MonitorScene extends BaseScene {
         + ".sdp?real_stream--rtp-caching=100";
     private FlowPane mediaPlayerPane = new FlowPane();
     private Label cameraStatus;
+    private static SimpleObjectProperty<File> lastKnownDirectoryProperty = new SimpleObjectProperty<>();
 
     /**
      * Constructor.
@@ -350,10 +352,12 @@ public class MonitorScene extends BaseScene {
             if (!getController().isVideoPlaying()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Video File");
+                chooser.initialDirectoryProperty().bindBidirectional(lastKnownDirectoryProperty);
                 File file = chooser.showOpenDialog(primaryStage);
                 if (file != null) {
                     getController().createVideo(file);
                     setCameraStatus();
+                    lastKnownDirectoryProperty.setValue(file.getParentFile());
                 }
             }
         });
