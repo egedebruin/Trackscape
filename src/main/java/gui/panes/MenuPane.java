@@ -1,5 +1,6 @@
-package gui;
+package gui.panes;
 
+import gui.Controller;
 import handlers.JsonHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
