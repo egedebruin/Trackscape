@@ -109,8 +109,8 @@ public class JsonHandler {
         JSONArray array = (JSONArray) room.get("chests");
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
-            int sections = (int) object.get("sections");
-            int targetDuration = (int) object.get("targetDuration");
+            int sections = Math.toIntExact((long) object.get("sections"));
+            int targetDuration = Math.toIntExact((long) object.get("targetDuration"));
             Chest chest = new Chest(sections, targetDuration);
             chests.add(chest);
         }

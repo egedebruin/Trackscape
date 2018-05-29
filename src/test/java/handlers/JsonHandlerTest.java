@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
+import java.io.File;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +14,16 @@ import org.junit.jupiter.api.Test;
  * Test the Json handler class.
  */
 public class JsonHandlerTest {
+
+    static {
+        // These should be at the start of the application,
+        // so if the main changes this should be included.
+        // Load OpenCV library.
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_java341.dll");
+    }
 
     /**
      * Class variables.
@@ -51,12 +63,22 @@ public class JsonHandlerTest {
     }
 
     /**
-     * Test the getAmountChests method.
+     * Test the createRooms method.
      */
     @Test
-    void getAmountChestsTest() {
+    void createRoomsTest() {
         handler = new JsonHandler(jsonFile);
-        int chests = handler.getAmountChests(0);
+        int rooms = handler.createRooms().size();
+        assertEquals(1, rooms);
+    }
+
+    /**
+     * Test the createChests method.
+     */
+    @Test
+    void createChestsTest() {
+        handler = new JsonHandler(jsonFile);
+        int chests = handler.createChests(0).size();
         assertEquals(jsonChests, chests);
     }
 
@@ -67,7 +89,7 @@ public class JsonHandlerTest {
     void incorrectRoomIdTest() {
         handler = new JsonHandler(jsonFile);
         assertThrows(NullPointerException.class,
-            () -> handler.getAmountChests(2));
+            () -> handler.getAmountPeople(2));
     }
 
     /**
