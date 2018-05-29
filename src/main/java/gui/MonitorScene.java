@@ -40,5 +40,4 @@ public class MonitorScene extends BaseScene {
 
         return monitorScene;
     }
-
 }
