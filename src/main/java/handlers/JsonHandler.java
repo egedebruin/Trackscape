@@ -58,8 +58,7 @@ public class JsonHandler {
     public int getAmountPeople(final int roomId) {
         JSONObject room = getRoomById(roomId);
         long amount = (long) room.get("people");
-        int result = Math.toIntExact(amount);
-        return result;
+        return Math.toIntExact(amount);
     }
 
     /**
@@ -70,8 +69,7 @@ public class JsonHandler {
     public int getAmountChests(final int roomId) {
         JSONObject room = getRoomById(roomId);
         long amount = (long) room.get("chests");
-        int result = Math.toIntExact(amount);
-        return result;
+        return Math.toIntExact(amount);
     }
 
     /**
