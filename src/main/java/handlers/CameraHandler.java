@@ -20,7 +20,6 @@ public class CameraHandler {
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active;
-    private boolean changed = true;
     private ArrayList<Boolean> chestDetected;
     private final int frequency = 10;
     private final int firstDetection = 100;
@@ -90,9 +89,6 @@ public class CameraHandler {
         List<Mat> frames = new ArrayList<>();
         for (Camera camera : cameraList) {
             Mat newFrame = camera.getLastFrame();
-            if (!camera.isChanged()) {
-                changed = false;
-            }
             if (camera.getFirstFrame() == null) {
                 camera.setFirstFrame(newFrame);
             }
@@ -189,6 +185,11 @@ public class CameraHandler {
      * @return True if all cameras are changed, false otherwise.
      */
     public boolean isChanged() {
-        return changed;
+        for (Camera camera : cameraList) {
+            if (!camera.isChanged()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
