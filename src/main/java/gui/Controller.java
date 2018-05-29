@@ -183,7 +183,9 @@ public class Controller {
     public void closeStream() {
             cameraHandler.clearList();
             cameraHandler.setActive(false);
-            animationTimer.stop();
+            if (animationTimer != null) {
+                animationTimer.stop();
+            }
             beginTime = -1;
             timerLabel.setText("00:00:00");
             configurated = false;
