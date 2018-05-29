@@ -1,9 +1,12 @@
-package Room;
+package room;
 
 import camera.Camera;
 
 import java.util.ArrayList;
 
+/**
+ * Class describing a room as found in the config file.
+ */
 public class Room {
     private int id;
     private ArrayList<Chest> chestList;
