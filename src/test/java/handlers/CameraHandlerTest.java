@@ -60,8 +60,7 @@ class CameraHandlerTest {
     @Test
     void getNewFrameTest() {
         CameraHandler c = new CameraHandler();
-        Camera cam = new Camera(new VideoCapture(videoLink), videoLink);
-        assertNotNull(c.getNewFrame(cam));
+        assertNotNull(c.processFrames());
     }
 
     /**
