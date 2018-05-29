@@ -1,21 +1,19 @@
 package camera;
 
-import handlers.CameraHandler;
-import org.junit.jupiter.api.Test;
-import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
-
-import java.io.File;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+
+import handlers.CameraHandler;
+import java.io.File;
+import java.time.Duration;
+import org.junit.jupiter.api.Test;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
 /**
  * Class for testing Camera.
@@ -71,56 +69,6 @@ class CameraTest {
 
         Mat mat2 = camera.getLastFrame();
         assertNotEquals(mat, mat2);
-    }
-
-    /**
-     * Test if divideFrame divides all pixels equally.
-     */
-    @Test
-    void divideFrameTest() {
-        String link = "files" + File.separator + "webcast.mov";
-        VideoCapture videoCapture = new VideoCapture(link);
-        camera = new Camera(videoCapture, link);
-        Mat frame = camera.getLastFrame();
-
-        assertNotNull(frame);
-
-        camera.divideFrame(camera.getLastFrame());
-        List<Mat> fp = camera.getFrameParts();
-
-        assertNotNull(fp);
-        assertNotEquals(new ArrayList<Mat>(), camera.getFrameParts());
-        assertEquals(fp.get(0).size(), fp.get(1).size());   //equal divisions
-    }
-
-    /**
-     * Verify that activity is added.
-     */
-    @Test
-    void addActivityTest() {
-        String link = "files" + File.separator + "webcast.mov";
-        VideoCapture videoCapture = new VideoCapture(link);
-        camera = new Camera(videoCapture, link);
-
-        final int frames = 10;
-        for (int i = 0; i < frames; i++) {
-            camera.loadFrame();
-        }
-        Mat frame1 = camera.loadFrame();
-        Mat frame2 = camera.loadFrame();
-        int parts = camera.getFrames();
-
-        assertNotNull(camera.getActivity());
-        assertEquals(camera.getActivity().get(parts), new ArrayList());
-
-        camera.setFrameCounter(0);
-        camera.addActivity(frame1, parts, camera.getKnns().get(parts));
-        assertEquals(camera.getActivity().get(parts), new ArrayList());
-
-        camera.setFrameCounter(Integer.MAX_VALUE);
-        camera.addActivity(frame2, parts, camera.getKnns().get(parts));
-
-        assertNotEquals(camera.getActivity().get(parts), new ArrayList());
     }
 
     /**

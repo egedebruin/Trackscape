@@ -1,6 +1,7 @@
 package handlers;
 
 import camera.Camera;
+import camera.CameraActivity;
 import camera.CameraChestDetector;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -19,18 +20,14 @@ public class CameraHandler {
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
-    private boolean active;
-    private ArrayList<Boolean> chestDetected;
-    private final int frequency = 10;
-    private final int firstDetection = 100;
+    private boolean active = false;
+    private ArrayList<Boolean> chestDetected = new ArrayList<>();
 
     /**
      * Constructor for CameraHandler without specified information handler.
      */
     public CameraHandler() {
         informationHandler = new InformationHandler();
-        active = false;
-        chestDetected = new ArrayList<>();
     }
 
     /**
@@ -39,8 +36,6 @@ public class CameraHandler {
      */
     public CameraHandler(final InformationHandler information) {
         informationHandler = information;
-        active = false;
-        chestDetected = new ArrayList<>();
     }
 
     /**
@@ -66,25 +61,23 @@ public class CameraHandler {
      *
      * @param link The link of the camera.
      * @param chests Amount of chests.
-     * @return The new camera as a Camera object.
      */
-    public Camera addCamera(final String link, final int chests) {
+    public void addCamera(final String link, final int chests) {
         VideoCapture videoCapture = new VideoCapture(link);
         boolean opened = videoCapture.open(link);
         if (!opened) {
-            return null;
+            return;
         }
         Camera camera = new Camera(videoCapture, link, chests);
         cameraList.add(camera);
         informationHandler.addInformation("Added camera");
-        return camera;
     }
 
     /**
      * Get a new frame from the camera.
      *
      * @param camera The camera to get the new frame from.
-     * @return The new frame as a BufferedImage.
+     * @return The new frame as a Mat.
      */
     public Mat getNewFrame(final Camera camera) {
         Mat newFrame = camera.getLastFrame();
@@ -92,31 +85,43 @@ public class CameraHandler {
             camera.setFirstFrame(newFrame);
         }
 
+        final int frequency = 10;
         if (camera.getFrameCounter() % frequency == 0) {
-            camera.divideFrame(newFrame);
-
-            camera.addActivities(newFrame);
-            if (camera.getLastActivity() > 2) {
-                active = true;
-            }
-
-            Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
-
-            if (camera.getFrameCounter() > firstDetection) {
-                // Put true or false in the chestdetected arraylist on index cameraindex depending
-                // on whether a chest is detected or not.
-                if (chestDetected.size() > cameraList.indexOf(camera)) {
-                    chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
-                        checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
-                } else {
-                    // If the camera is new, add a index position for it to the arraylist
-                    chestDetected.add(cameraList.indexOf(camera), cameraChestDetector.
-                        checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
-                }
-            }
+            processFrame(camera, newFrame);
         }
 
         return newFrame;
+    }
+
+    /**
+     * Do all the calculations on the frame.
+     * @param camera The camera of the frame.
+     * @param newFrame The new frame.
+     */
+    public void processFrame(final Camera camera, final Mat newFrame) {
+        CameraActivity activity = camera.getActivity();
+        activity.divideFrame(newFrame);
+
+        activity.addActivities(newFrame, camera.getFrameCounter());
+        if (activity.getLastActivity() > 2) {
+            active = true;
+        }
+
+        Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
+
+        final int firstDetection = 100;
+        if (camera.getFrameCounter() > firstDetection) {
+            // Put true or false in the chestdetected arraylist on index cameraindex depending
+            // on whether a chest is detected or not.
+            if (chestDetected.size() > cameraList.indexOf(camera)) {
+                chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
+                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+            } else {
+                // If the camera is new, add a index position for it to the arraylist
+                chestDetected.add(cameraList.indexOf(camera), cameraChestDetector.
+                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+            }
+        }
     }
 
     /**

@@ -1,16 +1,8 @@
 package camera;
 
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
-import org.opencv.video.BackgroundSubtractorKNN;
-import org.opencv.video.Video;
-import org.opencv.videoio.VideoCapture;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
 /**
  * Class describing a camera.
@@ -24,15 +16,9 @@ public class Camera {
     private Mat firstFrame;
     private Mat lastFrame = new Mat();
     private boolean changed = false;
-    private List<Mat> frameParts = new ArrayList<>();
-    private List<List<double[]>> activity;
-    private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
-    private long firstTime = -1;
-    private int frameCounter = -1;
-    private static final int FRAMES = 4;
     private int numOfChestsInRoom;
-    private final int threshold = 1000;
-    private double lastActivity = 0;
+    private int frameCounter = -1;
+    private CameraActivity activity = new CameraActivity();
 
     /**
      * Constructor for a camera with possibility to specify no chests and persons.
@@ -46,14 +32,6 @@ public class Camera {
         this.videoCapture = newCapture;
         this.link = newLink;
         this.numOfChestsInRoom = numOfChests;
-        this.activity = new ArrayList<>();
-        for (int i = 0; i < FRAMES; i++) {
-            frameParts.add(new Mat());
-            activity.add(new ArrayList<>());
-            knns.add(Video.createBackgroundSubtractorKNN(1, threshold, false));
-        }
-        activity.add(new ArrayList<>());
-        knns.add(Video.createBackgroundSubtractorKNN(1, threshold, false));
     }
 
     /**
@@ -65,15 +43,7 @@ public class Camera {
     public Camera(final VideoCapture newCapture, final String newLink) {
         this.videoCapture = newCapture;
         this.link = newLink;
-        this.activity = new ArrayList<>();
         this.numOfChestsInRoom = DEFAULTNUMOFCHESTS;
-        for (int i = 0; i < FRAMES; i++) {
-            frameParts.add(new Mat());
-            activity.add(new ArrayList<>());
-            knns.add(Video.createBackgroundSubtractorKNN(1, threshold, false));
-        }
-        activity.add(new ArrayList<>());
-        knns.add(Video.createBackgroundSubtractorKNN(1, threshold, false));
     }
 
     /**
@@ -95,75 +65,6 @@ public class Camera {
         frameCounter++;
 
         return lastFrame.clone();
-    }
-
-    /**
-     * Add all activities for every part of the frame.
-     * @param newFrame The frame to get the activity from.
-     */
-    public void addActivities(final Mat newFrame) {
-        for (int i = 0; i < FRAMES; i++) {
-            addActivity(frameParts.get(i), i, knns.get(i));
-        }
-        lastActivity = addActivity(newFrame, FRAMES, knns.get(FRAMES));
-
-    }
-
-    /**
-     * Method in which a frame get divided into frames equally large parts.
-     * frames should be a number where the sqrt is an integer
-     *
-     * @param frame the input frame
-     */
-    public void divideFrame(final Mat frame) {
-        for (int i = 0; i < FRAMES; i++) {
-            int sqrt = (int) Math.sqrt(FRAMES);
-            int midCol = frame.width() / sqrt;
-            int midRow = frame.height() / sqrt;
-
-            int col = midCol * (i % sqrt);
-            int row = (i * sqrt) / FRAMES * midRow;
-
-            Mat result = frame.colRange(col, col + midCol);
-            result = result.rowRange(row, row + midRow);
-            frameParts.set(i, result);
-        }
-    }
-
-    /**
-     * Add current activity to list.
-     * @param frame the current frame
-     * @param partNumber current part of the frame
-     * @param knn the backgroundsubstractor
-     * @return double of the change
-     */
-    public double addActivity(final Mat frame, final int partNumber,
-                            final BackgroundSubtractorKNN knn) {
-        Mat subtraction = new Mat();
-        knn.apply(frame, subtraction);
-        Scalar meanValues = Core.mean(subtraction);
-
-        double change = 0;
-        for (double v : meanValues.val) {
-            change += v;
-        }
-
-        final int minFrames = 30;
-
-        // Only add the activity to the list when at least some frames are processed.
-        if (frameCounter > minFrames) {
-            if (firstTime == -1) {
-                firstTime = System.currentTimeMillis();
-            }
-
-            long currentTime = System.currentTimeMillis() - firstTime;
-
-            double[] tuple = {TimeUnit.MILLISECONDS.toSeconds(currentTime), change};
-
-            activity.get(partNumber).add(tuple);
-            return change;
-        }
-        return 0;
     }
 
     /**
@@ -205,31 +106,6 @@ public class Camera {
     }
 
     /**
-     * Get the activity of this camera.
-     *
-     * @return The activity.
-     */
-    public List<List<double[]>> getActivity() {
-        return activity;
-    }
-
-    /**
-     * Get the list of background subtractors.
-     * @return knns
-     */
-    public List<BackgroundSubtractorKNN> getKnns() {
-        return knns;
-    }
-
-    /**
-     * Get the frameParts list.
-     * @return frameParts.
-     */
-    public List<Mat> getFrameParts() {
-        return frameParts;
-    }
-
-    /**
      * Get the first frame known of the camera.
      * @return The Mat of the first frame.
      */
@@ -246,22 +122,6 @@ public class Camera {
     }
 
     /**
-     * Get the number of frames that one frame should be divided in.
-     * @return frames
-     */
-    public int getFrames() {
-        return FRAMES;
-    }
-
-    /**
-     * Set the frameCounter.
-     * @param newFrameCounter new framecount
-     */
-    public void setFrameCounter(final int newFrameCounter) {
-        this.frameCounter = newFrameCounter;
-    }
-
-    /**
      * Getter for numOfChestsInRoom.
      * @return this.numOfChestsInRoom
      */
@@ -270,18 +130,18 @@ public class Camera {
     }
 
     /**
-     * Getter for lastActivity.
-     * @return the last activity.
-     */
-    public double getLastActivity() {
-        return lastActivity;
-    }
-
-    /**
      * Getter for frameCounter.
      * @return the frame counter.
      */
     public int getFrameCounter() {
         return frameCounter;
+    }
+
+    /**
+     * Get the activity from the camera.
+     * @return The CameraActivity.
+     */
+    public CameraActivity getActivity() {
+        return activity;
     }
 }
