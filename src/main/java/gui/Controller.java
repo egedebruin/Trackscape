@@ -40,7 +40,6 @@ public class Controller {
     private Button notApproveButton;
     private boolean configurated = false;
     private boolean videoPlaying = false;
-    private CameraController cameraController;
 
     /**
      * Constructor method.
@@ -48,7 +47,6 @@ public class Controller {
     Controller() {
         informationHandler = new InformationHandler();
         cameraHandler = new CameraHandler(informationHandler);
-        cameraController = new CameraController(cameraHandler);
     }
 
     /**
