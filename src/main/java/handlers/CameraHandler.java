@@ -186,7 +186,7 @@ public class CameraHandler {
     }
 
     /**
-     * Returns weather a camera is changed or not.
+     * Returns whether a camera is changed or not.
      * @return True if all cameras are changed, false otherwise.
      */
     public boolean isChanged() {
