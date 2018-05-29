@@ -2,7 +2,6 @@ package handlers;
 
 import camera.Camera;
 import org.junit.jupiter.api.Test;
-import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
 

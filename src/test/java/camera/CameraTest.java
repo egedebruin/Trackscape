@@ -170,9 +170,9 @@ class CameraTest {
     void isChangedTrueTest() {
         cameraHandler = new CameraHandler();
         Camera cam = cameraHandler.addCamera(videoLink);
-        cameraHandler.getNewFrame(cam);
-        cameraHandler.getNewFrame(cam);
-        assertTrue(cam.isChanged());
+        cameraHandler.processFrames();
+        cameraHandler.processFrames();
+        assertTrue(cameraHandler.isChanged());
     }
 
     /**
@@ -192,11 +192,11 @@ class CameraTest {
         cameraHandler = new CameraHandler();
         Camera cam = cameraHandler.addCamera(videoLink);
         //sets isChanged to true
-        cameraHandler.getNewFrame(cam);
-        cameraHandler.getNewFrame(cam);
+        cameraHandler.processFrames();
+        cameraHandler.processFrames();
         //loop trough the video until last frame is acquired twice
         while (cam.isChanged()) {
-            cameraHandler.getNewFrame(cam);
+            cameraHandler.processFrames();
         }
     }
 
