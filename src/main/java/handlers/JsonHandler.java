@@ -124,4 +124,8 @@ public class JsonHandler {
     public JSONArray getJsonElement() {
         return jsonElement;
     }
+
+    public int getAmountChests(int i) {
+        return createChests(i).size();
+    }
 }
