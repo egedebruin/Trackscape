@@ -258,5 +258,4 @@ public class MenuPane {
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
     }
-
 }
