@@ -58,7 +58,4 @@ public class Chest {
         }
         return chestState;
     }
-
-    
-
 }
