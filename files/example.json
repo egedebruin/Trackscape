@@ -10,16 +10,20 @@
       }
     ],
     "people": 5,
-    "chests": 3
-  },
-  {
-    "roomId": 1,
-    "cameras": [
+    "chests": [
       {
-        "link": "testlink"
+        "sections": 2,
+        "targetDuration": 120
+      },
+      {
+        "sections": 3,
+        "targetDuration": 220
+      },
+      {
+        "sections": 1,
+        "targetDuration": 30
       }
     ],
-    "people": 4,
-    "chests": 2
+    "targetDuration": 500
   }
 ]
