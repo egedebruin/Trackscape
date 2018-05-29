@@ -47,7 +47,7 @@ public class VideoPane {
 
         // get the menubar and put it at the top of the videoPane
         videoPane.setTop(mmp.get(0));
-        // get the imageView (location where videos are shown)
+        // get the imageViews (location where videos are shown)
         // and put it in the center of the videoPane
         videoPane.setCenter(mmp.get(1));
 

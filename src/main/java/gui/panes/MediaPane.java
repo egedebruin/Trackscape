@@ -19,7 +19,7 @@ public class MediaPane {
     private FlowPane mediaPlayerPane;
 
     /**
-     * Constructor for MenuPane.
+     * Constructor for MediaPane.
      * @param mediaPane the pane on which the mediaPlayer is shown
      */
     public MediaPane(final FlowPane mediaPane) {
