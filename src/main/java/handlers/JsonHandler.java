@@ -39,7 +39,7 @@ public class JsonHandler {
      * @param roomId The Id of the room.
      * @return List of the links to the cameras.
      */
-    public List<String> getCameraLinks(final int roomId) {
+    public List<String> getCameraLinks(final long roomId) {
         JSONObject room = getRoomById(roomId);
         List<String> cameras = new ArrayList<>();
         JSONArray array = (JSONArray) room.get("cameras");
@@ -55,21 +55,9 @@ public class JsonHandler {
      * @param roomId The id of the room.
      * @return The amount of people.
      */
-    public int getAmountPeople(final int roomId) {
+    public int getAmountPeople(final long roomId) {
         JSONObject room = getRoomById(roomId);
         long amount = (long) room.get("people");
-        int result = Math.toIntExact(amount);
-        return result;
-    }
-
-    /**
-     * Get the amount of chests in the room.
-     * @param roomId The id of the room.
-     * @return The amount of chests.
-     */
-    public int getAmountChests(final int roomId) {
-        JSONObject room = getRoomById(roomId);
-        long amount = (long) room.get("chests");
         int result = Math.toIntExact(amount);
         return result;
     }
@@ -79,7 +67,7 @@ public class JsonHandler {
      * @param roomId The id of the room.
      * @return The Json element of the room.
      */
-    private JSONObject getRoomById(final int roomId) {
+    private JSONObject getRoomById(final long roomId) {
         for (Object o : jsonElement) {
             JSONObject room = (JSONObject) o;
             if ((long) room.get("roomId") == roomId) {
@@ -87,6 +75,34 @@ public class JsonHandler {
             }
         }
         return null;
+    }
+
+    public List<Room> createRooms() {
+        List<Room> rooms = new ArrayList<>();
+        for (Object o : jsonElement) {
+            JSONObject roomObject = (JSONObject) o;
+            long roomId = (long) roomObject.get("roomId");
+            int amountPeople = getAmountPeople(roomId);
+            List<String> cameraLinks = getCameraLinks(roomId);
+            List<Chest> chests = createChests(roomId);
+            Room room = new Room(roomId, amountPeople, cameraLinks, chests);
+            rooms.add(room);
+        }
+        return rooms;
+    }
+
+    public List<Chest> createChests(long roomId) {
+        JSONObject room = getRoomById(roomId);
+        List<Chest> chests = new ArrayList<>();
+        JSONArray array = (JSONArray) room.get("chests");
+        for (Object o : array) {
+            JSONObject object = (JSONObject) o;
+            int sections = (int) object.get("sections");
+            int targetDuration = (int) object.get("targetDuration");
+            Chest chest = new Chest(sections, targetDuration);
+            chests.add(chest);
+        }
+        return chests;
     }
 
     /**
