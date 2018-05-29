@@ -98,6 +98,18 @@ public class JsonHandler {
         return rooms;
     }
 
+    public Room createSingleRoom() {
+        if (!jsonElement.isEmpty()) {
+            JSONObject roomObject = (JSONObject) jsonElement.get(0);
+            long roomId = (long) roomObject.get("roomId");
+            int amountPeople = getAmountPeople(roomId);
+            List<String> cameraLinks = getCameraLinks(roomId);
+            List<Chest> chests = createChests(roomId);
+            return new Room(roomId, amountPeople, cameraLinks, chests);
+        }
+        return new Room(0,0,null,null);
+    }
+
     /**
      * Create chests from the room from the JSON file.
      * @param roomId The id of the room.
@@ -128,4 +140,6 @@ public class JsonHandler {
     public int getAmountChests(int i) {
         return createChests(i).size();
     }
+
+
 }

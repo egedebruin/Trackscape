@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Controller class for controlling GUI elements.
  */
-public class Controller {
+public abstract class Controller {
 
     /**
      * Class parameters.
