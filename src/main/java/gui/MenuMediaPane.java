@@ -25,9 +25,9 @@ public class MenuMediaPane {
      */
     public MenuMediaPane(final Controller control, final FlowPane inputMediaPlayerPane) {
         this.controller = control;
+        this.mediaPlayerPane = inputMediaPlayerPane;
         mediaPane = new MediaPane(mediaPlayerPane);
         menuPane = new MenuPane(controller, mediaPane);
-        this.mediaPlayerPane = inputMediaPlayerPane;
     }
 
     /**
