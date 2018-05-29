@@ -54,6 +54,7 @@ public class Controller {
      * @return list of frames in Mat format
      */
     private ArrayList<Image> requestFrames() {
+        List<Mat> frames = cameraHandler.processFrames();
         ArrayList<Image> processedFrames = new ArrayList<>();
 
         File streamEnd = new File(System.getProperty("user.dir")
@@ -65,7 +66,6 @@ public class Controller {
             }
             closeStream();
         } else {
-            List<Mat> frames = cameraHandler.processFrames();
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
             }
