@@ -28,7 +28,7 @@ public class Camera {
     private List<List<double[]>> activity;
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
     private long firstTime = -1;
-    private int frameCounter = 0;
+    private int frameCounter = -1;
     private static final int FRAMES = 4;
     private int numOfChestsInRoom;
     private final int threshold = 1000;
@@ -92,9 +92,7 @@ public class Camera {
             return lastFrame.clone();
         }
 
-        divideFrame(newFrame);
-
-        addActivities(newFrame);
+        frameCounter++;
 
         return lastFrame.clone();
     }
@@ -103,18 +101,12 @@ public class Camera {
      * Add all activities for every part of the frame.
      * @param newFrame The frame to get the activity from.
      */
-    private void addActivities(final Mat newFrame) {
-        final int frequency = 5;
-
-        if (frameCounter % frequency == 0) {
-            for (int i = 0; i < FRAMES; i++) {
-                addActivity(frameParts.get(i), i, knns.get(i));
-            }
-            lastActivity = addActivity(newFrame, FRAMES, knns.get(FRAMES));
-
+    public void addActivities(final Mat newFrame) {
+        for (int i = 0; i < FRAMES; i++) {
+            addActivity(frameParts.get(i), i, knns.get(i));
         }
+        lastActivity = addActivity(newFrame, FRAMES, knns.get(FRAMES));
 
-        frameCounter++;
     }
 
     /**
@@ -283,5 +275,13 @@ public class Camera {
      */
     public double getLastActivity() {
         return lastActivity;
+    }
+
+    /**
+     * Getter for frameCounter.
+     * @return the frame counter.
+     */
+    public int getFrameCounter() {
+        return frameCounter;
     }
 }

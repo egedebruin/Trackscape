@@ -21,7 +21,6 @@ public class CameraChestDetector extends CameraObjectDetector {
     private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 205);
     private static final Scalar CHESTBOXCOLOUR = new Scalar(255, 0, 255);
     private static final double MINCHESTAREA = 600;
-    private static final double APPROXSCALE = 0.02;
     private Boolean isOpened = false;
     private final Comparator<Rect> comparator = new RectComparator();
 
@@ -33,15 +32,18 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param newFrame the frame that gets checked for the presence of boxes.
      * @param noOfChests the number of chests in the room.
      * @param subtraction the subtraction of this frame.
+     * @return true if chest is detected, false otherwise.
      */
-    public void checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
+    public boolean checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
+        boolean isDetected = false;
         Core.bitwise_and(dest, subtraction, subtracted);
         detectChest(subtracted);
         if (isOpened) {
-            includeChestContoursInFrame(newFrame, subtracted, noOfChests);
+            isDetected = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
         }
+        return isDetected;
     }
 
     /**
@@ -60,9 +62,12 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
      *                            but the boxes are already found.
      * @param noOfChests the number of chests in the room.
+     *
+     * @return true iff a boundingbox is drawn.
      */
-    private void includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
+    private boolean includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {
+        boolean isContourDrawn = false;
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
@@ -80,8 +85,12 @@ public class CameraChestDetector extends CameraObjectDetector {
             }
         }
         for (Rect rect : rects) {
-            Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
+            if (rect.area() > MINCHESTAREA) {
+                Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
+                isContourDrawn = true;
+            }
         }
+        return isContourDrawn;
     }
 
     /**
@@ -114,13 +123,5 @@ public class CameraChestDetector extends CameraObjectDetector {
         Core.inRange(hsvMatrix, CHESTCOLOUR_LOWER, CHESTCOLOUR_UPPER, dest);
 
         return dest;
-    }
-
-    /**
-     * Get if the chest is opened.
-     * @return True if opened, false otherwise.
-     */
-    public Boolean getIsOpened() {
-        return isOpened;
     }
 }
