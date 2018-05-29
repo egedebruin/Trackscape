@@ -43,7 +43,8 @@ public class MonitorScene extends BaseScene {
         + ".sdp?real_stream--rtp-caching=100";
     private FlowPane mediaPlayerPane = new FlowPane();
     private Label cameraStatus;
-    private static SimpleObjectProperty<File> lastKnownDirectoryProperty = new SimpleObjectProperty<>();
+    private static SimpleObjectProperty<File> lastKnownDirectoryProperty
+        = new SimpleObjectProperty<>();
 
     /**
      * Constructor.
