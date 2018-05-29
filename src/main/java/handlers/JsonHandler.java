@@ -80,6 +80,10 @@ public class JsonHandler {
         return null;
     }
 
+    /**
+     * Create rooms from the JSON file.
+     * @return List of rooms from the JSON file.
+     */
     public List<Room> createRooms() {
         List<Room> rooms = new ArrayList<>();
         for (Object o : jsonElement) {
@@ -94,14 +98,19 @@ public class JsonHandler {
         return rooms;
     }
 
+    /**
+     * Create chests from the room from the JSON file.
+     * @param roomId The id of the room.
+     * @return List of chests in the room.
+     */
     public List<Chest> createChests(long roomId) {
         JSONObject room = getRoomById(roomId);
         List<Chest> chests = new ArrayList<>();
         JSONArray array = (JSONArray) room.get("chests");
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
-            int sections = (int) object.get("sections");
-            int targetDuration = (int) object.get("targetDuration");
+            int sections = Math.toIntExact((long) object.get("sections"));
+            int targetDuration = Math.toIntExact((long) object.get("targetDuration"));
             Chest chest = new Chest(sections, targetDuration);
             chests.add(chest);
         }
