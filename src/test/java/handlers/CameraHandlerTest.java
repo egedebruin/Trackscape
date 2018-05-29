@@ -104,4 +104,26 @@ class CameraHandlerTest {
         CameraHandler ch = new CameraHandler();
         assertFalse(ch.isActive());
     }
+
+    /**
+     * Test setActive method.
+     */
+    @Test
+    void testSetActive() {
+        CameraHandler ch = new CameraHandler();
+        ch.setActive(true);
+        assertTrue(ch.isActive());
+    }
+
+    /**
+     * Test isChanged method.
+     */
+    @Test
+    void testIsChanged() {
+        CameraHandler ch  = new CameraHandler();
+        ch.addCamera(videoLink);
+        assertFalse(ch.isChanged());
+        ch.processFrames();
+        assertTrue(ch.isChanged());
+    }
 }
