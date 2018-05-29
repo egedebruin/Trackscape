@@ -21,7 +21,7 @@ public class CameraHandler {
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active = false;
-    private ArrayList<Boolean> chestDetected = new ArrayList<>();
+    private List<Boolean> chestDetected = new ArrayList<>();
 
     /**
      * Constructor for CameraHandler without specified information handler.

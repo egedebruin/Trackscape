@@ -3,6 +3,7 @@ package gui;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
 import handlers.JsonHandler;
+import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
@@ -17,7 +18,6 @@ import org.opencv.core.Mat;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,9 +53,9 @@ public class Controller {
      * Request frames from all the cameras.
      * @return list of frames in Mat format
      */
-    private ArrayList<Image> requestFrames() {
+    private List<Image> requestFrames() {
         List<Mat> frames = cameraHandler.processFrames();
-        ArrayList<Image> processedFrames = new ArrayList<>();
+        List<Image> processedFrames = new ArrayList<>();
 
         File streamEnd = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\images\\black.png");
@@ -153,7 +153,7 @@ public class Controller {
      * Call updateImageViews method every period of time to retrieve a new frame
      * @param imageViews list of panels that show the frames
      */
-    public void grabTimeFrame(final ArrayList<ImageView> imageViews) {
+    public void grabTimeFrame(final List<ImageView> imageViews) {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(final long now) {
@@ -173,7 +173,7 @@ public class Controller {
      * Retrieve current frames and show in ImageViews
      * @param imageViews list of panels that show the frames
      */
-    private void updateImageViews(final ArrayList<ImageView> imageViews) {
+    private void updateImageViews(final List<ImageView> imageViews) {
         List<Image> currentFrames = requestFrames();
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             imageViews.get(i).setImage(currentFrames.get(i));
