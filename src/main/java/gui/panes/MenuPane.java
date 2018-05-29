@@ -2,6 +2,7 @@ package gui.panes;
 
 import gui.Controller;
 import handlers.JsonHandler;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,6 +36,8 @@ public class MenuPane {
     private MediaPane mediaPane;
     private Label cameraStatus;
     private Controller controller;
+    private static SimpleObjectProperty<File> lastKnownDirectoryProperty
+            = new SimpleObjectProperty<>();
 
     /**
      * Constructor for MenuPane.
@@ -156,10 +159,12 @@ public class MenuPane {
             if (!controller.isVideoPlaying()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Video File");
+                chooser.initialDirectoryProperty().bindBidirectional(lastKnownDirectoryProperty);
                 File file = chooser.showOpenDialog(primaryStage);
                 if (file != null) {
                     controller.createVideo(file);
                     setCameraStatus();
+                    lastKnownDirectoryProperty.setValue(file.getParentFile());
                 }
             }
         });
