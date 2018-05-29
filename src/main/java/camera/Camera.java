@@ -138,14 +138,6 @@ public class Camera {
     }
 
     /**
-     * Set the frameCounter.
-     * @param newFrameCounter new framecount
-     */
-    public void setFrameCounter(final int newFrameCounter) {
-        this.frameCounter = newFrameCounter;
-    }
-
-    /**
      * Get the activity from the camera.
      * @return The CameraActivity.
      */

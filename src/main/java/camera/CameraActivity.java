@@ -19,7 +19,6 @@ public class CameraActivity {
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
     private long firstTime = -1;
     private static final int FRAMES = 4;
-    private final int threshold = 1000;
     private double lastActivity = 0;
     private int frameCounter;
 
@@ -28,6 +27,7 @@ public class CameraActivity {
      */
     public CameraActivity() {
         this.activityList = new ArrayList<>();
+        final int threshold = 1000;
         for (int i = 0; i < FRAMES; i++) {
             frameParts.add(new Mat());
             activityList.add(new ArrayList<>());
