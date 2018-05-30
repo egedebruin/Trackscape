@@ -20,7 +20,7 @@ public class Main extends Application {
         + "\\src\\main\\java\\gui\\stylesheet.css");
     private String stylesheet = "file:///"
         + css.getAbsolutePath().replace("\\", "/");
-    private Controller controller = new Controller();
+    private Controller controller = new BasicController();
     private MonitorScene monitorScene = new MonitorScene(controller);
 
     /**

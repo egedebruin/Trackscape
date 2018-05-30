@@ -37,9 +37,9 @@ public abstract class Controller {
     private Label timerLabel;
     private TextArea informationArea;
     private Button approveButton;
+    private Button notApproveButton;
     private boolean configurated = false;
     private boolean videoPlaying = false;
-    private Button notApproveButton;
 
     /**
      * Constructor method.
@@ -183,7 +183,9 @@ public abstract class Controller {
     public void closeStream() {
             cameraHandler.clearList();
             cameraHandler.setActive(false);
-            animationTimer.stop();
+            if (animationTimer != null) {
+                animationTimer.stop();
+            }
             beginTime = -1;
             timerLabel.setText("00:00:00");
             configurated = false;
