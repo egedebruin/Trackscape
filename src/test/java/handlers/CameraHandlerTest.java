@@ -54,10 +54,10 @@ class CameraHandlerTest {
 
     /**
      * Tests if a non null frame is returned.
-     * Checks this when getNewFrame is called with a correctly initialized camera
+     * Checks this when processFrames is called with a correctly initialized camera
      */
     @Test
-    void getNewFrameTest() {
+    void processFramesTest() {
         CameraHandler c = new CameraHandler();
         assertNotNull(c.processFrames());
     }
@@ -111,6 +111,7 @@ class CameraHandlerTest {
     @Test
     void testSetActive() {
         CameraHandler ch = new CameraHandler();
+        assertFalse(ch.isActive());
         ch.setActive(true);
         assertTrue(ch.isActive());
     }

@@ -45,15 +45,7 @@ public class CameraHandler {
      * @return The new camera as a Camera object.
      */
     public Camera addCamera(final String link) {
-        VideoCapture videoCapture = new VideoCapture(link);
-        boolean opened = videoCapture.open(link);
-        if (!opened) {
-            return null;
-        }
-        Camera camera = new Camera(videoCapture, link);
-        cameraList.add(camera);
-        informationHandler.addInformation("Added camera");
-        return camera;
+        return addCamera(link, -1);
     }
 
     /**
@@ -61,16 +53,24 @@ public class CameraHandler {
      *
      * @param link The link of the camera.
      * @param chests Amount of chests.
+     * @return The new camera.
      */
-    public void addCamera(final String link, final int chests) {
+    public Camera addCamera(final String link, final int chests) {
         VideoCapture videoCapture = new VideoCapture(link);
         boolean opened = videoCapture.open(link);
         if (!opened) {
-            return;
+            return null;
         }
-        Camera camera = new Camera(videoCapture, link, chests);
-        cameraList.add(camera);
+        chestDetected.add(false);
         informationHandler.addInformation("Added camera");
+        Camera camera;
+        if (chests == -1) {
+            camera = new Camera(videoCapture, link);
+        } else {
+            camera = new Camera(videoCapture, link, chests);
+        }
+        cameraList.add(camera);
+        return camera;
     }
 
     /**
@@ -118,10 +118,6 @@ public class CameraHandler {
             // on whether a chest is detected or not.
             if (chestDetected.size() > cameraList.indexOf(camera)) {
                 chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
-                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
-            } else {
-                // If the camera is new, add a index position for it to the arraylist
-                chestDetected.add(cameraList.indexOf(camera), cameraChestDetector.
                     checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
             }
         }
