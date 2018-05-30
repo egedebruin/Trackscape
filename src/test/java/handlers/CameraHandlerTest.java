@@ -7,6 +7,7 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -127,5 +128,33 @@ class CameraHandlerTest {
         assertFalse(ch.isChanged());
         ch.processFrames();
         assertTrue(ch.isChanged());
+    }
+
+    /**
+     * Test closeHandler method.
+     */
+    @Test
+    void testCloseHandler() {
+        CameraHandler ch  = new CameraHandler();
+        ch.addCamera(videoLink);
+        ch.setActive(true);
+        ch.closeHandler();
+        assertFalse(ch.isActive());
+        assertEquals(0, ch.listSize());
+    }
+
+    /**
+     * Test setInformation method.
+     */
+    @Test
+    void testSetInformationHandler() {
+        InformationHandler handler = new InformationHandler();
+        InformationHandler handler2 = new InformationHandler();
+        CameraHandler ch  = new CameraHandler(handler);
+        assertEquals(handler, ch.getInformationHandler());
+
+        ch.setInformationHandler(handler2);
+        assertEquals(handler2, ch.getInformationHandler());
+        assertNotEquals(handler, ch.getInformationHandler());
     }
 }
