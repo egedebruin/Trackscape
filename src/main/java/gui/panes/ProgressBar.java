@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
@@ -24,6 +23,7 @@ public class ProgressBar {
     private Controller controller;
     private MenuMediaPane menuMediaPane;
     private MediaBar mediaBar;
+    private GridPane progressBar = new GridPane();
     private List<Label> progressStages = new ArrayList<>();
 
     /**
@@ -43,11 +43,14 @@ public class ProgressBar {
      */
     public VBox createMediaAndProgressBar() {
         final int spacing = 30;
-        Pane progressBar = createProgressBar();
+        progressBar = createProgressBar();
         HBox mediaButtons = mediaBar.createMediaBar();
         VBox buttonsAndProgress =  new VBox();
         buttonsAndProgress.setSpacing(spacing);
         buttonsAndProgress.getChildren().addAll(progressBar, mediaButtons);
+
+        gridPaneEvent();
+
         return buttonsAndProgress;
     }
 
@@ -72,11 +75,11 @@ public class ProgressBar {
             progressStages.get(m).getStyleClass().add("progress-bar");
         }
 
-        GridPane progressBar = new GridPane();
         progressBar.setAlignment(Pos.CENTER);
 
         int spot = 0;
         for (int k = 0; k < progressStages.size(); k++) {
+            progressStages.get(k).setId("item");
             progressBar.add(progressStages.get(k), spot, 0);
             spot = spot + 1;
             if (k != progressStages.size() - 1) {
@@ -84,6 +87,7 @@ public class ProgressBar {
                 spot = spot + 1;
             }
         }
+
         return progressBar;
     }
 
@@ -166,6 +170,25 @@ public class ProgressBar {
             progressStages.get(k).getStyleClass().clear();
             progressStages.get(k).getStyleClass().add("progress-bar-done");
         }
+    }
+
+    /**
+     * Let the host set items on done when the team has finished them.
+     */
+    private void setItemsOnDone() {
+        progressBar.getChildren().forEach(item -> {
+            item.setOnMouseClicked(event -> {
+                if (item.getId() == "item") {
+                    if (item.getStyleClass().toString() == "progress-bar") {
+                        item.getStyleClass().clear();
+                        item.getStyleClass().add("progress-bar-done");
+                    } else {
+                        item.getStyleClass().clear();
+                        item.getStyleClass().add("progress-bar");
+                    }
+                }
+            });
+        });
     }
 
 }
