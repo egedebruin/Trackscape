@@ -37,9 +37,9 @@ public class Controller {
     private Label timerLabel;
     private TextArea informationArea;
     private Button approveButton;
+    private Button notApproveButton;
     private boolean configurated = false;
     private boolean videoPlaying = false;
-    private Button notApproveButton;
 
     /**
      * Constructor method.
