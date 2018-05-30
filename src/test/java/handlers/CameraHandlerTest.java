@@ -67,12 +67,12 @@ class CameraHandlerTest {
      * Tests if the cameraList gets cleared whenever clearList() is called.
      */
     @Test
-    void clearListTest() {
+    void clearListsTest() {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(videoLink);
 
         assertTrue(ch.listSize() > 0);
-        ch.clearList();
+        ch.clearLists();
         assertEquals(0, ch.listSize());
     }
 

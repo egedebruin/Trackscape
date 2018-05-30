@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.Controller;
+import gui.controllers.Controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

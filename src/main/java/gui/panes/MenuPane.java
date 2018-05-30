@@ -1,7 +1,6 @@
 package gui.panes;
 
-import gui.Controller;
-import handlers.JsonHandler;
+import gui.controllers.Controller;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -101,7 +100,7 @@ public class MenuPane {
      */
     private void resetCameras(final MenuItem clearImageViewers) {
         clearImageViewers.setOnAction(event -> {
-            controller.clearInformationArea();
+            controller.getTimeLogController().clearInformationArea();
             endStream();
         });
     }
@@ -121,12 +120,11 @@ public class MenuPane {
      */
     private void openConfig(final MenuItem configFile, final Stage primaryStage) {
         configFile.setOnAction(event -> {
-            if (!controller.isVideoPlaying() && !controller.getConfigurated()) {
+            if (!controller.isVideoPlaying() && !controller.getConfigured()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Configuration File (JSon format)");
                 File file = chooser.showOpenDialog(primaryStage);
-                JsonHandler jsonHandler = new JsonHandler(file.toString());
-                controller.configure(jsonHandler);
+                controller.configure(file.toString());
                 setCameraStatus();
 
             }
@@ -139,9 +137,8 @@ public class MenuPane {
      */
     private void standardConfig(final MenuItem standardFile) {
         standardFile.setOnAction(event -> {
-            if (!controller.isVideoPlaying() && !controller.getConfigurated()) {
-                JsonHandler jsonHandler = new JsonHandler("files/standard.json");
-                controller.configure(jsonHandler);
+            if (!controller.isVideoPlaying() && !controller.getConfigured()) {
+                controller.configure("files/standard.json");
                 setCameraStatus();
             }
         });
