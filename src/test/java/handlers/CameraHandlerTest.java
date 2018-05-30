@@ -1,15 +1,15 @@
 package handlers;
 
+import camera.Camera;
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
-import camera.Camera;
-import java.io.File;
-import org.junit.jupiter.api.Test;
 
 /**
  * Class for testing CameraHandler.
@@ -53,12 +53,13 @@ class CameraHandlerTest {
     }
 
     /**
-     * Tests if a non null frame is returned.
+     * Tests if non-null frames are returned.
      * Checks this when processFrames is called with a correctly initialized camera
      */
     @Test
     void processFramesTest() {
         CameraHandler c = new CameraHandler();
+        c.addCamera(videoLink);
         assertNotNull(c.processFrames());
     }
 
