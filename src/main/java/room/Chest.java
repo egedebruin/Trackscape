@@ -12,7 +12,7 @@ public class Chest {
     /**
      * Enum of statuses.
      */
-    private enum Status {
+    enum Status {
         OPENED, TO_BE_OPENED, WAITING_FOR_SECTION_TO_START;
     }
     private Status chestState;
@@ -21,6 +21,7 @@ public class Chest {
     private long beginOfSectionTimeInSec;
     private long timeFound;
     private int numberOfSubSections;
+    private boolean[] subsectionFound;
     private boolean approvedChestFoundByHost;
 
     /**
@@ -34,6 +35,7 @@ public class Chest {
      */
     public Chest(int noSubsections, long targetTimeInSeconds) {
         numberOfSubSections = noSubsections;
+        subsectionFound = new boolean[noSubsections];
         targetDurationInSec = targetTimeInSeconds;
         chestState = Status.WAITING_FOR_SECTION_TO_START;
     }
@@ -57,5 +59,44 @@ public class Chest {
             timeFound = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()) - beginOfSectionTimeInSec;
         }
         return chestState;
+    }
+
+    /**
+     * Get the chest's status.
+     * @return this.cestState
+     */
+    public Status getChestState() {
+        return chestState;
+    }
+
+    /**
+     * Loops over the subsections and count the amount of trues.
+     * @return the amount of subsections which are completed
+     */
+    public int countSubsections() {
+        int count = 0;
+        for (boolean subsection : subsectionFound) {
+            if (subsection) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Get numberOfSubsections.
+     *
+     * @return this.numberOfSubSections
+     */
+    public int getNumberOfSubSections() {
+        return numberOfSubSections;
+    }
+
+    /**
+     * Setter for approvedChestFoundByHost
+     * @param isChestFound
+     */
+    public void setApprovedChestFoundByHost(boolean isChestFound) {
+        this.approvedChestFoundByHost = isChestFound;
     }
 }
