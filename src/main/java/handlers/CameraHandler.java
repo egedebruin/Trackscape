@@ -136,6 +136,7 @@ public class CameraHandler {
      * Clear the list of cameras.
      */
     public void clearList() {
+        chestDetected.clear();
         cameraList.clear();
     }
 
