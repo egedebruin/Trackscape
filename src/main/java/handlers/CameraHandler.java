@@ -21,7 +21,7 @@ public class CameraHandler {
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean active = false;
-    private ArrayList<Boolean> chestDetected = new ArrayList<>();
+    private List<Boolean> chestDetected = new ArrayList<>();
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -45,15 +45,7 @@ public class CameraHandler {
      * @return The new camera as a Camera object.
      */
     public Camera addCamera(final String link) {
-        VideoCapture videoCapture = new VideoCapture(link);
-        boolean opened = videoCapture.open(link);
-        if (!opened) {
-            return null;
-        }
-        Camera camera = new Camera(videoCapture, link);
-        cameraList.add(camera);
-        informationHandler.addInformation("Added camera");
-        return camera;
+        return addCamera(link, -1);
     }
 
     /**
@@ -61,36 +53,47 @@ public class CameraHandler {
      *
      * @param link The link of the camera.
      * @param chests Amount of chests.
+     * @return The new camera.
      */
-    public void addCamera(final String link, final int chests) {
+    public Camera addCamera(final String link, final int chests) {
         VideoCapture videoCapture = new VideoCapture(link);
         boolean opened = videoCapture.open(link);
         if (!opened) {
-            return;
+            return null;
         }
-        Camera camera = new Camera(videoCapture, link, chests);
-        cameraList.add(camera);
+        chestDetected.add(false);
         informationHandler.addInformation("Added camera");
+        Camera camera;
+        if (chests == -1) {
+            camera = new Camera(videoCapture, link);
+        } else {
+            camera = new Camera(videoCapture, link, chests);
+        }
+        cameraList.add(camera);
+        return camera;
     }
 
     /**
-     * Get a new frame from the camera.
+     * Get new frames from the cameras.
      *
-     * @param camera The camera to get the new frame from.
-     * @return The new frame as a Mat.
+     * @return The new frames as a list of Mat.
      */
-    public Mat getNewFrame(final Camera camera) {
-        Mat newFrame = camera.getLastFrame();
-        if (camera.getFirstFrame() == null) {
-            camera.setFirstFrame(newFrame);
+    public List<Mat> processFrames() {
+        List<Mat> frames = new ArrayList<>();
+        for (Camera camera : cameraList) {
+            Mat newFrame = camera.getLastFrame();
+            if (camera.getFirstFrame() == null) {
+                camera.setFirstFrame(newFrame);
+            }
+
+            final int frequency = 10;
+            if (camera.getFrameCounter() % frequency == 0) {
+                processFrame(camera, newFrame);
+            }
+            frames.add(newFrame);
         }
 
-        final int frequency = 10;
-        if (camera.getFrameCounter() % frequency == 0) {
-            processFrame(camera, newFrame);
-        }
-
-        return newFrame;
+        return frames;
     }
 
     /**
@@ -116,10 +119,6 @@ public class CameraHandler {
             if (chestDetected.size() > cameraList.indexOf(camera)) {
                 chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
                     checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
-            } else {
-                // If the camera is new, add a index position for it to the arraylist
-                chestDetected.add(cameraList.indexOf(camera), cameraChestDetector.
-                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
             }
         }
     }
@@ -137,6 +136,7 @@ public class CameraHandler {
      * Clear the list of cameras.
      */
     public void clearList() {
+        chestDetected.clear();
         cameraList.clear();
     }
 
@@ -180,5 +180,18 @@ public class CameraHandler {
      */
     public InformationHandler getInformationHandler() {
         return informationHandler;
+    }
+
+    /**
+     * Returns whether a camera is changed or not.
+     * @return True if all cameras are changed, false otherwise.
+     */
+    public boolean isChanged() {
+        for (Camera camera : cameraList) {
+            if (!camera.isChanged()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -2,7 +2,6 @@ package handlers;
 
 import camera.Camera;
 import org.junit.jupiter.api.Test;
-import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
 
@@ -54,14 +53,14 @@ class CameraHandlerTest {
     }
 
     /**
-     * Tests if a non null frame is returned.
-     * Checks this when getNewFrame is called with a correctly initialized camera
+     * Tests if non-null frames are returned.
+     * Checks this when processFrames is called with a correctly initialized camera
      */
     @Test
-    void getNewFrameTest() {
+    void processFramesTest() {
         CameraHandler c = new CameraHandler();
-        Camera cam = new Camera(new VideoCapture(videoLink), videoLink);
-        assertNotNull(c.getNewFrame(cam));
+        c.addCamera(videoLink);
+        assertNotNull(c.processFrames());
     }
 
     /**
@@ -105,5 +104,28 @@ class CameraHandlerTest {
     void testIsActive() {
         CameraHandler ch = new CameraHandler();
         assertFalse(ch.isActive());
+    }
+
+    /**
+     * Test setActive method.
+     */
+    @Test
+    void testSetActive() {
+        CameraHandler ch = new CameraHandler();
+        assertFalse(ch.isActive());
+        ch.setActive(true);
+        assertTrue(ch.isActive());
+    }
+
+    /**
+     * Test isChanged method.
+     */
+    @Test
+    void testIsChanged() {
+        CameraHandler ch  = new CameraHandler();
+        ch.addCamera(videoLink);
+        assertFalse(ch.isChanged());
+        ch.processFrames();
+        assertTrue(ch.isChanged());
     }
 }

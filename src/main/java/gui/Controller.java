@@ -1,9 +1,9 @@
 package gui;
 
-import camera.Camera;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
 import handlers.JsonHandler;
+import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
@@ -18,7 +18,7 @@ import org.opencv.core.Mat;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,32 +50,35 @@ public class Controller {
     }
 
     /**
-     * retrieveFrame.
-     * Retrieve last frame from video reader in handlers.CameraHandler
-     * @param cam the camera that is used
-     * @return Image
+     * Request frames from all the cameras.
+     * @return list of frames in Mat format
      */
-    private Image retrieveFrame(final Camera cam) {
-        Image frame;
-        Mat matrixFrame = cameraHandler.getNewFrame(cam);
-        if (!cam.isChanged()) {
-            File streamEnd = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\black.png");
-            frame = new Image(streamEnd.toURI().toString());
+    private List<Image> requestFrames() {
+        List<Mat> frames = cameraHandler.processFrames();
+        List<Image> processedFrames = new ArrayList<>();
+
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\black.png");
+        Image blackFrame = new Image(streamEnd.toURI().toString());
+        if (!cameraHandler.isChanged()) {
+            for (int k = 0; k < getCameras(); k++) {
+                processedFrames.add(blackFrame);
+            }
             closeStream();
-            return frame;
         } else {
             if (cameraHandler.isActive() && beginTime == -1) {
                 beginTime = System.nanoTime();
             }
-            BufferedImage bufferedFrame = matToBufferedImage(matrixFrame);
-            frame = SwingFXUtils.toFXImage(bufferedFrame, null);
+            for (int j = 0; j < frames.size(); j++) {
+                BufferedImage bufferedFrame = matToBufferedImage(frames.get(j));
+                processedFrames.add(SwingFXUtils.toFXImage(bufferedFrame, null));
+            }
+            if (cameraHandler.isChestDetected()) {
+                approveButton.setVisible(true);
+                notApproveButton.setVisible(true);
+            }
         }
-        if (cameraHandler.isChestDetected()) {
-            approveButton.setVisible(true);
-            notApproveButton.setVisible(true);
-        }
-        return frame;
+        return processedFrames;
     }
 
     /**
@@ -150,7 +153,7 @@ public class Controller {
      * Call updateImageViews method every period of time to retrieve a new frame
      * @param imageViews list of panels that show the frames
      */
-    public void grabTimeFrame(final ArrayList<ImageView> imageViews) {
+    public void grabTimeFrame(final List<ImageView> imageViews) {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(final long now) {
@@ -170,10 +173,10 @@ public class Controller {
      * Retrieve current frames and show in ImageViews
      * @param imageViews list of panels that show the frames
      */
-    private void updateImageViews(final ArrayList<ImageView> imageViews) {
+    private void updateImageViews(final List<ImageView> imageViews) {
+        List<Image> currentFrames = requestFrames();
         for (int i = 0; i < cameraHandler.listSize(); i++) {
-            Image currentFrame = retrieveFrame(cameraHandler.getCamera(i));
-            imageViews.get(i).setImage(currentFrame);
+            imageViews.get(i).setImage(currentFrames.get(i));
         }
     }
 
