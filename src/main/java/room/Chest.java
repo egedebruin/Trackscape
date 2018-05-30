@@ -21,7 +21,7 @@ public class Chest {
     private long beginOfSectionTimeInSec;
     private long timeFound;
     private int numberOfSubSections;
-    private boolean[] subsectionFound;
+    private boolean[] subsectionCompleted;
     private boolean approvedChestFoundByHost;
 
     /**
@@ -34,8 +34,8 @@ public class Chest {
      *                            critical stage.
      */
     public Chest(int noSubsections, long targetTimeInSeconds) {
-        numberOfSubSections = noSubsections;
-        subsectionFound = new boolean[noSubsections];
+        numberOfSubSections = Math.max(noSubsections, 1);
+        subsectionCompleted = new boolean[numberOfSubSections];
         targetDurationInSec = targetTimeInSeconds;
         chestState = Status.WAITING_FOR_SECTION_TO_START;
     }
@@ -49,7 +49,7 @@ public class Chest {
      *
      * @return the current Status of the chest.
      */
-    public Status updateStatus() {
+    public void updateStatus() {
         if (chestState == Status.WAITING_FOR_SECTION_TO_START) {
             chestState = Status.TO_BE_OPENED;
             beginOfSectionTimeInSec = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime());
@@ -58,7 +58,6 @@ public class Chest {
             chestState = Status.OPENED;
             timeFound = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()) - beginOfSectionTimeInSec;
         }
-        return chestState;
     }
 
     /**
@@ -73,9 +72,9 @@ public class Chest {
      * Loops over the subsections and count the amount of trues.
      * @return the amount of subsections which are completed
      */
-    public int countSubsections() {
+    public int countSubsectionsCompleted() {
         int count = 0;
-        for (boolean subsection : subsectionFound) {
+        for (boolean subsection : subsectionCompleted) {
             if (subsection) {
                 count++;
             }
@@ -98,5 +97,12 @@ public class Chest {
      */
     public void setApprovedChestFoundByHost(boolean isChestFound) {
         this.approvedChestFoundByHost = isChestFound;
+    }
+
+    /**
+     * Method that sets the next subsection to completed.
+     */
+    public void subSectionCompleted() {
+        subsectionCompleted[Math.min(countSubsectionsCompleted(), numberOfSubSections-1)] = true;
     }
 }

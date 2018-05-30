@@ -36,7 +36,7 @@ public class Progress {
             if (chest.getChestState() == Chest.Status.OPENED) {
                 subSectionCount += chest.getNumberOfSubSections();
             } else if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
-                subSectionCount = chest.countSubsections();
+                subSectionCount = chest.countSubsectionsCompleted();
             }
         }
         return subSectionCount;
