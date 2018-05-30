@@ -97,6 +97,10 @@ public class JsonHandler {
         return rooms;
     }
 
+    /**
+     * Create the first room from the JSON file.
+     * @return the first room from the JSON file.
+     */
     public Room createSingleRoom() {
         if (!jsonElement.isEmpty()) {
             JSONObject roomObject = (JSONObject) jsonElement.get(0);
@@ -106,7 +110,7 @@ public class JsonHandler {
             List<Chest> chests = createChests(roomId);
             return new Room(roomId, amountPeople, cameraLinks, chests);
         }
-        return new Room(0,0,null,null);
+        return new Room(0, 0, null, null);
     }
 
     /**
@@ -136,8 +140,13 @@ public class JsonHandler {
         return jsonElement;
     }
 
-    public int getAmountChests(int i) {
-        return createChests(i).size();
+    /**
+     * Method that counts the amount of chest in a specific room.
+     * @param roomid the id of the room where the amount of present chest is wanted
+     * @return  the amount of chests in the room with id: roomid
+     */
+    public int getAmountChests(int roomid) {
+        return createChests(roomid).size();
     }
 
 

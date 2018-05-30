@@ -1,5 +1,6 @@
 package gui;
 
+import gui.controllers.Controller;
 import gui.panes.VideoPane;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;

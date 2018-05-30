@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.Controller;
+import gui.controllers.Controller;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;

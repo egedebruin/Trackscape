@@ -62,7 +62,6 @@ public class CameraHandler {
             return null;
         }
         chestDetected.add(false);
-        informationHandler.addInformation("Added camera");
         Camera camera;
         if (chests == -1) {
             camera = new Camera(videoCapture, link);
@@ -135,9 +134,14 @@ public class CameraHandler {
     /**
      * Clear the list of cameras.
      */
-    public void clearList() {
+    public void clearLists() {
         chestDetected.clear();
         cameraList.clear();
+    }
+
+    public void closeHandler() {
+        clearLists();
+        active = false;
     }
 
     /**
@@ -193,5 +197,9 @@ public class CameraHandler {
             }
         }
         return true;
+    }
+
+    public void setInformationHandler(InformationHandler informationHandler) {
+        this.informationHandler = informationHandler;
     }
 }
