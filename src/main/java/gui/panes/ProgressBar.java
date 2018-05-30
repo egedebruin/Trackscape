@@ -191,4 +191,12 @@ public class ProgressBar {
         });
     }
 
+    /**
+     * Reset the progressBar when stream is closed.
+     */
+    private void closeProgressBar() {
+        progressBar.getChildren().clear();
+        progressBar.setVisible(false);
+    }
+
 }
