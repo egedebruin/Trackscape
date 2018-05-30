@@ -6,8 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,37 +20,25 @@ public class ProgressBar {
      * Class parameters.
      */
     private Controller controller;
-    private MenuMediaPane menuMediaPane;
-    private MediaBar mediaBar;
     private GridPane progressBar = new GridPane();
     private List<Label> progressStages = new ArrayList<>();
 
     /**
      * Constructor for ProgressBar.
      * @param control the controller
-     * @param mmp the MenuMediaPane
      */
-    public ProgressBar(final Controller control, final MenuMediaPane mmp) {
+    public ProgressBar(final Controller control) {
         this.controller = control;
-        this.menuMediaPane = mmp;
-        this.mediaBar = new MediaBar(controller, menuMediaPane);
     }
 
     /**
      * Creates the bottom pane for the videoPane with mediaBar and progressBar.
      * @return VBox with buttons and progressbar
      */
-    public VBox createMediaAndProgressBar() {
-        final int spacing = 30;
+    public Pane createMediaAndProgressBar() {
         progressBar = createProgressBar();
-        HBox mediaButtons = mediaBar.createMediaBar();
-        VBox buttonsAndProgress =  new VBox();
-        buttonsAndProgress.setSpacing(spacing);
-        buttonsAndProgress.getChildren().addAll(progressBar, mediaButtons);
-
         setItemsOnDone();
-
-        return buttonsAndProgress;
+        return progressBar;
     }
 
     /**

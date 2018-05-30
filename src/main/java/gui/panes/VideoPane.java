@@ -18,6 +18,7 @@ public class VideoPane {
     private FlowPane mediaPlayerPane = new FlowPane();
     private Controller controller;
     private MenuMediaPane menuMediaPane;
+    private MediaBar mediaBar;
     private ProgressBar progressBar;
     private TimeLoggerPane timeLoggerPane;
 
@@ -28,7 +29,8 @@ public class VideoPane {
     public VideoPane(final Controller control) {
         this.controller = control;
         menuMediaPane = new MenuMediaPane(controller, mediaPlayerPane);
-        progressBar = new ProgressBar(controller, menuMediaPane);
+        mediaBar = new MediaBar(controller, menuMediaPane);
+        progressBar = new ProgressBar(controller);
         timeLoggerPane = new TimeLoggerPane(controller);
     }
 
@@ -54,7 +56,7 @@ public class VideoPane {
         // put the escape room status in the right of the pane
         videoPane.setRight(new FlowPane()); // escape room status will be displayed here
         // put the mediabar and progressbar in the bottom of the pane
-        videoPane.setBottom(progressBar.createMediaAndProgressBar());
+        videoPane.setBottom(mediaBar.createMediaBar());
 
         return videoPane;
     }
