@@ -18,7 +18,7 @@ public class VideoPane {
     private FlowPane mediaPlayerPane = new FlowPane();
     private Controller controller;
     private MenuMediaPane menuMediaPane;
-    private MediaBar mediaBar;
+    private ProgressBar progressBar;
     private TimeLoggerPane timeLoggerPane;
 
     /**
@@ -28,7 +28,7 @@ public class VideoPane {
     public VideoPane(final Controller control) {
         this.controller = control;
         menuMediaPane = new MenuMediaPane(controller, mediaPlayerPane);
-        mediaBar = new MediaBar(controller, menuMediaPane);
+        progressBar = new ProgressBar(controller, menuMediaPane);
         timeLoggerPane = new TimeLoggerPane(controller);
     }
 
@@ -45,16 +45,16 @@ public class VideoPane {
         ArrayList<Pane> mmp =
             menuMediaPane.createMenuAndMediaPane(videoPane, primaryStage);
 
-        // get the menubar and put it at the top of the videoPane
+        // put menubar at the top of the pane
         videoPane.setTop(mmp.get(0));
-        // get the imageViews (location where videos are shown)
-        // and put it in the center of the videoPane
+        // put the imageviews in the center of the pane
         videoPane.setCenter(mmp.get(1));
-
-        // create the functionality panes for the videoPane
-        videoPane.setBottom(mediaBar.createMediaBar());
+        // put the timelogger in the left of the pane
         videoPane.setLeft(timeLoggerPane.createTimeLoggerPane());
+        // put the escape room status in the right of the pane
         videoPane.setRight(new FlowPane()); // escape room status will be displayed here
+        // put the mediabar and progressbar in the bottom of the pane
+        videoPane.setBottom(progressBar.createMediaAndProgressBar());
 
         return videoPane;
     }

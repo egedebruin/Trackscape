@@ -11,3 +11,20 @@
     -fx-border-width: 2;
     -fx-background-color: white;
 }
+
+.progress-bar{
+    -fx-border-width: 3px;
+    -fx-border-radius: 80%;
+    -fx-border-color: grey;
+    -fx-background-radius: 80%;
+    -fx-background-color: lightgrey;
+}
+
+.progress-bar-done{
+    -fx-border-width: 3px;
+    -fx-border-radius: 80%;
+    -fx-border-color: green;
+    -fx-background-radius: 80%;
+    -fx-background-color: lightgreen;
+}
+
