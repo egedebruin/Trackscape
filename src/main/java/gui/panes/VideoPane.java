@@ -56,7 +56,9 @@ public class VideoPane {
         // create the functionality panes for the videoPane
         videoPane.setBottom(mediaBar.createMediaBar());
         videoPane.setLeft(timeLoggerPane.createTimeLoggerPane());
-        videoPane.setRight(statusPane.createStatusPane()); // escape room status will be displayed here
+
+        // escape room status will be displayed here
+        videoPane.setRight(statusPane.createStatusPane());
 
         return videoPane;
     }
