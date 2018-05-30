@@ -28,7 +28,7 @@ public class Controller {
     /**
      * Constructor method.
      */
-    Controller() {
+    public Controller() {
         cameraHandler = new CameraHandler();
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);
