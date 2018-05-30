@@ -11,3 +11,7 @@
     -fx-border-width: 2;
     -fx-background-color: white;
 }
+
+.bold{
+    -fx-font-weight: bold;
+}

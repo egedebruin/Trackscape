@@ -20,6 +20,7 @@ public class VideoPane {
     private MenuMediaPane menuMediaPane;
     private MediaBar mediaBar;
     private TimeLoggerPane timeLoggerPane;
+    private StatusPane statusPane;
 
     /**
      * Constructor for VideoPane.
@@ -30,6 +31,7 @@ public class VideoPane {
         menuMediaPane = new MenuMediaPane(controller, mediaPlayerPane);
         mediaBar = new MediaBar(controller, menuMediaPane);
         timeLoggerPane = new TimeLoggerPane(controller);
+        statusPane = new StatusPane();
     }
 
     /**
@@ -54,7 +56,7 @@ public class VideoPane {
         // create the functionality panes for the videoPane
         videoPane.setBottom(mediaBar.createMediaBar());
         videoPane.setLeft(timeLoggerPane.createTimeLoggerPane());
-        videoPane.setRight(new FlowPane()); // escape room status will be displayed here
+        videoPane.setRight(statusPane.createStatusPane()); // escape room status will be displayed here
 
         return videoPane;
     }
