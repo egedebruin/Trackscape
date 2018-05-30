@@ -1,15 +1,14 @@
 package gui.controllers;
 
 import handlers.CameraHandler;
-import handlers.JsonHandler;
-import room.Room;
+import room.Progress;
 
 /**
  * Controller for the gui with a room.
  */
 public class RoomController {
 
-    private Room room;
+    private Progress progress;
     private CameraHandler cameraHandler;
 
     /**
@@ -17,9 +16,8 @@ public class RoomController {
      * @param configFile The configfile for this room.
      */
     public RoomController(String configFile) {
-        JsonHandler jsonHandler = new JsonHandler(configFile);
-        room = jsonHandler.createSingleRoom();
-        cameraHandler = room.getCameraHandler();
+        progress = new Progress(configFile, 0);
+        cameraHandler = progress.getRoom().getCameraHandler();
     }
 
     /**
