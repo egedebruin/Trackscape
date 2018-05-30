@@ -43,9 +43,9 @@ public class Chest {
     /**
      * Method used for updating the status of the Chest.
      *
-     * status can go    from:           to:
-     *                  Waiting         To_Be_Opened
-     *                  To_be_Opened    Opened
+     * status can switch    from:           to:
+     *                      Waiting         To_Be_Opened
+     *                      To_be_Opened    Opened
      *
      * @return the current Status of the chest.
      */
