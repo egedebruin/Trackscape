@@ -47,7 +47,6 @@ public class Chest {
      *                      Waiting         To_Be_Opened
      *                      To_be_Opened    Opened
      *
-     * @return the current Status of the chest.
      */
     public void updateStatus() {
         if (chestState == Status.WAITING_FOR_SECTION_TO_START) {
@@ -92,8 +91,8 @@ public class Chest {
     }
 
     /**
-     * Setter for approvedChestFoundByHost
-     * @param isChestFound
+     * Setter for approvedChestFoundByHost.
+     * @param isChestFound Whether the chest is found or not.
      */
     public void setApprovedChestFoundByHost(boolean isChestFound) {
         this.approvedChestFoundByHost = isChestFound;
@@ -103,6 +102,6 @@ public class Chest {
      * Method that sets the next subsection to completed.
      */
     public void subSectionCompleted() {
-        subsectionCompleted[Math.min(countSubsectionsCompleted(), numberOfSubSections-1)] = true;
+        subsectionCompleted[Math.min(countSubsectionsCompleted(), numberOfSubSections - 1)] = true;
     }
 }
