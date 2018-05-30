@@ -49,7 +49,7 @@ public class ProgressBar {
         buttonsAndProgress.setSpacing(spacing);
         buttonsAndProgress.getChildren().addAll(progressBar, mediaButtons);
 
-        gridPaneEvent();
+        setItemsOnDone();
 
         return buttonsAndProgress;
     }
