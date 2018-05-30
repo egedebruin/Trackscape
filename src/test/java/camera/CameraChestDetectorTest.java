@@ -31,11 +31,11 @@ class CameraChestDetectorTest {
     @Test
     void includeChestContoursInFrameCallTest() {
         CameraHandler ch = new CameraHandler();
-        Camera camera = ch.addCamera(shortVideoLinkWithBoxes);
+        ch.addCamera(shortVideoLinkWithBoxes);
         boolean isDetected = false;
-        ch.getNewFrame(camera);
-        while (ch.getCamera(0).isChanged()) {
-            ch.getNewFrame(camera);
+        ch.processFrames();
+        while (ch.isChanged()) {
+            ch.processFrames();
             if (ch.isChestDetected()) {
                 isDetected = true;
                 break;
