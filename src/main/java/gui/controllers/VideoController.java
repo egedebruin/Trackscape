@@ -11,11 +11,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 
+/**
+ * Class for the VideoController, to control the video shown.
+ */
 public class VideoController {
 
     private CameraHandler cameraHandler;
     private boolean closed;
 
+    /**
+     * Constructor for the VideoController.
+     * @param handler The CameraHandler.
+     */
     public VideoController(CameraHandler handler) {
         cameraHandler = handler;
     }
@@ -84,15 +91,26 @@ public class VideoController {
         }
     }
 
+    /**
+     * Close the stream.
+     */
     public void closeStream() {
         closed = true;
     }
 
+    /**
+     * Check if the stream is closed.
+     * @return True if stream is closed, false otherwise.
+     */
     public boolean isClosed() {
         return closed;
     }
 
-    public void setCameraHandler(CameraHandler cameraHandler) {
-        this.cameraHandler = cameraHandler;
+    /**
+     * Set the cameraHandler.
+     * @param handler The new CameraHandler.
+     */
+    public void setCameraHandler(CameraHandler handler) {
+        this.cameraHandler = handler;
     }
 }

@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
+/**
+ * Class for the TimeLogController, to control the time and log.
+ */
 public class TimeLogController {
 
     private Label timerLabel;
@@ -17,7 +20,11 @@ public class TimeLogController {
     private InformationHandler informationHandler = new InformationHandler();
     private CameraHandler cameraHandler;
 
-    public TimeLogController (CameraHandler handler) {
+    /**
+     * Constructor for the TimeLogController, sets a new informationHandler.
+     * @param handler The cameraHandler.
+     */
+    public TimeLogController(CameraHandler handler) {
         cameraHandler = handler;
         cameraHandler.setInformationHandler(informationHandler);
     }
@@ -111,6 +118,9 @@ public class TimeLogController {
         return hr + ":" + min + ":" + sec;
     }
 
+    /**
+     * Close this controller when the stream is closed.
+     */
     public void closeController() {
         beginTime = -1;
         timerLabel.setText("00:00:00");
@@ -153,6 +163,9 @@ public class TimeLogController {
         this.approveButton = button;
     }
 
+    /**
+     * Process the frames depending on the changes in cameraHandler.
+     */
     public void processFrame() {
         if (cameraHandler.isActive() && beginTime == -1) {
             beginTime = System.nanoTime();
@@ -163,8 +176,12 @@ public class TimeLogController {
         }
     }
 
-    public void setCameraHandler(CameraHandler cameraHandler) {
-        cameraHandler.setInformationHandler(informationHandler);
-        this.cameraHandler = cameraHandler;
+    /**
+     * Set the cameraHandler with the right informationHandler.
+     * @param handler The new cameraHandler.
+     */
+    public void setCameraHandler(CameraHandler handler) {
+        handler.setInformationHandler(informationHandler);
+        this.cameraHandler = handler;
     }
 }

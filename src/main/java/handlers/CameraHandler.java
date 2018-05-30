@@ -132,13 +132,16 @@ public class CameraHandler {
     }
 
     /**
-     * Clear the list of cameras.
+     * Clear the list of cameras and chest detected.
      */
     public void clearLists() {
         chestDetected.clear();
         cameraList.clear();
     }
 
+    /**
+     * Close the handler by clearing lists and set active to false.
+     */
     public void closeHandler() {
         clearLists();
         active = false;
@@ -199,7 +202,11 @@ public class CameraHandler {
         return true;
     }
 
-    public void setInformationHandler(InformationHandler informationHandler) {
-        this.informationHandler = informationHandler;
+    /**
+     * Set a new information handler.
+     * @param handler The new information handler.
+     */
+    public void setInformationHandler(InformationHandler handler) {
+        this.informationHandler = handler;
     }
 }

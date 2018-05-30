@@ -162,6 +162,10 @@ public class Controller {
         this.videoPlaying = isVideoPlaying;
     }
 
+    /**
+     * Get the TimeLogController.
+     * @return The TimeLogController
+     */
     public TimeLogController getTimeLogController() {
         return timeLogController;
     }
