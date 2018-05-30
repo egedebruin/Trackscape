@@ -112,6 +112,7 @@ class CameraHandlerTest {
     @Test
     void testSetActive() {
         CameraHandler ch = new CameraHandler();
+        assertFalse(ch.isActive());
         ch.setActive(true);
         assertTrue(ch.isActive());
     }
