@@ -41,4 +41,12 @@ public class Progress {
         }
         return subSectionCount;
     }
+
+    /**
+     * Get the room of this progress.
+     * @return The room.
+     */
+    public Room getRoom() {
+        return room;
+    }
 }
