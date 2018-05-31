@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class ProgressBar {
     private Controller controller;
     private GridPane progressBar;
     private List<Label> progressStages;
+    private double fittedWidth;
 
     /**
      * Constructor for ProgressBar.
@@ -67,8 +70,14 @@ public class ProgressBar {
      * Create the items of the progress bar.
      */
     private void createItems() {
-        final int chests = 3;   // should retrieve number from handler
-        final int steps = 1;    // should retrieve number from handler
+        final int chests = 4;   // should retrieve number from handler
+        final int steps = 3;    // should retrieve number from handler
+
+        final int screenParts = 4;
+        GraphicsDevice gd =
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int screenWidth = gd.getDisplayMode().getWidth();
+        fittedWidth = (screenWidth) / (screenParts * (chests + steps + (chests + steps - 1)));
 
         progressStages = new ArrayList<>();
 
@@ -95,7 +104,7 @@ public class ProgressBar {
             + "\\src\\main\\java\\gui\\images\\line.png");
         Image lineImage = new Image(line.toURI().toString());
 
-        final int size = 50;
+        final double size = fittedWidth;
         ImageView iv = new ImageView(lineImage);
         iv.setFitWidth(size);
         iv.setFitHeight(size);
@@ -116,7 +125,7 @@ public class ProgressBar {
             + "\\src\\main\\java\\gui\\images\\chest.png");
         Image chestImage = new Image(chest.toURI().toString());
 
-        final int size = 60;
+        final double size = 1.4 * fittedWidth;
         ImageView chestIV = new ImageView(chestImage);
         chestIV.setFitWidth(size);
         chestIV.setFitHeight(size);
@@ -124,7 +133,7 @@ public class ProgressBar {
         Label chestLabel = new Label("");
         chestLabel.setGraphic(chestIV);
 
-        final int circleSize = 90;
+        final double circleSize = 1.3 * fittedWidth + 25;
         chestLabel.setMinHeight(circleSize);
         chestLabel.setMinWidth(circleSize);
         chestLabel.setAlignment(Pos.CENTER);
@@ -142,7 +151,7 @@ public class ProgressBar {
             + "\\src\\main\\java\\gui\\images\\puzzle.png");
         Image puzzleImage = new Image(puzzle.toURI().toString());
 
-        final int size = 50;
+        final double size = fittedWidth;
         ImageView puzzleIV = new ImageView(puzzleImage);
         puzzleIV.setFitWidth(size);
         puzzleIV.setFitHeight(size);
@@ -151,7 +160,7 @@ public class ProgressBar {
         puzzleLabel.setAlignment(Pos.CENTER);
         puzzleLabel.setGraphic(puzzleIV);
 
-        final int circleSize = 70;
+        final double circleSize = fittedWidth + 20;
         puzzleLabel.setMinHeight(circleSize);
         puzzleLabel.setMinWidth(circleSize);
 
