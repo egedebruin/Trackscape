@@ -163,6 +163,7 @@ public class TimeLogController {
 
     /**
      * Process the frames depending on the changes in cameraHandler.
+     * @param now The current time.
      */
     public void processFrame(long now) {
         if (cameraHandler.isChestDetected()) {
