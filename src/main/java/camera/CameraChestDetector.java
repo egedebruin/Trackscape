@@ -87,6 +87,8 @@ public class CameraChestDetector extends CameraObjectDetector {
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
                 Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
+                Mat cols = frame.colRange((int) rect.tl().x, (int) rect.br().x);
+                Mat square = cols.rowRange((int) rect.tl().y, (int) rect.br().y);
                 isContourDrawn = true;
             }
         }

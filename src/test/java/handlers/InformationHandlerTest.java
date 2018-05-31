@@ -17,7 +17,7 @@ public class InformationHandlerTest {
     @Test
     void testConstructor() {
         InformationHandler handler = new InformationHandler();
-        assertNotNull(handler.getQueue());
+        assertNotNull(handler.getInfQueue());
     }
 
     /**
