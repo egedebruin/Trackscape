@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ChestTest {
 
     private static final long TARGETTIME = 120;
-    private Chest preceedingChest = new OpenedChest();
+    private Chest precedingChest = new OpenedChest();
 
     static {
         // These should be at the start of the application,
@@ -31,14 +31,14 @@ class ChestTest {
     void updateStatusTest() {
         Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
         assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
         assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
         chest.setApprovedChestFoundByHost(true);
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
     }
 
@@ -88,18 +88,24 @@ class ChestTest {
         assertEquals(chest.countSubsectionsCompleted(), 1);
     }
 
+    /**
+     * Tests is countsubsections works when only cheststate is opened.
+     */
     @Test
     void countSubsectionsCompletedOpenedChestTest() {
         Chest chest = new OpenedChest();
         assertEquals(chest.countSubsectionsCompleted(), 1);
     }
 
+    /**
+     * Tests if status gets updated to opened when it was to be opened.
+     */
     @Test
     void chestStateUpdateFromToBeOpenedToOpened() {
         Chest chest = new Chest(1, TARGETTIME);
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
         chest.subSectionCompleted();
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
 
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
     }
