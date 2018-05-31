@@ -8,7 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
-import java.awt.*;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class ProgressBar {
      * Create the items of the progress bar.
      */
     private void createItems() {
-        final int chests = 4;   // should retrieve number from handler
+        final int chests = 3;   // should retrieve number from handler
         final int steps = 3;    // should retrieve number from handler
 
         final int screenParts = 4;
@@ -122,7 +123,7 @@ public class ProgressBar {
      */
     private Label createChestLabel() {
         File chest = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\chest.png");
+            + "\\src\\main\\java\\gui\\images\\blackchest.png");
         Image chestImage = new Image(chest.toURI().toString());
 
         final double size = 1.4 * fittedWidth;
@@ -151,7 +152,8 @@ public class ProgressBar {
         Random random = new Random();
 
         File puzzle = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\puzzlepieces\\puzzle" + random.nextInt(puzzlePieces) + ".png");
+            + "\\src\\main\\java\\gui\\images\\puzzlepieces\\puzzle"
+            + random.nextInt(puzzlePieces) + ".png");
         Image puzzleImage = new Image(puzzle.toURI().toString());
 
         final double size = fittedWidth;
@@ -179,7 +181,12 @@ public class ProgressBar {
         for (int k = 0; k <= stage; k++) {
             progressBar.getChildren().get(k);
             progressBar.getChildren().get(k).getStyleClass().clear();
-            progressBar.getChildren().get(k).getStyleClass().add("progress-made");
+
+            if (progressBar.getChildren().get(k).getId() == "chest") {
+                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
+            } else {
+                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
+            }
             k++;
         }
     }

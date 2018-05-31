@@ -31,3 +31,11 @@
     -fx-background-color: lightgreen;
 }
 
+.progress-chest-made{
+    -fx-border-width: 3px;
+    -fx-border-radius: 80%;
+    -fx-border-color: orange;
+    -fx-background-radius: 80%;
+    -fx-background-color: gold;
+}
+
