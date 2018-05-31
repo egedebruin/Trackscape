@@ -45,10 +45,7 @@ public class JsonHandler {
     public List<String> getCameraLinks(final long roomId) {
         JSONObject room = getRoomById(roomId);
         List<String> cameras = new ArrayList<>();
-        JSONArray array = new JSONArray();
-        if (room != null) {
-            array = (JSONArray) room.get("cameras");
-        }
+        JSONArray array = (JSONArray) room.get("cameras");
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
             cameras.add((String) object.get("link"));
@@ -63,10 +60,7 @@ public class JsonHandler {
      */
     public int getAmountPeople(final long roomId) {
         JSONObject room = getRoomById(roomId);
-        long amount = 0;
-        if (room != null) {
-            amount = (long) room.get("people");
-        }
+        long amount = (long) room.get("people");
         return Math.toIntExact(amount);
     }
 
@@ -77,10 +71,7 @@ public class JsonHandler {
      */
     public int getTargetDuration(final long roomId) {
         JSONObject room = getRoomById(roomId);
-        long amount = 0;
-        if (room != null) {
-            amount = (long) room.get("targetDuration");
-        }
+        long amount = (long) room.get("targetDuration");
         return Math.toIntExact(amount);
     }
 
@@ -143,10 +134,7 @@ public class JsonHandler {
     public List<Chest> createChests(long roomId) {
         JSONObject room = getRoomById(roomId);
         List<Chest> chests = new ArrayList<>();
-        JSONArray array = new JSONArray();
-        if (room != null) {
-            array = (JSONArray) room.get("chests");
-        }
+        JSONArray array = (JSONArray) room.get("chests");
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
             int sections = Math.toIntExact((long) object.get("sections"));
