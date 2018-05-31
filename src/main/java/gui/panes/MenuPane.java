@@ -118,8 +118,12 @@ public class MenuPane {
             if (!controller.isVideoPlaying() && !controller.getConfigured()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Configuration File (JSon format)");
+                chooser.initialDirectoryProperty().bindBidirectional(lastKnownDirectoryProperty);
                 File file = chooser.showOpenDialog(primaryStage);
-                controller.configure(file.toString());
+                if (file != null) {
+                    controller.configure(file.toString());
+                    lastKnownDirectoryProperty.setValue(file.getParentFile());
+                }
                 setCameraStatus();
 
             }
