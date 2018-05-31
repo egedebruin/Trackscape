@@ -1,11 +1,18 @@
 package gui.controllers;
 
+import gui.Util;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.util.concurrent.TimeUnit;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.opencv.core.Mat;
 
 /**
  * Class for the TimeLogController, to control the time and log.
@@ -19,6 +26,7 @@ public class TimeLogController {
     //private long beginTime = -1;
     private InformationHandler informationHandler = new InformationHandler();
     private CameraHandler cameraHandler;
+    private ImageView imageView;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
@@ -37,7 +45,7 @@ public class TimeLogController {
     public void changeTime(final long elapsedTime) {
         if (cameraHandler.getBeginTime() != -1) {
             long time = elapsedTime - cameraHandler.getBeginTime();
-            timerLabel.setText(getTimeString(time));
+            timerLabel.setText(Util.getTimeString(time));
         }
     }
 
@@ -48,7 +56,7 @@ public class TimeLogController {
      */
     public void addInformation(final String text) {
         long elapsedTime = System.nanoTime() - cameraHandler.getBeginTime();
-        String newText = getTimeString(elapsedTime) + ": " + text;
+        String newText = Util.getTimeString(elapsedTime) + ": " + text;
         informationArea.appendText(newText + "\n");
     }
 
@@ -86,36 +94,6 @@ public class TimeLogController {
     public void unConfirm() {
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
-    }
-
-    /**
-     * Convert nano seconds to right time string.
-     *
-     * @param time Time in nano seconds.
-     * @return Correct time string.
-     */
-    public String getTimeString(final long time) {
-        final int sixtySeconds = 60;
-        final int nineSeconds = 9;
-
-        int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(time) % sixtySeconds;
-        int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(time) % sixtySeconds;
-        int hours = (int) TimeUnit.NANOSECONDS.toHours(time);
-
-        String sec = Integer.toString(seconds);
-        String min = Integer.toString(minutes);
-        String hr = Integer.toString(hours);
-
-        if (seconds <= nineSeconds) {
-            sec = "0" + seconds;
-        }
-        if (minutes <= nineSeconds) {
-            min = "0" + minutes;
-        }
-        if (hours <= nineSeconds) {
-            hr = "0" + hours;
-        }
-        return hr + ":" + min + ":" + sec;
     }
 
     /**
@@ -166,9 +144,13 @@ public class TimeLogController {
      * Process the frames depending on the changes in cameraHandler.
      */
     public void processFrame() {
-        if (cameraHandler.isChestDetected()) {
+        Mat mat = informationHandler.getMatrix();
+        if (mat != null) {
             approveButton.setVisible(true);
             notApproveButton.setVisible(true);
+            BufferedImage bufferedFrame = Util.matToBufferedImage(mat);
+            Image image = SwingFXUtils.toFXImage(bufferedFrame, null);
+            imageView.setImage(image);
         }
     }
 
@@ -179,5 +161,9 @@ public class TimeLogController {
     public void setCameraHandler(CameraHandler handler) {
         handler.setInformationHandler(informationHandler);
         this.cameraHandler = handler;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
     }
 }

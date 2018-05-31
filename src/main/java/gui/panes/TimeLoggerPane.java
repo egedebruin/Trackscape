@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.ImageView;
 
 /**
  * Class that creates the TimeLoggerPane for the VideoPane.
@@ -100,10 +101,13 @@ public class TimeLoggerPane {
         notApprove.setVisible(false);
         notApprove.setOnAction(event -> controller.getTimeLogController().unConfirm());
 
-        buttonPane.getChildren().addAll(approveButton, notApprove);
+        ImageView imageView = new ImageView();
+
+        buttonPane.getChildren().addAll(approveButton, notApprove, imageView);
 
         controller.getTimeLogController().setApproveButton(approveButton);
         controller.getTimeLogController().setNotApproveButton(notApprove);
+        controller.getTimeLogController().setImageView(imageView);
 
         return buttonPane;
     }

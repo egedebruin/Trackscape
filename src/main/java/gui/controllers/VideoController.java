@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import gui.Util;
 import handlers.CameraHandler;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -45,38 +46,12 @@ public class VideoController {
             closeStream();
         } else {
             for (int j = 0; j < frames.size(); j++) {
-                BufferedImage bufferedFrame = matToBufferedImage(frames.get(j));
+                BufferedImage bufferedFrame = Util.matToBufferedImage(frames.get(j));
                 processedFrames.add(SwingFXUtils.toFXImage(bufferedFrame, null));
             }
             closed = false;
         }
         return processedFrames;
-    }
-
-    /**
-     * Converts a Mat to a BufferedImage.
-     *
-     * @param videoMatImage The frame in Mat.
-     * @return The BufferedImage.
-     */
-    private BufferedImage matToBufferedImage(final Mat videoMatImage) {
-        int type;
-        if (videoMatImage.channels() == 1) {
-            type = BufferedImage.TYPE_BYTE_GRAY;
-        } else {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        }
-
-        int bufferSize = videoMatImage.channels()
-            * videoMatImage.cols() * videoMatImage.rows();
-        byte[] buffer = new byte[bufferSize];
-        videoMatImage.get(0, 0, buffer);
-        BufferedImage image = new BufferedImage(
-            videoMatImage.cols(), videoMatImage.rows(), type);
-        final byte[] targetPixels =
-            ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
-        return image;
     }
 
     /**

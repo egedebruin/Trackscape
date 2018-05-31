@@ -36,10 +36,10 @@ class CameraChestDetectorTest {
         ch.processFrames();
         while (ch.isChanged()) {
             ch.processFrames();
-            if (ch.isChestDetected()) {
-                isDetected = true;
-                break;
-            }
+//            if (ch) {
+//                isDetected = true;
+//                break;
+//            }
         }
 
         assertTrue(isDetected);
