@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import room.Room;
 
 /**
  * Test the Json handler class.
@@ -29,6 +30,7 @@ public class JsonHandlerTest {
      * Class variables.
      */
     private final String jsonFile = "files/example.json";
+    private final String emptyJsonFile = "files/empty.json";
     private final int jsonPeople = 5;
     private final int jsonChests = 3;
     private JsonHandler handler;
@@ -99,5 +101,29 @@ public class JsonHandlerTest {
     void incorrectFileNameTest() {
         handler = new JsonHandler("ajax");
         assertNull(handler.getJsonElement());
+    }
+
+    @Test
+    void createSingleRoomTest() {
+        handler = new JsonHandler(jsonFile);
+        Room room = handler.createSingleRoom();
+        assertNotNull(room);
+        assertEquals(jsonPeople, room.getNumberOfPeople());
+        assertEquals(jsonChests, room.getChestList().size());
+    }
+
+    @Test
+    void createSingleRoomEmptyTest() {
+        handler = new JsonHandler(emptyJsonFile);
+        Room room = handler.createSingleRoom();
+        assertNotNull(room);
+        assertEquals(0, room.getNumberOfPeople());
+        assertNull(room.getChestList());
+    }
+
+    @Test
+    void getAmountChestsTest() {
+        handler = new JsonHandler(jsonFile);
+        assertEquals(jsonChests, handler.getAmountChests(0));
     }
 }

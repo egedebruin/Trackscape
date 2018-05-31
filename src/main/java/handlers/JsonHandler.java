@@ -123,7 +123,7 @@ public class JsonHandler {
             List<Chest> chests = createChests(roomId);
             return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
         }
-        return new Room(0, 0, null, null, 0);
+        return new Room(0, 0, new ArrayList<>(), null, 0);
     }
 
     /**
