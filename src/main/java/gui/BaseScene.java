@@ -34,15 +34,6 @@ public abstract class BaseScene {
      * @return topPane
      */
     protected Pane createTopPane() {
-//        final int size = 100;
-//        Text text = new Text("TrackScape");
-//        text.setFont(Font.font("Edwardian Script ITC", size));
-//        text.setFill(Color.BLACK);
-//        text.setStroke(Color.LIGHTSLATEGREY);
-//        FlowPane textPane = new FlowPane();
-//        textPane.getChildren().add(text);
-//        textPane.setAlignment(Pos.CENTER);
-
         final int width = 150;
         File streamEnd = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\images\\trackscape.png");
