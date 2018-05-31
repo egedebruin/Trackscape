@@ -5,6 +5,16 @@
     -fx-background-image: url("././images/light.jpg");
 }
 
+.menu-bar{
+    -fx-background-image: url("././images/red.PNG");
+    -fx-font-style: bold;
+}
+
+.button{
+    -fx-border-color: black;
+    -fx-background-image: url("././images/red.PNG");
+}
+
 .progress-reset{
     -fx-border-width: 3px;
     -fx-border-radius: 80%;
