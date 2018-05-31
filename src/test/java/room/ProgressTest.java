@@ -4,12 +4,19 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Class for testing progress.
+ */
 class ProgressTest {
 
     private String testConfigFile = "files/testConfig.json";
-    private Chest preceedingChest = new OpenedChest();
+    private Chest precedingChest = new OpenedChest();
+    private static final int FIRSTCHESTNOOFSECTIONS = 21;
+    private static final int SECONDCHESTNOOFSECTIONS = 3;
+    private static final int COMBINEDNOOFSECTIONS = 24;
 
     static {
         // These should be at the start of the application,
@@ -21,21 +28,27 @@ class ProgressTest {
             + File.separator + "libs" + File.separator + "opencv_java341.dll");
     }
 
+    /**
+     * Tests calculate progress for only one chest.
+     */
     @Test
     void calculateProgress() {
         Progress progress = new Progress(testConfigFile);
         assertEquals(progress.calculateProgress(), 0);
         Chest chest  = progress.getRoom().getChestList().get(0);
 
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
         assertEquals(progress.calculateProgress(), 0);
         chest.subSectionCompleted();
         assertEquals(progress.calculateProgress(), 1);
         chest.setApprovedChestFoundByHost(true);
-        chest.updateStatus(preceedingChest);
-        assertEquals(progress.calculateProgress(), 21);
+        chest.updateStatus(precedingChest);
+        assertEquals(progress.calculateProgress(), FIRSTCHESTNOOFSECTIONS);
     }
 
+    /**
+     * Tests calculate progress for two chests.
+     */
     @Test
     void calculateProgressMultipleChests() {
         Progress progress = new Progress(testConfigFile);
@@ -48,17 +61,20 @@ class ProgressTest {
         chest2.subSectionCompleted();
         assertEquals(progress.calculateProgress(), 0);
         chest2.setApprovedChestFoundByHost(true);
-        assertEquals(progress.calculateProgress(), 3);
+        assertEquals(progress.calculateProgress(), SECONDCHESTNOOFSECTIONS);
 
-        chest.updateStatus(preceedingChest);
+        chest.updateStatus(precedingChest);
         chest.subSectionCompleted();
         chest.setApprovedChestFoundByHost(true);
-        chest.updateStatus(preceedingChest);
-        assertEquals(progress.calculateProgress(), 24);
+        chest.updateStatus(precedingChest);
+        assertEquals(progress.calculateProgress(), COMBINEDNOOFSECTIONS);
     }
 
+    /**
+     * Tests is calculate progress doesnt count to many subsections.
+     */
     @Test
-    void calculateProgresssingleSectionChest() {
+    void calculateProgressSingleSectionChest() {
         Progress progress = new Progress(testConfigFile);
         assertEquals(progress.calculateProgress(), 0);
         Chest chest  = progress.getRoom().getChestList().get(2);
@@ -71,7 +87,9 @@ class ProgressTest {
     }
 
 
-
+    /**
+     * Tests if getter for room returns a room when correctly initialized.
+     */
     @Test
     void getRoom() {
         Progress progress = new Progress(testConfigFile, 0);

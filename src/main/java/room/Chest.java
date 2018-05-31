@@ -53,13 +53,23 @@ public class Chest {
             chestState = Status.TO_BE_OPENED;
             beginOfSectionTimeInSec = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime());
             positionInFrame = new MatOfPoint();
-        } else if (chestState == Status.TO_BE_OPENED &&
-            (approvedChestFoundByHost || countSubsectionsCompleted() == numberOfSubSections)) {
+        } else if (chestState == Status.TO_BE_OPENED
+            && (approvedChestFoundByHost || countSubsectionsCompleted() == numberOfSubSections)) {
             chestState = Status.OPENED;
             timeFound = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()) - beginOfSectionTimeInSec;
         }
     }
 
+    /**
+     * Method to update a status of a chest when the preceding chest is opened.
+     *
+     * when preceding chest is opened, status can switch
+     * from:           to:
+     * Waiting         To_Be_Opened
+     * To_be_Opened    Opened
+     *
+     * @param previousChest preceding chest
+     */
     public void updateStatus(Chest previousChest) {
         if (previousChest.getChestState() == Status.OPENED) {
             updateStatus();

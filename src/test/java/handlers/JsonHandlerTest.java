@@ -1,15 +1,15 @@
 package handlers;
 
+import org.junit.jupiter.api.Test;
+import room.Room;
+
+import java.io.File;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-
-import java.io.File;
-import java.util.List;
-import org.junit.jupiter.api.Test;
-import room.Room;
 
 /**
  * Test the Json handler class.
@@ -103,6 +103,9 @@ public class JsonHandlerTest {
         assertNull(handler.getJsonElement());
     }
 
+    /**
+     * Tests if a single room is correctly created when createsingleroom is called.
+     */
     @Test
     void createSingleRoomTest() {
         handler = new JsonHandler(jsonFile);
@@ -112,6 +115,9 @@ public class JsonHandlerTest {
         assertEquals(jsonChests, room.getChestList().size());
     }
 
+    /**
+     * Tests if a generic room is returned whenever jsonfile is wrong.
+     */
     @Test
     void createSingleRoomEmptyTest() {
         handler = new JsonHandler(emptyJsonFile);
@@ -121,6 +127,9 @@ public class JsonHandlerTest {
         assertNull(room.getChestList());
     }
 
+    /**
+     * Tests if the correct amount of chests are returned when getAmountChests(roomid) is called.
+     */
     @Test
     void getAmountChestsTest() {
         handler = new JsonHandler(jsonFile);
