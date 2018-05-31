@@ -16,7 +16,7 @@ public class TimeLogController {
     private TextArea informationArea;
     private Button approveButton;
     private Button notApproveButton;
-    private long beginTime = -1;
+    //private long beginTime = -1;
     private InformationHandler informationHandler = new InformationHandler();
     private CameraHandler cameraHandler;
 
@@ -35,8 +35,8 @@ public class TimeLogController {
      * @param elapsedTime the elapsed time
      */
     public void changeTime(final long elapsedTime) {
-        if (beginTime != -1) {
-            long time = elapsedTime - beginTime;
+        if (cameraHandler.getBeginTime() != -1) {
+            long time = elapsedTime - cameraHandler.getBeginTime();
             timerLabel.setText(getTimeString(time));
         }
     }
@@ -47,7 +47,7 @@ public class TimeLogController {
      * @param text The text to add.
      */
     public void addInformation(final String text) {
-        long elapsedTime = System.nanoTime() - beginTime;
+        long elapsedTime = System.nanoTime() - cameraHandler.getBeginTime();
         String newText = getTimeString(elapsedTime) + ": " + text;
         informationArea.appendText(newText + "\n");
     }
@@ -62,7 +62,7 @@ public class TimeLogController {
      * Check if there is information to be shown.
      */
     public void checkInformation() {
-        if (beginTime != -1) {
+        if (cameraHandler.getBeginTime() != -1) {
             String log = informationHandler.getInformation();
 
             if (!log.equals("empty")) {
@@ -122,7 +122,6 @@ public class TimeLogController {
      * Close this controller when the stream is closed.
      */
     public void closeController() {
-        beginTime = -1;
         timerLabel.setText("00:00:00");
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
@@ -167,9 +166,6 @@ public class TimeLogController {
      * Process the frames depending on the changes in cameraHandler.
      */
     public void processFrame() {
-        if (cameraHandler.isActive() && beginTime == -1) {
-            beginTime = System.nanoTime();
-        }
         if (cameraHandler.isChestDetected()) {
             approveButton.setVisible(true);
             notApproveButton.setVisible(true);

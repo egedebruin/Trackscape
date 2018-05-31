@@ -20,8 +20,8 @@ public class CameraHandler {
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
-    private boolean active = false;
     private List<Boolean> chestDetected = new ArrayList<>();
+    private long beginTime = -1;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -105,8 +105,8 @@ public class CameraHandler {
         activity.divideFrame(newFrame);
 
         activity.addActivities(newFrame, camera.getFrameCounter());
-        if (activity.getLastActivity() > 2) {
-            active = true;
+        if (activity.getLastActivity() > 2 && beginTime == -1) {
+            beginTime = System.nanoTime();
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
@@ -144,7 +144,7 @@ public class CameraHandler {
      */
     public void closeHandler() {
         clearLists();
-        active = false;
+        beginTime = -1;
     }
 
     /**
@@ -158,27 +158,11 @@ public class CameraHandler {
     }
 
     /**
-     * Returns if there is activity in these cameras.
-     * @return True if there is activity, false otherwise.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
      * Loop through the isChestdetected arraylist to check if there is at least 1 chest detected.
      * @return true if there is at least 1 chest detected, false otherwise
      */
     public boolean isChestDetected() {
         return chestDetected.contains(true);
-    }
-
-    /**
-     * Set the active variable to true or false.
-     * @param newActive the new value for active.
-     */
-    public void setActive(final boolean newActive) {
-        this.active = newActive;
     }
 
     /**
@@ -208,5 +192,13 @@ public class CameraHandler {
      */
     public void setInformationHandler(InformationHandler handler) {
         this.informationHandler = handler;
+    }
+
+    /**
+     * Get the begin time of the current CameraHandler.
+     * @return The begin time in nano seconds.
+     */
+    public long getBeginTime() {
+        return beginTime;
     }
 }
