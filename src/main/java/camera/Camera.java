@@ -145,4 +145,12 @@ public class Camera {
     public CameraActivity getActivity() {
         return activity;
     }
+
+    /**
+     * Get the link of the camera.
+     * @return The link as a String.
+     */
+    public String getLink() {
+        return link;
+    }
 }

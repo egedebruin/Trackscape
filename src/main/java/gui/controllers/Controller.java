@@ -113,6 +113,11 @@ public class Controller {
      */
     public void configure(final String jsonHandler) {
         roomController = new RoomController(jsonHandler);
+
+        for (int i = 0; i < cameraHandler.listSize(); i++) {
+            roomController.getCameraHandler().addCamera(cameraHandler.getCamera(i).getLink());
+        }
+
         cameraHandler = roomController.getCameraHandler();
         timeLogController.setCameraHandler(cameraHandler);
         videoController.setCameraHandler(cameraHandler);
