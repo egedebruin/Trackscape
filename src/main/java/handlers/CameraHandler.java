@@ -113,11 +113,12 @@ public class CameraHandler {
 
         final int firstDetection = 100;
         if (camera.getFrameCounter() > firstDetection) {
-            // Put true or false in the chestdetected arraylist on index cameraindex depending
-            // on whether a chest is detected or not.
-            if (chestDetected.size() > cameraList.indexOf(camera)) {
-                chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
-                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+            List<Mat> mats = cameraChestDetector.
+                checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
+            boolean chestFound = mats.size() > 0;
+            chestDetected.set(cameraList.indexOf(camera), chestFound);
+            for (Mat mat : mats) {
+                informationHandler.addMatrix(mat);
             }
         }
     }
