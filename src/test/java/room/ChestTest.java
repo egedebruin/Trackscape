@@ -75,4 +75,10 @@ class ChestTest {
         chest.subSectionCompleted();
         assertEquals(chest.countSubsectionsCompleted(), 1);
     }
+
+    @Test
+    void countSubsectionsCompletedOpenedChestTest() {
+        Chest chest = new OpenedChest();
+        assertEquals(chest.countSubsectionsCompleted(), 1);
+    }
 }
