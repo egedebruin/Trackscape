@@ -79,9 +79,7 @@ public class Controller {
                 if (videoController.isClosed()) {
                     closeStream();
                 }
-                timeLogController.processFrame();
-                timeLogController.changeTime(now);
-                timeLogController.checkInformation();
+                timeLogController.processFrame(now);
             }
         };
         timeLogController.clearInformationArea();

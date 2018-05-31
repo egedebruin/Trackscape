@@ -16,7 +16,6 @@ public class TimeLogController {
     private TextArea informationArea;
     private Button approveButton;
     private Button notApproveButton;
-    //private long beginTime = -1;
     private InformationHandler informationHandler = new InformationHandler();
     private CameraHandler cameraHandler;
 
@@ -165,11 +164,13 @@ public class TimeLogController {
     /**
      * Process the frames depending on the changes in cameraHandler.
      */
-    public void processFrame() {
+    public void processFrame(long now) {
         if (cameraHandler.isChestDetected()) {
             approveButton.setVisible(true);
             notApproveButton.setVisible(true);
         }
+        changeTime(now);
+        checkInformation();
     }
 
     /**
