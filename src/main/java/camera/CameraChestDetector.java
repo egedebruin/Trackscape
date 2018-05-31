@@ -86,10 +86,15 @@ public class CameraChestDetector extends CameraObjectDetector {
         }
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
-                Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
-                Mat cols = frame.colRange((int) rect.tl().x, (int) rect.br().x);
-                Mat square = cols.rowRange((int) rect.tl().y, (int) rect.br().y);
+                final int growth = 30;
+                int minCol = Math.max(0, (int) rect.tl().x - growth);
+                int maxCol = Math.min(frame.cols(), (int) rect.br().x + growth);
+                int minRow = Math.max(0, (int) rect.tl().y - growth);
+                int maxRow = Math.min(frame.rows(), (int) rect.br().y + growth);
+                Mat cols = frame.clone().colRange(minCol, maxCol);
+                Mat square = cols.rowRange(minRow, maxRow);
                 mats.add(square);
+                Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
             }
         }
         return mats;
