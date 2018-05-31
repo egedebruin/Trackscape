@@ -16,7 +16,7 @@ public class RoomController {
      * @param configFile The configfile for this room.
      */
     public RoomController(String configFile) {
-        progress = new Progress(configFile, 0);
+        progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
     }
 
