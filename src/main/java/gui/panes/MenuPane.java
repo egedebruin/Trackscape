@@ -29,9 +29,6 @@ public class MenuPane {
     /**
      * Class parameters.
      */
-    private String theStreamString = "rtsp://192.168.0.117:554/"
-            + "user=admin&password=&channel=1&stream=1"
-            + ".sdp?real_stream--rtp-caching=100";
     private MediaPane mediaPane;
     private Label cameraStatus;
     private Controller controller;
@@ -71,8 +68,7 @@ public class MenuPane {
         Menu configManual = new Menu("Manual Configuration");
         MenuItem openVideo = new MenuItem("Add Video File...");
         MenuItem connectStream = new MenuItem("Add Stream...");
-        MenuItem theStream = new MenuItem("Add THE Stream");
-        configManual.getItems().addAll(openVideo, connectStream, theStream);
+        configManual.getItems().addAll(openVideo, connectStream);
 
         // Add al submenus to main menu bar
         MenuBar menu = new MenuBar();
@@ -88,7 +84,6 @@ public class MenuPane {
         standardConfig(standardFile);
         openVideo(openVideo, primaryStage);
         connectStream(connectStream, primaryStage);
-        theStream(theStream);
 
         return menuPane;
     }
@@ -218,21 +213,6 @@ public class MenuPane {
                 Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
                 streamStage.setScene(popUp);
                 streamStage.show();
-            }
-        });
-    }
-
-    /**
-     * theStream.
-     * Enables easy access to our  stream
-     * @param theStream menuItem
-     */
-    private void theStream(final MenuItem theStream) {
-        theStream.setOnAction((ActionEvent t)
-                -> {
-            if (!controller.isVideoPlaying()) {
-                controller.createTheStream(theStreamString);
-                setCameraStatus();
             }
         });
     }

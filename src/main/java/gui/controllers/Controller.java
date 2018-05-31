@@ -48,15 +48,6 @@ public class Controller {
     }
 
     /**
-     * Method to initialize a connection with our active camera(stream).
-     *
-     * @param streamUrl THE url
-     */
-    public void createTheStream(final String streamUrl) {
-        cameraHandler.addCamera(streamUrl);
-    }
-
-    /**
      * Method to initialize a connection with a video.
      *
      * @param file the video file
