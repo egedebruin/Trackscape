@@ -43,16 +43,21 @@ public class VideoPane {
     public Pane createVideoPane(final Stage primaryStage) {
         BorderPane videoPane = new BorderPane();
 
-        // put menubar at the top of the pane
+        // Create the pane that will be in the center of the videopane
+        BorderPane mediaPlayer = new BorderPane();
+        mediaPlayer.setCenter(mediaPane.createImageViewerPane());
+        mediaPlayer.setBottom(mediaBar.createMediaBar());
+
+        // put menubar at the top of the videopane
         videoPane.setTop(menuPane.createMenuPane(videoPane, primaryStage));
-        // put the imageviews in the center of the pane
-        videoPane.setCenter(mediaPane.createImageViewerPane());
-        // put the timelogger in the left of the pane
+        // put the imageviews & mediabar in the center of the videopane
+        videoPane.setCenter(mediaPlayer);
+        // put the timelogger in the left of the videopane
         videoPane.setLeft(timeLoggerPane.createTimeLoggerPane());
-        // put the escape room status in the right of the pane
+        // put the escape room status in the right of the videopane
         videoPane.setRight(new FlowPane()); // escape room status will be displayed here
-        // put the mediabar and progressbar in the bottom of the pane
-        videoPane.setBottom(mediaBar.createMediaBar());
+        // put the mediabar and progressbar in the bottom of the videopane
+        videoPane.setBottom(progressBar.createProgressBarPane());
 
         return videoPane;
     }

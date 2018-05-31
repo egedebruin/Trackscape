@@ -20,8 +20,8 @@ public class ProgressBar {
      * Class parameters.
      */
     private Controller controller;
-    private GridPane progressBar = new GridPane();
-    private List<Label> progressStages = new ArrayList<>();
+    private GridPane progressBar;
+    private List<Label> progressStages;
 
     /**
      * Constructor for ProgressBar.
@@ -32,10 +32,10 @@ public class ProgressBar {
     }
 
     /**
-     * Creates the bottom pane for the videoPane with mediaBar and progressBar.
-     * @return VBox with buttons and progressbar
+     * Creates the progressBarPane.
+     * @return Pane with progressbar
      */
-    public Pane createMediaAndProgressBar() {
+    public Pane createProgressBarPane() {
         progressBar = createProgressBar();
         setItemsOnDone();
         return progressBar;
@@ -46,27 +46,13 @@ public class ProgressBar {
      * @return progressBar
      */
     private GridPane createProgressBar() {
-        final int chests = 3;
-        final int steps = 1;
+        createItems();
 
-        // Add chests and their puzzle steps to the list
-        for (int i = 1; i <= chests; i++) {
-            for (int j = 1; j <= steps; j++) {
-                progressStages.add(createPuzzleLabel());
-            }
-            progressStages.add(createChestLabel());
-        }
-
-        // Add stylesheet
-        for (int m = 0; m < progressStages.size(); m++) {
-            progressStages.get(m).getStyleClass().add("progress-bar");
-        }
-
+        progressBar = new GridPane();
         progressBar.setAlignment(Pos.CENTER);
 
         int spot = 0;
         for (int k = 0; k < progressStages.size(); k++) {
-            progressStages.get(k).setId("item");
             progressBar.add(progressStages.get(k), spot, 0);
             spot = spot + 1;
             if (k != progressStages.size() - 1) {
@@ -76,6 +62,29 @@ public class ProgressBar {
         }
 
         return progressBar;
+    }
+
+    /**
+     * Create the items of the progress bar.
+     */
+    private void createItems() {
+        final int chests = 3;   // should retrieve number from handler
+        final int steps = 1;    // should retrieve number from handler
+
+        progressStages = new ArrayList<>();
+
+        // Add chests and their puzzle steps to the list
+        for (int i = 0; i < chests; i++) {
+            for (int j = 0; j < steps; j++) {
+                progressStages.add(createPuzzleLabel());
+            }
+            progressStages.add(createChestLabel());
+        }
+
+        // Add initial stylesheet
+        for (int m = 0; m < progressStages.size(); m++) {
+            progressStages.get(m).getStyleClass().add("progress-bar");
+        }
     }
 
     /**
@@ -95,6 +104,7 @@ public class ProgressBar {
         Label lineLabel = new Label();
         lineLabel.setGraphic(iv);
 
+        lineLabel.setId("line");
         return lineLabel;
     }
 
@@ -120,6 +130,7 @@ public class ProgressBar {
         chestLabel.setMinWidth(circleSize);
         chestLabel.setAlignment(Pos.CENTER);
 
+        chestLabel.setId("chest");
         return chestLabel;
     }
 
@@ -145,17 +156,32 @@ public class ProgressBar {
         puzzleLabel.setMinHeight(circleSize);
         puzzleLabel.setMinWidth(circleSize);
 
+        puzzleLabel.setId("puzzle");
         return puzzleLabel;
     }
 
     /**
      * Fills the progressbar up to the current stage.
-     * @param stage the current progress stage where the game is at
+     * @param stage the current progress stage of the game
      */
     private void fillProgress(final int stage) {
-        for (int k = 0; k < stage; k++) {
-            progressStages.get(k).getStyleClass().clear();
-            progressStages.get(k).getStyleClass().add("progress-bar-done");
+        for (int k = 0; k <= stage; k++) {
+            progressBar.getChildren().get(k);
+            progressBar.getChildren().get(k).getStyleClass().clear();
+            progressBar.getChildren().get(k).getStyleClass().add("progress-bar-done");
+            k++;
+        }
+    }
+
+    /**
+     * Resets the progressbar to the current stage.
+     * @param stage the current progress stage of the game
+     */
+    private void resetProgress(final int stage) {
+        for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
+            progressBar.getChildren().get(k).getStyleClass().clear();
+            progressBar.getChildren().get(k).getStyleClass().add("progress-bar");
+            k++;
         }
     }
 
@@ -164,18 +190,16 @@ public class ProgressBar {
      */
     private void setItemsOnDone() {
         progressBar.getChildren().forEach(item -> {
-            item.setOnMouseClicked(event -> {
-                if (item.getId() == "item") {
-                    if (item.getStyleClass().toString() == "progress-bar") {
-                        item.getStyleClass().clear();
-                        item.getStyleClass().add("progress-bar-done");
-                    } else {
-                        item.getStyleClass().clear();
-                        item.getStyleClass().add("progress-bar");
+                item.setOnMouseClicked(event -> {
+                    if (item.getId() != "line") {
+                        if (item.getStyleClass().toString() == "progress-bar") {
+                            fillProgress(progressBar.getChildren().indexOf(item));
+                        } else {
+                            resetProgress(progressBar.getChildren().indexOf(item));
+                        }
                     }
-                }
+                });
             });
-        });
     }
 
     /**
@@ -183,7 +207,6 @@ public class ProgressBar {
      */
     private void closeProgressBar() {
         progressBar.getChildren().clear();
-        progressBar.setVisible(false);
     }
 
 }
