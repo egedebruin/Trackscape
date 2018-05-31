@@ -7,12 +7,13 @@
 
 .menu-bar{
     -fx-background-image: url("././images/red.PNG");
-    -fx-font-style: bold;
+    -fx-font-size: 15pt;
+    -fx-font-weight: bold;
 }
 
 .button{
-    -fx-border-color: black;
-    -fx-background-image: url("././images/red.PNG");
+    -fx-border: none;
+    -fx-background-color: transparent;
 }
 
 .progress-reset{

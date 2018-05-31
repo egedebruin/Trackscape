@@ -45,7 +45,7 @@ public abstract class BaseScene {
 
         final int width = 150;
         File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\trackscape2.png");
+            + "\\src\\main\\java\\gui\\images\\trackscape.png");
         Image trackscape = new Image(streamEnd.toURI().toString());
         ImageView logo = new ImageView();
         logo.setFitWidth(width);

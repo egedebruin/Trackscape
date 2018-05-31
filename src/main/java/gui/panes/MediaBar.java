@@ -22,6 +22,7 @@ public class MediaBar {
     private Controller controller;
     private MenuPane menuPane;
     private MediaPane mediaPane;
+    private final int buttonWidth = 70;
 
     /**
      * Constructor for MediaBar.
@@ -43,9 +44,9 @@ public class MediaBar {
     public HBox createMediaBar() {
         final int top = 5;
         final int right = 10;
-        final int bottom = 5;
+        final int bottom = 25;
         final int left = 10;
-        final int spacing = 10;
+        final int spacing = 0;
 
         // Create mediabar for video options
         HBox mediaBar = new HBox();
@@ -53,8 +54,9 @@ public class MediaBar {
         mediaBar.setPadding(new Insets(top, right, bottom, left));
         mediaBar.setSpacing(spacing);
 
-        // Create the play/pauze button
-        final Button playButton = new Button("Start Cameras");
+        // Create the play button
+        final Button playButton = new Button();
+        playButton.setGraphic(createPlayImage());
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
                 mediaPane.showCameraIcon();
@@ -65,7 +67,9 @@ public class MediaBar {
             }
         });
 
-        final Button closeStream = new Button("Close Stream");
+        // Create the stop button
+        final Button closeStream = new Button();
+        closeStream.setGraphic(createStopImage());
         closeStream.setOnAction(event -> menuPane.endStream());
 
         mediaBar.getChildren().addAll(playButton, closeStream);
@@ -97,5 +101,35 @@ public class MediaBar {
             imageViews.get(i).setCache(false);
         }
         mediaPane.getMediaPlayerPane().getChildren().addAll(imageViews);
+    }
+
+    /**
+     * Create the imageView for the play logo.
+     * @return playLogo
+     */
+    private ImageView createPlayImage() {
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\play.png");
+        Image play = new Image(streamEnd.toURI().toString());
+        ImageView playLogo = new ImageView();
+        playLogo.setFitWidth(buttonWidth);
+        playLogo.setPreserveRatio(true);
+        playLogo.setImage(play);
+        return playLogo;
+    }
+
+    /**
+     * Create the imageView for the play logo.
+     * @return playLogo
+     */
+    private ImageView createStopImage() {
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\stop.png");
+        Image stop = new Image(streamEnd.toURI().toString());
+        ImageView stopLogo = new ImageView();
+        stopLogo.setFitWidth(buttonWidth);
+        stopLogo.setPreserveRatio(true);
+        stopLogo.setImage(stop);
+        return stopLogo;
     }
 }

@@ -179,7 +179,8 @@ public class ProgressBar {
      */
     private void resetProgress(final int stage) {
         if (stage == 0
-            && progressBar.getChildren().get(2).getStyleClass().toString().contains("progress-reset")) {
+            && progressBar.getChildren().get(2)
+            .getStyleClass().toString().contains("progress-reset")) {
             progressBar.getChildren().get(stage).getStyleClass().clear();
             progressBar.getChildren().get(stage).getStyleClass().add("progress-reset");
         }
