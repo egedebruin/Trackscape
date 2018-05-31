@@ -21,6 +21,16 @@ public class Progress {
     }
 
     /**
+     * Constructor.
+     * @param configfile configuration file where the room,
+     *                   for which progress needs to be computed, is held in.
+     */
+    public Progress(String configfile) {
+        room = new JsonHandler(configfile).createSingleRoom();
+        subSectionCount = 0;
+    }
+
+    /**
      * Calculate the progress by checking each Chest.
      * For each opened chest the total number of subsections is added to the total.
      * For each to be opened chest the total amount of completed subsections get added to the total.

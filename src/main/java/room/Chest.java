@@ -53,7 +53,8 @@ public class Chest {
             chestState = Status.TO_BE_OPENED;
             beginOfSectionTimeInSec = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime());
             positionInFrame = new MatOfPoint();
-        } else if (chestState == Status.TO_BE_OPENED && approvedChestFoundByHost) {
+        } else if (chestState == Status.TO_BE_OPENED &&
+            (approvedChestFoundByHost || countSubsectionsCompleted() == numberOfSubSections)) {
             chestState = Status.OPENED;
             timeFound = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()) - beginOfSectionTimeInSec;
         }

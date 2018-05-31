@@ -1,8 +1,9 @@
 package camera;
 
-import java.util.Objects;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+
+import java.util.Objects;
 
 /**
  * Class describing a camera.
@@ -31,7 +32,7 @@ public class Camera {
                   final int numOfChests) {
         this.videoCapture = newCapture;
         this.link = newLink;
-        this.numOfChestsInRoom = numOfChests;
+        this.numOfChestsInRoom = Math.max(DEFAULTNUMOFCHESTS, numOfChests);
     }
 
     /**
