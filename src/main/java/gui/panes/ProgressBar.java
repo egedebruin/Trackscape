@@ -8,11 +8,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class that creates a progress bar.
@@ -147,8 +147,11 @@ public class ProgressBar {
      * @return PuzzleImageView
      */
     private Label createPuzzleLabel() {
+        final int puzzlePieces = 8;
+        Random random = new Random();
+
         File puzzle = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\puzzle.png");
+            + "\\src\\main\\java\\gui\\images\\puzzlepieces\\puzzle" + random.nextInt(puzzlePieces) + ".png");
         Image puzzleImage = new Image(puzzle.toURI().toString());
 
         final double size = fittedWidth;
