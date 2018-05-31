@@ -20,16 +20,19 @@ public class MediaBar {
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private Controller controller;
-    private MenuMediaPane menuMediaPane;
+    private MenuPane menuPane;
+    private MediaPane mediaPane;
 
     /**
      * Constructor for MediaBar.
      * @param control the controller
-     * @param pane the menuMediaPane
+     * @param menu the menu
+     * @param media the mediaplayer
      */
-    public MediaBar(final Controller control, final MenuMediaPane pane) {
+    public MediaBar(final Controller control, final MenuPane menu, final MediaPane media) {
         this.controller = control;
-        this.menuMediaPane = pane;
+        this.menuPane = menu;
+        this.mediaPane = media;
     }
 
     /**
@@ -54,7 +57,7 @@ public class MediaBar {
         final Button playButton = new Button("Start Cameras");
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
-                menuMediaPane.getMediaPane().showCameraIcon();
+                mediaPane.showCameraIcon();
             } else if (!controller.isVideoPlaying()) {
                 controller.setVideoPlaying(true);
                 initializeImageViewers();
@@ -63,7 +66,7 @@ public class MediaBar {
         });
 
         final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> menuMediaPane.getMenuPane().endStream());
+        closeStream.setOnAction(event -> menuPane.endStream());
 
         mediaBar.getChildren().addAll(playButton, closeStream);
 
@@ -74,7 +77,7 @@ public class MediaBar {
      * Initializes the imageViews with a black image.
      */
     private void initializeImageViewers() {
-        menuMediaPane.getMediaPane().getMediaPlayerPane().getChildren().clear();
+        mediaPane.getMediaPlayerPane().getChildren().clear();
 
         imageViews.clear();
         for (int k = 0; k < controller.getCameras(); k++) {
@@ -93,6 +96,6 @@ public class MediaBar {
             imageViews.get(i).setSmooth(true);
             imageViews.get(i).setCache(false);
         }
-        menuMediaPane.getMediaPane().getMediaPlayerPane().getChildren().addAll(imageViews);
+        mediaPane.getMediaPlayerPane().getChildren().addAll(imageViews);
     }
 }
