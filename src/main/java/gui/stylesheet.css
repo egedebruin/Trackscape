@@ -12,7 +12,7 @@
     -fx-background-color: white;
 }
 
-.progress-bar{
+.progress-reset{
     -fx-border-width: 3px;
     -fx-border-radius: 80%;
     -fx-border-color: grey;
@@ -20,7 +20,7 @@
     -fx-background-color: lightgrey;
 }
 
-.progress-bar-done{
+.progress-made{
     -fx-border-width: 3px;
     -fx-border-radius: 80%;
     -fx-border-color: green;

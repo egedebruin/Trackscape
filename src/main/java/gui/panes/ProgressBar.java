@@ -83,7 +83,7 @@ public class ProgressBar {
 
         // Add initial stylesheet
         for (int m = 0; m < progressStages.size(); m++) {
-            progressStages.get(m).getStyleClass().add("progress-bar");
+            progressStages.get(m).getStyleClass().add("progress-reset");
         }
     }
 
@@ -168,7 +168,7 @@ public class ProgressBar {
         for (int k = 0; k <= stage; k++) {
             progressBar.getChildren().get(k);
             progressBar.getChildren().get(k).getStyleClass().clear();
-            progressBar.getChildren().get(k).getStyleClass().add("progress-bar-done");
+            progressBar.getChildren().get(k).getStyleClass().add("progress-made");
             k++;
         }
     }
@@ -180,7 +180,7 @@ public class ProgressBar {
     private void resetProgress(final int stage) {
         for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
-            progressBar.getChildren().get(k).getStyleClass().add("progress-bar");
+            progressBar.getChildren().get(k).getStyleClass().add("progress-reset");
             k++;
         }
     }
@@ -192,7 +192,7 @@ public class ProgressBar {
         progressBar.getChildren().forEach(item -> {
                 item.setOnMouseClicked(event -> {
                     if (item.getId() != "line") {
-                        if (item.getStyleClass().toString() == "progress-bar") {
+                        if (item.getStyleClass().toString().contains("progress-reset")) {
                             fillProgress(progressBar.getChildren().indexOf(item));
                         } else {
                             resetProgress(progressBar.getChildren().indexOf(item));
