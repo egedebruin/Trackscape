@@ -1,8 +1,8 @@
 package gui.panes;
 
 import gui.controllers.Controller;
+import java.io.File;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,8 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 /**
  * Class that creates the MenuPane for the VideoPane.
