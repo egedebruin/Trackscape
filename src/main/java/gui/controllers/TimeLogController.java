@@ -74,7 +74,7 @@ public class TimeLogController {
      * Turns the button invisible after it is clicked.
      */
     public void confirmedChest() {
-        addInformation("Found chest.");
+        addInformation("Found chest");
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
     }
@@ -163,6 +163,7 @@ public class TimeLogController {
 
     /**
      * Process the frames depending on the changes in cameraHandler.
+     * @param now The current time.
      */
     public void processFrame(long now) {
         if (cameraHandler.isChestDetected()) {
