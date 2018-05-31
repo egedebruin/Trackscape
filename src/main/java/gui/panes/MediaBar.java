@@ -3,6 +3,7 @@ package gui.panes;
 import gui.controllers.Controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,7 +55,10 @@ public class MediaBar {
         final Button playButton = new Button("Start Cameras");
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
-                menuMediaPane.getMediaPane().showCameraIcon();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Yo momma is fat");
+                alert.setContentText("There are no cameras to be shown!");
+                alert.showAndWait();
             } else if (!controller.isVideoPlaying()) {
                 controller.setVideoPlaying(true);
                 initializeImageViewers();
