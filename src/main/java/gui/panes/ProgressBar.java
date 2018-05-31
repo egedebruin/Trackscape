@@ -178,6 +178,11 @@ public class ProgressBar {
      * @param stage the current progress stage of the game
      */
     private void resetProgress(final int stage) {
+        if (stage == 0
+            && progressBar.getChildren().get(2).getStyleClass().toString().contains("progress-reset")) {
+            progressBar.getChildren().get(stage).getStyleClass().clear();
+            progressBar.getChildren().get(stage).getStyleClass().add("progress-reset");
+        }
         for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
             progressBar.getChildren().get(k).getStyleClass().add("progress-reset");
