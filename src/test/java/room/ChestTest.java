@@ -1,9 +1,8 @@
 package room;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for the Chest class.
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 class ChestTest {
 
     private static final long TARGETTIME = 120;
+    private Chest preceedingChest = new OpenedChest();
 
     /**
      * Test for the updateStatus method, every transition is tested.
@@ -19,14 +19,14 @@ class ChestTest {
     void updateStatusTest() {
         Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
-        chest.updateStatus();
+        chest.updateStatus(preceedingChest);
         assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
-        chest.updateStatus();
+        chest.updateStatus(preceedingChest);
         assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
         chest.setApprovedChestFoundByHost(true);
-        chest.updateStatus();
+        chest.updateStatus(preceedingChest);
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
-        chest.updateStatus();
+        chest.updateStatus(preceedingChest);
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
     }
 
