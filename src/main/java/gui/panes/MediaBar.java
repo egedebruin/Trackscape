@@ -22,18 +22,21 @@ public class MediaBar {
     private Controller controller;
     private MenuPane menuPane;
     private MediaPane mediaPane;
-    private final int buttonWidth = 70;
+    private ProgressBar progressBar;
 
     /**
      * Constructor for MediaBar.
      * @param control the controller
      * @param menu the menu
      * @param media the mediaplayer
+     * @param progress the progress bar
      */
-    public MediaBar(final Controller control, final MenuPane menu, final MediaPane media) {
+    public MediaBar(final Controller control, final MenuPane menu,
+                    final MediaPane media, final ProgressBar progress) {
         this.controller = control;
         this.menuPane = menu;
         this.mediaPane = media;
+        this.progressBar = progress;
     }
 
     /**
@@ -63,6 +66,7 @@ public class MediaBar {
             } else if (!controller.isVideoPlaying()) {
                 controller.setVideoPlaying(true);
                 initializeImageViewers();
+                initializeProgressBar();
                 controller.grabTimeFrame(imageViews);
             }
         });
@@ -74,7 +78,9 @@ public class MediaBar {
         // Create the stop button
         final Button closeStream = new Button();
         closeStream.setGraphic(createLogo("stop"));
-        closeStream.setOnAction(event -> menuPane.endStream());
+        closeStream.setOnAction(event -> {
+            menuPane.endStream();
+        });
         closeStream.setOnMouseEntered(event
             -> closeStream.setGraphic(createLogo("stopActive")));
         closeStream.setOnMouseExited(event
@@ -112,13 +118,22 @@ public class MediaBar {
     }
 
     /**
-     * Create the imageView for a button logo.
-     * @filename the name of the file
-     * @return logo
+     * Initialize the progressBar with current configuration.
      */
-    private ImageView createLogo(final String filename) {
+    private void initializeProgressBar() {
+        progressBar.getProgressBar().getChildren().clear();
+        progressBar.constructProgressBar();
+    }
+
+    /**
+     * Create the imageView for a button logo.
+     * @param fileName the name of the file
+     * @return ImageView of the logo
+     */
+    private ImageView createLogo(final String fileName) {
+        final int buttonWidth = 70;
         File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\" + filename + ".png");
+            + "\\src\\main\\java\\gui\\images\\" + fileName + ".png");
         Image img = new Image(streamEnd.toURI().toString());
         ImageView logo = new ImageView();
         logo.setFitWidth(buttonWidth);

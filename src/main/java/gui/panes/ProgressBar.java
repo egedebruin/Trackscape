@@ -32,24 +32,21 @@ public class ProgressBar {
     }
 
     /**
-     * Creates the progressBarPane.
-     * @return Pane with progressbar
+     * Create the progressBar.
+     * @return progressBar
      */
-    public Pane createProgressBarPane() {
-        progressBar = createProgressBar();
-        setItemsOnDone();
+    public GridPane createProgressBarPane() {
+        progressBar = new GridPane();
+        progressBar.setAlignment(Pos.CENTER);
         return progressBar;
     }
 
     /**
-     * Create HBox with progressbar.
+     * Construct and initialize progressbar.
      * @return progressBar
      */
-    private GridPane createProgressBar() {
+    public GridPane constructProgressBar() {
         createItems();
-
-        progressBar = new GridPane();
-        progressBar.setAlignment(Pos.CENTER);
 
         int spot = 0;
         for (int k = 0; k < progressStages.size(); k++) {
@@ -60,6 +57,8 @@ public class ProgressBar {
                 spot = spot + 1;
             }
         }
+
+        setItemsOnDone();
 
         return progressBar;
     }
@@ -211,8 +210,16 @@ public class ProgressBar {
     /**
      * Reset the progressBar when stream is closed.
      */
-    private void closeProgressBar() {
+    public void closeProgressBar() {
         progressBar.getChildren().clear();
+    }
+
+    /**
+     * Retrieves the progressBar.
+     * @return ProgressBar
+     */
+    public Pane getProgressBar() {
+        return progressBar;
     }
 
 }

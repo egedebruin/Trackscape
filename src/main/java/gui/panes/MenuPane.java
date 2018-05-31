@@ -34,6 +34,7 @@ public class MenuPane {
             + "user=admin&password=&channel=1&stream=1"
             + ".sdp?real_stream--rtp-caching=100";
     private MediaPane mediaPane;
+    private ProgressBar progressBar;
     private Label cameraStatus;
     private Controller controller;
     private static SimpleObjectProperty<File> lastKnownDirectoryProperty
@@ -43,10 +44,12 @@ public class MenuPane {
      * Constructor for MenuPane.
      * @param control the controller
      * @param pane the mediaPane
+     * @param progress the progressBar
      */
-    public MenuPane(final Controller control, final MediaPane pane) {
+    public MenuPane(final Controller control, final MediaPane pane, final ProgressBar progress) {
         this.controller = control;
         this.mediaPane = pane;
+        this.progressBar = progress;
     }
 
     /**
@@ -263,6 +266,7 @@ public class MenuPane {
         controller.closeStream();
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
+        progressBar.closeProgressBar();
     }
 
 }

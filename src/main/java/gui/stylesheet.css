@@ -8,7 +8,6 @@
 .menu-bar{
     -fx-background-image: url("././images/red.PNG");
     -fx-font-size: 15pt;
-    -fx-font-weight: bold;
 }
 
 .button{

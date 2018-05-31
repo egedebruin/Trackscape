@@ -27,9 +27,9 @@ public class VideoPane {
     public VideoPane(final Controller control) {
         this.controller = control;
         mediaPane = new MediaPane();
-        menuPane = new MenuPane(controller, mediaPane);
-        mediaBar = new MediaBar(controller, menuPane, mediaPane);
         progressBar = new ProgressBar(controller);
+        menuPane = new MenuPane(controller, mediaPane, progressBar);
+        mediaBar = new MediaBar(controller, menuPane, mediaPane, progressBar);
         timeLoggerPane = new TimeLoggerPane(controller);
     }
 
