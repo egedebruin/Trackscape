@@ -65,6 +65,17 @@ public class JsonHandler {
     }
 
     /**
+     * Get the target duration of the room.
+     * @param roomId The id of the room.
+     * @return The target duration of the room
+     */
+    public int getTargetDuration(final long roomId) {
+        JSONObject room = getRoomById(roomId);
+        long amount = (long) room.get("targetDuration");
+        return Math.toIntExact(amount);
+    }
+
+    /**
      * Get the Json element of a room.
      * @param roomId The id of the room.
      * @return The Json element of the room.
@@ -89,9 +100,10 @@ public class JsonHandler {
             JSONObject roomObject = (JSONObject) o;
             long roomId = (long) roomObject.get("roomId");
             int amountPeople = getAmountPeople(roomId);
+            int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
             List<Chest> chests = createChests(roomId);
-            Room room = new Room(roomId, amountPeople, cameraLinks, chests);
+            Room room = new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
             rooms.add(room);
         }
         return rooms;
@@ -106,11 +118,12 @@ public class JsonHandler {
             JSONObject roomObject = (JSONObject) jsonElement.get(0);
             long roomId = (long) roomObject.get("roomId");
             int amountPeople = getAmountPeople(roomId);
+            int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
             List<Chest> chests = createChests(roomId);
-            return new Room(roomId, amountPeople, cameraLinks, chests);
+            return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
         }
-        return new Room(0, 0, null, null);
+        return new Room(0, 0, null, null, 0);
     }
 
     /**

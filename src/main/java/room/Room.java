@@ -12,7 +12,7 @@ public class Room {
     private List<Chest> chestList;
     private CameraHandler cameraHandler;
     private int numberOfPeople;
-    private long startTime;
+    private long targetDurationInSec;
 
     /**
      * Constructor.
@@ -21,8 +21,10 @@ public class Room {
      * @param nOPeople  the number of people
      * @param cameraLinks the links for the cameras
      * @param chests a list of chests
+     * @param duration the target duration
      */
-    public Room(long roomid, int nOPeople, List<String> cameraLinks, List<Chest> chests) {
+    public Room(long roomid, int nOPeople, List<String> cameraLinks, List<Chest> chests,
+                int duration) {
         id = roomid;
         cameraHandler = new CameraHandler();
         numberOfPeople = nOPeople;
@@ -30,6 +32,7 @@ public class Room {
             cameraHandler.addCamera(link, chests.size());
         }
         chestList = chests;
+        targetDurationInSec = duration;
     }
 
     /**
@@ -97,18 +100,18 @@ public class Room {
     }
 
     /**
-     * Get startTime.
-     * @return startTime
+     * Get targetDuration in seconds.
+     * @return targetDuration
      */
-    public long getStartTime() {
-        return startTime;
+    public long getTargetDuration() {
+        return targetDurationInSec;
     }
 
     /**
-     * Set startTime.
+     * Set targetDuration in seconds.
      * @param startsTime the starting time
      */
-    public void setStartTime(long startsTime) {
-        this.startTime = startsTime;
+    public void setTargetDuration(long startsTime) {
+        this.targetDurationInSec = startsTime;
     }
 }
