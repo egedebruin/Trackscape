@@ -59,6 +59,7 @@ public class MediaBar {
 
         // Create the play button
         final Button playButton = new Button();
+        playButton.getStyleClass().add("media-buttons");
         playButton.setGraphic(createLogo("play"));
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
@@ -76,17 +77,18 @@ public class MediaBar {
             -> playButton.setGraphic(createLogo("play")));
 
         // Create the stop button
-        final Button closeStream = new Button();
-        closeStream.setGraphic(createLogo("stop"));
-        closeStream.setOnAction(event -> {
+        final Button stopButton = new Button();
+        stopButton.getStyleClass().add("media-buttons");
+        stopButton.setGraphic(createLogo("stop"));
+        stopButton.setOnAction(event -> {
             menuPane.endStream();
         });
-        closeStream.setOnMouseEntered(event
-            -> closeStream.setGraphic(createLogo("stopActive")));
-        closeStream.setOnMouseExited(event
-            -> closeStream.setGraphic(createLogo("stop")));
+        stopButton.setOnMouseEntered(event
+            -> stopButton.setGraphic(createLogo("stopActive")));
+        stopButton.setOnMouseExited(event
+            -> stopButton.setGraphic(createLogo("stop")));
 
-        mediaBar.getChildren().addAll(playButton, closeStream);
+        mediaBar.getChildren().addAll(playButton, stopButton);
 
         return mediaBar;
     }

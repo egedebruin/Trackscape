@@ -10,7 +10,7 @@
     -fx-font-size: 15pt;
 }
 
-.button{
+.media-buttons{
     -fx-border: none;
     -fx-background-color: transparent;
 }
