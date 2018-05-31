@@ -74,7 +74,7 @@ public class TimeLogController {
      * Turns the button invisible after it is clicked.
      */
     public void confirmedChest() {
-        addInformation("Found chest.");
+        addInformation("Found chest");
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
     }
