@@ -37,7 +37,7 @@
         "targetDuration": 30
       }
     ],
-    //This target duration is the total amount of time players get to escape the entire escape room
+    //This target duration is the total amount of time in seconds players get to escape the entire escape room
     "targetDuration": 500
   }
 ]
