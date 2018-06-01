@@ -32,18 +32,18 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param newFrame the frame that gets checked for the presence of boxes.
      * @param noOfChests the number of chests in the room.
      * @param subtraction the subtraction of this frame.
-     * @return List of Mats of chests.
+     * @return true if chest is detected, false otherwise.
      */
-    public List<Mat> checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
+    public boolean checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
-        List<Mat> mats = new ArrayList<>();
+        boolean isDetected = false;
         Core.bitwise_and(dest, subtraction, subtracted);
         detectChest(subtracted);
         if (isOpened) {
-            mats = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
+            isDetected = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
         }
-        return mats;
+        return isDetected;
     }
 
     /**
@@ -63,11 +63,11 @@ public class CameraChestDetector extends CameraObjectDetector {
      *                            but the boxes are already found.
      * @param noOfChests the number of chests in the room.
      *
-     * @return List of Mats of chests
+     * @return true iff a boundingbox is drawn.
      */
-    private List<Mat> includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
+    private boolean includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {
-        List<Mat> mats = new ArrayList<>();
+        boolean isContourDrawn = false;
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
@@ -86,13 +86,12 @@ public class CameraChestDetector extends CameraObjectDetector {
         }
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
-                Imgproc.rectangle(frame, rect.tl(), rect.br(), CHESTBOXCOLOUR, 2);
-                Mat cols = frame.colRange((int) rect.tl().x, (int) rect.br().x);
-                Mat square = cols.rowRange((int) rect.tl().y, (int) rect.br().y);
-                mats.add(square);
+                Rect cutoutChest = new Rect(rect.x - 5, rect.y - 5, rect.width + 10, rect.height + 10);
+                Imgproc.rectangle(frame, cutoutChest.tl(), cutoutChest.br(), CHESTBOXCOLOUR, 2);
+                isContourDrawn = true;
             }
         }
-        return mats;
+        return isContourDrawn;
     }
 
     /**
