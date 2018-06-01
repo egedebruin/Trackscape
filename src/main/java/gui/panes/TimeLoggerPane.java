@@ -102,6 +102,7 @@ public class TimeLoggerPane {
         notApprove.setOnAction(event -> controller.getTimeLogController().unConfirm());
 
         ImageView imageView = new ImageView();
+        imageView.setVisible(false);
 
         buttonPane.getChildren().addAll(approveButton, notApprove, imageView);
 

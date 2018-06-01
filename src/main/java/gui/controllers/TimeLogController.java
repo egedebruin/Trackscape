@@ -86,6 +86,7 @@ public class TimeLogController {
         addInformation("Found chest.");
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
+        imageView.setVisible(false);
     }
 
     /**
@@ -94,6 +95,7 @@ public class TimeLogController {
     public void unConfirm() {
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
+        imageView.setVisible(false);
     }
 
     /**
@@ -144,18 +146,21 @@ public class TimeLogController {
      * Process the frames depending on the changes in cameraHandler.
      */
     public void processFrame() {
-        Mat mat = informationHandler.getMatrix();
-        if (mat != null) {
-            approveButton.setVisible(true);
-            notApproveButton.setVisible(true);
-            BufferedImage bufferedFrame = Util.matToBufferedImage(mat);
+        if (!imageView.isVisible()) {
+            Mat mat = informationHandler.getMatrix();
+            if (mat != null) {
+                approveButton.setVisible(true);
+                notApproveButton.setVisible(true);
+                imageView.setVisible(true);
+                BufferedImage bufferedFrame = Util.matToBufferedImage(mat);
 
-            int newWidth = 300;
-            int newHeight = 200;
-            BufferedImage resizedSubFrame = resizeBImage(bufferedFrame, newWidth, newHeight);
-            Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
+                int newWidth = 300;
+                int newHeight = 200;
+                BufferedImage resizedSubFrame = resizeBImage(bufferedFrame, newWidth, newHeight);
+                Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
 
-            imageView.setImage(image);
+                imageView.setImage(image);
+            }
         }
     }
 
