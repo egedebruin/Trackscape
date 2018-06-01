@@ -46,6 +46,9 @@ public class JsonHandler {
         JSONObject room = getRoomById(roomId);
         List<String> cameras = new ArrayList<>();
         JSONArray array = (JSONArray) room.get("cameras");
+        if (array == null) {
+            return new ArrayList<>();
+        }
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
             cameras.add((String) object.get("link"));
@@ -60,7 +63,11 @@ public class JsonHandler {
      */
     public int getAmountPeople(final long roomId) {
         JSONObject room = getRoomById(roomId);
-        long amount = (long) room.get("people");
+        Object res = room.get("people");
+        if (res == null) {
+            return 0;
+        }
+        long amount = (long) res;
         return Math.toIntExact(amount);
     }
 
@@ -71,7 +78,11 @@ public class JsonHandler {
      */
     public int getTargetDuration(final long roomId) {
         JSONObject room = getRoomById(roomId);
-        long amount = (long) room.get("targetDuration");
+        Object res = room.get("targetDuration");
+        if (res == null) {
+            return 0;
+        }
+        long amount = (long) res;
         return Math.toIntExact(amount);
     }
 
@@ -123,7 +134,7 @@ public class JsonHandler {
             List<Chest> chests = createChests(roomId);
             return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
         }
-        return new Room(0, 0, null, null, 0);
+        return new Room(0, 0, new ArrayList<>(), null, 0);
     }
 
     /**
@@ -131,10 +142,13 @@ public class JsonHandler {
      * @param roomId The id of the room.
      * @return List of chests in the room.
      */
-    public List<Chest> createChests(long roomId) {
+    public List<Chest> createChests(final long roomId) {
         JSONObject room = getRoomById(roomId);
         List<Chest> chests = new ArrayList<>();
         JSONArray array = (JSONArray) room.get("chests");
+        if (array == null) {
+            return new ArrayList<>();
+        }
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
             int sections = Math.toIntExact((long) object.get("sections"));
@@ -158,7 +172,7 @@ public class JsonHandler {
      * @param roomid the id of the room where the amount of present chest is wanted
      * @return  the amount of chests in the room with id: roomid
      */
-    public int getAmountChests(int roomid) {
+    public int getAmountChests(final int roomid) {
         return createChests(roomid).size();
     }
 

@@ -1,6 +1,6 @@
 package gui;
 
-import gui.controllers.Controller;
+import gui.controllers.MainController;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,9 +26,9 @@ public class InputScene extends BaseScene {
      * Constructor.
      * @param ctrl the controller
      */
-    public InputScene(final Controller ctrl) {
+    public InputScene(final MainController ctrl) {
         super(ctrl);
-        this.monitorScene = new MonitorScene(getController());
+        this.monitorScene = new MonitorScene(getMainController());
     }
 
     /**
@@ -77,7 +77,7 @@ public class InputScene extends BaseScene {
         description.setTextAlignment(TextAlignment.CENTER);
 
         Button submit = new Button("Proceed");
-        submit.setOnAction(event -> getController().proceedToMonitorScene(
+        submit.setOnAction(event -> getMainController().proceedToMonitorScene(
             monitorScene, primaryStage, stylesheet));
         formPane.add(submit, 1, rowIndex, colspan, rowspan);
 

@@ -1,8 +1,9 @@
 package gui.panes;
 
-import gui.controllers.Controller;
+import gui.controllers.MainController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,16 +20,16 @@ public class MediaBar {
      * Class parameters.
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
-    private Controller controller;
+    private MainController mainController;
     private MenuMediaPane menuMediaPane;
 
     /**
      * Constructor for MediaBar.
-     * @param control the controller
+     * @param control the mainController
      * @param pane the menuMediaPane
      */
-    public MediaBar(final Controller control, final MenuMediaPane pane) {
-        this.controller = control;
+    public MediaBar(final MainController control, final MenuMediaPane pane) {
+        this.mainController = control;
         this.menuMediaPane = pane;
     }
 
@@ -53,12 +54,15 @@ public class MediaBar {
         // Create the play/pauze button
         final Button playButton = new Button("Start Cameras");
         playButton.setOnAction(event -> {
-            if (controller.getCameras() == 0) {
-                menuMediaPane.getMediaPane().showCameraIcon();
-            } else if (!controller.isVideoPlaying()) {
-                controller.setVideoPlaying(true);
+            if (mainController.getCameras() == 0) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Yo momma is fat");
+                alert.setContentText("There are no cameras to be shown!");
+                alert.showAndWait();
+            } else if (!mainController.isVideoPlaying()) {
+                mainController.setVideoPlaying(true);
                 initializeImageViewers();
-                controller.grabTimeFrame(imageViews);
+                mainController.grabTimeFrame(imageViews);
             }
         });
 
@@ -77,7 +81,7 @@ public class MediaBar {
         menuMediaPane.getMediaPane().getMediaPlayerPane().getChildren().clear();
 
         imageViews.clear();
-        for (int k = 0; k < controller.getCameras(); k++) {
+        for (int k = 0; k < mainController.getCameras(); k++) {
             imageViews.add(new ImageView());
         }
 

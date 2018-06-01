@@ -23,8 +23,8 @@ public class Room {
      * @param chests a list of chests
      * @param duration the target duration
      */
-    public Room(long roomid, int nOPeople, List<String> cameraLinks, List<Chest> chests,
-                int duration) {
+    public Room(final long roomid, final int nOPeople, final List<String> cameraLinks,
+                final List<Chest> chests, final int duration) {
         id = roomid;
         cameraHandler = new CameraHandler();
         numberOfPeople = nOPeople;
@@ -47,7 +47,7 @@ public class Room {
      * Set id.
      * @param ids the id
      */
-    public void setId(long ids) {
+    public void setId(final long ids) {
         this.id = ids;
     }
 
@@ -63,7 +63,7 @@ public class Room {
      * Set chestList.
      * @param chestsList the chestList
      */
-    public void setChestList(List<Chest> chestsList) {
+    public void setChestList(final List<Chest> chestsList) {
         this.chestList = chestsList;
     }
 
@@ -79,7 +79,7 @@ public class Room {
      * Set cameraHandler.
      * @param camerasHandler the camerahandler
      */
-    public void setCameraHandler(CameraHandler camerasHandler) {
+    public void setCameraHandler(final CameraHandler camerasHandler) {
         this.cameraHandler = camerasHandler;
     }
 
@@ -95,7 +95,7 @@ public class Room {
      * Set numberOfPeople.
      * @param numbersOfPeople the number of people
      */
-    public void setNumberOfPeople(int numbersOfPeople) {
+    public void setNumberOfPeople(final int numbersOfPeople) {
         this.numberOfPeople = numbersOfPeople;
     }
 
@@ -111,7 +111,7 @@ public class Room {
      * Set targetDuration in seconds.
      * @param startsTime the starting time
      */
-    public void setTargetDuration(long startsTime) {
+    public void setTargetDuration(final long startsTime) {
         this.targetDurationInSec = startsTime;
     }
 }

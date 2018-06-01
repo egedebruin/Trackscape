@@ -24,7 +24,7 @@ public class VideoController {
      * Constructor for the VideoController.
      * @param handler The CameraHandler.
      */
-    public VideoController(CameraHandler handler) {
+    public VideoController(final CameraHandler handler) {
         cameraHandler = handler;
     }
 
@@ -85,7 +85,7 @@ public class VideoController {
      * Set the cameraHandler.
      * @param handler The new CameraHandler.
      */
-    public void setCameraHandler(CameraHandler handler) {
+    public void setCameraHandler(final CameraHandler handler) {
         this.cameraHandler = handler;
     }
 }

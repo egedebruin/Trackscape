@@ -1,14 +1,15 @@
 package handlers;
 
+import org.junit.jupiter.api.Test;
+import room.Room;
+
+import java.io.File;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-
-import java.io.File;
-import java.util.List;
-import org.junit.jupiter.api.Test;
 
 /**
  * Test the Json handler class.
@@ -29,6 +30,7 @@ public class JsonHandlerTest {
      * Class variables.
      */
     private final String jsonFile = "files/example.json";
+    private final String emptyJsonFile = "files/empty.json";
     private final int jsonPeople = 5;
     private final int jsonChests = 3;
     private JsonHandler handler;
@@ -99,5 +101,38 @@ public class JsonHandlerTest {
     void incorrectFileNameTest() {
         handler = new JsonHandler("ajax");
         assertNull(handler.getJsonElement());
+    }
+
+    /**
+     * Tests if a single room is correctly created when createsingleroom is called.
+     */
+    @Test
+    void createSingleRoomTest() {
+        handler = new JsonHandler(jsonFile);
+        Room room = handler.createSingleRoom();
+        assertNotNull(room);
+        assertEquals(jsonPeople, room.getNumberOfPeople());
+        assertEquals(jsonChests, room.getChestList().size());
+    }
+
+    /**
+     * Tests if a generic room is returned whenever jsonfile is wrong.
+     */
+    @Test
+    void createSingleRoomEmptyTest() {
+        handler = new JsonHandler(emptyJsonFile);
+        Room room = handler.createSingleRoom();
+        assertNotNull(room);
+        assertEquals(0, room.getNumberOfPeople());
+        assertNull(room.getChestList());
+    }
+
+    /**
+     * Tests if the correct amount of chests are returned when getAmountChests(roomid) is called.
+     */
+    @Test
+    void getAmountChestsTest() {
+        handler = new JsonHandler(jsonFile);
+        assertEquals(jsonChests, handler.getAmountChests(0));
     }
 }

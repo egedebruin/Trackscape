@@ -23,7 +23,6 @@ public class TimeLogController {
     private TextArea informationArea;
     private Button approveButton;
     private Button notApproveButton;
-    //private long beginTime = -1;
     private InformationHandler informationHandler = new InformationHandler();
     private CameraHandler cameraHandler;
     private ImageView imageView;
@@ -32,7 +31,7 @@ public class TimeLogController {
      * Constructor for the TimeLogController, sets a new informationHandler.
      * @param handler The cameraHandler.
      */
-    public TimeLogController(CameraHandler handler) {
+    public TimeLogController(final CameraHandler handler) {
         cameraHandler = handler;
         cameraHandler.setInformationHandler(informationHandler);
     }
@@ -83,7 +82,7 @@ public class TimeLogController {
      * Turns the button invisible after it is clicked.
      */
     public void confirmedChest() {
-        addInformation("Found chest.");
+        addInformation("Found chest");
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
         imageView.setVisible(false);
@@ -144,8 +143,9 @@ public class TimeLogController {
 
     /**
      * Process the frames depending on the changes in cameraHandler.
+     * @param now The current time.
      */
-    public void processFrame() {
+    public void processFrame(final long now) {
         if (!imageView.isVisible()) {
             Mat mat = informationHandler.getMatrix();
             if (mat != null) {
@@ -162,6 +162,8 @@ public class TimeLogController {
                 imageView.setImage(image);
             }
         }
+        changeTime(now);
+        checkInformation();
     }
 
     public BufferedImage resizeBImage(BufferedImage bi, int newWidth, int newHeight) {
@@ -178,7 +180,7 @@ public class TimeLogController {
      * Set the cameraHandler with the right informationHandler.
      * @param handler The new cameraHandler.
      */
-    public void setCameraHandler(CameraHandler handler) {
+    public void setCameraHandler(final CameraHandler handler) {
         handler.setInformationHandler(informationHandler);
         this.cameraHandler = handler;
     }

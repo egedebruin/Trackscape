@@ -15,7 +15,7 @@ public class Progress {
      *                   for which progress needs to be computed, is held in.
      * @param roomid the id of the room.
      */
-    public Progress(String configfile, int roomid) {
+    public Progress(final String configfile, final int roomid) {
         room = new JsonHandler(configfile).createRooms().get(roomid);
         subSectionCount = 0;
     }
@@ -25,7 +25,7 @@ public class Progress {
      * @param configfile configuration file where the room,
      *                   for which progress needs to be computed, is held in.
      */
-    public Progress(String configfile) {
+    public Progress(final String configfile) {
         room = new JsonHandler(configfile).createSingleRoom();
         subSectionCount = 0;
     }

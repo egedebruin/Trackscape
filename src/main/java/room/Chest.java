@@ -33,7 +33,7 @@ public class Chest {
      *                            when peolpe take longer than this time they might enter a
      *                            critical stage.
      */
-    public Chest(int noSubsections, long targetTimeInSeconds) {
+    public Chest(final int noSubsections, final long targetTimeInSeconds) {
         numberOfSubSections = Math.max(noSubsections, 1);
         subsectionCompleted = new boolean[numberOfSubSections];
         targetDurationInSec = targetTimeInSeconds;
@@ -48,15 +48,31 @@ public class Chest {
      *                      To_be_Opened    Opened
      *
      */
-    public void updateStatus() {
+    private void updateStatus() {
         if (chestState == Status.WAITING_FOR_SECTION_TO_START) {
             chestState = Status.TO_BE_OPENED;
             beginOfSectionTimeInSec = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime());
             positionInFrame = new MatOfPoint();
-        } else if (chestState == Status.TO_BE_OPENED &&
-            (approvedChestFoundByHost || countSubsectionsCompleted() == numberOfSubSections)) {
+        } else if (chestState == Status.TO_BE_OPENED
+            && (approvedChestFoundByHost || countSubsectionsCompleted() == numberOfSubSections)) {
             chestState = Status.OPENED;
             timeFound = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()) - beginOfSectionTimeInSec;
+        }
+    }
+
+    /**
+     * Method to update a status of a chest when the preceding chest is opened.
+     *
+     * when preceding chest is opened, status can switch
+     * from:           to:
+     * Waiting         To_Be_Opened
+     * To_be_Opened    Opened
+     *
+     * @param previousChest preceding chest
+     */
+    public void updateStatus(final Chest previousChest) {
+        if (previousChest.getChestState() == Status.OPENED) {
+            updateStatus();
         }
     }
 
@@ -73,6 +89,11 @@ public class Chest {
      * @return the amount of subsections which are completed
      */
     public int countSubsectionsCompleted() {
+        // If the chest is opened all subsections are completed.
+        if (chestState == Status.OPENED) {
+            return numberOfSubSections;
+        }
+
         int count = 0;
         for (boolean subsection : subsectionCompleted) {
             if (subsection) {
@@ -95,8 +116,11 @@ public class Chest {
      * Setter for approvedChestFoundByHost.
      * @param isChestFound Whether the chest is found or not.
      */
-    public void setApprovedChestFoundByHost(boolean isChestFound) {
-        this.approvedChestFoundByHost = isChestFound;
+    public void setApprovedChestFoundByHost(final boolean isChestFound) {
+        if (isChestFound) {
+            this.approvedChestFoundByHost = isChestFound;
+            chestState = Status.OPENED;
+        }
     }
 
     /**

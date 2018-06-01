@@ -15,8 +15,8 @@ public class RoomController {
      * Constructor for RoomController, creates a new camerahandler depending on the config.
      * @param configFile The configfile for this room.
      */
-    public RoomController(String configFile) {
-        progress = new Progress(configFile, 0);
+    public RoomController(final String configFile) {
+        progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
     }
 

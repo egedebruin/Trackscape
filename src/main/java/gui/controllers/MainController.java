@@ -10,9 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
- * Controller class for controlling GUI elements.
+ * MainController class for controlling GUI elements.
  */
-public class Controller {
+public class MainController {
 
     /**
      * Class parameters.
@@ -28,7 +28,7 @@ public class Controller {
     /**
      * Constructor method.
      */
-    public Controller() {
+    public MainController() {
         cameraHandler = new CameraHandler();
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);
@@ -44,15 +44,6 @@ public class Controller {
     public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
-        cameraHandler.addCamera(streamUrl);
-    }
-
-    /**
-     * Method to initialize a connection with our active camera(stream).
-     *
-     * @param streamUrl THE url
-     */
-    public void createTheStream(final String streamUrl) {
         cameraHandler.addCamera(streamUrl);
     }
 
@@ -79,9 +70,7 @@ public class Controller {
                 if (videoController.isClosed()) {
                     closeStream();
                 }
-                timeLogController.processFrame();
-                timeLogController.changeTime(now);
-                timeLogController.checkInformation();
+                timeLogController.processFrame(now);
             }
         };
         timeLogController.clearInformationArea();
@@ -124,6 +113,11 @@ public class Controller {
      */
     public void configure(final String jsonHandler) {
         roomController = new RoomController(jsonHandler);
+
+        for (int i = 0; i < cameraHandler.listSize(); i++) {
+            roomController.getCameraHandler().addCamera(cameraHandler.getCamera(i).getLink());
+        }
+
         cameraHandler = roomController.getCameraHandler();
         timeLogController.setCameraHandler(cameraHandler);
         videoController.setCameraHandler(cameraHandler);

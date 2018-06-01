@@ -56,7 +56,7 @@ public class CameraHandler {
      * @return The new camera.
      */
     public Camera addCamera(final String link, final int chests) {
-        VideoCapture videoCapture = new VideoCapture(link);
+        VideoCapture videoCapture = new VideoCapture();
         boolean opened = videoCapture.open(link);
         if (!opened) {
             return null;
@@ -191,7 +191,7 @@ public class CameraHandler {
      * Set a new information handler.
      * @param handler The new information handler.
      */
-    public void setInformationHandler(InformationHandler handler) {
+    public void setInformationHandler(final InformationHandler handler) {
         this.informationHandler = handler;
     }
 
