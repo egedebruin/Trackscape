@@ -246,7 +246,6 @@ public class MenuPane {
         controller.closeStream();
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
-        progressBar.closeProgressBar();
     }
 
 }

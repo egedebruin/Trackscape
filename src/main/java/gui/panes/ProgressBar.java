@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.MainController;
+import gui.controllers.RoomController;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import room.Chest;
 
 /**
  * Class that creates a progress bar.
@@ -21,7 +22,7 @@ public class ProgressBar {
     /**
      * Class parameters.
      */
-    private MainController controller;
+    private RoomController controller;
     private GridPane progressBar;
     private List<Label> progressStages;
     private double fittedWidth;
@@ -30,7 +31,7 @@ public class ProgressBar {
      * Constructor for ProgressBar.
      * @param control the controller
      */
-    public ProgressBar(final MainController control) {
+    public ProgressBar(final RoomController control) {
         this.controller = control;
     }
 
@@ -61,7 +62,8 @@ public class ProgressBar {
             }
         }
 
-        setItemsOnDone();
+        controller.setProgressBar(progressBar);
+        controller.setItemsOnDone();
 
         return progressBar;
     }
@@ -70,20 +72,20 @@ public class ProgressBar {
      * Create the items of the progress bar.
      */
     private void createItems() {
-        final int chests = 3;   // should retrieve number from handler
-        final int steps = 3;    // should retrieve number from handler
+
+        List<Chest> chests = controller.getProgress().getRoom().getChestList();
 
         final int screenParts = 4;
         GraphicsDevice gd =
             GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int screenWidth = gd.getDisplayMode().getWidth();
-        fittedWidth = (screenWidth) / (screenParts * (chests + steps + (chests + steps - 1)));
-
+        fittedWidth = (screenWidth)
+            / (screenParts * (controller.getProgress().getTotalSections() - 1));
         progressStages = new ArrayList<>();
 
         // Add chests and their puzzle steps to the list
-        for (int i = 0; i < chests; i++) {
-            for (int j = 0; j < steps; j++) {
+        for (Chest chest : chests) {
+            for (int i = 1; i < chest.getNumberOfSubSections(); i++) {
                 progressStages.add(createPuzzleLabel());
             }
             progressStages.add(createChestLabel());
@@ -170,79 +172,6 @@ public class ProgressBar {
 
         puzzleLabel.setId("puzzle");
         return puzzleLabel;
-    }
-
-    /**
-     * Fills the progressbar up to the current stage.
-     * @param stage the current progress stage of the game
-     */
-    private void fillProgress(final int stage) {
-        for (int k = 0; k <= stage; k++) {
-            progressBar.getChildren().get(k);
-            progressBar.getChildren().get(k).getStyleClass().clear();
-
-            if (k == progressBar.getChildren().size() - 1) {
-                // Done! Last box is unlocked.
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            } else {
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            }
-            k++;
-        }
-    }
-
-    /**
-     * Resets the progressbar to the current stage.
-     * @param stage the current progress stage of the game
-     */
-    private void resetProgress(final int stage) {
-        if (stage == progressBar.getChildren().size() - 1) {
-            clearStyleSheet(stage);
-        }
-        if (stage < progressBar.getChildren().size() - 1) {
-            if (progressBar.getChildren().get(stage + 2)
-                .getStyleClass().toString().contains("progress-reset")) {
-                clearStyleSheet(stage);
-            } else {
-                for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
-                    clearStyleSheet(k);
-                    k++;
-                }
-            }
-        }
-    }
-
-    /**
-     * Clear the stylesheet of current stage item.
-     * @param stage the current stage item
-     */
-    private void clearStyleSheet(final int stage) {
-        progressBar.getChildren().get(stage).getStyleClass().clear();
-        progressBar.getChildren().get(stage).getStyleClass().add("progress-reset");
-    }
-
-    /**
-     * Let the host set items on done when the team has finished them.
-     */
-    private void setItemsOnDone() {
-        progressBar.getChildren().forEach(item -> {
-                item.setOnMouseClicked(event -> {
-                    if (item.getId() != "line") {
-                        if (item.getStyleClass().toString().contains("progress-reset")) {
-                            fillProgress(progressBar.getChildren().indexOf(item));
-                        } else {
-                            resetProgress(progressBar.getChildren().indexOf(item));
-                        }
-                    }
-                });
-            });
-    }
-
-    /**
-     * Reset the progressBar when stream is closed.
-     */
-    public void closeProgressBar() {
-        progressBar.getChildren().clear();
     }
 
     /**

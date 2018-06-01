@@ -71,7 +71,9 @@ public class MediaBar {
             } else if (!controller.isVideoPlaying()) {
                 controller.setVideoPlaying(true);
                 initializeImageViewers();
-                initializeProgressBar();
+                if (controller.getConfigured()) {
+                    initializeProgressBar();
+                }
                 controller.grabTimeFrame(imageViews);
             }
         });

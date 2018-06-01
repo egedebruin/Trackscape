@@ -32,6 +32,7 @@ public class MainController {
         cameraHandler = new CameraHandler();
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);
+        roomController = new RoomController();
     }
 
     /**
@@ -112,7 +113,7 @@ public class MainController {
      * @param jsonHandler the current jsonHandler
      */
     public void configure(final String jsonHandler) {
-        roomController = new RoomController(jsonHandler);
+        roomController.configure(jsonHandler);
 
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             roomController.getCameraHandler().addCamera(cameraHandler.getCamera(i).getLink());
@@ -162,5 +163,13 @@ public class MainController {
      */
     public TimeLogController getTimeLogController() {
         return timeLogController;
+    }
+
+    /**
+     * Get the RoomController.
+     * @return The RoomController
+     */
+    public RoomController getRoomController() {
+        return roomController;
     }
 }
