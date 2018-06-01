@@ -13,12 +13,14 @@ public class RoomController {
     private GridPane progressBar;
     private CameraHandler cameraHandler;
 
+    /**
+     * Constructor.
+     */
     public RoomController() {
-
     }
 
     /**
-     * Constructor for RoomController, creates a new camerahandler depending on the config.
+     * Creates a new camerahandler depending on the config.
      * @param configFile The configfile for this room.
      */
     public void configure(final String configFile) {
@@ -107,11 +109,19 @@ public class RoomController {
         return cameraHandler;
     }
 
+    /**
+     * Get the progress object.
+     * @return The progress object.
+     */
     public Progress getProgress() {
         return progress;
     }
 
-    public void setProgressBar(GridPane progressBar) {
-        this.progressBar = progressBar;
+    /**
+     * Set the progressBar.
+     * @param newProgressBar the new progressBar
+     */
+    public void setProgressBar(final GridPane newProgressBar) {
+        this.progressBar = newProgressBar;
     }
 }

@@ -60,6 +60,10 @@ public class Progress {
         return room;
     }
 
+    /**
+     * Get the total amount of sections.
+     * @return Number of sections.
+     */
     public int getTotalSections() {
         int total = 0;
         for (Chest chest : room.getChestList()) {

@@ -1,6 +1,5 @@
 package gui.panes;
 
-import gui.controllers.MainController;
 import gui.controllers.RoomController;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -80,7 +79,8 @@ public class ProgressBar {
         GraphicsDevice gd =
             GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int screenWidth = gd.getDisplayMode().getWidth();
-        fittedWidth = (screenWidth) / (screenParts * (controller.getProgress().getTotalSections() - 1));
+        fittedWidth = (screenWidth)
+            / (screenParts * (controller.getProgress().getTotalSections() - 1));
         progressStages = new ArrayList<>();
 
         // Add chests and their puzzle steps to the list

@@ -165,6 +165,10 @@ public class MainController {
         return timeLogController;
     }
 
+    /**
+     * Get the RoomController.
+     * @return The RoomController
+     */
     public RoomController getRoomController() {
         return roomController;
     }
