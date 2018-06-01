@@ -1,6 +1,5 @@
 package gui.panes;
 
-import gui.controllers.MainController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
