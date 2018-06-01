@@ -190,7 +190,7 @@ public class CameraHandler {
      * Set a new information handler.
      * @param handler The new information handler.
      */
-    public void setInformationHandler(InformationHandler handler) {
+    public void setInformationHandler(final InformationHandler handler) {
         this.informationHandler = handler;
     }
 

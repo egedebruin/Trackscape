@@ -33,7 +33,7 @@ public class Chest {
      *                            when peolpe take longer than this time they might enter a
      *                            critical stage.
      */
-    public Chest(int noSubsections, long targetTimeInSeconds) {
+    public Chest(final int noSubsections, final long targetTimeInSeconds) {
         numberOfSubSections = Math.max(noSubsections, 1);
         subsectionCompleted = new boolean[numberOfSubSections];
         targetDurationInSec = targetTimeInSeconds;
@@ -70,7 +70,7 @@ public class Chest {
      *
      * @param previousChest preceding chest
      */
-    public void updateStatus(Chest previousChest) {
+    public void updateStatus(final Chest previousChest) {
         if (previousChest.getChestState() == Status.OPENED) {
             updateStatus();
         }
@@ -116,7 +116,7 @@ public class Chest {
      * Setter for approvedChestFoundByHost.
      * @param isChestFound Whether the chest is found or not.
      */
-    public void setApprovedChestFoundByHost(boolean isChestFound) {
+    public void setApprovedChestFoundByHost(final boolean isChestFound) {
         if (isChestFound) {
             this.approvedChestFoundByHost = isChestFound;
             chestState = Status.OPENED;

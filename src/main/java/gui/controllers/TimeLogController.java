@@ -23,7 +23,7 @@ public class TimeLogController {
      * Constructor for the TimeLogController, sets a new informationHandler.
      * @param handler The cameraHandler.
      */
-    public TimeLogController(CameraHandler handler) {
+    public TimeLogController(final CameraHandler handler) {
         cameraHandler = handler;
         cameraHandler.setInformationHandler(informationHandler);
     }
@@ -165,7 +165,7 @@ public class TimeLogController {
      * Process the frames depending on the changes in cameraHandler.
      * @param now The current time.
      */
-    public void processFrame(long now) {
+    public void processFrame(final long now) {
         if (cameraHandler.isChestDetected()) {
             approveButton.setVisible(true);
             notApproveButton.setVisible(true);
@@ -178,7 +178,7 @@ public class TimeLogController {
      * Set the cameraHandler with the right informationHandler.
      * @param handler The new cameraHandler.
      */
-    public void setCameraHandler(CameraHandler handler) {
+    public void setCameraHandler(final CameraHandler handler) {
         handler.setInformationHandler(informationHandler);
         this.cameraHandler = handler;
     }
