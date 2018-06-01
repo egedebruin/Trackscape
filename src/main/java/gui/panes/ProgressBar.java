@@ -1,6 +1,7 @@
 package gui.panes;
 
 import gui.controllers.MainController;
+import gui.controllers.RoomController;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import room.Chest;
 
 /**
  * Class that creates a progress bar.
@@ -21,7 +23,7 @@ public class ProgressBar {
     /**
      * Class parameters.
      */
-    private MainController controller;
+    private RoomController controller;
     private GridPane progressBar;
     private List<Label> progressStages;
     private double fittedWidth;
@@ -30,7 +32,7 @@ public class ProgressBar {
      * Constructor for ProgressBar.
      * @param control the controller
      */
-    public ProgressBar(final MainController control) {
+    public ProgressBar(final RoomController control) {
         this.controller = control;
     }
 
@@ -70,20 +72,19 @@ public class ProgressBar {
      * Create the items of the progress bar.
      */
     private void createItems() {
-        final int chests = 3;   // should retrieve number from handler
-        final int steps = 3;    // should retrieve number from handler
+        List<Chest> chests = controller.getProgress().getRoom().getChestList();
 
         final int screenParts = 4;
         GraphicsDevice gd =
             GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int screenWidth = gd.getDisplayMode().getWidth();
-        fittedWidth = (screenWidth) / (screenParts * (chests + steps + (chests + steps - 1)));
+        fittedWidth = (screenWidth) / 40;
 
         progressStages = new ArrayList<>();
 
         // Add chests and their puzzle steps to the list
-        for (int i = 0; i < chests; i++) {
-            for (int j = 0; j < steps; j++) {
+        for (Chest chest : chests) {
+            for (int j = 0; j < chest.getNumberOfSubSections(); j++) {
                 progressStages.add(createPuzzleLabel());
             }
             progressStages.add(createChestLabel());
