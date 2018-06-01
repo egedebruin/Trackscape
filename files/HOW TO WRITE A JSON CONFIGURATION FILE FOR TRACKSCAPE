@@ -1,0 +1,48 @@
+THIS FILE IS AN EXPLANATORY GUIDE ON HOW TO FORMAT THE ESCAPE ROOM CONFIGURATION FILE.
+
+THIS CODE CAN BE COPIED, HOWEVER YOU WILL HAVE TO REMOVE THE COMMENTS BEFORE IT WORKS.
+
+JSON FILE STARTS BELOW:
+[
+  {
+    //Give room an id, this is used to retrieve the information, like in a DB.
+    "roomId": 0,
+    // Cameras holds a list of links to some kind of video, this video can be a stream/video/image
+    "cameras": [
+      {
+        "link": "testlink"
+      },
+      {
+        "link": "testlink"
+      }
+    ],
+    //Specify the amount of people that start in this room at people
+    "people": 5,
+    //Chests are seen as some kind of checkpoint in the escape room, each checkpoint can have subcheckpoints.
+    /*
+    A chest is formatted in the following way:
+    NB: information on what to put at each field is located between < and >
+    {
+        "sections": <THE AMOUNT OF PUZZLES THAT NEED TO BE SOLVED BEFORE PLAYERS CAN OPEN A CHEST>,
+        "targetDuration": <DURATION IN SECONDS
+                          AFTER THIS TIME HAS PASSED THE PLAYERS TAKE "TOO LONG" TO FINISH THIS SECTION>
+    }
+    */
+    "chests": [
+      {
+        "sections": 2,
+        "targetDuration": 120
+      },
+      {
+        "sections": 3,
+        "targetDuration": 220
+      },
+      {
+        "sections": 1,
+        "targetDuration": 30
+      }
+    ],
+    //This target duration is the total amount of time in seconds players get to escape the entire escape room
+    "targetDuration": 500
+  }
+]

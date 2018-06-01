@@ -7,6 +7,7 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -67,12 +68,12 @@ class CameraHandlerTest {
      * Tests if the cameraList gets cleared whenever clearList() is called.
      */
     @Test
-    void clearListTest() {
+    void clearListsTest() {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(videoLink);
 
         assertTrue(ch.listSize() > 0);
-        ch.clearList();
+        ch.clearLists();
         assertEquals(0, ch.listSize());
     }
 
@@ -98,26 +99,6 @@ class CameraHandlerTest {
     }
 
     /**
-     * Test that the camera handler isn't active from the start.
-     */
-    @Test
-    void testIsActive() {
-        CameraHandler ch = new CameraHandler();
-        assertFalse(ch.isActive());
-    }
-
-    /**
-     * Test setActive method.
-     */
-    @Test
-    void testSetActive() {
-        CameraHandler ch = new CameraHandler();
-        assertFalse(ch.isActive());
-        ch.setActive(true);
-        assertTrue(ch.isActive());
-    }
-
-    /**
      * Test isChanged method.
      */
     @Test
@@ -127,5 +108,32 @@ class CameraHandlerTest {
         assertFalse(ch.isChanged());
         ch.processFrames();
         assertTrue(ch.isChanged());
+    }
+
+    /**
+     * Test closeHandler method.
+     */
+    @Test
+    void testCloseHandler() {
+        CameraHandler ch  = new CameraHandler();
+        ch.addCamera(videoLink);
+        ch.closeHandler();
+        assertEquals(-1, ch.getBeginTime());
+        assertEquals(0, ch.listSize());
+    }
+
+    /**
+     * Test setInformation method.
+     */
+    @Test
+    void testSetInformationHandler() {
+        InformationHandler handler = new InformationHandler();
+        InformationHandler handler2 = new InformationHandler();
+        CameraHandler ch  = new CameraHandler(handler);
+        assertEquals(handler, ch.getInformationHandler());
+
+        ch.setInformationHandler(handler2);
+        assertEquals(handler2, ch.getInformationHandler());
+        assertNotEquals(handler, ch.getInformationHandler());
     }
 }
