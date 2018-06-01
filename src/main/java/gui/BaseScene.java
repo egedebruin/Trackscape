@@ -1,5 +1,6 @@
 package gui;
 
+import gui.controllers.MainController;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,14 +19,14 @@ public abstract class BaseScene {
     /**
      * Class parameters.
      */
-    private Controller controller;
+    private MainController mainController;
 
     /**
      * Constructor for BaseScene.
-     * @param crtl the controller
+     * @param crtl the mainController
      */
-    public BaseScene(final Controller crtl) {
-        this.controller = crtl;
+    public BaseScene(final MainController crtl) {
+        this.mainController = crtl;
     }
 
     /**
@@ -72,11 +73,11 @@ public abstract class BaseScene {
     }
 
     /**
-     * Get the controller.
-     * @return controller
+     * Get the mainController.
+     * @return mainController
      */
-    public Controller getController() {
-        return controller;
+    public MainController getMainController() {
+        return mainController;
     }
 
 }

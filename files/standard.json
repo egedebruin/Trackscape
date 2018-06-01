@@ -9,7 +9,21 @@
         "link": "files/webcast.mov"
       }
     ],
-    "people": 42,
-    "chests": 9
+    "people": 5,
+    "chests": [
+      {
+        "sections": 2,
+        "targetDuration": 120
+      },
+      {
+        "sections": 3,
+        "targetDuration": 220
+      },
+      {
+        "sections": 1,
+        "targetDuration": 30
+      }
+    ],
+    "targetDuration": 500
   }
 ]
