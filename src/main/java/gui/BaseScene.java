@@ -34,7 +34,7 @@ public abstract class BaseScene {
      * @return topPane
      */
     protected Pane createTopPane() {
-        final int width = 130;
+        final int width = 140;
         File streamEnd = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\images\\trackscape.png");
         Image trackscape = new Image(streamEnd.toURI().toString());
