@@ -56,7 +56,7 @@ public class CameraHandler {
      * @return The new camera.
      */
     public Camera addCamera(final String link, final int chests) {
-        VideoCapture videoCapture = new VideoCapture(link);
+        VideoCapture videoCapture = new VideoCapture();
         boolean opened = videoCapture.open(link);
         if (!opened) {
             return null;
