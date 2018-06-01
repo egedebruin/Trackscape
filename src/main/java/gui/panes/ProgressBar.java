@@ -182,7 +182,8 @@ public class ProgressBar {
             progressBar.getChildren().get(k);
             progressBar.getChildren().get(k).getStyleClass().clear();
 
-            if (progressBar.getChildren().get(k).getId() == "chest") {
+            if (k == progressBar.getChildren().size() - 1) {
+                // Done! Last box is unlocked.
                 progressBar.getChildren().get(k).getStyleClass().add("progress-made");
             } else {
                 progressBar.getChildren().get(k).getStyleClass().add("progress-made");
