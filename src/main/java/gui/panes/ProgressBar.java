@@ -197,17 +197,29 @@ public class ProgressBar {
      * @param stage the current progress stage of the game
      */
     private void resetProgress(final int stage) {
-        if (stage == 0
-            && progressBar.getChildren().get(2)
-            .getStyleClass().toString().contains("progress-reset")) {
-            progressBar.getChildren().get(stage).getStyleClass().clear();
-            progressBar.getChildren().get(stage).getStyleClass().add("progress-reset");
+        if (stage == progressBar.getChildren().size() - 1) {
+            clearStyleSheet(stage);
         }
-        for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
-            progressBar.getChildren().get(k).getStyleClass().clear();
-            progressBar.getChildren().get(k).getStyleClass().add("progress-reset");
-            k++;
+        if (stage < progressBar.getChildren().size() - 1) {
+            if (progressBar.getChildren().get(stage + 2)
+                .getStyleClass().toString().contains("progress-reset")) {
+                clearStyleSheet(stage);
+            } else {
+                for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
+                    clearStyleSheet(k);
+                    k++;
+                }
+            }
         }
+    }
+
+    /**
+     * Clear the stylesheet of current stage item.
+     * @param stage the current stage item
+     */
+    private void clearStyleSheet(final int stage) {
+        progressBar.getChildren().get(stage).getStyleClass().clear();
+        progressBar.getChildren().get(stage).getStyleClass().add("progress-reset");
     }
 
     /**
