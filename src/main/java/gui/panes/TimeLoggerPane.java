@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.TimeLogController;
+import gui.Controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -17,14 +17,14 @@ public class TimeLoggerPane {
     /**
      * Class parameters.
      */
-    private TimeLogController timeLogController;
+    private Controller controller;
 
     /**
      * Constructor for TimeLoggerPane.
-     * @param control the mainController
+     * @param control the controller
      */
-    public TimeLoggerPane(final TimeLogController control) {
-        this.timeLogController = control;
+    public TimeLoggerPane(final Controller control) {
+        this.controller = control;
     }
 
     /**
@@ -38,7 +38,7 @@ public class TimeLoggerPane {
 
         Label description = new Label("Time playing:");
         Label l = new Label("00:00:00");
-        timeLogController.setTimerLabel(l);
+        this.controller.setTimerLabel(l);
 
         final int top = 5;
         final int bottom = 5;
@@ -64,7 +64,7 @@ public class TimeLoggerPane {
 
         TextArea logText = new TextArea();
         logText.setEditable(false);
-        timeLogController.setInformationBox(logText);
+        controller.setInformationBox(logText);
 
         final int width = 350;
         final int height = 300;
@@ -93,17 +93,17 @@ public class TimeLoggerPane {
         Button approveButton = new Button();
         approveButton.setText("Confirm chest opened");
         approveButton.setVisible(false);
-        approveButton.setOnAction(event -> timeLogController.confirmedChest());
+        approveButton.setOnAction(event -> controller.confirmedChest());
 
         Button notApprove = new Button();
         notApprove.setText("Not Confirm");
         notApprove.setVisible(false);
-        notApprove.setOnAction(event -> timeLogController.unConfirm());
+        notApprove.setOnAction(event -> controller.unConfirm());
 
         buttonPane.getChildren().addAll(approveButton, notApprove);
 
-        timeLogController.setApproveButton(approveButton);
-        timeLogController.setNotApproveButton(notApprove);
+        controller.setApproveButton(approveButton);
+        controller.setNotApproveButton(notApprove);
 
         return buttonPane;
     }

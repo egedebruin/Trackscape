@@ -1,18 +1,19 @@
 package gui.panes;
 
-import gui.controllers.MainController;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import gui.Controller;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that creates a progress bar.
@@ -21,7 +22,7 @@ public class ProgressBar {
     /**
      * Class parameters.
      */
-    private MainController controller;
+    private Controller controller;
     private GridPane progressBar;
     private List<Label> progressStages;
     private double fittedWidth;
@@ -30,7 +31,7 @@ public class ProgressBar {
      * Constructor for ProgressBar.
      * @param control the controller
      */
-    public ProgressBar(final MainController control) {
+    public ProgressBar(final Controller control) {
         this.controller = control;
     }
 

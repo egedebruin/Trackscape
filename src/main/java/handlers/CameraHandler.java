@@ -20,8 +20,8 @@ public class CameraHandler {
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
+    private boolean active = false;
     private List<Boolean> chestDetected = new ArrayList<>();
-    private long beginTime = -1;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -56,12 +56,13 @@ public class CameraHandler {
      * @return The new camera.
      */
     public Camera addCamera(final String link, final int chests) {
-        VideoCapture videoCapture = new VideoCapture();
+        VideoCapture videoCapture = new VideoCapture(link);
         boolean opened = videoCapture.open(link);
         if (!opened) {
             return null;
         }
         chestDetected.add(false);
+        informationHandler.addInformation("Added camera");
         Camera camera;
         if (chests == -1) {
             camera = new Camera(videoCapture, link);
@@ -105,8 +106,8 @@ public class CameraHandler {
         activity.divideFrame(newFrame);
 
         activity.addActivities(newFrame, camera.getFrameCounter());
-        if (activity.getLastActivity() > 2 && beginTime == -1) {
-            beginTime = System.nanoTime();
+        if (activity.getLastActivity() > 2) {
+            active = true;
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
@@ -132,19 +133,11 @@ public class CameraHandler {
     }
 
     /**
-     * Clear the list of cameras and chest detected.
+     * Clear the list of cameras.
      */
-    public void clearLists() {
+    public void clearList() {
         chestDetected.clear();
         cameraList.clear();
-    }
-
-    /**
-     * Close the handler by clearing lists and set active to false.
-     */
-    public void closeHandler() {
-        clearLists();
-        beginTime = -1;
     }
 
     /**
@@ -158,11 +151,27 @@ public class CameraHandler {
     }
 
     /**
+     * Returns if there is activity in these cameras.
+     * @return True if there is activity, false otherwise.
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
      * Loop through the isChestdetected arraylist to check if there is at least 1 chest detected.
      * @return true if there is at least 1 chest detected, false otherwise
      */
     public boolean isChestDetected() {
         return chestDetected.contains(true);
+    }
+
+    /**
+     * Set the active variable to true or false.
+     * @param newActive the new value for active.
+     */
+    public void setActive(final boolean newActive) {
+        this.active = newActive;
     }
 
     /**
@@ -184,21 +193,5 @@ public class CameraHandler {
             }
         }
         return true;
-    }
-
-    /**
-     * Set a new information handler.
-     * @param handler The new information handler.
-     */
-    public void setInformationHandler(final InformationHandler handler) {
-        this.informationHandler = handler;
-    }
-
-    /**
-     * Get the begin time of the current CameraHandler.
-     * @return The begin time in nano seconds.
-     */
-    public long getBeginTime() {
-        return beginTime;
     }
 }

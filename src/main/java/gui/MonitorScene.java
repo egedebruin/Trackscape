@@ -1,6 +1,5 @@
 package gui;
 
-import gui.controllers.MainController;
 import gui.panes.VideoPane;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -13,14 +12,14 @@ public class MonitorScene extends BaseScene {
     /**
      * Class parameters.
      */
-    private VideoPane videoPane = new VideoPane(getMainController());
+    private VideoPane videoPane = new VideoPane(getController());
 
     /**
      * Constructor.
-     * @param mainController the mainController
+     * @param controller the controller
      */
-    public MonitorScene(final MainController mainController) {
-        super(mainController);
+    public MonitorScene(final Controller controller) {
+        super(controller);
     }
 
     /**

@@ -1,6 +1,5 @@
 package gui;
 
-import gui.controllers.MainController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -21,8 +20,8 @@ public class Main extends Application {
         + "\\src\\main\\java\\gui\\stylesheet.css");
     private String stylesheet = "file:///"
         + css.getAbsolutePath().replace("\\", "/");
-    private MainController mainController = new MainController();
-    private MonitorScene monitorScene = new MonitorScene(mainController);
+    private Controller controller = new Controller();
+    private MonitorScene monitorScene = new MonitorScene(controller);
 
     /**
      * main.

@@ -1,9 +1,8 @@
 package gui.panes;
 
-import gui.controllers.MainController;
+import gui.Controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +19,7 @@ public class MediaBar {
      * Class parameters.
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
-    private MainController controller;
+    private Controller controller;
     private MenuPane menuPane;
     private MediaPane mediaPane;
     private ProgressBar progressBar;
@@ -32,7 +31,7 @@ public class MediaBar {
      * @param media the mediaplayer
      * @param progress the progress bar
      */
-    public MediaBar(final MainController control, final MenuPane menu,
+    public MediaBar(final Controller control, final MenuPane menu,
                     final MediaPane media, final ProgressBar progress) {
         this.controller = control;
         this.menuPane = menu;
@@ -64,10 +63,7 @@ public class MediaBar {
         playButton.setGraphic(createLogo("play"));
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Yo momma is fat");
-                alert.setContentText("There are no cameras to be shown!");
-                alert.showAndWait();
+                mediaPane.showCameraIcon();
             } else if (!controller.isVideoPlaying()) {
                 controller.setVideoPlaying(true);
                 initializeImageViewers();

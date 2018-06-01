@@ -134,16 +134,6 @@ class CameraTest {
     }
 
     /**
-     * Test for getLink method.
-     */
-    @Test
-    void getLinkTest() {
-        cameraHandler = new CameraHandler();
-        Camera cam = cameraHandler.addCamera(videoLink);
-        assertEquals(videoLink, cam.getLink());
-    }
-
-    /**
      * Method that loops till the end of a the videolink video.
      */
     private void loopToEndOfVideo() {
