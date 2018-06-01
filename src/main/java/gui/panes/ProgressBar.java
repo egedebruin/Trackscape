@@ -63,7 +63,8 @@ public class ProgressBar {
             }
         }
 
-        setItemsOnDone();
+        controller.setProgressBar(progressBar);
+        controller.setItemsOnDone();
 
         return progressBar;
     }
@@ -171,79 +172,6 @@ public class ProgressBar {
 
         puzzleLabel.setId("puzzle");
         return puzzleLabel;
-    }
-
-    /**
-     * Fills the progressbar up to the current stage.
-     * @param stage the current progress stage of the game
-     */
-    private void fillProgress(final int stage) {
-        for (int k = 0; k <= stage; k++) {
-            progressBar.getChildren().get(k);
-            progressBar.getChildren().get(k).getStyleClass().clear();
-
-            if (k == progressBar.getChildren().size() - 1) {
-                // Done! Last box is unlocked.
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            } else {
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            }
-            k++;
-        }
-    }
-
-    /**
-     * Resets the progressbar to the current stage.
-     * @param stage the current progress stage of the game
-     */
-    private void resetProgress(final int stage) {
-        if (stage == progressBar.getChildren().size() - 1) {
-            clearStyleSheet(stage);
-        }
-        if (stage < progressBar.getChildren().size() - 1) {
-            if (progressBar.getChildren().get(stage + 2)
-                .getStyleClass().toString().contains("progress-reset")) {
-                clearStyleSheet(stage);
-            } else {
-                for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
-                    clearStyleSheet(k);
-                    k++;
-                }
-            }
-        }
-    }
-
-    /**
-     * Clear the stylesheet of current stage item.
-     * @param stage the current stage item
-     */
-    private void clearStyleSheet(final int stage) {
-        progressBar.getChildren().get(stage).getStyleClass().clear();
-        progressBar.getChildren().get(stage).getStyleClass().add("progress-reset");
-    }
-
-    /**
-     * Let the host set items on done when the team has finished them.
-     */
-    private void setItemsOnDone() {
-        progressBar.getChildren().forEach(item -> {
-                item.setOnMouseClicked(event -> {
-                    if (item.getId() != "line") {
-                        if (item.getStyleClass().toString().contains("progress-reset")) {
-                            fillProgress(progressBar.getChildren().indexOf(item));
-                        } else {
-                            resetProgress(progressBar.getChildren().indexOf(item));
-                        }
-                    }
-                });
-            });
-    }
-
-    /**
-     * Reset the progressBar when stream is closed.
-     */
-    public void closeProgressBar() {
-        progressBar.getChildren().clear();
     }
 
     /**
