@@ -34,7 +34,7 @@ public abstract class BaseScene {
      * @return topPane
      */
     protected Pane createTopPane() {
-        final int width = 150;
+        final int width = 130;
         File streamEnd = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\images\\trackscape.png");
         Image trackscape = new Image(streamEnd.toURI().toString());
@@ -45,6 +45,8 @@ public abstract class BaseScene {
         FlowPane logoPane = new FlowPane();
         logoPane.getChildren().add(logo);
         logoPane.setAlignment(Pos.CENTER);
+
+        logoPane.getStyleClass().add("top");
 
         return logoPane;
     }
