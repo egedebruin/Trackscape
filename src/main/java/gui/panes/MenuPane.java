@@ -28,19 +28,23 @@ public class MenuPane {
      * Class parameters.
      */
     private MediaPane mediaPane;
+    private ProgressBar progressBar;
     private Label cameraStatus;
-    private MainController mainController;
+    private MainController controller;
     private static SimpleObjectProperty<File> lastKnownDirectoryProperty
             = new SimpleObjectProperty<>();
 
     /**
      * Constructor for MenuPane.
-     * @param control the mainController
+     * @param control the controller
      * @param pane the mediaPane
+     * @param progress the progressBar
      */
-    public MenuPane(final MainController control, final MediaPane pane) {
-        this.mainController = control;
+    public MenuPane(final MainController control, final MediaPane pane,
+                    final ProgressBar progress) {
+        this.controller = control;
         this.mediaPane = pane;
+        this.progressBar = progress;
     }
 
     /**
@@ -93,7 +97,7 @@ public class MenuPane {
      */
     private void resetCameras(final MenuItem clearImageViewers) {
         clearImageViewers.setOnAction(event -> {
-            mainController.getTimeLogController().clearInformationArea();
+            controller.getTimeLogController().clearInformationArea();
             endStream();
         });
     }
@@ -113,13 +117,13 @@ public class MenuPane {
      */
     private void openConfig(final MenuItem configFile, final Stage primaryStage) {
         configFile.setOnAction(event -> {
-            if (!mainController.isVideoPlaying() && !mainController.getConfigured()) {
+            if (!controller.isVideoPlaying() && !controller.getConfigured()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Configuration File (JSon format)");
                 chooser.initialDirectoryProperty().bindBidirectional(lastKnownDirectoryProperty);
                 File file = chooser.showOpenDialog(primaryStage);
                 if (file != null) {
-                    mainController.configure(file.toString());
+                    controller.configure(file.toString());
                     lastKnownDirectoryProperty.setValue(file.getParentFile());
                 }
                 setCameraStatus();
@@ -134,8 +138,8 @@ public class MenuPane {
      */
     private void standardConfig(final MenuItem standardFile) {
         standardFile.setOnAction(event -> {
-            if (!mainController.isVideoPlaying() && !mainController.getConfigured()) {
-                mainController.configure("files/standard.json");
+            if (!controller.isVideoPlaying() && !controller.getConfigured()) {
+                controller.configure("files/standard.json");
                 setCameraStatus();
             }
         });
@@ -150,13 +154,13 @@ public class MenuPane {
     private void openVideo(final MenuItem openVideo,
                            final Stage primaryStage) {
         openVideo.setOnAction(t -> {
-            if (!mainController.isVideoPlaying()) {
+            if (!controller.isVideoPlaying()) {
                 FileChooser chooser = new FileChooser();
                 chooser.setTitle("Select Video File");
                 chooser.initialDirectoryProperty().bindBidirectional(lastKnownDirectoryProperty);
                 File file = chooser.showOpenDialog(primaryStage);
                 if (file != null) {
-                    mainController.createVideo(file);
+                    controller.createVideo(file);
                     setCameraStatus();
                     lastKnownDirectoryProperty.setValue(file.getParentFile());
                 }
@@ -173,7 +177,7 @@ public class MenuPane {
     private void connectStream(
             final MenuItem connectStream, final Stage primaryStage) {
         connectStream.setOnAction(t -> {
-            if (!mainController.isVideoPlaying()) {
+            if (!controller.isVideoPlaying()) {
                 // Set up pop up window
                 final Stage streamStage = new Stage();
                 streamStage.initModality(Modality.APPLICATION_MODAL);
@@ -197,14 +201,14 @@ public class MenuPane {
 
                 // Save the url of the RTSP stream by clicking on submit
                 submit.setOnAction(t1 -> {
-                    mainController.createStream(streamStage, field);
+                    controller.createStream(streamStage, field);
                     setCameraStatus();
                 });
 
                 // Save the url of the RTSP stream by pressing on the enter key
                 field.setOnKeyPressed(keyEvent -> {
                     if (keyEvent.getCode() == KeyCode.ENTER) {
-                        mainController.createStream(streamStage, field);
+                        controller.createStream(streamStage, field);
                         setCameraStatus();
                     }
                 });
@@ -225,10 +229,10 @@ public class MenuPane {
      */
     private void setCameraStatus() {
         String text;
-        if (mainController.getCameras() == 1) {
+        if (controller.getCameras() == 1) {
             text = "1 camera is currently ready to be activated.";
         } else {
-            text = mainController.getCameras() + " cameras are currently ready to be activated.";
+            text = controller.getCameras() + " cameras are currently ready to be activated.";
         }
         cameraStatus = new Label(text);
         mediaPane.getMediaPlayerPane().getChildren().clear();
@@ -239,8 +243,9 @@ public class MenuPane {
      * Close the stream(s) and reset the application.
      */
     public void endStream() {
-        mainController.closeStream();
+        controller.closeStream();
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
     }
+
 }
