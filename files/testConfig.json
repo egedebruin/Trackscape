@@ -3,16 +3,16 @@
     "roomId": 0,
     "cameras": [
       {
-        "link": "testlink"
+        "link": "files/postit.mov"
       },
       {
-        "link": "testlink"
+        "link": "files/webcast.mov"
       }
     ],
     "people": 5,
     "chests": [
       {
-        "sections": 2,
+        "sections": 21,
         "targetDuration": 120
       },
       {
