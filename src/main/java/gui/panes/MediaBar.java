@@ -135,7 +135,7 @@ public class MediaBar {
     private ImageView createLogo(final String fileName) {
         final int buttonWidth = 70;
         File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\" + fileName + ".png");
+            + "\\src\\main\\java\\gui\\images\\buttons\\" + fileName + ".png");
         Image img = new Image(streamEnd.toURI().toString());
         ImageView logo = new ImageView();
         logo.setFitWidth(buttonWidth);

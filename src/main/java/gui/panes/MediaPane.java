@@ -42,7 +42,7 @@ public class MediaPane {
     public void showCameraIcon() {
         final int width = 100;
         File streamEnd = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\cameraIcon.png");
+                + "\\src\\main\\java\\gui\\images\\icons\\cameraIcon.png");
         Image cameraIcon = new Image(streamEnd.toURI().toString());
         ImageView startImage = new ImageView();
         startImage.setFitWidth(width);
