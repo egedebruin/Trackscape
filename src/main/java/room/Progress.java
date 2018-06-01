@@ -59,4 +59,12 @@ public class Progress {
     public Room getRoom() {
         return room;
     }
+
+    public int getTotalSections() {
+        int total = 0;
+        for (Chest chest : room.getChestList()) {
+            total += chest.getNumberOfSubSections();
+        }
+        return total;
+    }
 }

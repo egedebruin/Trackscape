@@ -73,19 +73,19 @@ public class ProgressBar {
      * Create the items of the progress bar.
      */
     private void createItems() {
+
         List<Chest> chests = controller.getProgress().getRoom().getChestList();
 
         final int screenParts = 4;
         GraphicsDevice gd =
             GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int screenWidth = gd.getDisplayMode().getWidth();
-        fittedWidth = (screenWidth) / 40;
-
+        fittedWidth = (screenWidth) / (screenParts * (controller.getProgress().getTotalSections() - 1));
         progressStages = new ArrayList<>();
 
         // Add chests and their puzzle steps to the list
         for (Chest chest : chests) {
-            for (int j = 0; j < chest.getNumberOfSubSections(); j++) {
+            for (int i = 1; i < chest.getNumberOfSubSections(); i++) {
                 progressStages.add(createPuzzleLabel());
             }
             progressStages.add(createChestLabel());
