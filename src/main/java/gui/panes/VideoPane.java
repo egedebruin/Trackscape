@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.Controller;
+import gui.controllers.MainController;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -16,20 +16,20 @@ public class VideoPane {
      * Class parameters.
      */
     private FlowPane mediaPlayerPane = new FlowPane();
-    private Controller controller;
+    private MainController mainController;
     private MenuMediaPane menuMediaPane;
     private MediaBar mediaBar;
     private TimeLoggerPane timeLoggerPane;
 
     /**
      * Constructor for VideoPane.
-     * @param control the controller
+     * @param control the mainController
      */
-    public VideoPane(final Controller control) {
-        this.controller = control;
-        menuMediaPane = new MenuMediaPane(controller, mediaPlayerPane);
-        mediaBar = new MediaBar(controller, menuMediaPane);
-        timeLoggerPane = new TimeLoggerPane(controller);
+    public VideoPane(final MainController control) {
+        this.mainController = control;
+        menuMediaPane = new MenuMediaPane(mainController, mediaPlayerPane);
+        mediaBar = new MediaBar(mainController, menuMediaPane);
+        timeLoggerPane = new TimeLoggerPane(mainController.getTimeLogController());
     }
 
     /**

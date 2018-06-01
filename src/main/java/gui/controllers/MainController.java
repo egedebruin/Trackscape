@@ -10,9 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
- * Controller class for controlling GUI elements.
+ * MainController class for controlling GUI elements.
  */
-public class Controller {
+public class MainController {
 
     /**
      * Class parameters.
@@ -28,7 +28,7 @@ public class Controller {
     /**
      * Constructor method.
      */
-    public Controller() {
+    public MainController() {
         cameraHandler = new CameraHandler();
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);

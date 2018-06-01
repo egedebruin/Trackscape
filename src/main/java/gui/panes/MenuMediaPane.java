@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.Controller;
+import gui.controllers.MainController;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -14,21 +14,21 @@ public class MenuMediaPane {
     /**
      * Class parameters.
      */
-    private Controller controller;
+    private MainController mainController;
     private MenuPane menuPane;
     private MediaPane mediaPane;
     private FlowPane mediaPlayerPane;
 
     /**
      * Constructor for MenuMediaPane.
-     * @param control the controller
+     * @param control the mainController
      * @param inputMediaPlayerPane the mediaPlayerPane
      */
-    public MenuMediaPane(final Controller control, final FlowPane inputMediaPlayerPane) {
-        this.controller = control;
+    public MenuMediaPane(final MainController control, final FlowPane inputMediaPlayerPane) {
+        this.mainController = control;
         this.mediaPlayerPane = inputMediaPlayerPane;
         mediaPane = new MediaPane(mediaPlayerPane);
-        menuPane = new MenuPane(controller, mediaPane);
+        menuPane = new MenuPane(mainController, mediaPane);
     }
 
     /**
