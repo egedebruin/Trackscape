@@ -3,9 +3,6 @@ package gui.controllers;
 import gui.Util;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.util.concurrent.TimeUnit;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +10,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Class for the TimeLogController, to control the time and log.
@@ -149,11 +149,26 @@ public class TimeLogController {
             approveButton.setVisible(true);
             notApproveButton.setVisible(true);
             BufferedImage bufferedFrame = Util.matToBufferedImage(mat);
-            Image image = SwingFXUtils.toFXImage(bufferedFrame, null);
+
+            int newWidth = 300;
+            int newHeight = 200;
+            BufferedImage resizedSubFrame = resizeBImage(bufferedFrame, newWidth, newHeight);
+            Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
+
             imageView.setImage(image);
         }
     }
 
+    public BufferedImage resizeBImage(BufferedImage bi, int newWidth, int newHeight) {
+        BufferedImage scaledImage = null;
+        if (bi != null) {
+            scaledImage = new BufferedImage(newWidth, newHeight, bi.getType());
+            Graphics2D graphics2D = scaledImage.createGraphics();
+            graphics2D.drawImage(bi, 0, 0, newWidth, newHeight, null);
+            graphics2D.dispose();
+        }
+        return scaledImage;
+    }
     /**
      * Set the cameraHandler with the right informationHandler.
      * @param handler The new cameraHandler.

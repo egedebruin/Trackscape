@@ -3,6 +3,7 @@ package camera;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -34,16 +35,16 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param subtraction the subtraction of this frame.
      * @return true if chest is detected, false otherwise.
      */
-    public boolean checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
+    public List<Mat> checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
-        boolean isDetected = false;
+        List<Mat> mats = new ArrayList<>();
         Core.bitwise_and(dest, subtraction, subtracted);
         detectChest(subtracted);
         if (isOpened) {
-            isDetected = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
+            mats = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
         }
-        return isDetected;
+        return mats;
     }
 
     /**
@@ -65,9 +66,10 @@ public class CameraChestDetector extends CameraObjectDetector {
      *
      * @return true iff a boundingbox is drawn.
      */
-    private boolean includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
+    private List<Mat> includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {
         boolean isContourDrawn = false;
+        List<Mat> mats = new ArrayList<>();
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
@@ -86,12 +88,15 @@ public class CameraChestDetector extends CameraObjectDetector {
         }
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
-                Rect cutoutChest = new Rect(rect.x - 5, rect.y - 5, rect.width + 10, rect.height + 10);
-                Imgproc.rectangle(frame, cutoutChest.tl(), cutoutChest.br(), CHESTBOXCOLOUR, 2);
-                isContourDrawn = true;
+                Rect cutoutChest = new Rect(rect.x - 50, rect.y - 50, rect.width + 100, rect.height + 100);
+                Point topLeft = new Point(Math.max(cutoutChest.tl().x, 0) , Math.max(0, cutoutChest.tl().y));
+                Point bottomRight = new Point(Math.min(cutoutChest.br().x, frame.width()-1) , Math.min(cutoutChest.br().y, frame.height()-1));
+                //Imgproc.rectangle(frame, topLeft, bottomRight, CHESTBOXCOLOUR, 2);
+                Rect r = new Rect(topLeft,bottomRight);
+                mats.add(frame.submat(r));
             }
         }
-        return isContourDrawn;
+        return mats;
     }
 
     /**
