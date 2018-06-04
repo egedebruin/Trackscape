@@ -84,7 +84,7 @@ public class MainController {
     public void closeStream() {
         cameraHandler.closeHandler();
         timeLogController.closeController();
-        if (roomController != null) {
+        if (roomController != null && roomController.isConfigurationActive()) {
             roomController.closeController();
         }
         if (animationTimer != null) {
