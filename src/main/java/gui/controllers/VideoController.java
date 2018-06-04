@@ -3,7 +3,6 @@ package gui.controllers;
 import gui.Util;
 import handlers.CameraHandler;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

@@ -21,6 +21,7 @@ public class TimeLogController {
 
     private Label timerLabel;
     private TextArea informationArea;
+    private Label question;
     private Button approveButton;
     private Button notApproveButton;
     private InformationHandler informationHandler = new InformationHandler();
@@ -83,6 +84,7 @@ public class TimeLogController {
      */
     public void confirmedChest() {
         addInformation("Found chest");
+        question.setVisible(false);
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
         imageView.setVisible(false);
@@ -92,6 +94,7 @@ public class TimeLogController {
      * Turns button invisible without notification of found chest.
      */
     public void unConfirm() {
+        question.setVisible(false);
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
         imageView.setVisible(false);
@@ -102,8 +105,10 @@ public class TimeLogController {
      */
     public void closeController() {
         timerLabel.setText("00:00:00");
+        question.setVisible(false);
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
+        imageView.setVisible(false);
     }
 
     /**
@@ -142,6 +147,14 @@ public class TimeLogController {
     }
 
     /**
+     * Setter for the question asked when a chest is shown.
+     * @param label the label that needs to be set
+     */
+    public void setQuestion(final Label label) {
+        this.question = label;
+    }
+
+    /**
      * Process the frames depending on the changes in cameraHandler.
      * @param now The current time.
      */
@@ -149,6 +162,7 @@ public class TimeLogController {
         if (!imageView.isVisible()) {
             Mat mat = informationHandler.getMatrix();
             if (mat != null) {
+                question.setVisible(true);
                 approveButton.setVisible(true);
                 notApproveButton.setVisible(true);
                 imageView.setVisible(true);
