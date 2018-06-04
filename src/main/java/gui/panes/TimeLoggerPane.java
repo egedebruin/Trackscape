@@ -1,5 +1,6 @@
 package gui.panes;
 
+import gui.controllers.MainController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,13 +20,15 @@ public class TimeLoggerPane {
      * Class parameters.
      */
     private TimeLogController timeLogController;
+    private MainController mainController;
 
     /**
      * Constructor for TimeLoggerPane.
      * @param control the mainController
      */
-    public TimeLoggerPane(final TimeLogController control) {
-        this.timeLogController = control;
+    public TimeLoggerPane(final MainController control) {
+        this.mainController = control;
+        this.timeLogController = control.getTimeLogController();
     }
 
     /**
@@ -94,7 +97,11 @@ public class TimeLoggerPane {
         Button approveButton = new Button();
         approveButton.setText("Confirm chest opened");
         approveButton.setVisible(false);
-        approveButton.setOnAction(event -> timeLogController.confirmedChest());
+        approveButton.setOnAction(event -> {
+            timeLogController.confirmedChest();
+            //int nextChestIndex =
+            //mainController.getRoomController().fillProgress(nextChestIndex);
+        });
 
         Button notApprove = new Button();
         notApprove.setText("Not Confirm");
@@ -105,7 +112,7 @@ public class TimeLoggerPane {
         imageView.setVisible(false);
 
         buttonPane.getChildren().addAll(approveButton, notApprove, imageView);
-        
+
         timeLogController.setApproveButton(approveButton);
         timeLogController.setNotApproveButton(notApprove);
         timeLogController.setImageView(imageView);

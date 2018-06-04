@@ -12,11 +12,13 @@ public class RoomController {
     private Progress progress;
     private GridPane progressBar;
     private CameraHandler cameraHandler;
+    private int progressCompleted;
 
     /**
      * Constructor.
      */
     public RoomController() {
+        progressCompleted = 0;
     }
 
     /**
@@ -56,9 +58,9 @@ public class RoomController {
      * Fills the progressbar up to the current stage.
      * @param stage the current progress stage of the game
      */
-    private void fillProgress(final int stage) {
+    public void fillProgress(final int stage) {
         for (int k = 0; k <= stage; k++) {
-            progressBar.getChildren().get(k);
+            //progressBar.getChildren().get(k);
             progressBar.getChildren().get(k).getStyleClass().clear();
 
             if (k == progressBar.getChildren().size() - 1) {
@@ -69,6 +71,7 @@ public class RoomController {
             }
             k++;
         }
+        progressCompleted = stage;
     }
 
     /**
@@ -90,6 +93,7 @@ public class RoomController {
                 }
             }
         }
+        this.progressCompleted = stage;
     }
 
     /**
@@ -123,5 +127,9 @@ public class RoomController {
      */
     public void setProgressBar(final GridPane newProgressBar) {
         this.progressBar = newProgressBar;
+    }
+
+    public int getProgressCompleted() {
+        return progressCompleted;
     }
 }
