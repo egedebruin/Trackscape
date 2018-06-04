@@ -117,25 +117,20 @@ public class Room {
         this.targetDurationInSec = startsTime;
     }
 
+    /**
+     * Update the state of the escape room room.
+     */
     public void updateRoom() {
         Chest previousChest = new OpenedChest();
         for (Chest chest : chestList) {
             chest.updateStatus(previousChest);
             previousChest = chest;
         }
-        System.out.println(countOpenedChests());
     }
 
-    private int countOpenedChests() {
-        int count = 0;
-        for (Chest chest : chestList) {
-            if (chest.getChestState() == Chest.Status.OPENED) {
-                count++;
-            }
-        }
-        return count;
-    }
-
+    /**
+     * Sets the next chest with state TO_BE_OPENED OPENED, by approving it to be opened.
+     */
     public void setNextChestOpened() {
         for (Chest chest : chestList) {
             if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
