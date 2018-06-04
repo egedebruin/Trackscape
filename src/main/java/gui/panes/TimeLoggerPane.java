@@ -1,18 +1,21 @@
 package gui.panes;
 
 import gui.controllers.MainController;
+import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.image.ImageView;
+
+import java.io.File;
 
 import java.io.File;
 
@@ -125,7 +128,11 @@ public class TimeLoggerPane {
         approveButton.setVisible(false);
         approveButton.setOnAction(event -> {
             timeLogController.confirmedChest();
-            mainController.getRoomController().getProgress().getRoom().setNextChestOpened();
+            RoomController roomController = mainController.getRoomController();
+            if (roomController.getProgress() != null) {
+                roomController.getProgress().getRoom().setNextChestOpened();
+                roomController.fillProgress(roomController.getProgress().getFillCount());
+            }
         });
 
         Button notApprove = new Button();

@@ -138,6 +138,9 @@ public class RoomController {
         return progressCompleted;
     }
 
+    /**
+     * Update the roomController.
+     */
     public void update() {
         if (progress != null) {
             progress.updateProgress();

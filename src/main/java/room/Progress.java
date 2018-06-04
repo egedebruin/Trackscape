@@ -72,8 +72,19 @@ public class Progress {
         return total;
     }
 
+    /**
+     * Update the progress of the escape room.
+     */
     public void updateProgress() {
         room.updateRoom();
         subSectionCount = calculateProgress();
+    }
+
+    /**
+     * Calculates the position to where the progressbar needs to be filled.
+     * @return the index to where the progressbar needs to be filled.
+     */
+    public int getFillCount() {
+        return (calculateProgress() - 1) * 2;
     }
 }
