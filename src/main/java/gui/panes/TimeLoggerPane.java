@@ -146,7 +146,7 @@ public class TimeLoggerPane {
     }
 
     /**
-     * Create the dissaprove button.
+     * Create the disapprove button.
      * @param viewHeight the height of the imageView
      * @return notApprove button
      */
