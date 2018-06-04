@@ -2,12 +2,13 @@ package gui.controllers;
 
 import gui.MonitorScene;
 import handlers.CameraHandler;
-import java.io.File;
-import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * MainController class for controlling GUI elements.
@@ -84,7 +85,7 @@ public class MainController {
     public void closeStream() {
         cameraHandler.closeHandler();
         timeLogController.closeController();
-        if (roomController != null && roomController.isConfigurationActive()) {
+        if (roomController != null && configured) {
             roomController.closeController();
         }
         if (animationTimer != null) {

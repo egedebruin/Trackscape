@@ -13,7 +13,6 @@ public class RoomController {
     private GridPane progressBar;
     private CameraHandler cameraHandler;
     private int progressCompleted;
-    private boolean configurationActive = false;
 
     /**
      * Constructor.
@@ -29,7 +28,6 @@ public class RoomController {
     public void configure(final String configFile) {
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
-        configurationActive = true;
     }
 
     /**
@@ -37,7 +35,6 @@ public class RoomController {
      */
     public void closeController() {
         progressBar.getChildren().clear();
-        configurationActive = false;
     }
 
     /**
@@ -135,12 +132,5 @@ public class RoomController {
     public int getProgressCompleted() {
         return progressCompleted;
     }
-
-    /**
-     * Checks if a configuration file is active.
-     * @return configurationActive
-     */
-    public boolean isConfigurationActive() {
-        return configurationActive;
-    }
+    
 }
