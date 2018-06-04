@@ -64,8 +64,9 @@ public class MediaBar {
         playButton.setGraphic(createLogo("play"));
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
+                controller.closeStream();
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Yo momma is fat");
+                alert.setTitle("TrackScape");
                 alert.setContentText("There are no cameras to be shown!");
                 alert.showAndWait();
             } else if (!controller.isVideoPlaying()) {
