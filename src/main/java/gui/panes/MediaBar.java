@@ -20,17 +20,24 @@ public class MediaBar {
      * Class parameters.
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
-    private MainController mainController;
-    private MenuMediaPane menuMediaPane;
+    private MainController controller;
+    private MenuPane menuPane;
+    private MediaPane mediaPane;
+    private ProgressBar progressBar;
 
     /**
      * Constructor for MediaBar.
-     * @param control the mainController
-     * @param pane the menuMediaPane
+     * @param control the controller
+     * @param menu the menu
+     * @param media the mediaplayer
+     * @param progress the progress bar
      */
-    public MediaBar(final MainController control, final MenuMediaPane pane) {
-        this.mainController = control;
-        this.menuMediaPane = pane;
+    public MediaBar(final MainController control, final MenuPane menu,
+                    final MediaPane media, final ProgressBar progress) {
+        this.controller = control;
+        this.menuPane = menu;
+        this.mediaPane = media;
+        this.progressBar = progress;
     }
 
     /**
@@ -41,9 +48,9 @@ public class MediaBar {
     public HBox createMediaBar() {
         final int top = 5;
         final int right = 10;
-        final int bottom = 5;
+        final int bottom = 25;
         final int left = 10;
-        final int spacing = 10;
+        final int spacing = 0;
 
         // Create mediabar for video options
         HBox mediaBar = new HBox();
@@ -51,25 +58,44 @@ public class MediaBar {
         mediaBar.setPadding(new Insets(top, right, bottom, left));
         mediaBar.setSpacing(spacing);
 
-        // Create the play/pauze button
-        final Button playButton = new Button("Start Cameras");
+        // Create the play button
+        final Button playButton = new Button();
+        playButton.getStyleClass().add("media-buttons");
+        playButton.setGraphic(createLogo("play"));
         playButton.setOnAction(event -> {
-            if (mainController.getCameras() == 0) {
+            if (controller.getCameras() == 0) {
+                controller.closeStream();
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Yo momma is fat");
+                alert.setTitle("TrackScape");
                 alert.setContentText("There are no cameras to be shown!");
                 alert.showAndWait();
-            } else if (!mainController.isVideoPlaying()) {
-                mainController.setVideoPlaying(true);
+            } else if (!controller.isVideoPlaying()) {
+                controller.setVideoPlaying(true);
                 initializeImageViewers();
-                mainController.grabTimeFrame(imageViews);
+                if (controller.getConfigured()) {
+                    initializeProgressBar();
+                }
+                controller.grabTimeFrame(imageViews);
             }
         });
+        playButton.setOnMouseEntered(event
+            -> playButton.setGraphic(createLogo("playActive")));
+        playButton.setOnMouseExited(event
+            -> playButton.setGraphic(createLogo("play")));
 
-        final Button closeStream = new Button("Close Stream");
-        closeStream.setOnAction(event -> menuMediaPane.getMenuPane().endStream());
+        // Create the stop button
+        final Button stopButton = new Button();
+        stopButton.getStyleClass().add("media-buttons");
+        stopButton.setGraphic(createLogo("stop"));
+        stopButton.setOnAction(event -> {
+            menuPane.endStream();
+        });
+        stopButton.setOnMouseEntered(event
+            -> stopButton.setGraphic(createLogo("stopActive")));
+        stopButton.setOnMouseExited(event
+            -> stopButton.setGraphic(createLogo("stop")));
 
-        mediaBar.getChildren().addAll(playButton, closeStream);
+        mediaBar.getChildren().addAll(playButton, stopButton);
 
         return mediaBar;
     }
@@ -78,10 +104,10 @@ public class MediaBar {
      * Initializes the imageViews with a black image.
      */
     private void initializeImageViewers() {
-        menuMediaPane.getMediaPane().getMediaPlayerPane().getChildren().clear();
+        mediaPane.getMediaPlayerPane().getChildren().clear();
 
         imageViews.clear();
-        for (int k = 0; k < mainController.getCameras(); k++) {
+        for (int k = 0; k < controller.getCameras(); k++) {
             imageViews.add(new ImageView());
         }
 
@@ -97,6 +123,31 @@ public class MediaBar {
             imageViews.get(i).setSmooth(true);
             imageViews.get(i).setCache(false);
         }
-        menuMediaPane.getMediaPane().getMediaPlayerPane().getChildren().addAll(imageViews);
+        mediaPane.getMediaPlayerPane().getChildren().addAll(imageViews);
+    }
+
+    /**
+     * Initialize the progressBar with current configuration.
+     */
+    private void initializeProgressBar() {
+        progressBar.getProgressBar().getChildren().clear();
+        progressBar.constructProgressBar();
+    }
+
+    /**
+     * Create the imageView for a button logo.
+     * @param fileName the name of the file
+     * @return ImageView of the logo
+     */
+    private ImageView createLogo(final String fileName) {
+        final int buttonWidth = 70;
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\buttons\\" + fileName + ".png");
+        Image img = new Image(streamEnd.toURI().toString());
+        ImageView logo = new ImageView();
+        logo.setFitWidth(buttonWidth);
+        logo.setPreserveRatio(true);
+        logo.setImage(img);
+        return logo;
     }
 }

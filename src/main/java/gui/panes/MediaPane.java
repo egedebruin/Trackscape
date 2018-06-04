@@ -16,14 +16,12 @@ public class MediaPane {
     /**
      * Class parameters.
      */
-    private FlowPane mediaPlayerPane;
+    private FlowPane mediaPane = new FlowPane();
 
     /**
      * Constructor for MediaPane.
-     * @param mediaPane the pane on which the mediaPlayer is shown
      */
-    public MediaPane(final FlowPane mediaPane) {
-        this.mediaPlayerPane = mediaPane;
+    public MediaPane() {
     }
 
     /**
@@ -31,16 +29,11 @@ public class MediaPane {
      * @return mediaPlayerPane
      */
     public Pane createImageViewerPane() {
-        final int gap = 3;
         final int inset = 5;
-        mediaPlayerPane.setPadding(new Insets(0, inset, inset, inset));
-        mediaPlayerPane.setVgap(gap);
-        mediaPlayerPane.setHgap(gap);
-        mediaPlayerPane.setAlignment(Pos.CENTER);
-
+        mediaPane.setPadding(new Insets(0, inset, inset, inset));
         showCameraIcon();
-
-        return mediaPlayerPane;
+        mediaPane.setAlignment(Pos.CENTER);
+        return mediaPane;
     }
 
     /**
@@ -49,21 +42,21 @@ public class MediaPane {
     public void showCameraIcon() {
         final int width = 100;
         File streamEnd = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\cameraIcon.png");
+                + "\\src\\main\\java\\gui\\images\\icons\\cameraIcon.png");
         Image cameraIcon = new Image(streamEnd.toURI().toString());
         ImageView startImage = new ImageView();
         startImage.setFitWidth(width);
         startImage.setPreserveRatio(true);
         startImage.setImage(cameraIcon);
-        mediaPlayerPane.getChildren().clear();
-        mediaPlayerPane.getChildren().add(startImage);
+        mediaPane.getChildren().clear();
+        mediaPane.getChildren().add(startImage);
     }
 
     /**
      * Get the mediaPlayerPane.
      * @return mediaPlayerPane the pane on which the mediaPlayer is shown
      */
-    public FlowPane getMediaPlayerPane() {
-        return mediaPlayerPane;
+    public Pane getMediaPlayerPane() {
+        return mediaPane;
     }
 }

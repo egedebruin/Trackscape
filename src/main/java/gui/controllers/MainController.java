@@ -2,12 +2,13 @@ package gui.controllers;
 
 import gui.MonitorScene;
 import handlers.CameraHandler;
-import java.io.File;
-import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * MainController class for controlling GUI elements.
@@ -32,6 +33,7 @@ public class MainController {
         cameraHandler = new CameraHandler();
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);
+        roomController = new RoomController();
     }
 
     /**
@@ -71,6 +73,7 @@ public class MainController {
                     closeStream();
                 }
                 timeLogController.processFrame(now);
+                roomController.update();
             }
         };
         timeLogController.clearInformationArea();
@@ -83,7 +86,7 @@ public class MainController {
     public void closeStream() {
         cameraHandler.closeHandler();
         timeLogController.closeController();
-        if (roomController != null) {
+        if (roomController != null && configured) {
             roomController.closeController();
         }
         if (animationTimer != null) {
@@ -112,7 +115,7 @@ public class MainController {
      * @param jsonHandler the current jsonHandler
      */
     public void configure(final String jsonHandler) {
-        roomController = new RoomController(jsonHandler);
+        roomController.configure(jsonHandler);
 
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             roomController.getCameraHandler().addCamera(cameraHandler.getCamera(i).getLink());
@@ -121,7 +124,10 @@ public class MainController {
         cameraHandler = roomController.getCameraHandler();
         timeLogController.setCameraHandler(cameraHandler);
         videoController.setCameraHandler(cameraHandler);
-        configured = true;
+
+        if (cameraHandler.listSize() != 0) {
+            configured = true;
+        }
     }
 
     /**
@@ -162,5 +168,13 @@ public class MainController {
      */
     public TimeLogController getTimeLogController() {
         return timeLogController;
+    }
+
+    /**
+     * Get the RoomController.
+     * @return The RoomController
+     */
+    public RoomController getRoomController() {
+        return roomController;
     }
 }
