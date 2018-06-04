@@ -34,7 +34,9 @@ public class RoomController {
      * Close the controller when the stream is closed.
      */
     public void closeController() {
-        progressBar.getChildren().clear();
+        if (progressBar != null) {
+            progressBar.getChildren().clear();
+        }
     }
 
     /**
@@ -60,7 +62,6 @@ public class RoomController {
      */
     public void fillProgress(final int stage) {
         for (int k = 0; k <= stage; k++) {
-            //progressBar.getChildren().get(k);
             progressBar.getChildren().get(k).getStyleClass().clear();
 
             if (k == progressBar.getChildren().size() - 1) {
