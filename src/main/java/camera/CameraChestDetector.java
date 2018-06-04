@@ -69,7 +69,6 @@ public class CameraChestDetector extends CameraObjectDetector {
      */
     private List<Mat> includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {
-        boolean isContourDrawn = false;
         List<Mat> mats = new ArrayList<>();
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
