@@ -17,6 +17,8 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 
+import java.io.File;
+
 /**
  * Class that creates the TimeLoggerPane for the VideoPane.
  */
