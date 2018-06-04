@@ -11,7 +11,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -95,11 +94,11 @@ public class TimeLoggerPane {
      */
     public Pane createApproveButton() {
         final int padding = 5;
-        GridPane buttonPane = new GridPane();
+        FlowPane buttonPane = new FlowPane();
         buttonPane.setAlignment(Pos.BOTTOM_CENTER);
         buttonPane.setPadding(new Insets(padding, padding, 0, 0));
 
-        Label question = new Label("Is this a chest?" + "\n");
+        Label question = new Label("Is this a newly opened chest?           " + "\n");
         question.setVisible(false);
 
         File tick = new File(System.getProperty("user.dir")
@@ -141,11 +140,12 @@ public class TimeLoggerPane {
         ImageView imageView = new ImageView();
         imageView.setVisible(false);
 
-        final int rowIndex = 3;
-        buttonPane.add(imageView, 0, 1);
-        buttonPane.add(question, 0, 2);
-        buttonPane.add(approveButton, 0, rowIndex);
-        buttonPane.add(notApprove, 1, rowIndex);
+//        final int rowIndex = 3;
+//        buttonPane.add(imageView, 0, 1);
+//        buttonPane.add(question, 0, 2);
+//        buttonPane.add(approveButton, 0, rowIndex);
+//        buttonPane.add(notApprove, 1, rowIndex);
+        buttonPane.getChildren().addAll(imageView, question, approveButton, notApprove);
 
         timeLogController.setQuestion(question);
         timeLogController.setApproveButton(approveButton);
