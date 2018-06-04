@@ -35,7 +35,8 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param subtraction the subtraction of this frame.
      * @return true if chest is detected, false otherwise.
      */
-    public List<Mat> checkForChests(final Mat newFrame, final int noOfChests, final Mat subtraction) {
+    public List<Mat> checkForChests(final Mat newFrame, final int noOfChests,
+                                    final Mat subtraction) {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
         List<Mat> mats = new ArrayList<>();
@@ -86,13 +87,18 @@ public class CameraChestDetector extends CameraObjectDetector {
                 addToRects(newrect, rects, noOfChests);
             }
         }
+        final int axisOffset = 50;
+        final int sizeOffset = 100;
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
-                Rect cutoutChest = new Rect(rect.x - 50, rect.y - 50, rect.width + 100, rect.height + 100);
-                Point topLeft = new Point(Math.max(cutoutChest.tl().x, 0) , Math.max(0, cutoutChest.tl().y));
-                Point bottomRight = new Point(Math.min(cutoutChest.br().x, frame.width()-1) , Math.min(cutoutChest.br().y, frame.height()-1));
+                Rect cutoutChest = new Rect(rect.x - axisOffset, rect.y - axisOffset,
+                    rect.width + sizeOffset, rect.height + sizeOffset);
+                Point topLeft = new Point(Math.max(cutoutChest.tl().x, 0),
+                    Math.max(0, cutoutChest.tl().y));
+                Point bottomRight = new Point(Math.min(cutoutChest.br().x,
+                    frame.width() - 1), Math.min(cutoutChest.br().y, frame.height() - 1));
                 //Imgproc.rectangle(frame, topLeft, bottomRight, CHESTBOXCOLOUR, 2);
-                Rect r = new Rect(topLeft,bottomRight);
+                Rect r = new Rect(topLeft, bottomRight);
                 mats.add(frame.submat(r));
             }
         }

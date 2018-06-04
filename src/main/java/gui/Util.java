@@ -1,11 +1,20 @@
 package gui;
 
+import org.opencv.core.Mat;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.concurrent.TimeUnit;
-import org.opencv.core.Mat;
 
-public class Util {
+/**
+ * Class with helper functions.
+ */
+public final class Util {
+
+    /**
+     * Constructor.
+     */
+    private Util() { }
 
     /**
      * Converts a Mat to a BufferedImage.

@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -154,8 +154,8 @@ public class TimeLogController {
                 imageView.setVisible(true);
                 BufferedImage bufferedFrame = Util.matToBufferedImage(mat);
 
-                int newWidth = 300;
-                int newHeight = 200;
+                final int newWidth = 300;
+                final int newHeight = 200;
                 BufferedImage resizedSubFrame = resizeBImage(bufferedFrame, newWidth, newHeight);
                 Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
 
@@ -166,7 +166,15 @@ public class TimeLogController {
         checkInformation();
     }
 
-    public BufferedImage resizeBImage(BufferedImage bi, int newWidth, int newHeight) {
+    /**
+     * Resize the BufferedImage to fit in the screen.
+     * @param bi the BufferedImage
+     * @param newWidth the new width
+     * @param newHeight the new height
+     * @return scaledImage
+     */
+    public BufferedImage resizeBImage(final BufferedImage bi,
+                                      final int newWidth, final int newHeight) {
         BufferedImage scaledImage = null;
         if (bi != null) {
             scaledImage = new BufferedImage(newWidth, newHeight, bi.getType());
@@ -185,7 +193,11 @@ public class TimeLogController {
         this.cameraHandler = handler;
     }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
+    /**
+     * Set the ImageView to a different ImageView.
+     * @param iv the imageView to be set
+     */
+    public void setImageView(final ImageView iv) {
+        this.imageView = iv;
     }
 }

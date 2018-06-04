@@ -129,8 +129,11 @@ public class RoomController {
         this.progressBar = newProgressBar;
     }
 
+    /**
+     * Returns the current progress that is completed.
+     * @return progressCompleted
+     */
     public int getProgressCompleted() {
         return progressCompleted;
     }
-    
 }

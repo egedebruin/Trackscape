@@ -9,7 +9,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import room.Chest;
 
-import java.awt.*;
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +48,8 @@ public class ProgressBar {
 
     /**
      * Construct and initialize progressbar.
-     * @return progressBar
      */
-    public GridPane constructProgressBar() {
+    public void constructProgressBar() {
         createItems();
 
         int spot = 0;
@@ -61,12 +61,9 @@ public class ProgressBar {
                 spot = spot + 1;
             }
         }
-
         controller.setProgressBar(progressBar);
         controller.setItemsOnDone();
-
-        return progressBar;
-    }
+        }
 
     /**
      * Create the items of the progress bar.

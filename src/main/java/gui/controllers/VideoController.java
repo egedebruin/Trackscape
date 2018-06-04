@@ -2,15 +2,15 @@ package gui.controllers;
 
 import gui.Util;
 import handlers.CameraHandler;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for the VideoController, to control the video shown.
