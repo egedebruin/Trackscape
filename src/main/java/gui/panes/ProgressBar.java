@@ -103,7 +103,7 @@ public class ProgressBar {
      */
     private Label createLineLabel() {
         File line = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\line.png");
+            + "\\src\\main\\java\\gui\\images\\progressbar\\line.png");
         Image lineImage = new Image(line.toURI().toString());
 
         final double size = fittedWidth;
@@ -124,7 +124,7 @@ public class ProgressBar {
      */
     private Label createChestLabel() {
         File chest = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\blackchest.png");
+            + "\\src\\main\\java\\gui\\images\\progressbar\\blackchest.png");
         Image chestImage = new Image(chest.toURI().toString());
 
         final double size = 1.4 * fittedWidth;
@@ -153,7 +153,7 @@ public class ProgressBar {
         Random random = new Random();
 
         File puzzle = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\puzzlepieces\\puzzle"
+            + "\\src\\main\\java\\gui\\images\\progressbar\\puzzle"
             + random.nextInt(puzzlePieces) + ".png");
         Image puzzleImage = new Image(puzzle.toURI().toString());
 

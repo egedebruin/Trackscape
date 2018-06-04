@@ -1,5 +1,6 @@
 package gui.panes;
 
+import gui.Util;
 import gui.controllers.MainController;
 import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
@@ -9,12 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-
-import java.io.File;
 
 /**
  * Class that creates the TimeLoggerPane for the VideoPane.
@@ -93,36 +91,41 @@ public class TimeLoggerPane {
      * @return the Pane where the button is made on.
      */
     public Pane createApproveButton() {
-        final int padding = 5;
+        final int padding = 20;
         FlowPane buttonPane = new FlowPane();
         buttonPane.setAlignment(Pos.BOTTOM_CENTER);
         buttonPane.setPadding(new Insets(padding, padding, 0, 0));
 
-        Label question = new Label("Is this a newly opened chest?           " + "\n");
+        Label question = new Label("      Is this a newly opened chest?      ");
         question.setVisible(false);
 
-        File tick = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\checkButton.png");
-        File cross = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\cancelButton.png");
+        ImageView imageView = new ImageView();
+        imageView.setVisible(false);
 
-        final int viewHeight = 50;
+        final int viewHeight = 70;
+        Button approveButton = createApproveButton(viewHeight);
+        Button disapproveButton = createDisapproveButton(viewHeight);
 
-        Image greenTick = new Image(tick.toURI().toString());
-        ImageView tickView = new ImageView();
-        tickView.setFitHeight(viewHeight);
-        tickView.setPreserveRatio(true);
-        tickView.setImage(greenTick);
+        buttonPane.getChildren().addAll(imageView, question, approveButton, disapproveButton);
 
-        Image redCross = new Image(cross.toURI().toString());
-        ImageView crossView = new ImageView();
-        crossView.setFitHeight(viewHeight);
-        crossView.setPreserveRatio(true);
-        crossView.setImage(redCross);
+        timeLogController.setQuestion(question);
+        timeLogController.setApproveButton(approveButton);
+        timeLogController.setNotApproveButton(disapproveButton);
+        timeLogController.setImageView(imageView);
 
+        return buttonPane;
+    }
+
+    /**
+     * Create the approve button.
+     * @param viewHeight the height of the ImageView
+     * @return ApproveButton
+     */
+    private Button createApproveButton(final int viewHeight) {
         Button approveButton = new Button();
-        approveButton.setGraphic(tickView);
+        approveButton.setGraphic(Util.createButtonLogo("approve", viewHeight));
         approveButton.setVisible(false);
+
         approveButton.setOnAction(event -> {
             timeLogController.confirmedChest();
             RoomController roomController = mainController.getRoomController();
@@ -131,27 +134,37 @@ public class TimeLoggerPane {
                 roomController.fillProgress(roomController.getProgress().getFillCount());
             }
         });
+        approveButton.setOnMouseEntered(event -> {
+            approveButton.setGraphic(Util.createButtonLogo(
+                "approveActive", viewHeight));
+        });
+        approveButton.setOnMouseExited(event -> {
+            approveButton.setGraphic(Util.createButtonLogo("approve", viewHeight));
+        });
 
-        Button notApprove = new Button();
-        notApprove.setGraphic(crossView);
-        notApprove.setVisible(false);
-        notApprove.setOnAction(event -> timeLogController.unConfirm());
-
-        ImageView imageView = new ImageView();
-        imageView.setVisible(false);
-
-//        final int rowIndex = 3;
-//        buttonPane.add(imageView, 0, 1);
-//        buttonPane.add(question, 0, 2);
-//        buttonPane.add(approveButton, 0, rowIndex);
-//        buttonPane.add(notApprove, 1, rowIndex);
-        buttonPane.getChildren().addAll(imageView, question, approveButton, notApprove);
-
-        timeLogController.setQuestion(question);
-        timeLogController.setApproveButton(approveButton);
-        timeLogController.setNotApproveButton(notApprove);
-        timeLogController.setImageView(imageView);
-
-        return buttonPane;
+        return approveButton;
     }
+
+    /**
+     * Create the dissaprove button.
+     * @param viewHeight the height of the imageView
+     * @return notApprove button
+     */
+    private Button createDisapproveButton(final int viewHeight) {
+        Button notApprove = new Button();
+        notApprove.setGraphic(Util.createButtonLogo("disapprove", viewHeight));
+        notApprove.setVisible(false);
+
+        notApprove.setOnAction(event -> timeLogController.unConfirm());
+        notApprove.setOnMouseEntered(event -> {
+            notApprove.setGraphic(Util.createButtonLogo(
+                "disapproveActive", viewHeight));
+        });
+        notApprove.setOnMouseExited(event -> {
+            notApprove.setGraphic(Util.createButtonLogo("disapprove", viewHeight));
+        });
+
+        return notApprove;
+    }
+
 }

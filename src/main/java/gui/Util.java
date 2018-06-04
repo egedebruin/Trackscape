@@ -1,9 +1,12 @@
 package gui;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -71,4 +74,22 @@ public final class Util {
         }
         return hr + ":" + min + ":" + sec;
     }
+
+    /**
+     * Create the imageView for a button logo.
+     * @param fileName the name of the file
+     * @param buttonWidth the width of the button
+     * @return ImageView of the logo
+     */
+    public static ImageView createButtonLogo(final String fileName, final int buttonWidth) {
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\buttons\\" + fileName + ".png");
+        Image img = new Image(streamEnd.toURI().toString());
+        ImageView logo = new ImageView();
+        logo.setFitWidth(buttonWidth);
+        logo.setPreserveRatio(true);
+        logo.setImage(img);
+        return logo;
+    }
+
 }
