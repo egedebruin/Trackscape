@@ -66,4 +66,11 @@ public class InformationHandler {
     public Queue<Mat> getMatQueue() {
         return matQueue;
     }
+
+    /**
+     * Clear the MatQueue.
+     */
+    public void clearMatQueue() {
+        matQueue.clear();
+    }
 }

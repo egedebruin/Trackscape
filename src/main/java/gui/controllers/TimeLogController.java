@@ -108,7 +108,9 @@ public class TimeLogController {
         question.setVisible(false);
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
+        imageView.setImage(null);
         imageView.setVisible(false);
+        informationHandler.clearMatQueue();
     }
 
     /**
