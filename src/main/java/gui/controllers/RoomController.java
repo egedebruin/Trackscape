@@ -136,4 +136,8 @@ public class RoomController {
     public int getProgressCompleted() {
         return progressCompleted;
     }
+
+    public void update() {
+        progress.updateProgress();
+    }
 }

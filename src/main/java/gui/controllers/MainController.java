@@ -73,6 +73,7 @@ public class MainController {
                     closeStream();
                 }
                 timeLogController.processFrame(now);
+                roomController.update();
             }
         };
         timeLogController.clearInformationArea();

@@ -99,8 +99,7 @@ public class TimeLoggerPane {
         approveButton.setVisible(false);
         approveButton.setOnAction(event -> {
             timeLogController.confirmedChest();
-            //int nextChestIndex =
-            //mainController.getRoomController().fillProgress(nextChestIndex);
+            mainController.getRoomController().getProgress().getRoom().setNextChestOpened();
         });
 
         Button notApprove = new Button();

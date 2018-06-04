@@ -39,17 +39,17 @@ public class Progress {
      * @return subSectionCount (=total)
      */
     public int calculateProgress() {
-        subSectionCount = 0;
-        // Counts the open chests, chestList is ordened in the following manner:
+        int progressMeter = 0;
+        // Counts the open chests, chestList is ordered in the following manner:
         // OPENED : TO_BE_OPENED : WAITING_FOR_SECTION_TO_START
         for (Chest chest : room.getChestList()) {
             if (chest.getChestState() == Chest.Status.OPENED) {
-                subSectionCount += chest.getNumberOfSubSections();
+                progressMeter += chest.getNumberOfSubSections();
             } else if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
-                subSectionCount = chest.countSubsectionsCompleted();
+                progressMeter += chest.countSubsectionsCompleted();
             }
         }
-        return subSectionCount;
+        return progressMeter;
     }
 
     /**
@@ -70,5 +70,10 @@ public class Progress {
             total += chest.getNumberOfSubSections();
         }
         return total;
+    }
+
+    public void updateProgress() {
+        room.updateRoom();
+        subSectionCount = calculateProgress();
     }
 }

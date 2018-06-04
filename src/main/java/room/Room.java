@@ -13,6 +13,7 @@ public class Room {
     private CameraHandler cameraHandler;
     private int numberOfPeople;
     private long targetDurationInSec;
+    private long startTime;
 
     /**
      * Constructor.
@@ -33,6 +34,7 @@ public class Room {
         }
         chestList = chests;
         targetDurationInSec = duration;
+        startTime = System.currentTimeMillis();
     }
 
     /**
@@ -113,5 +115,32 @@ public class Room {
      */
     public void setTargetDuration(final long startsTime) {
         this.targetDurationInSec = startsTime;
+    }
+
+    public void updateRoom() {
+        Chest previousChest = new OpenedChest();
+        for (Chest chest : chestList) {
+            chest.updateStatus(previousChest);
+            previousChest = chest;
+        }
+        System.out.println(countOpenedChests());
+    }
+
+    private int countOpenedChests() {
+        int count = 0;
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.OPENED) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void setNextChestOpened() {
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                chest.setApprovedChestFoundByHost(true);
+            }
+        }
     }
 }
