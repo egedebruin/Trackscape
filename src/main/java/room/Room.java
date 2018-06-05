@@ -139,7 +139,12 @@ public class Room {
         }
     }
 
-    public void setChestSectionsCompletedTill(int completedSections) {
+    /**
+     * Sets the chests and subsections completed up till the subsection at completedSections.
+     * @param completedSubSections number of completed sections
+     */
+    public void setChestSectionsCompletedTill(final int completedSubSections) {
+        int completedSections = completedSubSections;
         for (Chest chest : chestList) {
             if (chest.getNumberOfSubSections() <= completedSections) {
                 chest.setApprovedChestFoundByHost(true);
@@ -154,7 +159,12 @@ public class Room {
         }
     }
 
-    public void unsetChestSectionsCompletedTill(int completedSections) {
+    /**
+     * Sets all chests up till completedsections.
+     * used when chests need to make negative progress.
+     * @param completedSections number of completed sections
+     */
+    public void unsetChestSectionsCompletedTill(final int completedSections) {
         for (Chest chest : chestList) {
             chest.resetChest();
         }

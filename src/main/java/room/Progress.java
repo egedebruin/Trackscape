@@ -80,7 +80,12 @@ public class Progress {
         subSectionCount = calculateProgress();
     }
 
-    public int getSubSectionCountFromBarIndex(int progressBarIndex) {
+    /**
+     * Calculates the no subsections that are completed according to the progressbar.
+     * @param progressBarIndex the index
+     * @return the number of subsections up till index
+     */
+    public int getSubSectionCountFromBarIndex(final int progressBarIndex) {
         subSectionCount = (progressBarIndex / 2) + 1;
         return subSectionCount;
     }
@@ -93,7 +98,11 @@ public class Progress {
         return (calculateProgress() - 1) * 2;
     }
 
-    public void setSubSectionCount(int subSectionCount) {
-        this.subSectionCount = subSectionCount;
+    /**
+     * Set the no subsections.
+     * @param newSubSectionCount the new no subsections
+     */
+    public void setSubSectionCount(final int newSubSectionCount) {
+        this.subSectionCount = newSubSectionCount;
     }
 }
