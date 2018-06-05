@@ -1,12 +1,9 @@
 package gui.panes;
 
-import gui.Controller;
+import gui.controllers.MainController;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
 
 /**
  * Class that constructs the videoPane for the MonitorScene.
@@ -15,23 +12,26 @@ public class VideoPane {
     /**
      * Class parameters.
      */
-    private FlowPane mediaPlayerPane = new FlowPane();
-    private Controller controller;
-    private MenuMediaPane menuMediaPane;
+    private MainController controller;
+    private MediaPane mediaPane;
+    private MenuPane menuPane;
     private MediaBar mediaBar;
+    private ProgressBar progressBar;
     private TimeLoggerPane timeLoggerPane;
     private StatusPane statusPane;
 
     /**
      * Constructor for VideoPane.
-     * @param control the controller
+     * @param control the mainController
      */
-    public VideoPane(final Controller control) {
+    public VideoPane(final MainController control) {
         this.controller = control;
-        menuMediaPane = new MenuMediaPane(controller, mediaPlayerPane);
-        mediaBar = new MediaBar(controller, menuMediaPane);
-        timeLoggerPane = new TimeLoggerPane(controller);
         statusPane = new StatusPane();
+        mediaPane = new MediaPane();
+        progressBar = new ProgressBar(controller.getRoomController());
+        menuPane = new MenuPane(controller, mediaPane, progressBar);
+        mediaBar = new MediaBar(controller, menuPane, mediaPane, progressBar);
+        timeLoggerPane = new TimeLoggerPane(controller.getTimeLogController());
     }
 
     /**
@@ -44,21 +44,21 @@ public class VideoPane {
     public Pane createVideoPane(final Stage primaryStage) {
         BorderPane videoPane = new BorderPane();
 
-        ArrayList<Pane> mmp =
-            menuMediaPane.createMenuAndMediaPane(videoPane, primaryStage);
+        // Create the pane that will be in the center of the videopane
+        BorderPane mediaPlayer = new BorderPane();
+        mediaPlayer.setCenter(mediaPane.createImageViewerPane());
+        mediaPlayer.setBottom(mediaBar.createMediaBar());
 
-        // get the menubar and put it at the top of the videoPane
-        videoPane.setTop(mmp.get(0));
-        // get the imageViews (location where videos are shown)
-        // and put it in the center of the videoPane
-        videoPane.setCenter(mmp.get(1));
-
-        // create the functionality panes for the videoPane
-        videoPane.setBottom(mediaBar.createMediaBar());
+        // put menubar at the top of the videopane
+        videoPane.setTop(menuPane.createMenuPane(videoPane, primaryStage));
+        // put the imageviews & mediabar in the center of the videopane
+        videoPane.setCenter(mediaPlayer);
+        // put the timelogger in the left of the videopane
         videoPane.setLeft(timeLoggerPane.createTimeLoggerPane());
-
         // escape room status will be displayed here
         videoPane.setRight(statusPane.createStatusPane());
+        // put the mediabar and progressbar in the bottom of the videopane
+        videoPane.setBottom(progressBar.createProgressBarPane());
 
         return videoPane;
     }

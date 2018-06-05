@@ -1,11 +1,16 @@
 package gui;
 
+import gui.controllers.MainController;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
+import java.io.File;
 
 /**
  * Abstract class for Scenes with repeated methods.
@@ -14,14 +19,14 @@ public abstract class BaseScene {
     /**
      * Class parameters.
      */
-    private Controller controller;
+    private MainController mainController;
 
     /**
      * Constructor for BaseScene.
-     * @param crtl the controller
+     * @param crtl the mainController
      */
-    public BaseScene(final Controller crtl) {
-        this.controller = crtl;
+    public BaseScene(final MainController crtl) {
+        this.mainController = crtl;
     }
 
     /**
@@ -30,18 +35,21 @@ public abstract class BaseScene {
      * @return topPane
      */
     protected Pane createTopPane() {
-        final int size = 100;
-        Text text = new Text("TrackScape");
-        text.setFont(Font.font("Edwardian Script ITC", size));
-        text.setFill(Color.BLACK);
-        text.setStroke(Color.LIGHTSLATEGREY);
-        text.setStrokeWidth(2);
+        final int width = 140;
+        File streamEnd = new File(System.getProperty("user.dir")
+            + "\\src\\main\\java\\gui\\images\\trackscape.png");
+        Image trackscape = new Image(streamEnd.toURI().toString());
+        ImageView logo = new ImageView();
+        logo.setFitWidth(width);
+        logo.setPreserveRatio(true);
+        logo.setImage(trackscape);
+        FlowPane logoPane = new FlowPane();
+        logoPane.getChildren().add(logo);
+        logoPane.setAlignment(Pos.CENTER);
 
-        FlowPane topPane = new FlowPane();
-        topPane.getChildren().addAll(text);
-        topPane.setAlignment(Pos.CENTER);
+        logoPane.getStyleClass().add("top");
 
-        return topPane;
+        return logoPane;
     }
 
     /**
@@ -52,24 +60,24 @@ public abstract class BaseScene {
     protected Pane createBottomPane() {
         final int size = 15;
 
-        Text text2 = new Text("© TrackScape");
-        text2.setFont(Font.font("Verdana", size));
-        text2.setFill(Color.BLACK);
-        text2.setStroke(Color.LIGHTSLATEGREY);
-        text2.setStrokeWidth(1);
+        Text text = new Text("TrackScape");
+        text.setFont(Font.font("Verdana", size));
+        text.setFill(Color.BLACK);
+        text.setStroke(Color.LIGHTSLATEGREY);
+        text.setStrokeWidth(1);
 
         FlowPane bottomPane = new FlowPane();
-        bottomPane.getChildren().addAll(text2);
+        bottomPane.getChildren().addAll(text);
 
         return bottomPane;
     }
 
     /**
-     * Get the controller.
-     * @return controller
+     * Get the mainController.
+     * @return mainController
      */
-    public Controller getController() {
-        return controller;
+    public MainController getMainController() {
+        return mainController;
     }
 
 }
