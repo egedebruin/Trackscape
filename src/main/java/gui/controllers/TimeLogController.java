@@ -77,6 +77,7 @@ public class TimeLogController {
     public void clearInformationArea() {
         informationArea.clear();
     }
+
     /**
      * Check if there is information to be shown.
      */
@@ -121,13 +122,9 @@ public class TimeLogController {
      */
     public void closeController() {
         timerLabel.setText("00:00:00");
-        question.setVisible(false);
-        approveButton.setVisible(false);
-        notApproveButton.setVisible(false);
+        clearButtons();
         imageView.setImage(null);
-        imageView.setVisible(false);
         informationHandler.clearMatQueue();
-        chestTimestamp = -1;
     }
 
     /**
@@ -178,8 +175,8 @@ public class TimeLogController {
      * @param now The current time.
      */
     public void processFrame(final long now) {
-        checkMatInformation();
         changeTime(now);
+        checkMatInformation();
         checkInformation();
     }
 

@@ -111,6 +111,7 @@ public class CameraHandler {
         activity.addActivities(newFrame, camera.getFrameCounter());
         if (activity.getLastActivity() > 2 && beginTime == -1) {
             beginTime = nanoTime();
+            informationHandler.addInformation("Detected activity");
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
