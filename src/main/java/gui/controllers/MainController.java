@@ -124,10 +124,7 @@ public class MainController {
         cameraHandler = roomController.getCameraHandler();
         timeLogController.setCameraHandler(cameraHandler);
         videoController.setCameraHandler(cameraHandler);
-
-        if (cameraHandler.listSize() != 0) {
-            configured = true;
-        }
+        configured = true;
     }
 
     /**
