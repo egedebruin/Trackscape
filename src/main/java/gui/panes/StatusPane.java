@@ -3,8 +3,12 @@ package gui.panes;
 import handlers.JsonHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+
+import java.io.File;
 
 /**
  * Class that constructs the StatusPane for the VideoPane.
@@ -43,7 +47,7 @@ public class StatusPane {
         numOfChestsOpened = new Label("Amount of opened chests: ?" + "\n");
         numOfPersonsDetected = new Label("Amount of persons detected: ?");
         statusPane.getChildren().addAll(status, numOfChests, numOfPersons,
-                numOfChestsOpened, numOfPersonsDetected);
+                numOfChestsOpened, numOfPersonsDetected, createWarningSign());
 
         return statusPane;
     }
@@ -63,4 +67,19 @@ public class StatusPane {
     public void updatePersons(final String persons) {
         numOfPersonsDetected.setText("Amount of persons detected: " + persons + "\n");
     }
+
+    private Pane createWarningSign() {
+        FlowPane warningPane = new FlowPane();
+
+        File warningFile = new File(System.getProperty("user.dir")
+                + "\\src\\main\\java\\gui\\images\\warning.png");
+        Image warningImage = new Image(warningFile.toURI().toString());
+        ImageView warningView = new ImageView();
+
+        warningView.setImage(warningImage);
+
+        warningPane.getChildren().add(warningView);
+        return warningPane;
+    }
+
 }
