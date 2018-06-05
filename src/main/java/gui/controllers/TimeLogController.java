@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Pair;
 import org.opencv.core.Mat;
 
 import java.awt.Graphics2D;
@@ -27,6 +28,7 @@ public class TimeLogController {
     private InformationHandler informationHandler = new InformationHandler();
     private CameraHandler cameraHandler;
     private ImageView imageView;
+    private long chestTimestamp = -1;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
@@ -55,7 +57,16 @@ public class TimeLogController {
      * @param text The text to add.
      */
     public void addInformation(final String text) {
-        long elapsedTime = System.nanoTime() - cameraHandler.getBeginTime();
+        addInformation(text, System.nanoTime());
+    }
+
+    /**
+     * Add information with different time to correct VBox.
+     * @param text The text to add.
+     * @param time The timestamp.
+     */
+    public void addInformation(final String text, final long time) {
+        long elapsedTime = time - cameraHandler.getBeginTime();
         String newText = Util.getTimeString(elapsedTime) + ": " + text;
         informationArea.appendText(newText + "\n");
     }
@@ -83,21 +94,26 @@ public class TimeLogController {
      * Turns the button invisible after it is clicked.
      */
     public void confirmedChest() {
-        addInformation("Found chest");
-        question.setVisible(false);
-        approveButton.setVisible(false);
-        notApproveButton.setVisible(false);
-        imageView.setVisible(false);
+        addInformation("Found chest", chestTimestamp);
+        clearButtons();
     }
 
     /**
      * Turns button invisible without notification of found chest.
      */
     public void unConfirm() {
+        clearButtons();
+    }
+
+    /**
+     * Set the buttons and picture to not visible.
+     */
+    public void clearButtons() {
         question.setVisible(false);
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
         imageView.setVisible(false);
+        chestTimestamp = -1;
     }
 
     /**
@@ -111,6 +127,7 @@ public class TimeLogController {
         imageView.setImage(null);
         imageView.setVisible(false);
         informationHandler.clearMatQueue();
+        chestTimestamp = -1;
     }
 
     /**
@@ -161,14 +178,23 @@ public class TimeLogController {
      * @param now The current time.
      */
     public void processFrame(final long now) {
-        if (!imageView.isVisible()) {
-            Mat mat = informationHandler.getMatrix();
+        checkMatInformation();
+        changeTime(now);
+        checkInformation();
+    }
+
+    /**
+     * Check the information from the Mat queue for pictures of chests.
+     */
+    public void checkMatInformation() {
+        if (chestTimestamp == -1) {
+            Pair<Mat, Long> mat = informationHandler.getMatrix();
             if (mat != null) {
                 question.setVisible(true);
                 approveButton.setVisible(true);
                 notApproveButton.setVisible(true);
                 imageView.setVisible(true);
-                BufferedImage bufferedFrame = Util.matToBufferedImage(mat);
+                BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
 
                 final int newWidth = 300;
                 final int newHeight = 200;
@@ -176,10 +202,9 @@ public class TimeLogController {
                 Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
 
                 imageView.setImage(image);
+                chestTimestamp = mat.getValue();
             }
         }
-        changeTime(now);
-        checkInformation();
     }
 
     /**

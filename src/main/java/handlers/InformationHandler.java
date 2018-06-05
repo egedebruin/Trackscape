@@ -1,5 +1,6 @@
 package handlers;
 
+import javafx.util.Pair;
 import org.opencv.core.Mat;
 
 import java.util.LinkedList;
@@ -11,7 +12,7 @@ import java.util.Queue;
 public class InformationHandler {
 
     private Queue<String> infQueue = new LinkedList<>();
-    private Queue<Mat> matQueue = new LinkedList<>();
+    private Queue<Pair<Mat, Long>> matQueue = new LinkedList<>();
 
     /**
      * Add information to the infQueue.
@@ -25,7 +26,7 @@ public class InformationHandler {
      * Add matrix to the matQueue.
      * @param mat The new matrix.
      */
-    public void addMatrix(final Mat mat) {
+    public void addMatrix(final Pair<Mat, Long> mat) {
         matQueue.add(mat);
     }
 
@@ -44,7 +45,7 @@ public class InformationHandler {
      * Get matrices from the matQueue and remove if it exists, otherwise returns null.
      * @return matrix.
      */
-    public Mat getMatrix() {
+    public Pair<Mat, Long> getMatrix() {
         if (matQueue.isEmpty()) {
             return null;
         }
@@ -63,7 +64,7 @@ public class InformationHandler {
      * Get the full matrix matQueue.
      * @return the matQueue.
      */
-    public Queue<Mat> getMatQueue() {
+    public Queue<Pair<Mat, Long>> getMatQueue() {
         return matQueue;
     }
 

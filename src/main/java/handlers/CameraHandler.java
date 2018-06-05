@@ -1,8 +1,12 @@
 package handlers;
 
+import static java.lang.System.nanoTime;
+
+
 import camera.Camera;
 import camera.CameraActivity;
 import camera.CameraChestDetector;
+import javafx.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -106,7 +110,7 @@ public class CameraHandler {
 
         activity.addActivities(newFrame, camera.getFrameCounter());
         if (activity.getLastActivity() > 2 && beginTime == -1) {
-            beginTime = System.nanoTime();
+            beginTime = nanoTime();
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
@@ -118,7 +122,8 @@ public class CameraHandler {
             boolean chestFound = mats.size() > 0;
             chestDetected.set(cameraList.indexOf(camera), chestFound);
             for (Mat mat : mats) {
-                informationHandler.addMatrix(mat);
+                Pair<Mat, Long> tuple = new Pair<>(mat, nanoTime());
+                informationHandler.addMatrix(tuple);
             }
         }
     }
