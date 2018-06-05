@@ -78,6 +78,12 @@ public class Progress {
     public void updateProgress() {
         room.updateRoom();
         subSectionCount = calculateProgress();
+        System.out.println(subSectionCount);
+    }
+
+    public int getSubSectionCountFromBarIndex(int progressBarIndex) {
+        subSectionCount = (progressBarIndex / 2) + 1;
+        return subSectionCount;
     }
 
     /**
@@ -86,5 +92,9 @@ public class Progress {
      */
     public int getFillCount() {
         return (calculateProgress() - 1) * 2;
+    }
+
+    public void setSubSectionCount(int subSectionCount) {
+        this.subSectionCount = subSectionCount;
     }
 }

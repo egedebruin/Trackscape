@@ -47,9 +47,17 @@ public class RoomController {
             item.setOnMouseClicked(event -> {
                 if (item.getId() != "line") {
                     if (item.getStyleClass().toString().contains("progress-reset")) {
-                        fillProgress(progressBar.getChildren().indexOf(item));
+                        int index = progressBar.getChildren().indexOf(item);
+                        fillProgress(index);
+                        int completedSections = progress.getSubSectionCountFromBarIndex(index);
+                        progress.setSubSectionCount(completedSections);
+                        progress.getRoom().setChestSectionsCompletedTill(completedSections);
+                        progress.updateProgress();
                     } else {
+                        int index = progressBar.getChildren().indexOf(item);
                         resetProgress(progressBar.getChildren().indexOf(item));
+                        int completedSections = progress.getSubSectionCountFromBarIndex(index);
+                        progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
                     }
                 }
             });

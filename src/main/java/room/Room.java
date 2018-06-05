@@ -138,4 +138,25 @@ public class Room {
             }
         }
     }
+
+    public void setChestSectionsCompletedTill(int completedSections) {
+        for (Chest chest : chestList) {
+            if (chest.getNumberOfSubSections() < completedSections) {
+                chest.setApprovedChestFoundByHost(true);
+                completedSections -= chest.getNumberOfSubSections();
+            } else {
+                while (completedSections > 0) {
+                    chest.subSectionCompleted();
+                    completedSections--;
+                }
+            }
+        }
+    }
+
+    public void unsetChestSectionsCompletedTill(int completedSections) {
+        for (Chest chest : chestList) {
+            chest.resetChest();
+        }
+        setChestSectionsCompletedTill(completedSections);
+    }
 }

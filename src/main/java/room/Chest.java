@@ -9,6 +9,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class Chest {
 
+    public void resetChest() {
+        chestState = Status.WAITING_FOR_SECTION_TO_START;
+        subsectionCompleted = new boolean[numberOfSubSections];
+        approvedChestFoundByHost = false;
+    }
+
     /**
      * Enum of statuses.
      */
