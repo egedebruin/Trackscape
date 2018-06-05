@@ -54,7 +54,10 @@ public class RoomController {
                         progress.getRoom().setChestSectionsCompletedTill(completedSections);
                         progress.updateProgress();
                     } else {
+                        int index = progressBar.getChildren().indexOf(item);
                         resetProgress(progressBar.getChildren().indexOf(item));
+                        int completedSections = progress.getSubSectionCountFromBarIndex(index);
+                        progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
                     }
                 }
             });
