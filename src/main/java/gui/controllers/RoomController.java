@@ -55,8 +55,9 @@ public class RoomController {
                         progress.updateProgress();
                     } else {
                         int index = progressBar.getChildren().indexOf(item);
-                        resetProgress(progressBar.getChildren().indexOf(item));
-                        int completedSections = progress.getSubSectionCountFromBarIndex(index);
+                        resetProgress(index);
+                        int completedSections =
+                            progress.getSubSectionCountFromBarIndex(progressCompleted);
                         progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
                     }
                 }
@@ -90,19 +91,21 @@ public class RoomController {
     private void resetProgress(final int stage) {
         if (stage == progressBar.getChildren().size() - 1) {
             clearStyleSheet(stage);
+            progressCompleted = stage - 2;
         }
         if (stage < progressBar.getChildren().size() - 1) {
             if (progressBar.getChildren().get(stage + 2)
                 .getStyleClass().toString().contains("progress-reset")) {
                 clearStyleSheet(stage);
+                progressCompleted = stage - 2;
             } else {
                 for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
                     clearStyleSheet(k);
                     k++;
                 }
+                progressCompleted = stage;
             }
         }
-        this.progressCompleted = stage;
     }
 
     /**
