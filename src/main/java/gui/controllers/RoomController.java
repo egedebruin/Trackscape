@@ -73,7 +73,10 @@ public class RoomController {
         progress.updateProgress();
         int amountNewChests = progress.getRoom().getChestsOpened() - chestsOpened;
         for (int i = 0; i < amountNewChests; i++) {
-            cameraHandler.getInformationHandler().addInformation("Found chest");
+            int chestNumber = i + chestsOpened + 1;
+            String chestsFound = chestNumber + "/"
+                + progress.getRoom().getChestList().size();
+            cameraHandler.getInformationHandler().addInformation("Found chest " + chestsFound);
         }
     }
 
@@ -158,5 +161,18 @@ public class RoomController {
         if (progress != null) {
             progress.updateProgress();
         }
+    }
+
+    /**
+     * Method for when a chest if confirmed by the host.
+     * @return string format of how many chests are opened
+     */
+    public String confirmedChest() {
+        if (getProgress() != null) {
+            getProgress().getRoom().setNextChestOpened();
+            fillProgress(getProgress().getFillCount());
+        }
+        return progress.getRoom().getChestsOpened() + "/"
+            + progress.getRoom().getChestList().size();
     }
 }
