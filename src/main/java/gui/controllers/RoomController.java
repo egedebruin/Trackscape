@@ -1,6 +1,8 @@
 package gui.controllers;
 
 import handlers.CameraHandler;
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import room.Progress;
 
@@ -11,8 +13,10 @@ public class RoomController {
 
     private Progress progress;
     private GridPane progressBar;
+    private FlowPane statusPane;
     private CameraHandler cameraHandler;
     private int progressCompleted;
+    private Label numOfChestsOpened;
 
     /**
      * Constructor.
@@ -28,6 +32,7 @@ public class RoomController {
     public void configure(final String configFile) {
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
+        statusPane.setVisible(true);
     }
 
     /**
@@ -36,6 +41,10 @@ public class RoomController {
     public void closeController() {
         if (progressBar != null) {
             progressBar.getChildren().clear();
+        }
+        if (statusPane != null) {
+            statusPane.setVisible(false);
+            numOfChestsOpened.setText("Amount of opened chests: ?");
         }
     }
 
@@ -152,11 +161,36 @@ public class RoomController {
     }
 
     /**
+     * Set the statusPane.
+     * @param pane the statusPane
+     */
+    public void setStatusPane(final FlowPane pane) {
+        this.statusPane = pane;
+    }
+
+    /**
      * Update the roomController.
      */
     public void update() {
         if (progress != null) {
             progress.updateProgress();
+            updateChests(progress.getRoom().getChestsOpened());
         }
+    }
+
+    /**
+     * Set the numOfChestsOpened label.
+     * @param label the label showing the amount of chests opened
+     */
+    public void setNumOfChestsOpened(final Label label) {
+        this.numOfChestsOpened = label;
+    }
+
+    /**
+     * Updates the amount of chests present in the room.
+     * @param chests the amount of chests
+     */
+    public void updateChests(final int chests) {
+        numOfChestsOpened.setText("Amount of opened chests: " + chests + "\n");
     }
 }

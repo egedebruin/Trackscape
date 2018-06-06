@@ -1,5 +1,7 @@
 package gui.panes;
 
+import gui.controllers.MainController;
+import gui.controllers.RoomController;
 import handlers.JsonHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -17,14 +19,16 @@ public class StatusPane {
     /**
      * Class parameters.
      */
+    private RoomController roomController;
     private JsonHandler jsonHandler = new JsonHandler("files/example.json");
     private Label numOfChestsOpened;
-    private Label numOfPersonsDetected;
 
     /**
      * Constructor for StatusPane.
+     * @param control the mainController
      */
-    public StatusPane() {
+    public StatusPane(final MainController control) {
+        this.roomController = control.getRoomController();
     }
 
     /**
@@ -33,6 +37,7 @@ public class StatusPane {
      */
     public Pane createStatusPane() {
         FlowPane statusPane = new FlowPane();
+        statusPane.setVisible(false);
 
         final int prefWidth = 350;
         statusPane.setPrefWidth(prefWidth);
@@ -45,31 +50,22 @@ public class StatusPane {
         Label numOfPersons = new Label("Amount of players: "
                 + jsonHandler.getAmountPeople(0) + "\n");
         numOfChestsOpened = new Label("Amount of opened chests: ?" + "\n");
-        numOfPersonsDetected = new Label("Amount of persons detected: ?");
         statusPane.getChildren().addAll(status, numOfChests, numOfPersons,
-                numOfChestsOpened, numOfPersonsDetected, createWarningSign());
+                numOfChestsOpened, createWarningSign());
+
+        roomController.setStatusPane(statusPane);
+        roomController.setNumOfChestsOpened(numOfChestsOpened);
 
         return statusPane;
     }
 
     /**
-     * Updates the amount of chests present in the room.
-     * @param chests the amount of chests
+     * Creates a warning sign in the statusPane when players are delaying.
+     * @return the warningPane
      */
-    public void updateChests(final String chests) {
-        numOfChestsOpened.setText("Amount of opened chests: " + chests + "\n");
-    }
-
-    /**
-     * Updates the amount of persons present in the room.
-     * @param persons the amount of persons
-     */
-    public void updatePersons(final String persons) {
-        numOfPersonsDetected.setText("Amount of persons detected: " + persons + "\n");
-    }
-
     private Pane createWarningSign() {
         FlowPane warningPane = new FlowPane();
+        warningPane.setVisible(false);
 
         File warningFile = new File(System.getProperty("user.dir")
                 + "\\src\\main\\java\\gui\\images\\warning.png");
