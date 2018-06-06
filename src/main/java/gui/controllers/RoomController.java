@@ -141,14 +141,6 @@ public class RoomController {
     }
 
     /**
-     * Returns the current progress that is completed.
-     * @return progressCompleted
-     */
-    public int getProgressCompleted() {
-        return progressCompleted;
-    }
-
-    /**
      * Update the roomController.
      */
     public void update() {

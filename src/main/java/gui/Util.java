@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Graphics2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
@@ -90,6 +91,25 @@ public final class Util {
         logo.setPreserveRatio(true);
         logo.setImage(img);
         return logo;
+    }
+
+    /**
+     * Resize the BufferedImage to fit in the screen.
+     * @param bi the BufferedImage
+     * @param newWidth the new width
+     * @param newHeight the new height
+     * @return scaledImage
+     */
+    public static BufferedImage resizeBufferedImage(final BufferedImage bi,
+                                             final int newWidth, final int newHeight) {
+        BufferedImage scaledImage = null;
+        if (bi != null) {
+            scaledImage = new BufferedImage(newWidth, newHeight, bi.getType());
+            Graphics2D graphics2D = scaledImage.createGraphics();
+            graphics2D.drawImage(bi, 0, 0, newWidth, newHeight, null);
+            graphics2D.dispose();
+        }
+        return scaledImage;
     }
 
 }

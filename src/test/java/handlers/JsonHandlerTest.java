@@ -1,6 +1,7 @@
 package handlers;
 
 import org.junit.jupiter.api.Test;
+import room.Chest;
 import room.Room;
 
 import java.io.File;
@@ -29,8 +30,9 @@ public class JsonHandlerTest {
     /**
      * Class variables.
      */
-    private final String jsonFile = "files/example.json";
-    private final String emptyJsonFile = "files/empty.json";
+    private final String jsonFile = "files/test/testConfig.json";
+    private final String jsonFile2 = "files/test/testConfig2.json";
+    private final String emptyJsonFile = "files/test/empty.json";
     private final int jsonPeople = 5;
     private final int jsonChests = 3;
     private JsonHandler handler;
@@ -134,5 +136,43 @@ public class JsonHandlerTest {
     void getAmountChestsTest() {
         handler = new JsonHandler(jsonFile);
         assertEquals(jsonChests, handler.getAmountChests(0));
+    }
+
+    /**
+     * Test configFile without target duration.
+     */
+    @Test
+    void noTargetDurationTest() {
+        handler = new JsonHandler(jsonFile2);
+        assertEquals(0, handler.getTargetDuration(0));
+    }
+
+    /**
+     * Test configFile without amount people.
+     */
+    @Test
+    void noAmountPeopleTest() {
+        handler = new JsonHandler(jsonFile2);
+        assertEquals(0, handler.getAmountPeople(0));
+    }
+
+    /**
+     * Test configFile without camera links.
+     */
+    @Test
+    void noCameraLinksTest() {
+        handler = new JsonHandler(jsonFile2);
+        List<String> stringList = handler.getCameraLinks(0);
+        assertEquals(0, stringList.size());
+    }
+
+    /**
+     * Test configFile without chests.
+     */
+    @Test
+    void noChestsTest() {
+        handler = new JsonHandler(jsonFile2);
+        List<Chest> stringList = handler.createChests(0);
+        assertEquals(0, stringList.size());
     }
 }
