@@ -192,18 +192,23 @@ public class TimeLogController {
                     approveButton.setVisible(true);
                     notApproveButton.setVisible(true);
                     imageView.setVisible(true);
-                    BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
 
-                    final int newWidth = 300;
-                    final int newHeight = 200;
-                    BufferedImage resizedSubFrame =
-                        Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
-                    Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
-
+                    Image image = newChestFrame(mat);
                     imageView.setImage(image);
                     chestTimestamp = mat.getValue();
                 }
         }
+    }
+
+    private Image newChestFrame(Pair<Mat, Long> mat) {
+        BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
+
+        final int newWidth = 300;
+        final int newHeight = 200;
+        BufferedImage resizedSubFrame =
+            Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
+
+        return SwingFXUtils.toFXImage(resizedSubFrame, null);
     }
 
     /**
