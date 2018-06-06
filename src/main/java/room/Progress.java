@@ -78,6 +78,11 @@ public class Progress {
     public void updateProgress() {
         room.updateRoom();
         subSectionCount = calculateProgress();
+        if (subSectionCount == getTotalSections()) {
+            room.setAllChestsDetected(true);
+        } else {
+            room.setAllChestsDetected(false);
+        }
     }
 
     /**

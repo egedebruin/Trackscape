@@ -3,7 +3,6 @@ package gui.controllers;
 import gui.Util;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
-import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Pair;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Class for the TimeLogController, to control the time and log.
@@ -182,25 +183,32 @@ public class TimeLogController {
      * Check the information from the Mat queue for pictures of chests.
      */
     public void checkMatInformation() {
-        if (chestTimestamp == -1) {
-            Pair<Mat, Long> mat = informationHandler.getMatrix();
-            if (mat != null) {
-                question.setVisible(true);
-                approveButton.setVisible(true);
-                notApproveButton.setVisible(true);
-                imageView.setVisible(true);
-                BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
+        if (cameraHandler.areAllChestsDetected()) {
+            clearButtons();
+        } else if (chestTimestamp == -1) {
+                Pair<Mat, Long> mat = informationHandler.getMatrix();
+                if (mat != null) {
+                    question.setVisible(true);
+                    approveButton.setVisible(true);
+                    notApproveButton.setVisible(true);
+                    imageView.setVisible(true);
 
-                final int newWidth = 300;
-                final int newHeight = 200;
-                BufferedImage resizedSubFrame =
-                    Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
-                Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
-
-                imageView.setImage(image);
-                chestTimestamp = mat.getValue();
-            }
+                    Image image = newChestFrame(mat);
+                    imageView.setImage(image);
+                    chestTimestamp = mat.getValue();
+                }
         }
+    }
+
+    private Image newChestFrame(Pair<Mat, Long> mat) {
+        BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
+
+        final int newWidth = 300;
+        final int newHeight = 200;
+        BufferedImage resizedSubFrame =
+            Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
+
+        return SwingFXUtils.toFXImage(resizedSubFrame, null);
     }
 
     /**
