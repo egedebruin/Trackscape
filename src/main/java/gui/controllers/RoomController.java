@@ -89,24 +89,20 @@ public class RoomController {
      * @param stage the current progress stage of the game
      */
     private void resetProgress(final int stage) {
-        if (stage == progressBar.getChildren().size() - 1) {
+        if (stage == progressBar.getChildren().size() - 1 ||
+            progressBar.getChildren().get(stage + 2)
+                .getStyleClass().toString().contains("progress-reset")) {
             clearStyleSheet(stage);
             progressCompleted = stage - 2;
-        }
-        if (stage < progressBar.getChildren().size() - 1) {
-            if (progressBar.getChildren().get(stage + 2)
-                .getStyleClass().toString().contains("progress-reset")) {
-                clearStyleSheet(stage);
-                progressCompleted = stage - 2;
-            } else {
-                for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
-                    clearStyleSheet(k);
-                    k++;
-                }
-                progressCompleted = stage;
+        } else {
+            for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
+                clearStyleSheet(k);
+                k++;
             }
+            progressCompleted = stage;
         }
     }
+    
 
     /**
      * Clear the stylesheet of current stage item.
