@@ -72,8 +72,8 @@ public class MainController {
                 if (videoController.isClosed()) {
                     closeStream();
                 }
-                timeLogController.processFrame(now);
                 roomController.update();
+                timeLogController.processFrame(now);
             }
         };
         timeLogController.clearInformationArea();
