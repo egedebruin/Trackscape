@@ -69,7 +69,7 @@ public class CameraChestDetector extends CameraObjectDetector {
      */
     private List<Mat> includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
                                                     final int noOfChests) {
-        List<Mat> mats = new ArrayList<>();
+        List<Mat> detectedMats = new ArrayList<>();
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
@@ -98,10 +98,10 @@ public class CameraChestDetector extends CameraObjectDetector {
                     frame.width() - 1), Math.min(cutoutChest.br().y, frame.height() - 1));
                 //Imgproc.rectangle(frame, topLeft, bottomRight, CHESTBOXCOLOUR, 2);
                 Rect r = new Rect(topLeft, bottomRight);
-                mats.add(frame.submat(r));
+                detectedMats.add(frame.submat(r));
             }
         }
-        return mats;
+        return detectedMats;
     }
 
     /**
