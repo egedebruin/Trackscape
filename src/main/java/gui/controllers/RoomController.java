@@ -87,8 +87,7 @@ public class RoomController {
         progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
         int newChests = progress.getRoom().getChestsOpened();
         for (int i = chestsOpened; i > newChests; i--) {
-            String chestsFound = i + "/" + progress.getRoom().getChestList().size();
-            cameraHandler.getInformationHandler().addInformation("Removed chest " + chestsFound);
+            cameraHandler.getInformationHandler().addInformation("Removed chest " + i);
         }
     }
 
