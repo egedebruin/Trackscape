@@ -46,15 +46,14 @@ public class RoomController {
         progressBar.getChildren().forEach(item -> {
             item.setOnMouseClicked(event -> {
                 if (item.getId() != "line") {
+                    int index = progressBar.getChildren().indexOf(item);
                     if (item.getStyleClass().toString().contains("progress-reset")) {
-                        int index = progressBar.getChildren().indexOf(item);
                         fillProgress(index);
                         int completedSections = progress.getSubSectionCountFromBarIndex(index);
                         progress.setSubSectionCount(completedSections);
                         progress.getRoom().setChestSectionsCompletedTill(completedSections);
                         progress.updateProgress();
                     } else {
-                        int index = progressBar.getChildren().indexOf(item);
                         resetProgress(index);
                         int completedSections =
                             progress.getSubSectionCountFromBarIndex(progressCompleted);
