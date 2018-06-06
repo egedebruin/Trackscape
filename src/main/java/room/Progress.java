@@ -105,4 +105,12 @@ public class Progress {
     public void setSubSectionCount(final int newSubSectionCount) {
         this.subSectionCount = newSubSectionCount;
     }
+
+    /**
+     * GEt subsectioncount.
+     * @return this.subsectioncount
+     */
+    public int getSubSectionCount() {
+        return subSectionCount;
+    }
 }

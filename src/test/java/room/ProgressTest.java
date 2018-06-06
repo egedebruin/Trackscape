@@ -17,6 +17,8 @@ class ProgressTest {
     private static final int FIRSTCHESTNOOFSECTIONS = 21;
     private static final int SECONDCHESTNOOFSECTIONS = 3;
     private static final int COMBINEDNOOFSECTIONS = 24;
+    private static final int TOTALNOOFSECTIONS = 25;
+
 
     static {
         // These should be at the start of the application,
@@ -95,4 +97,61 @@ class ProgressTest {
         Progress progress = new Progress(testConfigFile, 0);
         assertNotNull(progress.getRoom());
     }
+
+    /**
+     * Test if getTotalSections the correct number of sections returned when correct file is loaded.
+     */
+    @Test
+    void getTotalSections() {
+        Progress progress = new Progress(testConfigFile, 0);
+        assertEquals(TOTALNOOFSECTIONS, progress.getTotalSections());
+    }
+
+    /**
+     * Test if getTotalSections the correct number of sections returned when correct file is loaded.
+     */
+    @Test
+    void getSubsectionCountFromBarIndex() {
+        Progress progress = new Progress(testConfigFile, 0);
+        int evenIndex = 8;
+        assertEquals(5, progress.getSubSectionCountFromBarIndex(evenIndex));
+        int oddIndex = 7;
+        assertEquals(4, progress.getSubSectionCountFromBarIndex(oddIndex));
+    }
+
+    /**
+     * Tests if updateProgress updates the first chest if that chest needs to be updated.
+     */
+    @Test
+    void updateProgress() {
+        Progress progress = new Progress(testConfigFile, 0);
+        Chest chest = progress.getRoom().getChestList().get(0);
+        assertEquals(chest.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
+        progress.updateProgress();
+        assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
+    }
+
+    /**
+     * Test if getTotalSections the correct number of sections returned when correct file is loaded.
+     */
+    @Test
+    void getFillCount() {
+        Progress progress = new Progress(testConfigFile, 0);
+
+        assertEquals(-2, progress.getFillCount());
+        updateProgress();
+        progress.getRoom().getChestList().get(0).setApprovedChestFoundByHost(true);
+        updateProgress();
+        assertEquals((FIRSTCHESTNOOFSECTIONS - 1) * 2, progress.getFillCount());
+    }
+
+    @Test
+    void setSubSectionCount() {
+        Progress progress = new Progress(testConfigFile, 0);
+        assertEquals(0, progress.getSubSectionCount());
+        progress.setSubSectionCount(3);
+        assertEquals(3, progress.getSubSectionCount());
+    }
+
+
 }
