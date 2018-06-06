@@ -205,12 +205,7 @@ public class TimeLogController {
                     timeStamp.setVisible(true);
                     timeStamp.setText("Time detected: " + (Util.getTimeString(mat.getValue()
                             - cameraHandler.getBeginTime())));
-                    BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
 
-                    final int newWidth = 300;
-                    final int newHeight = 200;
-                    BufferedImage resizedSubFrame =
-                        Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
                     Image image = newChestFrame(mat);
                     imageView.setImage(image);
                     chestTimestamp = mat.getValue();
