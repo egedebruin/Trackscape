@@ -211,12 +211,27 @@ public class TimeLogController {
                     final int newHeight = 200;
                     BufferedImage resizedSubFrame =
                         Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
-                    Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
-
+                    Image image = newChestFrame(mat);
                     imageView.setImage(image);
                     chestTimestamp = mat.getValue();
                 }
         }
+    }
+
+    /**
+     * Create new image for the found chest.
+     * @param mat the mat of the image
+     * @return the image
+     */
+    private Image newChestFrame(final Pair<Mat, Long> mat) {
+        BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
+
+        final int newWidth = 300;
+        final int newHeight = 200;
+        BufferedImage resizedSubFrame =
+            Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
+
+        return SwingFXUtils.toFXImage(resizedSubFrame, null);
     }
 
     /**

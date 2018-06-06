@@ -14,6 +14,7 @@ public class Room {
     private int numberOfPeople;
     private long targetDurationInSec;
     private long startTime;
+    private int chestsOpened;
 
     /**
      * Constructor.
@@ -178,5 +179,19 @@ public class Room {
      */
     public void setAllChestsDetected(final boolean detectedAllChests) {
         cameraHandler.setAllChestsDetected(detectedAllChests);
+    }
+
+    /**
+     * Get the amount of chests opened.
+     * @return amount of chests opened
+     */
+    public int getChestsOpened() {
+        chestsOpened = 0;
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.OPENED) {
+                chestsOpened++;
+            }
+        }
+        return chestsOpened;
     }
 }

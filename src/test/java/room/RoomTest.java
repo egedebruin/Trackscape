@@ -1,14 +1,15 @@
 package room;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-
 import handlers.CameraHandler;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests for the class Room.
@@ -23,6 +24,15 @@ public class RoomTest {
             + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
         System.load(System.getProperty("user.dir")
             + File.separator + "libs" + File.separator + "opencv_java341.dll");
+    }
+
+    /**
+     * REset cameralist and handeler after all teststr/.
+     */
+    @AfterEach
+    void reset() {
+        cameraLinks = new ArrayList<>();
+        chestList = new ArrayList<>();
     }
 
     private Room room;
@@ -83,4 +93,40 @@ public class RoomTest {
 
         assertEquals(newHandler, room.getCameraHandler());
     }
+
+    /**
+     * TEst if setNextChestOpened opens next chest.
+     */
+    @Test
+    void setNextChestOpened() {
+        chestList.add(new Chest(1, TARGETTIME));
+        room = new Room(0, 2, cameraLinks, chestList, 1);
+        assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
+        room.updateRoom();
+        room.setNextChestOpened();
+        room.updateRoom();
+        assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
+    }
+
+    /**
+     * Test if unsetChestTill sets only the chests till subsections and not further.
+     */
+    @Test
+    void unsetChestsTill() {
+        room = new Room(0, 2, cameraLinks, chestList, 1);
+        Chest chest = new Chest(1, TARGETTIME);
+        Chest chest2 = new Chest(1, TARGETTIME);
+        Chest chest3 = new Chest(2, TARGETTIME);
+        chestList.add(chest);
+        chestList.add(chest2);
+        chestList.add(chest3);
+        final int subsections = 3;
+        room.unsetChestSectionsCompletedTill(subsections);
+        assertEquals(chest.getChestState(), Chest.Status.OPENED);
+        assertEquals(chest2.getChestState(), Chest.Status.OPENED);
+        assertEquals(chest3.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
+        assertEquals(chest3.countSubsectionsCompleted(), 1);
+
+    }
+
 }
