@@ -3,7 +3,6 @@ package gui.controllers;
 import gui.Util;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
-import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Pair;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Class for the TimeLogController, to control the time and log.
@@ -182,7 +183,7 @@ public class TimeLogController {
      * Check the information from the Mat queue for pictures of chests.
      */
     public void checkMatInformation() {
-        if (chestTimestamp == -1) {
+        if (chestTimestamp == -1 && !cameraHandler.areAllChestsDetected()) {
             Pair<Mat, Long> mat = informationHandler.getMatrix();
             if (mat != null) {
                 question.setVisible(true);

@@ -170,4 +170,13 @@ public class Room {
         }
         setChestSectionsCompletedTill(completedSections);
     }
+
+    /**
+     * Set allChestsDetected variable of cameraHandler
+     * on true when all chests have been detected.
+     * @param detectedAllChests boolean that says whether all chests are detected
+     */
+    public void setAllChestsDetected(final boolean detectedAllChests) {
+        cameraHandler.setAllChestsDetected(detectedAllChests);
+    }
 }
