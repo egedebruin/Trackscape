@@ -51,9 +51,7 @@ public class RoomController {
                         newItemDone(index);
                     } else {
                         resetProgress(index);
-                        int completedSections =
-                            progress.getSubSectionCountFromBarIndex(progressCompleted);
-                        progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
+                        itemsRemoved();
                     }
                 }
             });
@@ -71,9 +69,25 @@ public class RoomController {
         progress.setSubSectionCount(completedSections);
         progress.getRoom().setChestSectionsCompletedTill(completedSections);
         progress.updateProgress();
-        int amountNewChests = progress.getRoom().getChestsOpened() - chestsOpened;
-        for (int i = 0; i < amountNewChests; i++) {
-            cameraHandler.getInformationHandler().addInformation("Found chest");
+        int amountNewChests = progress.getRoom().getChestsOpened();
+        for (int i = chestsOpened + 1; i < amountNewChests + 1; i++) {
+            String chestsFound = i + "/"
+                + progress.getRoom().getChestList().size();
+            cameraHandler.getInformationHandler().addInformation("Found chest " + chestsFound);
+        }
+    }
+
+    /**
+     * Logic for when items are removed.
+     */
+    private void itemsRemoved() {
+        int chestsOpened = progress.getRoom().getChestsOpened();
+        int completedSections =
+            progress.getSubSectionCountFromBarIndex(progressCompleted);
+        progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
+        int newChests = progress.getRoom().getChestsOpened();
+        for (int i = chestsOpened; i > newChests; i--) {
+            cameraHandler.getInformationHandler().addInformation("Removed chest " + i);
         }
     }
 
@@ -158,5 +172,18 @@ public class RoomController {
         if (progress != null) {
             progress.updateProgress();
         }
+    }
+
+    /**
+     * Method for when a chest if confirmed by the host.
+     * @return string format of how many chests are opened
+     */
+    public String confirmedChest() {
+        if (getProgress() != null) {
+            getProgress().getRoom().setNextChestOpened();
+            fillProgress(getProgress().getFillCount());
+        }
+        return progress.getRoom().getChestsOpened() + "/"
+            + progress.getRoom().getChestList().size();
     }
 }
