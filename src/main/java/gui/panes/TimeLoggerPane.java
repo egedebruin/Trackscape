@@ -71,7 +71,7 @@ public class TimeLoggerPane {
         logText.setEditable(false);
         timeLogController.setInformationBox(logText);
 
-        final int width = 450;
+        final int width = 400;
         final int height = 300;
 
         logText.setPrefSize(width, height);
