@@ -28,6 +28,7 @@ public class TimeLogController {
     private CameraHandler cameraHandler;
     private ImageView imageView;
     private long chestTimestamp = -1;
+    private Label timeStamp;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
@@ -113,6 +114,7 @@ public class TimeLogController {
         approveButton.setVisible(false);
         notApproveButton.setVisible(false);
         imageView.setVisible(false);
+        timeStamp.setVisible(false);
         chestTimestamp = -1;
     }
 
@@ -170,6 +172,14 @@ public class TimeLogController {
     }
 
     /**
+     * Setter for the timeStamp at which a chest is detected.
+     * @param label the label that needs to be set
+     */
+    public void setTimeStamp(final Label label) {
+        this.timeStamp = label;
+    }
+
+    /**
      * Process the frames depending on the changes in cameraHandler.
      * @param now The current time.
      */
@@ -192,6 +202,9 @@ public class TimeLogController {
                     approveButton.setVisible(true);
                     notApproveButton.setVisible(true);
                     imageView.setVisible(true);
+                    timeStamp.setVisible(true);
+                    timeStamp.setText("Time detected: " + (Util.getTimeString(mat.getValue()
+                            - cameraHandler.getBeginTime())));
                     BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
 
                     final int newWidth = 300;

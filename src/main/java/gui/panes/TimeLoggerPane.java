@@ -54,7 +54,7 @@ public class TimeLoggerPane {
         vBox.getChildren().add(l);
 
         timerPane.getChildren().addAll(description, vBox, createLoggerPane(),
-                createApproveButton());
+                createApproveArea());
 
         return timerPane;
     }
@@ -87,10 +87,11 @@ public class TimeLoggerPane {
 
 
     /**
-     * Method to create an approveButton inside a new Pane.
-     * @return the Pane where the button is made on.
+     * Method to create the approve are inside a new Pane, which consists of
+     * the imageview, question and buttons.
+     * @return the Pane where the area is made on.
      */
-    public Pane createApproveButton() {
+    public Pane createApproveArea() {
         final int padding = 20;
         FlowPane buttonPane = new FlowPane();
         buttonPane.setAlignment(Pos.BOTTOM_CENTER);
@@ -102,16 +103,21 @@ public class TimeLoggerPane {
         ImageView imageView = new ImageView();
         imageView.setVisible(false);
 
+        Label timeStamp = new Label();
+        timeStamp.setVisible(false);
+
         final int viewHeight = 70;
         Button approveButton = createApproveButton(viewHeight);
         Button disapproveButton = createDisapproveButton(viewHeight);
 
-        buttonPane.getChildren().addAll(imageView, question, approveButton, disapproveButton);
+        buttonPane.getChildren().addAll(imageView, timeStamp, question,
+                approveButton, disapproveButton);
 
         timeLogController.setQuestion(question);
         timeLogController.setApproveButton(approveButton);
         timeLogController.setNotApproveButton(disapproveButton);
         timeLogController.setImageView(imageView);
+        timeLogController.setTimeStamp(timeStamp);
 
         return buttonPane;
     }
