@@ -44,7 +44,7 @@ public class RoomController {
         }
         if (statusPane != null) {
             statusPane.setVisible(false);
-            numOfChestsOpened.setText("Amount of opened chests: ?");
+            numOfChestsOpened.setText("Amount of opened chests: 0");
         }
     }
 
