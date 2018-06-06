@@ -46,15 +46,14 @@ public class RoomController {
         progressBar.getChildren().forEach(item -> {
             item.setOnMouseClicked(event -> {
                 if (item.getId() != "line") {
+                    int index = progressBar.getChildren().indexOf(item);
                     if (item.getStyleClass().toString().contains("progress-reset")) {
-                        int index = progressBar.getChildren().indexOf(item);
                         fillProgress(index);
                         int completedSections = progress.getSubSectionCountFromBarIndex(index);
                         progress.setSubSectionCount(completedSections);
                         progress.getRoom().setChestSectionsCompletedTill(completedSections);
                         progress.updateProgress();
                     } else {
-                        int index = progressBar.getChildren().indexOf(item);
                         resetProgress(index);
                         int completedSections =
                             progress.getSubSectionCountFromBarIndex(progressCompleted);
@@ -89,12 +88,15 @@ public class RoomController {
      * @param stage the current progress stage of the game
      */
     private void resetProgress(final int stage) {
-        if (stage == progressBar.getChildren().size() - 1 ||
-            progressBar.getChildren().get(stage + 2)
-                .getStyleClass().toString().contains("progress-reset")) {
+        if (stage == progressBar.getChildren().size() - 1
+            || progressBar.getChildren().get(stage + 2)
+            .getStyleClass().toString().contains("progress-reset")) {
+            // At the end state of the progress bar or
+            // when the next item is not already done, reset this item
             clearStyleSheet(stage);
             progressCompleted = stage - 2;
         } else {
+            // When the next item is already done, reset until this item
             for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
                 clearStyleSheet(k);
                 k++;
@@ -102,7 +104,6 @@ public class RoomController {
             progressCompleted = stage;
         }
     }
-    
 
     /**
      * Clear the stylesheet of current stage item.
