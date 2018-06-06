@@ -136,4 +136,18 @@ class CameraHandlerTest {
         assertEquals(handler2, ch.getInformationHandler());
         assertNotEquals(handler, ch.getInformationHandler());
     }
+
+    /**
+     * Test set and get method for AllChestsDetected boolean.
+     */
+    @Test
+    void testSetAndGetAllChestsDetected() {
+        InformationHandler handler = new InformationHandler();
+        CameraHandler ch  = new CameraHandler(handler);
+
+        assertFalse(ch.areAllChestsDetected());
+
+        ch.setAllChestsDetected(true);
+        assertTrue(ch.areAllChestsDetected());
+    }
 }
