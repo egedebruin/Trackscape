@@ -93,9 +93,10 @@ public class TimeLogController {
 
     /**
      * Turns the button invisible after it is clicked.
+     * @param chestsFound the string format of the amount of chests found
      */
-    public void confirmedChest() {
-        addInformation("Found chest", chestTimestamp);
+    public void confirmedChest(final String chestsFound) {
+        addInformation("Found chest " + chestsFound, chestTimestamp);
         clearButtons();
     }
 

@@ -2,7 +2,6 @@ package gui.panes;
 
 import gui.Util;
 import gui.controllers.MainController;
-import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -72,7 +71,7 @@ public class TimeLoggerPane {
         logText.setEditable(false);
         timeLogController.setInformationBox(logText);
 
-        final int width = 350;
+        final int width = 400;
         final int height = 300;
 
         logText.setPrefSize(width, height);
@@ -133,12 +132,11 @@ public class TimeLoggerPane {
         approveButton.setVisible(false);
 
         approveButton.setOnAction(event -> {
-            timeLogController.confirmedChest();
-            RoomController roomController = mainController.getRoomController();
-            if (roomController.getProgress() != null) {
-                roomController.getProgress().getRoom().setNextChestOpened();
-                roomController.fillProgress(roomController.getProgress().getFillCount());
+            String chestsFound = "";
+            if (mainController.getConfigured()) {
+                chestsFound = mainController.getRoomController().confirmedChest();
             }
+            timeLogController.confirmedChest(chestsFound);
         });
         approveButton.setOnMouseEntered(event -> {
             approveButton.setGraphic(Util.createButtonLogo(
