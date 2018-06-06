@@ -91,7 +91,7 @@ public class CameraHandler {
 
             final int frequency = 10;
             if (camera.getFrameCounter() % frequency == 0) {
-                processFrame(camera, newFrame);
+                new Thread(() -> processFrame(camera, newFrame)).start();
             }
             frames.add(newFrame);
         }
