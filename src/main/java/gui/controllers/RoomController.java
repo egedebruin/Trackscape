@@ -64,7 +64,7 @@ public class RoomController {
      * Logic for when a new item is clicked in the progressbar.
      * @param index the index of the new item
      */
-    private void newItemDone(int index) {
+    private void newItemDone(final int index) {
         int chestsOpened = progress.getRoom().getChestsOpened();
         fillProgress(index);
         int completedSections = progress.getSubSectionCountFromBarIndex(index);
