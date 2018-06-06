@@ -1,7 +1,6 @@
 package gui.panes;
 
 import gui.controllers.MainController;
-import java.io.File;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,6 +19,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 /**
  * Class that creates the MenuPane for the VideoPane.
  */
@@ -28,7 +29,6 @@ public class MenuPane {
      * Class parameters.
      */
     private MediaPane mediaPane;
-    private ProgressBar progressBar;
     private Label cameraStatus;
     private MainController controller;
     private static SimpleObjectProperty<File> lastKnownDirectoryProperty
@@ -38,13 +38,10 @@ public class MenuPane {
      * Constructor for MenuPane.
      * @param control the controller
      * @param pane the mediaPane
-     * @param progress the progressBar
      */
-    public MenuPane(final MainController control, final MediaPane pane,
-                    final ProgressBar progress) {
+    public MenuPane(final MainController control, final MediaPane pane) {
         this.controller = control;
         this.mediaPane = pane;
-        this.progressBar = progress;
     }
 
     /**

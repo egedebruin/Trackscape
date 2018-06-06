@@ -39,17 +39,17 @@ public class Progress {
      * @return subSectionCount (=total)
      */
     public int calculateProgress() {
-        subSectionCount = 0;
-        // Counts the open chests, chestList is ordened in the following manner:
+        int progressMeter = 0;
+        // Counts the open chests, chestList is ordered in the following manner:
         // OPENED : TO_BE_OPENED : WAITING_FOR_SECTION_TO_START
         for (Chest chest : room.getChestList()) {
             if (chest.getChestState() == Chest.Status.OPENED) {
-                subSectionCount += chest.getNumberOfSubSections();
+                progressMeter += chest.getNumberOfSubSections();
             } else if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
-                subSectionCount = chest.countSubsectionsCompleted();
+                progressMeter += chest.countSubsectionsCompleted();
             }
         }
-        return subSectionCount;
+        return progressMeter;
     }
 
     /**
@@ -70,5 +70,52 @@ public class Progress {
             total += chest.getNumberOfSubSections();
         }
         return total;
+    }
+
+    /**
+     * Update the progress of the escape room.
+     */
+    public void updateProgress() {
+        room.updateRoom();
+        subSectionCount = calculateProgress();
+        if (subSectionCount == getTotalSections()) {
+            room.setAllChestsDetected(true);
+        } else {
+            room.setAllChestsDetected(false);
+        }
+    }
+
+    /**
+     * Calculates the no subsections that are completed according to the progressbar.
+     * @param progressBarIndex the index
+     * @return the number of subsections up till index
+     */
+    public int getSubSectionCountFromBarIndex(final int progressBarIndex) {
+        subSectionCount = (progressBarIndex / 2) + 1;
+        return subSectionCount;
+    }
+
+    /**
+     * Calculates the position to where the progressbar needs to be filled.
+     * @return the index to where the progressbar needs to be filled.
+     */
+    public int getFillCount() {
+        return (calculateProgress() - 1) * 2;
+    }
+
+    /**
+     * Set the no subsections.
+     * @param newSubSectionCount the new no subsections
+     */
+    public void setSubSectionCount(final int newSubSectionCount) {
+        this.subSectionCount = newSubSectionCount;
+    }
+
+    /**
+     * GEt subsectioncount.
+     * @return this.subsectioncount
+     */
+    public int getSubSectionCount() {
+        return subSectionCount;
     }
 }

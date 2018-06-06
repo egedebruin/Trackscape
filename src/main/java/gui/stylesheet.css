@@ -10,11 +10,18 @@
 }
 
 /**
-Stylesheet for the media bar buttons
+Stylesheet for the media bar buttons (and all other buttons)
  */
-.media-buttons{
+.button{
     -fx-border: none !important;
     -fx-background-color: transparent !important;
+}
+
+/**
+Stylesheet for approve buttons
+ */
+.chest-button{
+    -fx-background-color: transparent
 }
 
 /**

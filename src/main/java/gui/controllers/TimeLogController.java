@@ -1,11 +1,18 @@
 package gui.controllers;
 
+import gui.Util;
 import handlers.CameraHandler;
 import handlers.InformationHandler;
-import java.util.concurrent.TimeUnit;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Pair;
+import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Class for the TimeLogController, to control the time and log.
@@ -14,10 +21,14 @@ public class TimeLogController {
 
     private Label timerLabel;
     private TextArea informationArea;
+    private Label question;
     private Button approveButton;
     private Button notApproveButton;
     private InformationHandler informationHandler = new InformationHandler();
     private CameraHandler cameraHandler;
+    private ImageView imageView;
+    private long chestTimestamp = -1;
+    private Label timeStamp;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
@@ -36,7 +47,7 @@ public class TimeLogController {
     public void changeTime(final long elapsedTime) {
         if (cameraHandler.getBeginTime() != -1) {
             long time = elapsedTime - cameraHandler.getBeginTime();
-            timerLabel.setText(getTimeString(time));
+            timerLabel.setText(Util.getTimeString(time));
         }
     }
 
@@ -46,8 +57,17 @@ public class TimeLogController {
      * @param text The text to add.
      */
     public void addInformation(final String text) {
-        long elapsedTime = System.nanoTime() - cameraHandler.getBeginTime();
-        String newText = getTimeString(elapsedTime) + ": " + text;
+        addInformation(text, System.nanoTime());
+    }
+
+    /**
+     * Add information with different time to correct VBox.
+     * @param text The text to add.
+     * @param time The timestamp.
+     */
+    public void addInformation(final String text, final long time) {
+        long elapsedTime = time - cameraHandler.getBeginTime();
+        String newText = Util.getTimeString(elapsedTime) + ": " + text;
         informationArea.appendText(newText + "\n");
     }
 
@@ -57,6 +77,7 @@ public class TimeLogController {
     public void clearInformationArea() {
         informationArea.clear();
     }
+
     /**
      * Check if there is information to be shown.
      */
@@ -74,47 +95,27 @@ public class TimeLogController {
      * Turns the button invisible after it is clicked.
      */
     public void confirmedChest() {
-        addInformation("Found chest");
-        approveButton.setVisible(false);
-        notApproveButton.setVisible(false);
+        addInformation("Found chest", chestTimestamp);
+        clearButtons();
     }
 
     /**
      * Turns button invisible without notification of found chest.
      */
     public void unConfirm() {
-        approveButton.setVisible(false);
-        notApproveButton.setVisible(false);
+        clearButtons();
     }
 
     /**
-     * Convert nano seconds to right time string.
-     *
-     * @param time Time in nano seconds.
-     * @return Correct time string.
+     * Set the buttons and picture to not visible.
      */
-    public String getTimeString(final long time) {
-        final int sixtySeconds = 60;
-        final int nineSeconds = 9;
-
-        int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(time) % sixtySeconds;
-        int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(time) % sixtySeconds;
-        int hours = (int) TimeUnit.NANOSECONDS.toHours(time);
-
-        String sec = Integer.toString(seconds);
-        String min = Integer.toString(minutes);
-        String hr = Integer.toString(hours);
-
-        if (seconds <= nineSeconds) {
-            sec = "0" + seconds;
-        }
-        if (minutes <= nineSeconds) {
-            min = "0" + minutes;
-        }
-        if (hours <= nineSeconds) {
-            hr = "0" + hours;
-        }
-        return hr + ":" + min + ":" + sec;
+    public void clearButtons() {
+        question.setVisible(false);
+        approveButton.setVisible(false);
+        notApproveButton.setVisible(false);
+        imageView.setVisible(false);
+        timeStamp.setVisible(false);
+        chestTimestamp = -1;
     }
 
     /**
@@ -122,8 +123,9 @@ public class TimeLogController {
      */
     public void closeController() {
         timerLabel.setText("00:00:00");
-        approveButton.setVisible(false);
-        notApproveButton.setVisible(false);
+        clearButtons();
+        imageView.setImage(null);
+        informationHandler.clearMatQueue();
     }
 
     /**
@@ -162,16 +164,69 @@ public class TimeLogController {
     }
 
     /**
+     * Setter for the question asked when a chest is shown.
+     * @param label the label that needs to be set
+     */
+    public void setQuestion(final Label label) {
+        this.question = label;
+    }
+
+    /**
+     * Setter for the timeStamp at which a chest is detected.
+     * @param label the label that needs to be set
+     */
+    public void setTimeStamp(final Label label) {
+        this.timeStamp = label;
+    }
+
+    /**
      * Process the frames depending on the changes in cameraHandler.
      * @param now The current time.
      */
     public void processFrame(final long now) {
-        if (cameraHandler.isChestDetected()) {
-            approveButton.setVisible(true);
-            notApproveButton.setVisible(true);
-        }
         changeTime(now);
+        checkMatInformation();
         checkInformation();
+    }
+
+    /**
+     * Check the information from the Mat queue for pictures of chests.
+     */
+    public void checkMatInformation() {
+        if (cameraHandler.areAllChestsDetected()) {
+            clearButtons();
+        } else if (chestTimestamp == -1) {
+                Pair<Mat, Long> mat = informationHandler.getMatrix();
+                if (mat != null) {
+                    question.setVisible(true);
+                    approveButton.setVisible(true);
+                    notApproveButton.setVisible(true);
+                    imageView.setVisible(true);
+                    timeStamp.setVisible(true);
+                    timeStamp.setText("Time detected: " + (Util.getTimeString(mat.getValue()
+                            - cameraHandler.getBeginTime())));
+
+                    Image image = newChestFrame(mat);
+                    imageView.setImage(image);
+                    chestTimestamp = mat.getValue();
+                }
+        }
+    }
+
+    /**
+     * Create new image for the found chest.
+     * @param mat the mat of the image
+     * @return the image
+     */
+    private Image newChestFrame(final Pair<Mat, Long> mat) {
+        BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
+
+        final int newWidth = 300;
+        final int newHeight = 200;
+        BufferedImage resizedSubFrame =
+            Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
+
+        return SwingFXUtils.toFXImage(resizedSubFrame, null);
     }
 
     /**
@@ -181,5 +236,13 @@ public class TimeLogController {
     public void setCameraHandler(final CameraHandler handler) {
         handler.setInformationHandler(informationHandler);
         this.cameraHandler = handler;
+    }
+
+    /**
+     * Set the ImageView to a different ImageView.
+     * @param iv the imageView to be set
+     */
+    public void setImageView(final ImageView iv) {
+        this.imageView = iv;
     }
 }

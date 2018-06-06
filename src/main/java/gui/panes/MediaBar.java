@@ -1,5 +1,6 @@
 package gui.panes;
 
+import gui.Util;
 import gui.controllers.MainController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -58,14 +59,16 @@ public class MediaBar {
         mediaBar.setPadding(new Insets(top, right, bottom, left));
         mediaBar.setSpacing(spacing);
 
+        final int buttonWidth = 70;
         // Create the play button
         final Button playButton = new Button();
         playButton.getStyleClass().add("media-buttons");
-        playButton.setGraphic(createLogo("play"));
+        playButton.setGraphic(Util.createButtonLogo("play", buttonWidth));
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
+                controller.closeStream();
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Yo momma is fat");
+                alert.setTitle("TrackScape");
                 alert.setContentText("There are no cameras to be shown!");
                 alert.showAndWait();
             } else if (!controller.isVideoPlaying()) {
@@ -78,21 +81,22 @@ public class MediaBar {
             }
         });
         playButton.setOnMouseEntered(event
-            -> playButton.setGraphic(createLogo("playActive")));
+            -> playButton.setGraphic(Util.createButtonLogo(
+                "playActive", buttonWidth)));
         playButton.setOnMouseExited(event
-            -> playButton.setGraphic(createLogo("play")));
+            -> playButton.setGraphic(Util.createButtonLogo("play", buttonWidth)));
 
         // Create the stop button
         final Button stopButton = new Button();
         stopButton.getStyleClass().add("media-buttons");
-        stopButton.setGraphic(createLogo("stop"));
+        stopButton.setGraphic(Util.createButtonLogo("stop", buttonWidth));
         stopButton.setOnAction(event -> {
             menuPane.endStream();
         });
         stopButton.setOnMouseEntered(event
-            -> stopButton.setGraphic(createLogo("stopActive")));
+            -> stopButton.setGraphic(Util.createButtonLogo("stopActive", buttonWidth)));
         stopButton.setOnMouseExited(event
-            -> stopButton.setGraphic(createLogo("stop")));
+            -> stopButton.setGraphic(Util.createButtonLogo("stop", buttonWidth)));
 
         mediaBar.getChildren().addAll(playButton, stopButton);
 
@@ -133,20 +137,4 @@ public class MediaBar {
         progressBar.constructProgressBar();
     }
 
-    /**
-     * Create the imageView for a button logo.
-     * @param fileName the name of the file
-     * @return ImageView of the logo
-     */
-    private ImageView createLogo(final String fileName) {
-        final int buttonWidth = 70;
-        File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\buttons\\" + fileName + ".png");
-        Image img = new Image(streamEnd.toURI().toString());
-        ImageView logo = new ImageView();
-        logo.setFitWidth(buttonWidth);
-        logo.setPreserveRatio(true);
-        logo.setImage(img);
-        return logo;
-    }
 }

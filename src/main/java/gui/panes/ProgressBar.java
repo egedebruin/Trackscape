@@ -1,12 +1,6 @@
 package gui.panes;
 
 import gui.controllers.RoomController;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -14,6 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import room.Chest;
+
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that creates a progress bar.
@@ -47,9 +48,8 @@ public class ProgressBar {
 
     /**
      * Construct and initialize progressbar.
-     * @return progressBar
      */
-    public GridPane constructProgressBar() {
+    public void constructProgressBar() {
         createItems();
 
         int spot = 0;
@@ -61,28 +61,32 @@ public class ProgressBar {
                 spot = spot + 1;
             }
         }
-
         controller.setProgressBar(progressBar);
         controller.setItemsOnDone();
-
-        return progressBar;
-    }
+        }
 
     /**
      * Create the items of the progress bar.
      */
     private void createItems() {
-
         List<Chest> chests = controller.getProgress().getRoom().getChestList();
 
-        final int screenParts = 4;
         GraphicsDevice gd =
             GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int screenWidth = gd.getDisplayMode().getWidth();
-        fittedWidth = (screenWidth)
-            / (screenParts * (controller.getProgress().getTotalSections() - 1));
-        progressStages = new ArrayList<>();
 
+        final int sectionsForMaxScreen = 10;
+        if (controller.getProgress().getTotalSections() < sectionsForMaxScreen) {
+            final int screenParts = 6;
+            fittedWidth = (screenWidth)
+                / (screenParts * (controller.getProgress().getTotalSections()));
+        } else {
+            final int screenParts = 4;
+            fittedWidth = (screenWidth)
+                / (screenParts * (controller.getProgress().getTotalSections()));
+        }
+
+        progressStages = new ArrayList<>();
         // Add chests and their puzzle steps to the list
         for (Chest chest : chests) {
             for (int i = 1; i < chest.getNumberOfSubSections(); i++) {
@@ -103,7 +107,7 @@ public class ProgressBar {
      */
     private Label createLineLabel() {
         File line = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\line.png");
+            + "\\src\\main\\java\\gui\\images\\progressbar\\line.png");
         Image lineImage = new Image(line.toURI().toString());
 
         final double size = fittedWidth;
@@ -124,7 +128,7 @@ public class ProgressBar {
      */
     private Label createChestLabel() {
         File chest = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\blackchest.png");
+            + "\\src\\main\\java\\gui\\images\\progressbar\\blackchest.png");
         Image chestImage = new Image(chest.toURI().toString());
 
         final double size = 1.4 * fittedWidth;
@@ -153,7 +157,7 @@ public class ProgressBar {
         Random random = new Random();
 
         File puzzle = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\puzzlepieces\\puzzle"
+            + "\\src\\main\\java\\gui\\images\\progressbar\\puzzle"
             + random.nextInt(puzzlePieces) + ".png");
         Image puzzleImage = new Image(puzzle.toURI().toString());
 

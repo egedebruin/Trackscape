@@ -1,5 +1,8 @@
 package handlers;
 
+import javafx.util.Pair;
+import org.opencv.core.Mat;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -8,32 +11,67 @@ import java.util.Queue;
  */
 public class InformationHandler {
 
-    private Queue<String> queue = new LinkedList<>();
+    private Queue<String> infQueue = new LinkedList<>();
+    private Queue<Pair<Mat, Long>> matQueue = new LinkedList<>();
 
     /**
-     * Add information to the queue.
+     * Add information to the infQueue.
      * @param info The new information.
      */
     public void addInformation(final String info) {
-        queue.add(info);
+        infQueue.add(info);
     }
 
     /**
-     * Get information from the queue and remove if it exists, otherwise returns empty.
+     * Add matrix to the matQueue.
+     * @param mat The new matrix.
+     */
+    public void addMatrix(final Pair<Mat, Long> mat) {
+        matQueue.add(mat);
+    }
+
+    /**
+     * Get information from the infQueue and remove if it exists, otherwise returns empty.
      * @return Information string.
      */
     public String getInformation() {
-        if (queue.isEmpty()) {
+        if (infQueue.isEmpty()) {
             return "empty";
         }
-        return queue.poll();
+        return infQueue.poll();
     }
 
     /**
-     * Get the full information queue.
-     * @return the queue.
+     * Get matrices from the matQueue and remove if it exists, otherwise returns null.
+     * @return matrix.
      */
-    public Queue<String> getQueue() {
-        return queue;
+    public Pair<Mat, Long> getMatrix() {
+        if (matQueue.isEmpty()) {
+            return null;
+        }
+        return matQueue.poll();
+    }
+
+    /**
+     * Get the full information infQueue.
+     * @return the infQueue.
+     */
+    public Queue<String> getInfQueue() {
+        return infQueue;
+    }
+
+    /**
+     * Get the full matrix matQueue.
+     * @return the matQueue.
+     */
+    public Queue<Pair<Mat, Long>> getMatQueue() {
+        return matQueue;
+    }
+
+    /**
+     * Clear the MatQueue.
+     */
+    public void clearMatQueue() {
+        matQueue.clear();
     }
 }
