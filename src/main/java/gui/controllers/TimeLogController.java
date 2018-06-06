@@ -200,7 +200,12 @@ public class TimeLogController {
         }
     }
 
-    private Image newChestFrame(Pair<Mat, Long> mat) {
+    /**
+     * Create new image for the found chest.
+     * @param mat the mat of the image
+     * @return the image
+     */
+    private Image newChestFrame(final Pair<Mat, Long> mat) {
         BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
 
         final int newWidth = 300;
