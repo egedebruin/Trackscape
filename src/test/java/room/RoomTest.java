@@ -26,6 +26,9 @@ public class RoomTest {
             + File.separator + "libs" + File.separator + "opencv_java341.dll");
     }
 
+    /**
+     * REset cameralist and handeler after all teststr/.
+     */
     @AfterEach
     void reset() {
         cameraLinks = new ArrayList<>();
@@ -91,6 +94,9 @@ public class RoomTest {
         assertEquals(newHandler, room.getCameraHandler());
     }
 
+    /**
+     * TEst if setNextChestOpened opens next chest.
+     */
     @Test
     void setNextChestOpened() {
         chestList.add(new Chest(1, TARGETTIME));
@@ -102,6 +108,9 @@ public class RoomTest {
         assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
     }
 
+    /**
+     * Test if unsetChestTill sets only the chests till subsections and not further.
+     */
     @Test
     void unsetChestsTill() {
         room = new Room(0, 2, cameraLinks, chestList, 1);
@@ -111,10 +120,12 @@ public class RoomTest {
         chestList.add(chest);
         chestList.add(chest2);
         chestList.add(chest3);
-        room.unsetChestSectionsCompletedTill(3);
+        final int subsections = 3;
+        room.unsetChestSectionsCompletedTill(subsections);
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
         assertEquals(chest2.getChestState(), Chest.Status.OPENED);
         assertEquals(chest3.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
+        assertEquals(chest3.countSubsectionsCompleted(), 1);
 
     }
 

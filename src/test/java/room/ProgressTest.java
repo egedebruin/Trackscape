@@ -113,10 +113,12 @@ class ProgressTest {
     @Test
     void getSubsectionCountFromBarIndex() {
         Progress progress = new Progress(testConfigFile, 0);
-        int evenIndex = 8;
-        assertEquals(5, progress.getSubSectionCountFromBarIndex(evenIndex));
-        int oddIndex = 7;
-        assertEquals(4, progress.getSubSectionCountFromBarIndex(oddIndex));
+        final int evenIndex = 8;
+        final int expected1 = 5;
+        assertEquals(expected1, progress.getSubSectionCountFromBarIndex(evenIndex));
+        final int oddIndex = 7;
+        final int expected2 = 4;
+        assertEquals(expected2, progress.getSubSectionCountFromBarIndex(oddIndex));
     }
 
     /**
@@ -137,20 +139,24 @@ class ProgressTest {
     @Test
     void getFillCount() {
         Progress progress = new Progress(testConfigFile, 0);
-
-        assertEquals(-2, progress.getFillCount());
+        final int expected = -2;
+        assertEquals(expected, progress.getFillCount());
         updateProgress();
         progress.getRoom().getChestList().get(0).setApprovedChestFoundByHost(true);
         updateProgress();
         assertEquals((FIRSTCHESTNOOFSECTIONS - 1) * 2, progress.getFillCount());
     }
 
+    /**
+     * Test getter setter for subsectionCount.
+     */
     @Test
     void setSubSectionCount() {
         Progress progress = new Progress(testConfigFile, 0);
         assertEquals(0, progress.getSubSectionCount());
-        progress.setSubSectionCount(3);
-        assertEquals(3, progress.getSubSectionCount());
+        final int newsubsections = 3;
+        progress.setSubSectionCount(newsubsections);
+        assertEquals(newsubsections, progress.getSubSectionCount());
     }
 
 
