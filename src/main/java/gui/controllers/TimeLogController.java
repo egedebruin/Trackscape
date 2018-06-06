@@ -183,24 +183,26 @@ public class TimeLogController {
      * Check the information from the Mat queue for pictures of chests.
      */
     public void checkMatInformation() {
-        if (chestTimestamp == -1 && !cameraHandler.areAllChestsDetected()) {
-            Pair<Mat, Long> mat = informationHandler.getMatrix();
-            if (mat != null) {
-                question.setVisible(true);
-                approveButton.setVisible(true);
-                notApproveButton.setVisible(true);
-                imageView.setVisible(true);
-                BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
+        if (cameraHandler.areAllChestsDetected()) {
+            clearButtons();
+        } else if (chestTimestamp == -1) {
+                Pair<Mat, Long> mat = informationHandler.getMatrix();
+                if (mat != null) {
+                    question.setVisible(true);
+                    approveButton.setVisible(true);
+                    notApproveButton.setVisible(true);
+                    imageView.setVisible(true);
+                    BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
 
-                final int newWidth = 300;
-                final int newHeight = 200;
-                BufferedImage resizedSubFrame =
-                    Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
-                Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
+                    final int newWidth = 300;
+                    final int newHeight = 200;
+                    BufferedImage resizedSubFrame =
+                        Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
+                    Image image = SwingFXUtils.toFXImage(resizedSubFrame, null);
 
-                imageView.setImage(image);
-                chestTimestamp = mat.getValue();
-            }
+                    imageView.setImage(image);
+                    chestTimestamp = mat.getValue();
+                }
         }
     }
 
