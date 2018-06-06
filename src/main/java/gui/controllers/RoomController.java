@@ -48,11 +48,16 @@ public class RoomController {
                 if (item.getId() != "line") {
                     int index = progressBar.getChildren().indexOf(item);
                     if (item.getStyleClass().toString().contains("progress-reset")) {
+                        int chestsOpened = progress.getRoom().getChestsOpened();
                         fillProgress(index);
                         int completedSections = progress.getSubSectionCountFromBarIndex(index);
                         progress.setSubSectionCount(completedSections);
                         progress.getRoom().setChestSectionsCompletedTill(completedSections);
                         progress.updateProgress();
+                        for (int i = 0;
+                             i < progress.getRoom().getChestsOpened() - chestsOpened; i++) {
+                             cameraHandler.getInformationHandler().addInformation("Found chest");
+                        }
                     } else {
                         resetProgress(index);
                         int completedSections =
