@@ -3,11 +3,14 @@ package handlers;
 import camera.Camera;
 import camera.CameraActivity;
 import camera.CameraChestDetector;
+import javafx.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.System.nanoTime;
 
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
@@ -21,6 +24,7 @@ public class CameraHandler {
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private List<Boolean> chestDetected = new ArrayList<>();
+    private boolean allChestsDetected = false;
     private long beginTime = -1;
 
     /**
@@ -106,18 +110,21 @@ public class CameraHandler {
 
         activity.addActivities(newFrame, camera.getFrameCounter());
         if (activity.getLastActivity() > 2 && beginTime == -1) {
-            beginTime = System.nanoTime();
+            beginTime = nanoTime();
+            informationHandler.addInformation("Detected activity");
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
 
         final int firstDetection = 100;
         if (camera.getFrameCounter() > firstDetection) {
-            // Put true or false in the chestdetected arraylist on index cameraindex depending
-            // on whether a chest is detected or not.
-            if (chestDetected.size() > cameraList.indexOf(camera)) {
-                chestDetected.set(cameraList.indexOf(camera), cameraChestDetector.
-                    checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction));
+            List<Mat> mats = cameraChestDetector.
+                checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
+            boolean chestFound = mats.size() > 0;
+            chestDetected.set(cameraList.indexOf(camera), chestFound);
+            for (Mat mat : mats) {
+                Pair<Mat, Long> tuple = new Pair<>(mat, nanoTime());
+                informationHandler.addMatrix(tuple);
             }
         }
     }
@@ -200,5 +207,21 @@ public class CameraHandler {
      */
     public long getBeginTime() {
         return beginTime;
+    }
+
+    /**
+     * Set allChestsDetected on true when all chests have been detected.
+     * @param detectedAllChests the boolean value about whether all chests are detected
+     */
+    public void setAllChestsDetected(final boolean detectedAllChests) {
+        this.allChestsDetected = detectedAllChests;
+    }
+
+    /**
+     * See if all chests are detected.
+     * @return allChestsDetected
+     */
+    public boolean areAllChestsDetected() {
+        return allChestsDetected;
     }
 }

@@ -29,9 +29,9 @@ public class VideoPane {
         statusPane = new StatusPane();
         mediaPane = new MediaPane();
         progressBar = new ProgressBar(controller.getRoomController());
-        menuPane = new MenuPane(controller, mediaPane, progressBar);
+        menuPane = new MenuPane(controller, mediaPane);
         mediaBar = new MediaBar(controller, menuPane, mediaPane, progressBar);
-        timeLoggerPane = new TimeLoggerPane(controller.getTimeLogController());
+        timeLoggerPane = new TimeLoggerPane(controller);
     }
 
     /**

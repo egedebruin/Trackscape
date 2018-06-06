@@ -12,11 +12,13 @@ public class RoomController {
     private Progress progress;
     private GridPane progressBar;
     private CameraHandler cameraHandler;
+    private int progressCompleted;
 
     /**
      * Constructor.
      */
     public RoomController() {
+        progressCompleted = 0;
     }
 
     /**
@@ -44,10 +46,14 @@ public class RoomController {
         progressBar.getChildren().forEach(item -> {
             item.setOnMouseClicked(event -> {
                 if (item.getId() != "line") {
+                    int index = progressBar.getChildren().indexOf(item);
                     if (item.getStyleClass().toString().contains("progress-reset")) {
-                        fillProgress(progressBar.getChildren().indexOf(item));
+                        newItemDone(index);
                     } else {
-                        resetProgress(progressBar.getChildren().indexOf(item));
+                        resetProgress(index);
+                        int completedSections =
+                            progress.getSubSectionCountFromBarIndex(progressCompleted);
+                        progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
                     }
                 }
             });
@@ -55,12 +61,28 @@ public class RoomController {
     }
 
     /**
+     * Logic for when a new item is clicked in the progressbar.
+     * @param index the index of the new item
+     */
+    private void newItemDone(final int index) {
+        int chestsOpened = progress.getRoom().getChestsOpened();
+        fillProgress(index);
+        int completedSections = progress.getSubSectionCountFromBarIndex(index);
+        progress.setSubSectionCount(completedSections);
+        progress.getRoom().setChestSectionsCompletedTill(completedSections);
+        progress.updateProgress();
+        int amountNewChests = progress.getRoom().getChestsOpened() - chestsOpened;
+        for (int i = 0; i < amountNewChests; i++) {
+            cameraHandler.getInformationHandler().addInformation("Found chest");
+        }
+    }
+
+    /**
      * Fills the progressbar up to the current stage.
      * @param stage the current progress stage of the game
      */
-    private void fillProgress(final int stage) {
+    public void fillProgress(final int stage) {
         for (int k = 0; k <= stage; k++) {
-            progressBar.getChildren().get(k);
             progressBar.getChildren().get(k).getStyleClass().clear();
 
             if (k == progressBar.getChildren().size() - 1) {
@@ -71,6 +93,7 @@ public class RoomController {
             }
             k++;
         }
+        progressCompleted = stage;
     }
 
     /**
@@ -78,19 +101,20 @@ public class RoomController {
      * @param stage the current progress stage of the game
      */
     private void resetProgress(final int stage) {
-        if (stage == progressBar.getChildren().size() - 1) {
+        if (stage == progressBar.getChildren().size() - 1
+            || progressBar.getChildren().get(stage + 2)
+            .getStyleClass().toString().contains("progress-reset")) {
+            // At the end state of the progress bar or
+            // when the next item is not already done, reset this item
             clearStyleSheet(stage);
-        }
-        if (stage < progressBar.getChildren().size() - 1) {
-            if (progressBar.getChildren().get(stage + 2)
-                .getStyleClass().toString().contains("progress-reset")) {
-                clearStyleSheet(stage);
-            } else {
-                for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
-                    clearStyleSheet(k);
-                    k++;
-                }
+            progressCompleted = stage - 2;
+        } else {
+            // When the next item is already done, reset until this item
+            for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
+                clearStyleSheet(k);
+                k++;
             }
+            progressCompleted = stage;
         }
     }
 
@@ -125,5 +149,14 @@ public class RoomController {
      */
     public void setProgressBar(final GridPane newProgressBar) {
         this.progressBar = newProgressBar;
+    }
+
+    /**
+     * Update the roomController.
+     */
+    public void update() {
+        if (progress != null) {
+            progress.updateProgress();
+        }
     }
 }

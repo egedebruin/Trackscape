@@ -41,6 +41,15 @@ public class Chest {
     }
 
     /**
+     * Method that resets teh chest to WAITING_FOR_SUBSECTION_TO_START.
+     */
+    public void resetChest() {
+        chestState = Status.WAITING_FOR_SECTION_TO_START;
+        subsectionCompleted = new boolean[numberOfSubSections];
+        approvedChestFoundByHost = false;
+    }
+
+    /**
      * Method used for updating the status of the Chest.
      *
      * status can switch    from:           to:

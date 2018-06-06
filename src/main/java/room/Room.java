@@ -13,6 +13,8 @@ public class Room {
     private CameraHandler cameraHandler;
     private int numberOfPeople;
     private long targetDurationInSec;
+    private long startTime;
+    private int chestsOpened;
 
     /**
      * Constructor.
@@ -33,6 +35,7 @@ public class Room {
         }
         chestList = chests;
         targetDurationInSec = duration;
+        startTime = System.currentTimeMillis();
     }
 
     /**
@@ -113,5 +116,82 @@ public class Room {
      */
     public void setTargetDuration(final long startsTime) {
         this.targetDurationInSec = startsTime;
+    }
+
+    /**
+     * Update the state of the escape room room.
+     */
+    public void updateRoom() {
+        Chest previousChest = new OpenedChest();
+        for (Chest chest : chestList) {
+            chest.updateStatus(previousChest);
+            previousChest = chest;
+        }
+    }
+
+    /**
+     * Sets the next chest with state TO_BE_OPENED OPENED, by approving it to be opened.
+     */
+    public void setNextChestOpened() {
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                chest.setApprovedChestFoundByHost(true);
+            }
+        }
+    }
+
+    /**
+     * Sets the chests and subsections completed up till the subsection at completedSections.
+     * @param completedSubSections number of completed sections
+     */
+    public void setChestSectionsCompletedTill(final int completedSubSections) {
+        int completedSections = completedSubSections;
+        for (Chest chest : chestList) {
+            if (chest.getNumberOfSubSections() <= completedSections) {
+                chest.setApprovedChestFoundByHost(true);
+                completedSections -= chest.getNumberOfSubSections();
+            } else {
+                while (completedSections > 0) {
+                    chest.resetChest();
+                    chest.subSectionCompleted();
+                    completedSections--;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets all chests up till completedsections.
+     * used when chests need to make negative progress.
+     * @param completedSections number of completed sections
+     */
+    public void unsetChestSectionsCompletedTill(final int completedSections) {
+        for (Chest chest : chestList) {
+            chest.resetChest();
+        }
+        setChestSectionsCompletedTill(completedSections);
+    }
+
+    /**
+     * Set allChestsDetected variable of cameraHandler
+     * on true when all chests have been detected.
+     * @param detectedAllChests boolean that says whether all chests are detected
+     */
+    public void setAllChestsDetected(final boolean detectedAllChests) {
+        cameraHandler.setAllChestsDetected(detectedAllChests);
+    }
+
+    /**
+     * Get the amount of chests opened.
+     * @return amount of chests opened
+     */
+    public int getChestsOpened() {
+        chestsOpened = 0;
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.OPENED) {
+                chestsOpened++;
+            }
+        }
+        return chestsOpened;
     }
 }
