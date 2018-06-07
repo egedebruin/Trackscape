@@ -3,7 +3,6 @@ package api;
 import gui.controllers.MainController;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
@@ -24,10 +23,9 @@ public class APIChestHandler extends AbstractHandler {
         controller = mainController;
     }
 
-
     @Override
     public void handle(final String s, final Request request, final HttpServletRequest httpRequest,
-                       final HttpServletResponse response) throws IOException, ServletException {
+                       final HttpServletResponse response) throws IOException {
         String body = "Nothing happened";
 
         if (request.getParameter("opened") == null) {
