@@ -5,13 +5,6 @@
     -fx-background-image: url("././images/backgrounds/blocks.jpg");
 }
 
-.timer{
-    -fx-border-color: #000000;
-    -fx-border-insets: 5;
-    -fx-border-width: 2;
-    -fx-background-color: white;
-}
-
 .bold{
     -fx-font-weight: bold;
 }
