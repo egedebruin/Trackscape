@@ -31,6 +31,7 @@ public class RoomController {
      * @param configFile The configfile for this room.
      */
     public void configure(final String configFile) {
+        progressCompleted = 0;
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
     }
