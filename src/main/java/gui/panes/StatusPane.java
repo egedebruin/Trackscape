@@ -2,6 +2,7 @@ package gui.panes;
 
 import gui.Util;
 import gui.controllers.RoomController;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -39,10 +40,14 @@ public class StatusPane {
      * @return statusPane the statusPane
      */
     public Pane createStatusPane() {
+        final int bigPadding = 50;
+        final int smallPadding = 20;
+        final int vgap = 40;
+
         statusPane = new FlowPane();
         statusPane.setVisible(false);
         statusPane.setAlignment(Pos.TOP_CENTER);
-        final int vgap = 40;
+        statusPane.setPadding(new Insets(bigPadding, smallPadding, smallPadding, 0));
         statusPane.setVgap(vgap);
 
         roomController.setStatusPane(statusPane);
@@ -54,8 +59,8 @@ public class StatusPane {
      * Initialize the statusPane with its children.
      */
     public void initializeStatusPane() {
-        statusPane.getChildren().addAll(createWarningSign(), createSetupPane(),
-            createProgressPane());
+        statusPane.getChildren().addAll(createSetupPane(),
+            createProgressPane(), createWarningSign());
         statusPane.setVisible(true);
     }
 

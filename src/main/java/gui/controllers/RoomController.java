@@ -165,9 +165,9 @@ public class RoomController {
                 // When people are behind on schedule
                 if (progressCompleted > 2 && !snoozeHint) {
                     // Get the warningPane of the statusPane and set it on visible
-                    statusPane.getChildren().get(0).setVisible(true);
+                    statusPane.getChildren().get(2).setVisible(true);
                 } else {
-                    statusPane.getChildren().get(0).setVisible(false);
+                    statusPane.getChildren().get(2).setVisible(false);
                 }
             }
         }
