@@ -11,7 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import room.Chest;
+
+import java.util.List;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -101,15 +105,28 @@ public class StatusPane {
      */
     private Pane createProgressPane() {
         final int prefWidth = 350;
-        FlowPane progressPane = new FlowPane();
+        VBox progressPane = new VBox();
         progressPane.setPrefWidth(prefWidth);
-        progressPane.setAlignment(Pos.CENTER);
+        progressPane.setAlignment(Pos.CENTER_LEFT);
 
         Label status = new Label("Status\n");
         status.getStyleClass().add("bold");
-        numOfChestsOpened = new Label("Amount of opened chests: 0\n");
+
+        numOfChestsOpened = new Label("Amount of opened chests: 0");
         progressPane.getChildren().addAll(status,
-            numOfChestsOpened);
+                numOfChestsOpened);
+
+        // Get the amount of chests that are present in the room and create
+        // the same amount of labels showing the time spend for activities
+        // belonging to these chests. (By a for loop?)
+
+        List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
+
+        for (int i = 0; i < chestList.size(); i++) {
+            Label chest = new Label();
+            chest.setText("Chest " + (i+1) + "/" + chestList.size() + " " + chestList.get(i).getTargetDurationInSec() + " ");
+            progressPane.getChildren().add(chest);
+        }
 
         roomController.setNumOfChestsOpened(numOfChestsOpened);
 
