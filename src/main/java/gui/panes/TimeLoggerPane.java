@@ -5,6 +5,7 @@ import gui.controllers.MainController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -131,6 +132,7 @@ public class TimeLoggerPane {
         approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         approveButton.setVisible(false);
 
+        approveButton.setCursor(Cursor.HAND);
         approveButton.setOnAction(event -> {
             String chestsFound = "";
             if (mainController.getConfigured()) {
@@ -158,6 +160,7 @@ public class TimeLoggerPane {
         Button notApprove = new Button();
         notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
         notApprove.setVisible(false);
+        notApprove.setCursor(Cursor.HAND);
 
         notApprove.setOnAction(event -> timeLogController.unConfirm());
         notApprove.setOnMouseEntered(event -> {
