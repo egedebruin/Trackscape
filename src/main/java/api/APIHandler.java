@@ -1,4 +1,4 @@
-package handlers;
+package api;
 
 import gui.controllers.MainController;
 import org.eclipse.jetty.server.Server;
