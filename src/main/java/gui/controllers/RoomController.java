@@ -31,7 +31,6 @@ public class RoomController {
      * @param configFile The configfile for this room.
      */
     public void configure(final String configFile) {
-        progressCompleted = 0;
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
     }
@@ -41,6 +40,7 @@ public class RoomController {
      */
     public void closeController() {
         snoozeHint = false;
+        progressCompleted = 0;
         if (progressBar != null) {
             progressBar.getChildren().clear();
         }
