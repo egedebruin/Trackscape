@@ -123,10 +123,8 @@ public class StatusPane {
         List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
 
         for (int i = 0; i < chestList.size(); i++) {
-            Label chest = new Label();
-            chest.setText("Chest " + (i + 1) + "/" + chestList.size()
-                + " " + chestList.get(i).getTargetDurationInSec() + " ");
-            progressPane.getChildren().add(chest);
+            Label cLabel = roomController.getChestTimeStampList().get(i);
+            progressPane.getChildren().add(cLabel);
         }
 
         roomController.setNumOfChestsOpened(numOfChestsOpened);

@@ -1,10 +1,16 @@
 package gui.controllers;
 
+import gui.Util;
 import handlers.CameraHandler;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import room.Chest;
 import room.Progress;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller for the gui with a room.
@@ -18,6 +24,8 @@ public class RoomController {
     private int progressCompleted;
     private Label numOfChestsOpened;
     private boolean snoozeHint = false;
+    private List<Chest> chestList;
+    private List<Label> chestTimeStampList;
 
     /**
      * Constructor.
@@ -33,6 +41,11 @@ public class RoomController {
     public void configure(final String configFile) {
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
+        chestList = progress.getRoom().getChestList();
+        chestTimeStampList = new ArrayList<>();
+        for (Chest chest : chestList) {
+            chestTimeStampList.add(new Label());
+        }
     }
 
     /**
@@ -153,11 +166,12 @@ public class RoomController {
 
     /**
      * Update the roomController.
+     * @param now the actual time in nanoseconds
      */
-    public void update() {
+    public void update(final long now) {
         if (progress != null) {
             progress.updateProgress();
-
+            changeTime(now);
             if (statusPane.getChildren().size() > 0) {
                 // Update the updatePane
                 updateChests(progress.getRoom().getChestsOpened());
@@ -185,6 +199,23 @@ public class RoomController {
         }
         return progress.getRoom().getChestsOpened() + "/"
             + progress.getRoom().getChestList().size();
+    }
+
+    /**
+     * Changes the time of the timer.
+     *
+     * @param elapsedTime the elapsed time
+     */
+    public void changeTime(final long elapsedTime) {
+        if (chestList.size() > 0) {
+            for (int i = 0; i < chestList.size(); i++) {
+                long time = elapsedTime - TimeUnit.SECONDS.toNanos(
+                        chestList.get(i).getBeginOfSectionTimeInSec());
+                chestTimeStampList.get(i).setText("Chest: " + (i + 1) + "/" + chestList.size()
+                        + " " + Util.getTimeString(time) + "/"
+                        + chestList.get(i).getTargetDurationInSec());
+            }
+        }
     }
 
     /**
@@ -231,6 +262,14 @@ public class RoomController {
      */
     public void setNumOfChestsOpened(final Label label) {
         this.numOfChestsOpened = label; }
+
+    /**
+     * Get the chestTimeStampList.
+     * @return the list
+     */
+    public List<Label> getChestTimeStampList() {
+        return chestTimeStampList;
+    }
 
     /**
      * Updates the amount of chests present in the room.
