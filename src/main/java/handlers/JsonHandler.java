@@ -87,6 +87,22 @@ public class JsonHandler {
     }
 
     /**
+     * Get the port the server needs to listen to.
+     * @param roomId The id of the room.
+     * @return The port
+     */
+    public int getPortNumber(final long roomId) {
+        final int defaultPort = 8080;
+        JSONObject room = getRoomById(roomId);
+        Object res = room.get("port");
+        if (res == null) {
+            return defaultPort;
+        }
+        long amount = (long) res;
+        return Math.toIntExact(amount);
+    }
+
+    /**
      * Get the Json element of a room.
      * @param roomId The id of the room.
      * @return The Json element of the room.

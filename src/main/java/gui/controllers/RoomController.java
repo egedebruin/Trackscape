@@ -238,4 +238,18 @@ public class RoomController {
     public void updateChests(final int chests) {
         numOfChestsOpened.setText("Amount of opened chests: " + chests);
     }
+
+    /**
+     * Check if all chests are opened.
+     * @return true if all chests are opened, false otherwise
+     */
+    public boolean allChestsOpened() {
+        if (progress == null) {
+            return false;
+        }
+        if (progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened()) {
+            return true;
+        }
+        return false;
+    }
 }
