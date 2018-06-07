@@ -18,7 +18,7 @@ public class CameraActivity {
     private List<List<double[]>> activityList;
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
     private long firstTime = -1;
-    private static final int FRAMES = 4;
+    private static final int FRAMES = 1;
     private double lastActivity = 0;
     private int frameCounter;
 
