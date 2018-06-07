@@ -1,7 +1,9 @@
 package gui.controllers;
 
 import gui.MonitorScene;
+import api.APIHandler;
 import handlers.CameraHandler;
+import handlers.JsonHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -25,6 +27,7 @@ public class MainController {
     private RoomController roomController;
     private boolean configured = false;
     private boolean videoPlaying = false;
+    private APIHandler apiHandler;
 
     /**
      * Constructor method.
@@ -34,6 +37,7 @@ public class MainController {
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);
         roomController = new RoomController();
+        apiHandler = new APIHandler(this);
     }
 
     /**
@@ -78,6 +82,7 @@ public class MainController {
         };
         timeLogController.clearInformationArea();
         animationTimer.start();
+        apiHandler.startServer();
     }
 
     /**
@@ -94,6 +99,7 @@ public class MainController {
         }
         configured = false;
         videoPlaying = false;
+        apiHandler.stopServer();
     }
 
     /**
@@ -116,6 +122,10 @@ public class MainController {
      */
     public void configure(final String jsonHandler) {
         roomController.configure(jsonHandler);
+
+        int port = new JsonHandler(jsonHandler).
+            getPortNumber(roomController.getProgress().getRoom().getId());
+        apiHandler.setServer(port);
 
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             roomController.getCameraHandler().addCamera(cameraHandler.getCamera(i).getLink());
