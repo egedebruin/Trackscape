@@ -124,7 +124,8 @@ public class StatusPane {
 
         for (int i = 0; i < chestList.size(); i++) {
             Label chest = new Label();
-            chest.setText("Chest " + (i+1) + "/" + chestList.size() + " " + chestList.get(i).getTargetDurationInSec() + " ");
+            chest.setText("Chest " + (i + 1) + "/" + chestList.size()
+                + " " + chestList.get(i).getTargetDurationInSec() + " ");
             progressPane.getChildren().add(chest);
         }
 

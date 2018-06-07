@@ -39,6 +39,7 @@ public class RoomController {
      * Close the controller when the stream is closed.
      */
     public void closeController() {
+        snoozeHint = false;
         if (progressBar != null) {
             progressBar.getChildren().clear();
         }
@@ -156,7 +157,7 @@ public class RoomController {
         if (progress != null) {
             progress.updateProgress();
 
-            if (statusPane.getChildren().size() != 0) {
+            if (statusPane.getChildren().size() > 0) {
                 // Update the updatePane
                 updateChests(progress.getRoom().getChestsOpened());
 
