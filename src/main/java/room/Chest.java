@@ -148,10 +148,18 @@ public class Chest {
     }
 
     /**
-     * Get the time at which a chest is found.
+     * Get the time of how long it took to find this chest.
      * @return the time
      */
     public long getTimeFound() {
         return timeFound;
+    }
+
+    /**
+     * Get the time of when the search for a chest begins.
+     * @return beginOfSectionsTimeInSec
+     */
+    public long getBeginOfSectionTimeInSec() {
+        return beginOfSectionTimeInSec;
     }
 }
