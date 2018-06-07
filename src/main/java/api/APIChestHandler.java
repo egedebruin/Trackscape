@@ -33,8 +33,7 @@ public class APIChestHandler extends AbstractHandler {
         if (request.getParameter("opened") == null) {
             body = "Parameter opened not found in request";
         } else if (request.getParameter("opened").equals("true")) {
-            if (controller.getRoomController().getProgress().getRoom().getChestsOpened()
-                == controller.getRoomController().getProgress().getRoom().getChestList().size()) {
+            if (controller.getRoomController().allChestsOpened()) {
                 body = "All chests are already opened";
             } else {
                 String log = "";
