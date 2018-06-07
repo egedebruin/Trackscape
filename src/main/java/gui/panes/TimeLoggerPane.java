@@ -41,6 +41,9 @@ public class TimeLoggerPane {
     public Pane createTimeLoggerPane() {
         FlowPane timerPane = new FlowPane();
         timerPane.setAlignment(Pos.TOP_CENTER);
+        final int largePadding = 15;
+        final int smallPadding = 5;
+        timerPane.setPadding(new Insets(largePadding, 0, smallPadding, largePadding));
 
         Label description = new Label("Time playing:");
         Label l = new Label("00:00:00");

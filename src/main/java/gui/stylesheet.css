@@ -64,3 +64,11 @@ Stylesheets for the progress bar
     -fx-background-radius: 80%;
     -fx-background-color: lightgreen;
 }
+
+.warning{
+    -fx-background-color: rgba(244, 26, 26, 0.3);
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}

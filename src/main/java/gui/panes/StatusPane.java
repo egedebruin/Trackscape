@@ -44,7 +44,7 @@ public class StatusPane {
      * @return statusPane the statusPane
      */
     public Pane createStatusPane() {
-        final int bigPadding = 50;
+        final int bigPadding = 25;
         final int smallPadding = 20;
         final int vgap = 40;
 
@@ -157,6 +157,7 @@ public class StatusPane {
         warningPane.setAlignment(Pos.CENTER);
         warningPane.getChildren().addAll(warningView, warningLabel, okButton);
         warningPane.setVisible(false);
+        warningPane.getStyleClass().add("warning");
 
         return warningPane;
     }
@@ -173,7 +174,7 @@ public class StatusPane {
             }
         };
         Timer hintTimer = new Timer();
-        final int timeUntilWarning = 2000;
+        final int timeUntilWarning = 3000;
         hintTimer.schedule(task, timeUntilWarning);
     }
 
