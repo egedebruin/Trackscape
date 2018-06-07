@@ -24,6 +24,7 @@ public class CameraChestDetector extends CameraObjectDetector {
     private static final double MINCHESTAREA = 600;
     private Boolean isOpened = false;
     private final Comparator<Rect> comparator = new RectComparator();
+    private CameraChestTracker tracker = new CameraChestTracker();
 
     /**
      * Method that checks for boxes in a frame.
@@ -42,8 +43,9 @@ public class CameraChestDetector extends CameraObjectDetector {
         List<Mat> mats = new ArrayList<>();
         Core.bitwise_and(dest, subtraction, subtracted);
         detectChest(subtracted);
+        Mat tracked = tracker.trackChests(subtracted, MINCHESTAREA);
         if (isOpened) {
-            mats = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
+            mats = includeChestContoursInFrame(newFrame, tracked, noOfChests);
         }
         return mats;
     }
