@@ -186,4 +186,18 @@ public class RoomController {
         return progress.getRoom().getChestsOpened() + "/"
             + progress.getRoom().getChestList().size();
     }
+
+    /**
+     * Check if all chests are opened.
+     * @return true if all chests are opened, false otherwise
+     */
+    public boolean allChestsOpened() {
+        if (progress == null) {
+            return false;
+        }
+        if (progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened()) {
+            return true;
+        }
+        return false;
+    }
 }

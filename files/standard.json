@@ -24,6 +24,7 @@
         "targetDuration": 30
       }
     ],
-    "targetDuration": 500
+    "targetDuration": 500,
+    "port": 7070
   }
 ]
