@@ -28,6 +28,7 @@ class CameraChestDetectorTest {
 
     /**
      * Test that checks whether includecontoursinframe gets called.
+     * @throws InterruptedException when interrupted
      */
     @Test
     void includeChestContoursInFrameCallTest() throws InterruptedException {
@@ -38,6 +39,6 @@ class CameraChestDetectorTest {
             ch.processFrames();
         }
         TimeUnit.SECONDS.sleep(1);
-        assertTrue(ch.isChestDetected());
+        assertTrue(ch.isChestFound());
     }
 }
