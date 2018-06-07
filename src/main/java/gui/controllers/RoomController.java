@@ -44,7 +44,6 @@ public class RoomController {
         }
         if (statusPane != null) {
             statusPane.getChildren().clear();
-            numOfChestsOpened.setText("Amount of opened chests: 0");
         }
     }
 
@@ -157,19 +156,20 @@ public class RoomController {
         if (progress != null) {
             progress.updateProgress();
 
-            // Update the updatePane
-            updateChests(progress.getRoom().getChestsOpened());
+            if (statusPane.getChildren().size() != 0) {
+                // Update the updatePane
+                updateChests(progress.getRoom().getChestsOpened());
 
-            // Update the warningPane
-            // TO DO: FIND TIME SPENT PER CURRENT CHEST AND CHECK WITH LIMIT
-            // When people are behind on schedule
-            if (progressCompleted > 2) {
-                // Get the warningPane of the statusPane and set it on visible
-                statusPane.getChildren().get(0).setVisible(true);
-            } else {
-                statusPane.getChildren().get(0).setVisible(false);
+                // Update the warningPane
+                // TO DO: FIND TIME SPENT PER CURRENT CHEST AND CHECK WITH LIMIT
+                // When people are behind on schedule
+                if (progressCompleted > 2) {
+                    // Get the warningPane of the statusPane and set it on visible
+                    statusPane.getChildren().get(0).setVisible(true);
+                } else {
+                    statusPane.getChildren().get(0).setVisible(false);
+                }
             }
-
         }
     }
 
