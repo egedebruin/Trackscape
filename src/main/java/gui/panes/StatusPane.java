@@ -44,7 +44,7 @@ public class StatusPane {
      * @return statusPane the statusPane
      */
     public Pane createStatusPane() {
-        final int bigPadding = 50;
+        final int bigPadding = 25;
         final int smallPadding = 20;
         final int vgap = 40;
 
