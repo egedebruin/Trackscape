@@ -4,6 +4,7 @@ import gui.Util;
 import gui.controllers.MainController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -68,6 +69,7 @@ public class MediaBar {
         final Button playButton = new Button();
         playButton.getStyleClass().add("media-buttons");
         playButton.setGraphic(Util.createButtonLogo("play", buttonWidth));
+        playButton.setCursor(Cursor.HAND);
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
                 controller.closeStream();
@@ -80,7 +82,7 @@ public class MediaBar {
                 initializeImageViewers();
                 if (controller.getConfigured()) {
                     initializeProgressBar();
-                    statusPane.initializeStatusPane();
+                    initializeStatus();
                 }
                 controller.grabTimeFrame(imageViews);
             }
@@ -95,6 +97,7 @@ public class MediaBar {
         final Button stopButton = new Button();
         stopButton.getStyleClass().add("media-buttons");
         stopButton.setGraphic(Util.createButtonLogo("stop", buttonWidth));
+        stopButton.setCursor(Cursor.HAND);
         stopButton.setOnAction(event -> {
             menuPane.endStream();
         });
@@ -140,6 +143,14 @@ public class MediaBar {
     private void initializeProgressBar() {
         progressBar.getProgressBar().getChildren().clear();
         progressBar.constructProgressBar();
+    }
+
+    /**
+     * Initialize the statusPane with current configuration.
+     */
+    private void initializeStatus() {
+        statusPane.getStatusPane().getChildren().clear();
+        statusPane.initializeStatusPane();
     }
 
 }

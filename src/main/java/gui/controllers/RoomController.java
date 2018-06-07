@@ -17,6 +17,7 @@ public class RoomController {
     private CameraHandler cameraHandler;
     private int progressCompleted;
     private Label numOfChestsOpened;
+    private boolean snoozeHint = false;
 
     /**
      * Constructor.
@@ -32,7 +33,6 @@ public class RoomController {
     public void configure(final String configFile) {
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
-        statusPane.setVisible(true);
     }
 
     /**
@@ -163,7 +163,7 @@ public class RoomController {
                 // Update the warningPane
                 // TO DO: FIND TIME SPENT PER CURRENT CHEST AND CHECK WITH LIMIT
                 // When people are behind on schedule
-                if (progressCompleted > 2) {
+                if (progressCompleted > 2 && !snoozeHint) {
                     // Get the warningPane of the statusPane and set it on visible
                     statusPane.getChildren().get(0).setVisible(true);
                 } else {
@@ -183,6 +183,14 @@ public class RoomController {
         }
         return progress.getRoom().getChestsOpened() + "/"
             + progress.getRoom().getChestList().size();
+    }
+
+    /**
+     * Snooze the warningPane when hint is given by host.
+     * @param snooze whether the warningPane should be snoozed or not.
+     */
+    public void snoozeHint(final boolean snooze) {
+        snoozeHint = snooze;
     }
 
     /**

@@ -3,12 +3,17 @@ package gui.panes;
 import gui.Util;
 import gui.controllers.RoomController;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextAlignment;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Class that constructs the StatusPane for the VideoPane.
@@ -37,7 +42,7 @@ public class StatusPane {
         statusPane = new FlowPane();
         statusPane.setVisible(false);
         statusPane.setAlignment(Pos.TOP_CENTER);
-        final int vgap = 30;
+        final int vgap = 40;
         statusPane.setVgap(vgap);
 
         roomController.setStatusPane(statusPane);
@@ -49,8 +54,9 @@ public class StatusPane {
      * Initialize the statusPane with its children.
      */
     public void initializeStatusPane() {
-        statusPane.getChildren().addAll(
-            createWarningSign(), createSetupPane(), createProgressPane());
+        statusPane.getChildren().addAll(createWarningSign(), createSetupPane(),
+            createProgressPane());
+        statusPane.setVisible(true);
     }
 
     /**
@@ -110,17 +116,51 @@ public class StatusPane {
      * @return the warningPane
      */
     private Pane createWarningSign() {
+        FlowPane warningPane = new FlowPane();
+
         final int warningWidth = 150;
         ImageView warningView = Util.createButtonLogo("warning", warningWidth);
+
         Label warningLabel = new Label(
             "The team is getting behind schedule!\nThey could use a hint.");
         warningLabel.setTextAlignment(TextAlignment.CENTER);
 
-        FlowPane warningPane = new FlowPane();
+        final int buttonWidth = 125;
+        Button okButton = new Button();
+        okButton.setGraphic(Util.createButtonLogo("okButton", buttonWidth));
+        okButton.setCursor(Cursor.HAND);
+        okButton.setOnAction(event -> {
+            startHintTimer();
+        });
+
         warningPane.setAlignment(Pos.CENTER);
-        warningPane.getChildren().addAll(warningView, warningLabel);
+        warningPane.getChildren().addAll(warningView, warningLabel, okButton);
         warningPane.setVisible(false);
 
         return warningPane;
+    }
+
+    /**
+     * Make the warningPane invisible until time is up and players are still behind.
+     */
+    private void startHintTimer() {
+        roomController.snoozeHint(true);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                roomController.snoozeHint(false);
+            }
+        };
+        Timer hintTimer = new Timer();
+        final int timeUntilWarning = 2000;
+        hintTimer.schedule(task, timeUntilWarning);
+    }
+
+    /**
+     * Retrieve the statusPane.
+     * @return statusPane
+     */
+    public FlowPane getStatusPane() {
+        return statusPane;
     }
 }
