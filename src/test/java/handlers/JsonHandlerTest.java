@@ -139,6 +139,16 @@ public class JsonHandlerTest {
     }
 
     /**
+     * Tests if the correct port is given when getPortNumber(roomid) is called.
+     */
+    @Test
+    void getPortNumberTest() {
+        final int port = 7070;
+        handler = new JsonHandler(jsonFile);
+        assertEquals(port, handler.getPortNumber(0));
+    }
+
+    /**
      * Test configFile without target duration.
      */
     @Test
@@ -174,5 +184,15 @@ public class JsonHandlerTest {
         handler = new JsonHandler(jsonFile2);
         List<Chest> stringList = handler.createChests(0);
         assertEquals(0, stringList.size());
+    }
+
+    /**
+     * Test configFile without port returns default port.
+     */
+    @Test
+    void noPortTest() {
+        handler = new JsonHandler(jsonFile2);
+        final int defaultPort = 8080;
+        assertEquals(defaultPort, handler.getPortNumber(0));
     }
 }

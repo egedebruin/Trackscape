@@ -44,5 +44,7 @@ JSON FILE STARTS BELOW:
     ],
     //This target duration is the total amount of time in seconds players get to escape the entire escape room
     "targetDuration": 500
+    //The port number the server needs to listen to for API calls. When not set, default is 8080.
+    "port": 7070
   }
 ]
