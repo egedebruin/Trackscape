@@ -227,5 +227,6 @@ public class RoomController {
      * @param chests the amount of chests
      */
     public void updateChests(final int chests) {
-        numOfChestsOpened.setText("Amount of opened chests: " + chests + "\n"); }
+        numOfChestsOpened.setText("Amount of opened chests: " + chests);
+    }
 }

@@ -138,4 +138,20 @@ public class Chest {
     public void subSectionCompleted() {
         subsectionCompleted[Math.min(countSubsectionsCompleted(), numberOfSubSections - 1)] = true;
     }
+
+    /**
+     * Get the target duration of a chest in seconds.
+     * @return the target duration in seconds
+     */
+    public long getTargetDurationInSec() {
+        return targetDurationInSec;
+    }
+
+    /**
+     * Get the time at which a chest is found.
+     * @return the time
+     */
+    public long getTimeFound() {
+        return timeFound;
+    }
 }
