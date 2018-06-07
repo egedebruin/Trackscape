@@ -38,7 +38,7 @@ class CameraChestDetectorTest {
         while (ch.isChanged()) {
             ch.processFrames();
         }
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(5);
         assertTrue(ch.isChestFound());
     }
 }
