@@ -3,6 +3,7 @@ package gui.controllers;
 import gui.MonitorScene;
 import handlers.APIHandler;
 import handlers.CameraHandler;
+import handlers.JsonHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -121,6 +122,10 @@ public class MainController {
      */
     public void configure(final String jsonHandler) {
         roomController.configure(jsonHandler);
+
+        int port = new JsonHandler(jsonHandler).
+            getPortNumber(roomController.getProgress().getRoom().getId());
+        apiHandler.setServer(port);
 
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             roomController.getCameraHandler().addCamera(cameraHandler.getCamera(i).getLink());
