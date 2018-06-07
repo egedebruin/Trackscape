@@ -1,6 +1,7 @@
 package gui.controllers;
 
 import gui.MonitorScene;
+import handlers.APIHandler;
 import handlers.CameraHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
@@ -25,6 +26,7 @@ public class MainController {
     private RoomController roomController;
     private boolean configured = false;
     private boolean videoPlaying = false;
+    private APIHandler apiHandler;
 
     /**
      * Constructor method.
@@ -34,6 +36,7 @@ public class MainController {
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);
         roomController = new RoomController();
+        apiHandler = new APIHandler(this);
     }
 
     /**
@@ -78,6 +81,7 @@ public class MainController {
         };
         timeLogController.clearInformationArea();
         animationTimer.start();
+        apiHandler.startServer();
     }
 
     /**
@@ -94,6 +98,7 @@ public class MainController {
         }
         configured = false;
         videoPlaying = false;
+        apiHandler.stopServer();
     }
 
     /**
