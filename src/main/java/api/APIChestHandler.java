@@ -28,7 +28,7 @@ public class APIChestHandler extends AbstractHandler {
     @Override
     public void handle(final String s, final Request request, final HttpServletRequest httpRequest,
                        final HttpServletResponse response) throws IOException, ServletException {
-        String body = "Ajax altijd nümmer 1";
+        String body = "Nothing happened";
 
         if (request.getParameter("opened") == null) {
             body = "Parameter opened not found in request";
@@ -41,6 +41,7 @@ public class APIChestHandler extends AbstractHandler {
                     log = controller.getRoomController().confirmedChest();
                 }
                 controller.getTimeLogController().addInformation("Found chest " + log);
+                body = "Found chest " + log;
             }
         }
 
