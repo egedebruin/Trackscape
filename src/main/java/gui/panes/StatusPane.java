@@ -70,9 +70,9 @@ public class StatusPane {
      */
     private Pane createSetupPane() {
         final int buttonWidth = 50;
-        ImageView ppl = Util.createButtonLogo("peopleIcon", buttonWidth);
-        ImageView box = Util.createButtonLogo("chestIcon", buttonWidth);
-        ImageView cam = Util.createButtonLogo("camIcon", buttonWidth);
+        ImageView ppl = Util.createImageViewLogo("icons\\peopleIcon", buttonWidth);
+        ImageView box = Util.createImageViewLogo("icons\\chestIcon", buttonWidth);
+        ImageView cam = Util.createImageViewLogo("icons\\camIcon", buttonWidth);
 
         Label cameras = new Label(""
             + roomController.getProgress().getRoom().getCameraHandler().listSize());
@@ -124,7 +124,7 @@ public class StatusPane {
         FlowPane warningPane = new FlowPane();
 
         final int warningWidth = 150;
-        ImageView warningView = Util.createButtonLogo("warning", warningWidth);
+        ImageView warningView = Util.createImageViewLogo("icons\\warning", warningWidth);
 
         Label warningLabel = new Label(
             "The team is getting behind schedule!\nThey could use a hint.");
@@ -132,7 +132,7 @@ public class StatusPane {
 
         final int buttonWidth = 125;
         Button okButton = new Button();
-        okButton.setGraphic(Util.createButtonLogo("okButton", buttonWidth));
+        okButton.setGraphic(Util.createImageViewLogo("buttons\\okButton", buttonWidth));
         okButton.setCursor(Cursor.HAND);
         okButton.setOnAction(event -> {
             startHintTimer();

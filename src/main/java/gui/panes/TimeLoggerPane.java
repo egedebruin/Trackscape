@@ -128,7 +128,7 @@ public class TimeLoggerPane {
      */
     private Button createApproveButton(final int viewHeight) {
         Button approveButton = new Button();
-        approveButton.setGraphic(Util.createButtonLogo("approve", viewHeight));
+        approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         approveButton.setVisible(false);
 
         approveButton.setOnAction(event -> {
@@ -139,11 +139,11 @@ public class TimeLoggerPane {
             timeLogController.confirmedChest(chestsFound);
         });
         approveButton.setOnMouseEntered(event -> {
-            approveButton.setGraphic(Util.createButtonLogo(
-                "approveActive", viewHeight));
+            approveButton.setGraphic(Util.createImageViewLogo(
+                "buttons\\approveActive", viewHeight));
         });
         approveButton.setOnMouseExited(event -> {
-            approveButton.setGraphic(Util.createButtonLogo("approve", viewHeight));
+            approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         });
 
         return approveButton;
@@ -156,16 +156,16 @@ public class TimeLoggerPane {
      */
     private Button createDisapproveButton(final int viewHeight) {
         Button notApprove = new Button();
-        notApprove.setGraphic(Util.createButtonLogo("disapprove", viewHeight));
+        notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
         notApprove.setVisible(false);
 
         notApprove.setOnAction(event -> timeLogController.unConfirm());
         notApprove.setOnMouseEntered(event -> {
-            notApprove.setGraphic(Util.createButtonLogo(
-                "disapproveActive", viewHeight));
+            notApprove.setGraphic(Util.createImageViewLogo(
+                "buttons\\disapproveActive", viewHeight));
         });
         notApprove.setOnMouseExited(event -> {
-            notApprove.setGraphic(Util.createButtonLogo("disapprove", viewHeight));
+            notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
         });
 
         return notApprove;

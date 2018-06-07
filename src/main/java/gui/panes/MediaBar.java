@@ -68,7 +68,7 @@ public class MediaBar {
         // Create the play button
         final Button playButton = new Button();
         playButton.getStyleClass().add("media-buttons");
-        playButton.setGraphic(Util.createButtonLogo("play", buttonWidth));
+        playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth));
         playButton.setCursor(Cursor.HAND);
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
@@ -88,23 +88,21 @@ public class MediaBar {
             }
         });
         playButton.setOnMouseEntered(event
-            -> playButton.setGraphic(Util.createButtonLogo(
-                "playActive", buttonWidth)));
+            -> playButton.setGraphic(Util.createImageViewLogo(
+                "buttons\\playActive", buttonWidth)));
         playButton.setOnMouseExited(event
-            -> playButton.setGraphic(Util.createButtonLogo("play", buttonWidth)));
+            -> playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth)));
 
         // Create the stop button
         final Button stopButton = new Button();
         stopButton.getStyleClass().add("media-buttons");
-        stopButton.setGraphic(Util.createButtonLogo("stop", buttonWidth));
+        stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth));
         stopButton.setCursor(Cursor.HAND);
-        stopButton.setOnAction(event -> {
-            menuPane.endStream();
-        });
+        stopButton.setOnAction(event -> menuPane.endStream());
         stopButton.setOnMouseEntered(event
-            -> stopButton.setGraphic(Util.createButtonLogo("stopActive", buttonWidth)));
+            -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stopActive", buttonWidth)));
         stopButton.setOnMouseExited(event
-            -> stopButton.setGraphic(Util.createButtonLogo("stop", buttonWidth)));
+            -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth)));
 
         mediaBar.getChildren().addAll(playButton, stopButton);
 

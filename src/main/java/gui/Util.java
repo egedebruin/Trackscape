@@ -77,14 +77,14 @@ public final class Util {
     }
 
     /**
-     * Create the imageView for a button logo.
+     * Create the imageView for a button or label.
      * @param fileName the name of the file
      * @param buttonWidth the width of the button
      * @return ImageView of the logo
      */
-    public static ImageView createButtonLogo(final String fileName, final int buttonWidth) {
+    public static ImageView createImageViewLogo(final String fileName, final int buttonWidth) {
         File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\buttons\\" + fileName + ".png");
+            + "\\src\\main\\java\\gui\\images\\" + fileName + ".png");
         Image img = new Image(streamEnd.toURI().toString());
         ImageView logo = new ImageView();
         logo.setFitWidth(buttonWidth);
