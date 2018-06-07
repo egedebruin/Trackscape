@@ -92,10 +92,11 @@ public class JsonHandler {
      * @return The port
      */
     public int getPortNumber(final long roomId) {
+        final int defaultPort = 8080;
         JSONObject room = getRoomById(roomId);
         Object res = room.get("port");
         if (res == null) {
-            return 8080;
+            return defaultPort;
         }
         long amount = (long) res;
         return Math.toIntExact(amount);
