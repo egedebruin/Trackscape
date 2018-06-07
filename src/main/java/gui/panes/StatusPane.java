@@ -159,6 +159,7 @@ public class StatusPane {
         warningPane.setAlignment(Pos.CENTER);
         warningPane.getChildren().addAll(warningView, warningLabel, okButton);
         warningPane.setVisible(false);
+        warningPane.getStyleClass().add("warning");
 
         return warningPane;
     }
@@ -175,7 +176,7 @@ public class StatusPane {
             }
         };
         Timer hintTimer = new Timer();
-        final int timeUntilWarning = 2000;
+        final int timeUntilWarning = 3000;
         hintTimer.schedule(task, timeUntilWarning);
     }
 
