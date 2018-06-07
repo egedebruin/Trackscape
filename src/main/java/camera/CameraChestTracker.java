@@ -4,6 +4,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 public class CameraChestTracker {
 
     private Mat previousFrame = new Mat();
+    private static final Scalar CHESTBOXCOLOUR = new Scalar(255, 0, 255);
 
     /**
      * Method which removes areas from frame, if they have overlap with the previous frame.
@@ -30,11 +32,11 @@ public class CameraChestTracker {
 
             // calculate the overlapping parts between previousFrame and frame
             Core.bitwise_and(previousFrame, tempFrame, overlappingFrame);
+            System.out.println("previousframe cloned: \n" + Core.countNonZero(previousFrame) + " : " + Core.countNonZero(tempFrame));
 
             // set frame to be the previousFrame
-            previousFrame = frame.clone();
+//            previousFrame = frame.clone();
 
-            System.out.println("previousframe cloned: " + Core.countNonZero(overlappingFrame));
 
 //            // calculate the contours in overlappingFrame
 //            List<MatOfPoint> contoursOverlappingFrame = new ArrayList<>();
@@ -51,18 +53,22 @@ public class CameraChestTracker {
             for (MatOfPoint points : contoursFrame) {
                 Rect rect = Imgproc.boundingRect(new MatOfPoint(points.toArray()));
                 if (rect.width * rect.height > minChestArea) {
-                    Mat checkOverlap = new Mat();
-                    Core.bitwise_and(tempFrame.submat(rect), overlappingFrame.submat(rect), checkOverlap);
-                    System.out.println(Core.countNonZero(tempFrame.submat(rect)));
-                    System.out.println(Core.countNonZero(overlappingFrame.submat(rect)));
-                    System.out.println(Core.countNonZero(checkOverlap));
-//                    if (Core.countNonZero(checkOverlap) > 0) {
-//                        frame.submat(rect).setTo(Mat.zeros(rect.size(), frame.type()));
+//                    Mat checkOverlap = new Mat();
+//                    Core.bitwise_and(tempFrame.submat(rect), overlappingFrame.submat(rect), checkOverlap);
+//                    System.out.println(Core.countNonZero(tempFrame.submat(rect)));
+//                    System.out.println(Core.countNonZero(overlappingFrame.submat(rect)));
+//                    System.out.println(Core.countNonZero(checkOverlap));
+//                    tempFrame.submat(rect).setTo(Mat.zeros(rect.size(), frame.type()));
+                    return tempFrame.submat(rect);
+//                    if (Core.countNonZero(previousFrame.submat(rect)) > 0) {
+////                        frame.submat(rect).setTo(Mat.zeros(rect.size(), frame.type()));
+////                        System.exit(1000);
 //                    }
                 }
             }
 
         }
+        previousFrame = frame.clone();
         return tempFrame;
     }
 
