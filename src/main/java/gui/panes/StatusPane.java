@@ -18,6 +18,7 @@ public class StatusPane {
      * Class parameters.
      */
     private RoomController roomController;
+    private FlowPane statusPane;
     private Label numOfChestsOpened;
 
     /**
@@ -33,14 +34,11 @@ public class StatusPane {
      * @return statusPane the statusPane
      */
     public Pane createStatusPane() {
-        FlowPane statusPane = new FlowPane();
+        statusPane = new FlowPane();
         statusPane.setVisible(false);
         statusPane.setAlignment(Pos.TOP_CENTER);
         final int vgap = 30;
         statusPane.setVgap(vgap);
-
-        statusPane.getChildren().addAll(
-            createWarningSign(), createSetupPane(), createProgressPane());
 
         roomController.setStatusPane(statusPane);
 
@@ -48,43 +46,40 @@ public class StatusPane {
     }
 
     /**
+     * Initialize the statusPane with its children.
+     */
+    public void initializeStatusPane() {
+        statusPane.getChildren().addAll(
+            createWarningSign(), createSetupPane(), createProgressPane());
+    }
+
+    /**
      * Create the setup pane for the initial setup parameters from configuration.
      * @return setupPane.
      */
     private Pane createSetupPane() {
-        GridPane setupPane = new GridPane();
-
         final int buttonWidth = 50;
         ImageView ppl = Util.createButtonLogo("peopleIcon", buttonWidth);
         ImageView box = Util.createButtonLogo("chestIcon", buttonWidth);
         ImageView cam = Util.createButtonLogo("camIcon", buttonWidth);
 
-//        Label cameras = new Label(""
-//            + roomController.getProgress().getRoom().getCameraHandler().listSize());
-//        cameras.setGraphic(cam);
-//        Label persons = new Label(""
-//            + roomController.getProgress().getRoom().getNumberOfPeople());
-//        persons.setGraphic(ppl);
-//        Label chests = new Label(""
-//            + roomController.getProgress().getRoom().getChestList().size());
-//        chests.setGraphic(box);
-
         Label cameras = new Label(""
-            + 2);
+            + roomController.getProgress().getRoom().getCameraHandler().listSize());
         cameras.setGraphic(cam);
         Label persons = new Label(""
-            + 4);
+            + roomController.getProgress().getRoom().getNumberOfPeople());
         persons.setGraphic(ppl);
         Label chests = new Label(""
-            + 3);
+            + roomController.getProgress().getRoom().getChestList().size());
         chests.setGraphic(box);
+
+        GridPane setupPane = new GridPane();
+        final int hgap = 30;
+        setupPane.setHgap(hgap);
 
         setupPane.add(cameras, 0, 0);
         setupPane.add(persons, 1, 0);
         setupPane.add(chests, 2, 0);
-
-        final int hgap = 30;
-        setupPane.setHgap(hgap);
 
         return setupPane;
     }
@@ -93,16 +88,15 @@ public class StatusPane {
      * Create the progressPane where chests and corresponding time are shown.
      * @return progressPane
      */
-    public Pane createProgressPane() {
-        FlowPane progressPane = new FlowPane();
-
+    private Pane createProgressPane() {
         final int prefWidth = 350;
+        FlowPane progressPane = new FlowPane();
         progressPane.setPrefWidth(prefWidth);
         progressPane.setAlignment(Pos.CENTER);
 
         Label status = new Label("Status\n");
         status.getStyleClass().add("bold");
-        numOfChestsOpened = new Label("Amount of opened chests: ?\n");
+        numOfChestsOpened = new Label("Amount of opened chests: 0\n");
         progressPane.getChildren().addAll(status,
             numOfChestsOpened);
 
@@ -116,18 +110,17 @@ public class StatusPane {
      * @return the warningPane
      */
     private Pane createWarningSign() {
-        FlowPane warningPane = new FlowPane();
-
         final int warningWidth = 150;
         ImageView warningView = Util.createButtonLogo("warning", warningWidth);
         Label warningLabel = new Label(
             "The team is getting behind schedule!\nThey could use a hint.");
         warningLabel.setTextAlignment(TextAlignment.CENTER);
 
+        FlowPane warningPane = new FlowPane();
         warningPane.setAlignment(Pos.CENTER);
         warningPane.getChildren().addAll(warningView, warningLabel);
+        warningPane.setVisible(false);
 
         return warningPane;
     }
-
 }

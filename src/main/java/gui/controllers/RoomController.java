@@ -2,8 +2,8 @@ package gui.controllers;
 
 import handlers.CameraHandler;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import room.Progress;
 
 /**
@@ -12,8 +12,8 @@ import room.Progress;
 public class RoomController {
 
     private Progress progress;
-    private GridPane progressBar;
-    private FlowPane statusPane;
+    private Pane progressBar;
+    private Pane statusPane;
     private CameraHandler cameraHandler;
     private int progressCompleted;
     private Label numOfChestsOpened;
@@ -43,7 +43,7 @@ public class RoomController {
             progressBar.getChildren().clear();
         }
         if (statusPane != null) {
-            statusPane.setVisible(false);
+            statusPane.getChildren().clear();
             numOfChestsOpened.setText("Amount of opened chests: 0");
         }
     }
@@ -151,61 +151,26 @@ public class RoomController {
     }
 
     /**
-     * Get the camera handler.
-     * @return The camera handler.
-     */
-    public CameraHandler getCameraHandler() {
-        return cameraHandler;
-    }
-
-    /**
-     * Get the progress object.
-     * @return The progress object.
-     */
-    public Progress getProgress() {
-        return progress;
-    }
-
-    /**
-     * Set the progressBar.
-     * @param newProgressBar the new progressBar
-     */
-    public void setProgressBar(final GridPane newProgressBar) {
-        this.progressBar = newProgressBar;
-    }
-
-    /**
-     * Set the statusPane.
-     * @param pane the statusPane
-     */
-    public void setStatusPane(final FlowPane pane) {
-        this.statusPane = pane;
-    }
-
-    /**
      * Update the roomController.
      */
     public void update() {
         if (progress != null) {
             progress.updateProgress();
+
+            // Update the updatePane
             updateChests(progress.getRoom().getChestsOpened());
+
+            // Update the warningPane
+            // TO DO: FIND TIME SPENT PER CURRENT CHEST AND CHECK WITH LIMIT
+            // When people are behind on schedule
+            if (progressCompleted > 2) {
+                // Get the warningPane of the statusPane and set it on visible
+                statusPane.getChildren().get(0).setVisible(true);
+            } else {
+                statusPane.getChildren().get(0).setVisible(false);
+            }
+
         }
-    }
-
-    /**
-     * Set the numOfChestsOpened label.
-     * @param label the label showing the amount of chests opened
-     */
-    public void setNumOfChestsOpened(final Label label) {
-        this.numOfChestsOpened = label;
-    }
-
-    /**
-     * Updates the amount of chests present in the room.
-     * @param chests the amount of chests
-     */
-    public void updateChests(final int chests) {
-        numOfChestsOpened.setText("Amount of opened chests: " + chests + "\n");
     }
 
      /** Method for when a chest if confirmed by the host.
@@ -219,4 +184,48 @@ public class RoomController {
         return progress.getRoom().getChestsOpened() + "/"
             + progress.getRoom().getChestList().size();
     }
+
+    /**
+     * Get the camera handler.
+     * @return The camera handler.
+     */
+    public CameraHandler getCameraHandler() {
+        return cameraHandler;
+    }
+
+    /**
+     * Get the progress object.
+     * @return The progress object.
+     */
+    public Progress getProgress() {
+        return progress; }
+
+    /**
+     * Set the progressBar.
+     * @param newProgressBar the new progressBar
+     */
+    public void setProgressBar(final GridPane newProgressBar) {
+        this.progressBar = newProgressBar;
+    }
+
+    /**
+     * Set the statusPane.
+     * @param pane the statusPane
+     */
+    public void setStatusPane(final Pane pane) {
+        this.statusPane = pane; }
+
+    /**
+     * Set the numOfChestsOpened label.
+     * @param label the label showing the amount of chests opened
+     */
+    public void setNumOfChestsOpened(final Label label) {
+        this.numOfChestsOpened = label; }
+
+    /**
+     * Updates the amount of chests present in the room.
+     * @param chests the amount of chests
+     */
+    public void updateChests(final int chests) {
+        numOfChestsOpened.setText("Amount of opened chests: " + chests + "\n"); }
 }

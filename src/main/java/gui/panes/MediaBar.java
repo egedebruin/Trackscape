@@ -24,6 +24,7 @@ public class MediaBar {
     private MainController controller;
     private MenuPane menuPane;
     private MediaPane mediaPane;
+    private StatusPane statusPane;
     private ProgressBar progressBar;
 
     /**
@@ -31,13 +32,16 @@ public class MediaBar {
      * @param control the controller
      * @param menu the menu
      * @param media the mediaplayer
+     * @param status the status of the game
      * @param progress the progress bar
      */
     public MediaBar(final MainController control, final MenuPane menu,
-                    final MediaPane media, final ProgressBar progress) {
+                    final MediaPane media, final StatusPane status,
+                    final ProgressBar progress) {
         this.controller = control;
         this.menuPane = menu;
         this.mediaPane = media;
+        this.statusPane = status;
         this.progressBar = progress;
     }
 
@@ -76,6 +80,7 @@ public class MediaBar {
                 initializeImageViewers();
                 if (controller.getConfigured()) {
                     initializeProgressBar();
+                    statusPane.initializeStatusPane();
                 }
                 controller.grabTimeFrame(imageViews);
             }
