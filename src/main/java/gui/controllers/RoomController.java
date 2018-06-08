@@ -212,7 +212,7 @@ public class RoomController {
                 long time = elapsedTime - TimeUnit.SECONDS.toNanos(
                         chestList.get(i).getBeginOfSectionTimeInSec());
                 chestTimeStampList.get(i).setText("Chest: " + (i + 1) + "/" + chestList.size()
-                        + " " + Util.getTimeString(time) + "/"
+                        + " " + Util.getTimeStringMinutes(time) + "/"
                         + chestList.get(i).getTargetDurationInSec());
             }
         }

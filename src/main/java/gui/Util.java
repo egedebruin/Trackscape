@@ -77,6 +77,31 @@ public final class Util {
     }
 
     /**
+     * Convert nano seconds to right time string without hours.
+     *
+     * @param time Time in nano seconds.
+     * @return Correct time string.
+     */
+    public static String getTimeStringMinutes(final long time) {
+        final int sixtySeconds = 60;
+        final int nineSeconds = 9;
+
+        int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(time) % sixtySeconds;
+        int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(time) % sixtySeconds;
+
+        String sec = Integer.toString(seconds);
+        String min = Integer.toString(minutes);
+
+        if (seconds <= nineSeconds) {
+            sec = "0" + seconds;
+        }
+        if (minutes <= nineSeconds) {
+            min = "0" + minutes;
+        }
+        return min + ":" + sec;
+    }
+
+    /**
      * Create the imageView for a button or label.
      * @param fileName the name of the file
      * @param buttonWidth the width of the button
