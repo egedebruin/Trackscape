@@ -43,7 +43,7 @@ class CameraChestDetectorTest {
             }
         }
 
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(15);
         assertTrue(detect);
     }
 }
