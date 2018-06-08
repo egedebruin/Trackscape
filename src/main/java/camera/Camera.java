@@ -20,6 +20,7 @@ public class Camera {
     private int numOfChestsInRoom;
     private int frameCounter = -1;
     private CameraActivity activity = new CameraActivity();
+    private CameraChestTracker tracker = new CameraChestTracker();
 
     /**
      * Constructor for a camera with possibility to specify no chests and persons.
@@ -152,5 +153,13 @@ public class Camera {
      */
     public String getLink() {
         return link;
+    }
+
+    /**
+     * Get the tracker.
+     * @return this.tracker
+     */
+    public CameraChestTracker getTracker() {
+        return tracker;
     }
 }

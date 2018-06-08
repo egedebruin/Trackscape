@@ -15,6 +15,7 @@ class CameraChestDetectorTest {
 
     private final String shortVideoLinkWithBoxes = "files" + File.separator
         + "escaperoomwithopenbox.mov";
+    private static final int MAGICTIMEOUT = 15;
 
     static {
         // These should be at the start of the application,
@@ -43,7 +44,7 @@ class CameraChestDetectorTest {
             }
         }
 
-        TimeUnit.SECONDS.sleep(15);
+        TimeUnit.SECONDS.sleep(MAGICTIMEOUT);
         assertTrue(detect);
     }
 }

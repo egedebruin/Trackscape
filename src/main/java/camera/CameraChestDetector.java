@@ -25,6 +25,7 @@ public class CameraChestDetector extends CameraObjectDetector {
     private Boolean isOpened = false;
     private final Comparator<Rect> comparator = new RectComparator();
     private CameraChestTracker tracker = new CameraChestTracker();
+    private List<Camera> cameraList = new ArrayList<>();
 
     /**
      * Method that checks for boxes in a frame.
@@ -32,18 +33,19 @@ public class CameraChestDetector extends CameraObjectDetector {
      * a bounding box will be drawn around it
      *
      * @param newFrame the frame that gets checked for the presence of boxes.
-     * @param noOfChests the number of chests in the room.
+     * @param camera the camera that generated the frame
      * @param subtraction the subtraction of this frame.
      * @return true if chest is detected, false otherwise.
      */
-    public List<Mat> checkForChests(final Mat newFrame, final int noOfChests,
+    public List<Mat> checkForChests(final Mat newFrame, final Camera camera,
                                     final Mat subtraction) {
+        int noOfChests = camera.getNumOfChestsInRoom();
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
         List<Mat> mats = new ArrayList<>();
         Core.bitwise_and(dest, subtraction, subtracted);
         detectChest(subtracted);
-        Mat tracked = tracker.trackChests(subtracted, MINCHESTAREA);
+        Mat tracked = camera.getTracker().trackChests(subtracted, MINCHESTAREA);
         if (isOpened) {
             mats = includeChestContoursInFrame(newFrame, tracked, noOfChests);
         }
@@ -58,6 +60,7 @@ public class CameraChestDetector extends CameraObjectDetector {
      */
     private void detectChest(final Mat image) {
         isOpened = Core.countNonZero(image) > MINCHESTAREA;
+
     }
 
     /**
@@ -136,5 +139,13 @@ public class CameraChestDetector extends CameraObjectDetector {
         Core.inRange(hsvMatrix, CHESTCOLOUR_LOWER, CHESTCOLOUR_UPPER, dest);
 
         return dest;
+    }
+
+    /**
+     * Add camera to the chestDetector's cameraList.
+     * @param cam the camera that needs to be added to the list
+     */
+    public void addCamera(final Camera cam) {
+        cameraList.add(cam);
     }
 }

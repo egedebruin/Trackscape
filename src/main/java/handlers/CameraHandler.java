@@ -49,7 +49,9 @@ public class CameraHandler {
      * @return The new camera as a Camera object.
      */
     public Camera addCamera(final String link) {
-        return addCamera(link, -1);
+        Camera cam = addCamera(link, -1);
+        cameraChestDetector.addCamera(cam);
+        return cam;
     }
 
     /**
@@ -119,7 +121,7 @@ public class CameraHandler {
         final int firstDetection = 100;
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = cameraChestDetector.
-                checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
+                checkForChests(newFrame, camera, subtraction);
             chestFound = mats.size() > 0;
             for (Mat mat : mats) {
                 Pair<Mat, Long> tuple = new Pair<>(mat, nanoTime());
