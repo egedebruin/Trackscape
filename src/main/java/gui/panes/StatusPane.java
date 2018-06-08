@@ -125,17 +125,6 @@ public class StatusPane {
         progressPane.getChildren().addAll(status,
                 numOfChestsOpened, activity, createChestTimePane());
 
-        // Get the amount of chests that are present in the room and create
-        // the same amount of labels showing the time spend for activities
-        // belonging to these chests. (By a for loop?)
-
-//        List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
-//
-//        for (int i = 0; i < chestList.size(); i++) {
-//            Label cLabel = roomController.getChestTimeStampList().get(i);
-//            progressPane.getChildren().add(cLabel);
-//        }
-
         roomController.setNumOfChestsOpened(numOfChestsOpened);
         roomController.setActivityStatus(activity);
 

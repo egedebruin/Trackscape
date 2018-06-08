@@ -46,8 +46,11 @@ public class RoomController {
         cameraHandler = progress.getRoom().getCameraHandler();
         chestList = progress.getRoom().getChestList();
         chestTimeStampList = new ArrayList<>();
-        for (Chest chest : chestList) {
-            chestTimeStampList.add(new Label());
+
+        if (chestList != null) {
+            for (Chest chest : chestList) {
+                chestTimeStampList.add(new Label());
+            }
         }
     }
 
@@ -237,6 +240,14 @@ public class RoomController {
                 long time = elapsedTime - TimeUnit.SECONDS.toNanos(
                         chestList.get(i).getBeginOfSectionTimeInSec());
                 chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
+
+                // This section should be in another method, but this does not work.
+                if (TimeUnit.NANOSECONDS.toSeconds(time)
+                        <= chestList.get(i).getTargetDurationInSec()) {
+                    chestTimeStampList.get(i).setTextFill(Color.GREEN);
+                } else {
+                    chestTimeStampList.get(i).setTextFill(Color.RED);
+                }
             }
         }
     }
