@@ -16,7 +16,6 @@ import javafx.scene.text.TextAlignment;
 import room.Chest;
 
 import java.util.List;
-
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +30,7 @@ public class StatusPane {
     private RoomController roomController;
     private FlowPane statusPane;
     private Label numOfChestsOpened;
+    private Label activity;
 
     /**
      * Constructor for StatusPane.
@@ -113,9 +113,17 @@ public class StatusPane {
         Label status = new Label("Status\n");
         status.getStyleClass().add("bold");
 
-        numOfChestsOpened = new Label("Amount of opened chests: 0");
+        final int buttonWidth = 20;
+        numOfChestsOpened = new Label(" Chests opened: 0 / "
+            + roomController.getProgress().getRoom().getChestList().size());
+        numOfChestsOpened.setGraphic(Util.createImageViewLogo(
+            "//icons//star", buttonWidth));
+        activity = new Label(" Current activity: low");
+        activity.setGraphic(Util.createImageViewLogo(
+            "//icons//star", buttonWidth));
+
         progressPane.getChildren().addAll(status,
-                numOfChestsOpened, createChestTimePane());
+                numOfChestsOpened, activity, createChestTimePane());
 
         // Get the amount of chests that are present in the room and create
         // the same amount of labels showing the time spend for activities
@@ -133,10 +141,15 @@ public class StatusPane {
         return progressPane;
     }
 
+    /**
+     * Create the pane where chests and current time are shown.
+     * @return chestTimePane
+     */
     private Pane createChestTimePane() {
         GridPane chestTimePane = new GridPane();
+        final int topInset = 20;
         chestTimePane.getStyleClass().add("grid-lines");
-        chestTimePane.setPadding(new Insets(10, 0, 0, 0));
+        chestTimePane.setPadding(new Insets(topInset, 0, 0, 0));
         chestTimePane.setAlignment(Pos.CENTER);
 
         Label chest = new Label("  Chest  ");
@@ -150,13 +163,14 @@ public class StatusPane {
         List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
 
         for (int i = 0; i < chestList.size(); i++) {
-            Label chestLabel = new Label((i + 1) + "/" + chestList.size());
+            Label chestLabel = new Label((i + 1) + "");
+            chestLabel.setTextAlignment(TextAlignment.CENTER);
             Label timeLabel = roomController.getChestTimeStampList().get(i);
             Label targetLabel = new Label(Util.getTimeString(TimeUnit.SECONDS.toNanos(
                     chestList.get(i).getTargetDurationInSec()), false));
             chestTimePane.add(chestLabel, 0, (i + 1));
             chestTimePane.add(timeLabel, 1, (i + 1));
-            chestTimePane.add(targetLabel, 2, (i +1));
+            chestTimePane.add(targetLabel, 2, (i + 1));
         }
 
         return chestTimePane;
@@ -173,7 +187,7 @@ public class StatusPane {
         ImageView warningView = Util.createImageViewLogo("icons\\warning", warningWidth);
 
         Label warningLabel = new Label(
-            "The team is getting behind schedule!\nThey could use a hint.");
+            " The team is getting behind schedule! \nThey could use a hint.");
         warningLabel.setTextAlignment(TextAlignment.CENTER);
 
         final int buttonWidth = 125;
@@ -204,7 +218,7 @@ public class StatusPane {
             }
         };
         Timer hintTimer = new Timer();
-        final int timeUntilWarning = 3000;
+        final int timeUntilWarning = 5000;
         hintTimer.schedule(task, timeUntilWarning);
     }
 

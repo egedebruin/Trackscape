@@ -5,6 +5,7 @@ import handlers.CameraHandler;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import room.Chest;
 import room.Progress;
 
@@ -274,7 +275,14 @@ public class RoomController {
      * @param chests the amount of chests
      */
     public void updateChests(final int chests) {
-        numOfChestsOpened.setText("Amount of opened chests: " + chests);
+        numOfChestsOpened.setText(" Chests opened: " + chests + "/"
+            + getProgress().getRoom().getChestList().size());
+        if (chests == getProgress().getRoom().getChestList().size()) {
+            numOfChestsOpened.setText(" All chests have been opened!");
+            numOfChestsOpened.setTextFill(Color.FORESTGREEN);
+        } else {
+            numOfChestsOpened.setTextFill(Color.BLACK);
+        }
     }
 
     /**
