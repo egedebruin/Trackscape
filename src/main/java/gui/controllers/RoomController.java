@@ -237,13 +237,21 @@ public class RoomController {
     public void changeTime(final long elapsedTime) {
         if (chestList.size() > 0) {
             for (int i = 0; i < chestList.size(); i++) {
+                Chest currentChest = chestList.get(i);
                 long time = elapsedTime - TimeUnit.SECONDS.toNanos(
-                        chestList.get(i).getBeginOfSectionTimeInSec());
-                chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
+                        currentChest.getBeginOfSectionTimeInSec());
+
+                if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                    chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
+                } else if (currentChest.getChestState() == Chest.Status.WAITING_FOR_SECTION_TO_START){
+                    chestTimeStampList.get(i).setText("");
+                }
+
+                System.out.println(i + " what is happning: " + currentChest.getChestState().toString());
 
                 // This section should be in another method, but this does not work.
                 if (TimeUnit.NANOSECONDS.toSeconds(time)
-                        <= chestList.get(i).getTargetDurationInSec()) {
+                        <= currentChest.getTargetDurationInSec()) {
                     chestTimeStampList.get(i).setTextFill(Color.GREEN);
                 } else {
                     chestTimeStampList.get(i).setTextFill(Color.RED);
