@@ -90,6 +90,9 @@ public class MainController {
      * Method that closes a stream.
      */
     public void closeStream() {
+        if (animationTimer != null) {
+            animationTimer.stop();
+        }
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
@@ -99,9 +102,6 @@ public class MainController {
         timeLogController.closeController();
         if (roomController != null && configured) {
             roomController.closeController();
-        }
-        if (animationTimer != null) {
-            animationTimer.stop();
         }
         configured = false;
         videoPlaying = false;
