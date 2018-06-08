@@ -45,7 +45,9 @@ public class CameraActivityTest {
 
         assertNotNull(fp);
         assertNotEquals(new ArrayList<Mat>(), activity.getFrameParts());
-        assertEquals(fp.get(0).size(), fp.get(1).size());   //equal divisions
+        if (activity.getFrames() > 1) {
+            assertEquals(fp.get(0).size(), fp.get(1).size());   //equal divisions
+        }
     }
 
     /**
