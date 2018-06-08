@@ -199,6 +199,21 @@ public class RoomController {
         activityStatus.setText(" Current activity: " + activeString.toLowerCase());
     }
 
+    /**
+     * Updates the amount of chests present in the room.
+     * @param chests the amount of chests
+     */
+    public void updateChests(final int chests) {
+        numOfChestsOpened.setText(" Chests opened: " + chests + "/"
+            + getProgress().getRoom().getChestList().size());
+        if (allChestsOpened()) {
+            numOfChestsOpened.setText(" All chests have been opened!");
+            numOfChestsOpened.setTextFill(Color.FORESTGREEN);
+        } else {
+            numOfChestsOpened.setTextFill(Color.BLACK);
+        }
+    }
+
      /** Method for when a chest if confirmed by the host.
      * @return string format of how many chests are opened
      */
@@ -223,21 +238,6 @@ public class RoomController {
                         chestList.get(i).getBeginOfSectionTimeInSec());
                 chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
             }
-        }
-    }
-
-    /**
-     * Updates the amount of chests present in the room.
-     * @param chests the amount of chests
-     */
-    public void updateChests(final int chests) {
-        numOfChestsOpened.setText(" Chests opened: " + chests + "/"
-            + getProgress().getRoom().getChestList().size());
-        if (allChestsOpened()) {
-            numOfChestsOpened.setText(" All chests have been opened!");
-            numOfChestsOpened.setTextFill(Color.FORESTGREEN);
-        } else {
-            numOfChestsOpened.setTextFill(Color.BLACK);
         }
     }
 
