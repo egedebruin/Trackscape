@@ -23,9 +23,9 @@ public class CameraHandler {
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
-    private List<Boolean> chestDetected = new ArrayList<>();
     private boolean allChestsDetected = false;
     private long beginTime = -1;
+    private boolean chestFound = false;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -65,7 +65,6 @@ public class CameraHandler {
         if (!opened) {
             return null;
         }
-        chestDetected.add(false);
         Camera camera;
         if (chests == -1) {
             camera = new Camera(videoCapture, link);
@@ -91,7 +90,8 @@ public class CameraHandler {
 
             final int frequency = 10;
             if (camera.getFrameCounter() % frequency == 0) {
-                processFrame(camera, newFrame);
+                Thread thread = new Thread(() -> processFrame(camera, newFrame));
+                thread.start();
             }
             frames.add(newFrame);
         }
@@ -120,8 +120,7 @@ public class CameraHandler {
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = cameraChestDetector.
                 checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
-            boolean chestFound = mats.size() > 0;
-            chestDetected.set(cameraList.indexOf(camera), chestFound);
+            chestFound = mats.size() > 0;
             for (Mat mat : mats) {
                 Pair<Mat, Long> tuple = new Pair<>(mat, nanoTime());
                 informationHandler.addMatrix(tuple);
@@ -142,7 +141,6 @@ public class CameraHandler {
      * Clear the list of cameras and chest detected.
      */
     public void clearLists() {
-        chestDetected.clear();
         cameraList.clear();
     }
 
@@ -162,14 +160,6 @@ public class CameraHandler {
      */
     public Camera getCamera(final int index) {
         return cameraList.get(index);
-    }
-
-    /**
-     * Loop through the isChestdetected arraylist to check if there is at least 1 chest detected.
-     * @return true if there is at least 1 chest detected, false otherwise
-     */
-    public boolean isChestDetected() {
-        return chestDetected.contains(true);
     }
 
     /**
@@ -223,5 +213,13 @@ public class CameraHandler {
      */
     public boolean areAllChestsDetected() {
         return allChestsDetected;
+    }
+
+    /**
+     * Check if a chest is found (actually only for ChestDetectorTest).
+     * @return True if chest is found, false otherwise
+     */
+    public boolean isChestFound() {
+        return chestFound;
     }
 }

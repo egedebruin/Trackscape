@@ -1,6 +1,7 @@
 package camera;
 
 import handlers.CameraHandler;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -27,9 +28,10 @@ class CameraChestDetectorTest {
 
     /**
      * Test that checks whether includecontoursinframe gets called.
+     * @throws InterruptedException when interrupted
      */
     @Test
-    void includeChestContoursInFrameCallTest() {
+    void includeChestContoursInFrameCallTest() throws InterruptedException {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(shortVideoLinkWithBoxes);
         ch.processFrames();
@@ -40,6 +42,8 @@ class CameraChestDetectorTest {
                 detect = true;
             }
         }
+
+        TimeUnit.SECONDS.sleep(5);
         assertTrue(detect);
     }
 }
