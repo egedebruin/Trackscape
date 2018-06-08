@@ -49,9 +49,7 @@ public class CameraHandler {
      * @return The new camera as a Camera object.
      */
     public Camera addCamera(final String link) {
-        Camera cam = addCamera(link, -1);
-        cameraChestDetector.addCameraToDetector(cam);
-        return cam;
+        return addCamera(link, -1);
     }
 
     /**
