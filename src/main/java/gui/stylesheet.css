@@ -13,6 +13,10 @@
     -fx-background-image: url("././images/backgrounds/stuff.jpg");
 }
 
+.grid-lines{
+    -fx-grid-lines-visible: true;
+}
+
 /**
 Stylesheet for the media bar buttons (and all other buttons)
  */

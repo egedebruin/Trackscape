@@ -211,10 +211,7 @@ public class RoomController {
             for (int i = 0; i < chestList.size(); i++) {
                 long time = elapsedTime - TimeUnit.SECONDS.toNanos(
                         chestList.get(i).getBeginOfSectionTimeInSec());
-                chestTimeStampList.get(i).setText("Chest: " + (i + 1) + "/" + chestList.size()
-                        + " " + Util.getTimeString(time, false) + "/"
-                        + Util.getTimeString(TimeUnit.SECONDS.toNanos(
-                                chestList.get(i).getTargetDurationInSec()), false));
+                chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
             }
         }
     }

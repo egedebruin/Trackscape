@@ -19,6 +19,7 @@ import java.util.List;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class that constructs the StatusPane for the VideoPane.
@@ -114,22 +115,51 @@ public class StatusPane {
 
         numOfChestsOpened = new Label("Amount of opened chests: 0");
         progressPane.getChildren().addAll(status,
-                numOfChestsOpened);
+                numOfChestsOpened, createChestTimePane());
 
         // Get the amount of chests that are present in the room and create
         // the same amount of labels showing the time spend for activities
         // belonging to these chests. (By a for loop?)
 
-        List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
-
-        for (int i = 0; i < chestList.size(); i++) {
-            Label cLabel = roomController.getChestTimeStampList().get(i);
-            progressPane.getChildren().add(cLabel);
-        }
+//        List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
+//
+//        for (int i = 0; i < chestList.size(); i++) {
+//            Label cLabel = roomController.getChestTimeStampList().get(i);
+//            progressPane.getChildren().add(cLabel);
+//        }
 
         roomController.setNumOfChestsOpened(numOfChestsOpened);
 
         return progressPane;
+    }
+
+    private Pane createChestTimePane() {
+        GridPane chestTimePane = new GridPane();
+        chestTimePane.getStyleClass().add("grid-lines");
+        chestTimePane.setPadding(new Insets(10, 0, 0, 0));
+        chestTimePane.setAlignment(Pos.CENTER);
+
+        Label chest = new Label("  Chest  ");
+        Label elapsedTime = new Label("  Time  ");
+        Label targetTime = new Label("  Target  ");
+
+        chestTimePane.add(chest, 0, 0);
+        chestTimePane.add(elapsedTime, 1, 0);
+        chestTimePane.add(targetTime, 2, 0);
+
+        List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
+
+        for (int i = 0; i < chestList.size(); i++) {
+            Label chestLabel = new Label((i + 1) + "/" + chestList.size());
+            Label timeLabel = roomController.getChestTimeStampList().get(i);
+            Label targetLabel = new Label(Util.getTimeString(TimeUnit.SECONDS.toNanos(
+                    chestList.get(i).getTargetDurationInSec()), false));
+            chestTimePane.add(chestLabel, 0, (i + 1));
+            chestTimePane.add(timeLabel, 1, (i + 1));
+            chestTimePane.add(targetLabel, 2, (i +1));
+        }
+
+        return chestTimePane;
     }
 
     /**
