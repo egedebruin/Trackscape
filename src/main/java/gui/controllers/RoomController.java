@@ -213,7 +213,8 @@ public class RoomController {
                         chestList.get(i).getBeginOfSectionTimeInSec());
                 chestTimeStampList.get(i).setText("Chest: " + (i + 1) + "/" + chestList.size()
                         + " " + Util.getTimeString(time, false) + "/"
-                        + chestList.get(i).getTargetDurationInSec());
+                        + Util.getTimeString(TimeUnit.SECONDS.toNanos(
+                                chestList.get(i).getTargetDurationInSec()), false));
             }
         }
     }
