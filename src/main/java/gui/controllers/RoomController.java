@@ -24,7 +24,9 @@ public class RoomController {
     private CameraHandler cameraHandler;
     private int progressCompleted;
     private Label numOfChestsOpened;
+    private Label activityStatus;
     private boolean snoozeHint = false;
+    private boolean behindSchedule = false;
     private List<Chest> chestList;
     private List<Label> chestTimeStampList;
 
@@ -54,6 +56,7 @@ public class RoomController {
      */
     public void closeController() {
         snoozeHint = false;
+        behindSchedule = false;
         progressCompleted = 0;
         if (progressBar != null) {
             progressBar.getChildren().clear();
@@ -122,7 +125,6 @@ public class RoomController {
     public void fillProgress(final int stage) {
         for (int k = 0; k <= stage; k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
-
             if (k == progressBar.getChildren().size() - 1) {
                 // Done! Last box is unlocked.
                 progressBar.getChildren().get(k).getStyleClass().add("progress-made");
@@ -174,13 +176,12 @@ public class RoomController {
             progress.updateProgress();
             changeTime(now);
             if (statusPane.getChildren().size() > 0) {
-                // Update the updatePane
+                // Update the progressPane
                 updateChests(progress.getRoom().getChestsOpened());
-
+                updateActivity();
                 // Update the warningPane
-                // TO DO: FIND TIME SPENT PER CURRENT CHEST AND CHECK WITH LIMIT
                 // When people are behind on schedule
-                if (progressCompleted > 2 && !snoozeHint) {
+                if (behindSchedule && !snoozeHint) {
                     // Get the warningPane of the statusPane and set it on visible
                     statusPane.getChildren().get(2).setVisible(true);
                 } else {
@@ -188,6 +189,14 @@ public class RoomController {
                 }
             }
         }
+    }
+
+    /**
+     * Update the activity Label.
+     */
+    private void updateActivity() {
+        String activeString = "" + this.getCameraHandler().getActive();
+        activityStatus.setText(" Current activity: " + activeString.toLowerCase());
     }
 
      /** Method for when a chest if confirmed by the host.
@@ -215,6 +224,35 @@ public class RoomController {
                 chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
             }
         }
+    }
+
+    /**
+     * Updates the amount of chests present in the room.
+     * @param chests the amount of chests
+     */
+    public void updateChests(final int chests) {
+        numOfChestsOpened.setText(" Chests opened: " + chests + "/"
+            + getProgress().getRoom().getChestList().size());
+        if (allChestsOpened()) {
+            numOfChestsOpened.setText(" All chests have been opened!");
+            numOfChestsOpened.setTextFill(Color.FORESTGREEN);
+        } else {
+            numOfChestsOpened.setTextFill(Color.BLACK);
+        }
+    }
+
+    /**
+     * Check if all chests are opened.
+     * @return true if all chests are opened, false otherwise
+     */
+    public boolean allChestsOpened() {
+        if (progress == null) {
+            return false;
+        }
+        if (progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -271,31 +309,10 @@ public class RoomController {
     }
 
     /**
-     * Updates the amount of chests present in the room.
-     * @param chests the amount of chests
+     * Set the activityStatus.
+     * @param activity the label that shows activity status
      */
-    public void updateChests(final int chests) {
-        numOfChestsOpened.setText(" Chests opened: " + chests + "/"
-            + getProgress().getRoom().getChestList().size());
-        if (chests == getProgress().getRoom().getChestList().size()) {
-            numOfChestsOpened.setText(" All chests have been opened!");
-            numOfChestsOpened.setTextFill(Color.FORESTGREEN);
-        } else {
-            numOfChestsOpened.setTextFill(Color.BLACK);
-        }
-    }
-
-    /**
-     * Check if all chests are opened.
-     * @return true if all chests are opened, false otherwise
-     */
-    public boolean allChestsOpened() {
-        if (progress == null) {
-            return false;
-        }
-        if (progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened()) {
-            return true;
-        }
-        return false;
+    public void setActivityStatus(final Label activity) {
+        this.activityStatus = activity;
     }
 }
