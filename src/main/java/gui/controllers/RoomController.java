@@ -280,6 +280,8 @@ public class RoomController {
         if (chests == getProgress().getRoom().getChestList().size()) {
             numOfChestsOpened.setText(" All chests have been opened!");
             numOfChestsOpened.setTextFill(Color.FORESTGREEN);
+        } else {
+            numOfChestsOpened.setTextFill(Color.BLACK);
         }
     }
 
