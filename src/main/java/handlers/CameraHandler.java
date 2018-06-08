@@ -154,7 +154,6 @@ public class CameraHandler {
         } else {
             active = Activity.HIGH;
         }
-        System.out.println(active.toString());
     }
 
     /**

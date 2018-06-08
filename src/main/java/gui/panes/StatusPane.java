@@ -126,6 +126,7 @@ public class StatusPane {
                 numOfChestsOpened, activity, createChestTimePane());
 
         roomController.setNumOfChestsOpened(numOfChestsOpened);
+        roomController.setActivityStatus(activity);
 
         return progressPane;
     }
