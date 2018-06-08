@@ -243,21 +243,29 @@ public class RoomController {
 
                 if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
-                } else if (currentChest.getChestState() == Chest.Status.WAITING_FOR_SECTION_TO_START){
+                } else if (currentChest.getChestState()
+                    == Chest.Status.WAITING_FOR_SECTION_TO_START) {
                     chestTimeStampList.get(i).setText("");
                 }
-
-                // This section should be in another method, but this does not work.
-                if (TimeUnit.NANOSECONDS.toSeconds(time)
-                        <= currentChest.getTargetDurationInSec()) {
-                    behindSchedule = false;
-                    chestTimeStampList.get(i).setTextFill(Color.GREEN);
-                } else {
-                    behindSchedule = true;
-                    chestTimeStampList.get(i).setTextFill(Color.RED);
-                }
+                updateTimeChestsPanel(time, i);
             }
-            System.out.println(behindSchedule);
+        }
+    }
+
+    /**
+     * Update the colors of the time text and check if the team is behind schedule.
+     * @param time the current time - time chest was discovered
+     * @param pos the current position in the chestlist
+     */
+    private void updateTimeChestsPanel(final long time, final int pos) {
+        if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED
+            && !(TimeUnit.NANOSECONDS.toSeconds(time)
+            <= chestList.get(pos).getTargetDurationInSec())) {
+            behindSchedule = true;
+            chestTimeStampList.get(pos).setTextFill(Color.RED);
+        } else {
+            behindSchedule = false;
+            chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
     }
 

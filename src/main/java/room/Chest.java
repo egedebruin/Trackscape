@@ -175,7 +175,11 @@ public class Chest {
         return beginOfSectionTimeInSec;
     }
 
-    public void setChestState(Status chestState) {
-        this.chestState = chestState;
+    /**
+     * Set the state of the chest.
+     * @param state the new state
+     */
+    public void setChestState(final Status state) {
+        this.chestState = state;
     }
 }
