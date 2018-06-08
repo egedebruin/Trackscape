@@ -1,10 +1,10 @@
 package camera;
 
 import handlers.CameraHandler;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +38,7 @@ class CameraChestDetectorTest {
         boolean detect = false;
         while (ch.isChanged()) {
             ch.processFrames();
-            if (ch.isChestDetected()) {
+            if (ch.isChestFound()) {
                 detect = true;
             }
         }
