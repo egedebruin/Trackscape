@@ -50,7 +50,7 @@ public class CameraHandler {
      */
     public Camera addCamera(final String link) {
         Camera cam = addCamera(link, -1);
-        cameraChestDetector.addCamera(cam);
+        cameraChestDetector.addCameraToDetector(cam);
         return cam;
     }
 

@@ -24,7 +24,6 @@ public class CameraChestDetector extends CameraObjectDetector {
     private static final double MINCHESTAREA = 600;
     private Boolean isOpened = false;
     private final Comparator<Rect> comparator = new RectComparator();
-    private CameraChestTracker tracker = new CameraChestTracker();
     private List<Camera> cameraList = new ArrayList<>();
 
     /**
@@ -145,7 +144,7 @@ public class CameraChestDetector extends CameraObjectDetector {
      * Add camera to the chestDetector's cameraList.
      * @param cam the camera that needs to be added to the list
      */
-    public void addCamera(final Camera cam) {
+    public void addCameraToDetector(final Camera cam) {
         cameraList.add(cam);
     }
 }

@@ -13,8 +13,7 @@ import java.util.List;
  */
 public class CameraChestTracker {
 
-    private Mat previousFrame = new Mat();
-    private  List<MatOfPoint> previousContours = new ArrayList<>();
+    private List<MatOfPoint> previousContours;
 
     /**
      * Method which removes areas from frame, if they have overlap with the previous frame.
@@ -31,7 +30,7 @@ public class CameraChestTracker {
         Imgproc.findContours(tempFrame, contoursFrame,
             contourMatFrame, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        if (previousFrame.size().equals(frame.size())) {
+        if (previousContours != null) {
             // Check if there is overlap between chests in subsequent frames.
             for (MatOfPoint points : contoursFrame) {
                 Rect rect = Imgproc.boundingRect(new MatOfPoint(points.toArray()));
@@ -39,10 +38,8 @@ public class CameraChestTracker {
                     for (MatOfPoint points2 : previousContours) {
                         Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
 
-                        if (rect2.area() > minChestArea) {
-                            if (doOverlap(rect, rect2)) {
-                                setRectToZerosInFrame(tempFrame, rect);
-                            }
+                        if (rect2.area() > minChestArea && doOverlap(rect, rect2)) {
+                            setRectToZerosInFrame(tempFrame, rect);
                         }
                     }
                 }
@@ -50,7 +47,6 @@ public class CameraChestTracker {
         }
 
         previousContours = contoursFrame;
-        previousFrame = frame.clone();
 
         return tempFrame;
     }
@@ -77,11 +73,7 @@ public class CameraChestTracker {
         if (r1.x + r1.width < r2.x || r1.x > r2.x + r2.width) {
             return false;
         }
-        if (r1.y + r1.height < r2.y || r1.y > r2.y + r2.height) {
-            return false;
-        }
-
-        return true;
+        return r1.y + r1.height >= r2.y && r1.y <= r2.y + r2.height;
     }
 
 }
