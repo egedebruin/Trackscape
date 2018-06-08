@@ -4,6 +4,7 @@ import gui.MonitorScene;
 import api.APIHandler;
 import handlers.CameraHandler;
 import handlers.JsonHandler;
+import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -89,6 +90,11 @@ public class MainController {
      * Method that closes a stream.
      */
     public void closeStream() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         cameraHandler.closeHandler();
         timeLogController.closeController();
         if (roomController != null && configured) {
