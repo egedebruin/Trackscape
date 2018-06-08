@@ -31,7 +31,7 @@ public abstract class CameraObjectDetector {
      * @param frame The frame to be subtracted.
      * @return The result of the subtraction.
      */
-    public Mat subtractFrame(final Mat frame) {
+    public synchronized Mat subtractFrame(final Mat frame) {
         Mat subtraction = new Mat();
 
         knn.apply(frame, subtraction);
