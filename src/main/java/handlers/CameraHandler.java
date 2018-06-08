@@ -18,14 +18,19 @@ import static java.lang.System.nanoTime;
 public class CameraHandler {
 
     /**
-     * The list of the cameras.
+     * Enum for the activity.
      */
+    enum Activity {
+        ZERO, LOW, MEDIUM, HIGH;
+    }
+
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
+    private Activity active = Activity.ZERO;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -96,6 +101,9 @@ public class CameraHandler {
             frames.add(newFrame);
         }
 
+        if (active != Activity.ZERO) {
+            changeActivity();
+        }
         return frames;
     }
 
@@ -111,7 +119,8 @@ public class CameraHandler {
         activity.addActivities(newFrame, camera.getFrameCounter());
         if (activity.getLastActivity() > 2 && beginTime == -1) {
             beginTime = nanoTime();
-            informationHandler.addInformation("Detected activity");
+            informationHandler.addInformation("Detected active");
+            active = Activity.LOW;
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
@@ -126,6 +135,34 @@ public class CameraHandler {
                 informationHandler.addMatrix(tuple);
             }
         }
+    }
+
+    /**
+     * Change the activity with the last known activity.
+     */
+    public void changeActivity() {
+        double average = 0;
+        for (Camera camera : cameraList) {
+            average += camera.getActivity().getLastActivity();
+        }
+        average = average / (double) cameraList.size();
+
+        if (average < 5) {
+            active = Activity.LOW;
+        } else if (average < 10) {
+            active = Activity.MEDIUM;
+        } else {
+            active = Activity.HIGH;
+        }
+        System.out.println(active.toString());
+    }
+
+    /**
+     * Get the activity.
+     * @return The activity.
+     */
+    public Activity getActive() {
+        return active;
     }
 
     /**
