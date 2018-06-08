@@ -147,9 +147,10 @@ public class CameraHandler {
         }
         average = average / (double) cameraList.size();
 
-        if (average < 5) {
+        final int hardCodedAverage = 5;
+        if (average < hardCodedAverage) {
             active = Activity.LOW;
-        } else if (average < 10) {
+        } else if (average < 2 * hardCodedAverage) {
             active = Activity.MEDIUM;
         } else {
             active = Activity.HIGH;

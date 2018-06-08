@@ -12,9 +12,21 @@ public class Chest {
     /**
      * Enum of statuses.
      */
-    enum Status {
-        OPENED, TO_BE_OPENED, WAITING_FOR_SECTION_TO_START;
+    public enum Status {
+        /**
+         * The chest is opened.
+         */
+        OPENED,
+        /**
+         * The chest should be opened.
+         */
+        TO_BE_OPENED,
+        /**
+         * The chest before this one is not opened yet.
+         */
+        WAITING_FOR_SECTION_TO_START;
     }
+
     private Status chestState;
     private MatOfPoint positionInFrame;
     private long targetDurationInSec;
