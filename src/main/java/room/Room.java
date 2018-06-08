@@ -154,6 +154,7 @@ public class Room {
                 while (completedSections > 0) {
                     chest.resetChest();
                     chest.subSectionCompleted();
+                    chest.setChestState(Chest.Status.TO_BE_OPENED);
                     completedSections--;
                 }
             }

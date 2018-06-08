@@ -174,4 +174,8 @@ public class Chest {
     public long getBeginOfSectionTimeInSec() {
         return beginOfSectionTimeInSec;
     }
+
+    public void setChestState(Status chestState) {
+        this.chestState = chestState;
+    }
 }
