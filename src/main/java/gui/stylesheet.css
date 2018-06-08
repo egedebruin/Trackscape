@@ -5,16 +5,20 @@
     -fx-background-image: url("././images/backgrounds/blocks.jpg");
 }
 
-.bold{
-    -fx-font-weight: bold;
-}
-
 .top{
     -fx-background-image: url("././images/backgrounds/stuff.jpg");
 }
 
 .grid-lines{
     -fx-grid-lines-visible: true;
+}
+
+.label{
+    -fx-text-fill: black;
+}
+
+.bold{
+    -fx-font-weight: bold;
 }
 
 /**
@@ -69,6 +73,9 @@ Stylesheets for the progress bar
     -fx-background-color: lightgreen;
 }
 
+/**
+Stylesheet for warningPane.
+ */
 .warning{
     -fx-background-color: rgba(244, 26, 26, 0.5);
     -fx-border-color: red;
