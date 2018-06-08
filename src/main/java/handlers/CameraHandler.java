@@ -74,6 +74,7 @@ public class CameraHandler {
             camera = new Camera(videoCapture, link, chests);
         }
         cameraList.add(camera);
+        cameraChestDetector.addCameraToDetector(camera);
         return camera;
     }
 
