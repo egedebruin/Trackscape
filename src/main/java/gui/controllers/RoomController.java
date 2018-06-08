@@ -247,8 +247,6 @@ public class RoomController {
                     chestTimeStampList.get(i).setText("");
                 }
 
-                System.out.println(i + " what is happning: " + currentChest.getChestState().toString());
-
                 // This section should be in another method, but this does not work.
                 if (TimeUnit.NANOSECONDS.toSeconds(time)
                         <= currentChest.getTargetDurationInSec()) {
