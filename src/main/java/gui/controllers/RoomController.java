@@ -250,11 +250,14 @@ public class RoomController {
                 // This section should be in another method, but this does not work.
                 if (TimeUnit.NANOSECONDS.toSeconds(time)
                         <= currentChest.getTargetDurationInSec()) {
+                    behindSchedule = false;
                     chestTimeStampList.get(i).setTextFill(Color.GREEN);
                 } else {
+                    behindSchedule = true;
                     chestTimeStampList.get(i).setTextFill(Color.RED);
                 }
             }
+            System.out.println(behindSchedule);
         }
     }
 
