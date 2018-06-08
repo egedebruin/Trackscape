@@ -47,7 +47,7 @@ public class TimeLogController {
     public void changeTime(final long elapsedTime) {
         if (cameraHandler.getBeginTime() != -1) {
             long time = elapsedTime - cameraHandler.getBeginTime();
-            timerLabel.setText(Util.getTimeString(time));
+            timerLabel.setText(Util.getTimeString(time, true));
         }
     }
 
@@ -67,7 +67,7 @@ public class TimeLogController {
      */
     public void addInformation(final String text, final long time) {
         long elapsedTime = time - cameraHandler.getBeginTime();
-        String newText = Util.getTimeString(elapsedTime) + ": " + text;
+        String newText = Util.getTimeString(elapsedTime, true) + ": " + text;
         informationArea.appendText(newText + "\n");
     }
 
@@ -205,7 +205,7 @@ public class TimeLogController {
                     imageView.setVisible(true);
                     timeStamp.setVisible(true);
                     timeStamp.setText("Time detected: " + (Util.getTimeString(mat.getValue()
-                            - cameraHandler.getBeginTime())));
+                            - cameraHandler.getBeginTime(), true)));
 
                     Image image = newChestFrame(mat);
                     imageView.setImage(image);

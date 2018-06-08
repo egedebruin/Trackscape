@@ -50,9 +50,10 @@ public final class Util {
      * Convert nano seconds to right time string.
      *
      * @param time Time in nano seconds.
+     * @param enableHours Boolean that defines whether hours should be enabled
      * @return Correct time string.
      */
-    public static String getTimeString(final long time) {
+    public static String getTimeString(final long time, final boolean enableHours) {
         final int sixtySeconds = 60;
         final int nineSeconds = 9;
 
@@ -73,32 +74,13 @@ public final class Util {
         if (hours <= nineSeconds) {
             hr = "0" + hours;
         }
-        return hr + ":" + min + ":" + sec;
-    }
 
-    /**
-     * Convert nano seconds to right time string without hours.
-     *
-     * @param time Time in nano seconds.
-     * @return Correct time string.
-     */
-    public static String getTimeStringMinutes(final long time) {
-        final int sixtySeconds = 60;
-        final int nineSeconds = 9;
-
-        int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(time) % sixtySeconds;
-        int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(time) % sixtySeconds;
-
-        String sec = Integer.toString(seconds);
-        String min = Integer.toString(minutes);
-
-        if (seconds <= nineSeconds) {
-            sec = "0" + seconds;
+        if (enableHours) {
+            return hr + ":" + min + ":" + sec;
+        } else {
+            return min + ":" + sec;
         }
-        if (minutes <= nineSeconds) {
-            min = "0" + minutes;
-        }
-        return min + ":" + sec;
+
     }
 
     /**
