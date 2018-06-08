@@ -1,10 +1,10 @@
 package camera;
 
 import handlers.CameraHandler;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +38,8 @@ class CameraChestDetectorTest {
         while (ch.isChanged()) {
             ch.processFrames();
         }
-        TimeUnit.SECONDS.sleep(5);
+        final int timeout = 5;
+        TimeUnit.SECONDS.sleep(timeout);
         assertTrue(ch.isChestFound());
     }
 }
