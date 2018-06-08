@@ -3,10 +3,7 @@
     "roomId": 0,
     "cameras": [
       {
-        "link": "files/postit.mov"
-      },
-      {
-        "link": "files/webcast.mov"
+        "link": "rtsp://192.168.0.158:554/user=admin&password=&channel=1&stream=1.sdp?real_stream--rtp-caching=100"
       }
     ],
     "people": 5,
