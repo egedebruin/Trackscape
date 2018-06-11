@@ -130,7 +130,9 @@ public class CameraHandler {
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = cameraChestDetector.
                 checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
-            chestFound = mats.size() > 0;
+            if (mats.size() > 0) {
+                chestFound = true;
+            }
             for (Mat mat : mats) {
                 Pair<Mat, Long> tuple = new Pair<>(mat, nanoTime());
                 informationHandler.addMatrix(tuple);
@@ -143,7 +145,8 @@ public class CameraHandler {
      */
     public void changeActivity() {
         double ratio = 0;
-        for (Camera camera : cameraList) {
+        for (int i = 0; i < cameraList.size(); i++) {
+            Camera camera = cameraList.get(i);
             ratio += camera.getActivity().calculateRatio();
         }
         ratio = ratio / (double) cameraList.size();

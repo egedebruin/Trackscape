@@ -56,7 +56,7 @@ public class MainController {
         Camera camera = cameraHandler.addCamera(streamUrl);
         streamTimer = new AnimationTimer() {
             @Override
-            public void handle(long now) {
+            public void handle(final long now) {
                 camera.loadFrame();
             }
         };
