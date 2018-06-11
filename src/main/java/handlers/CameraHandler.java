@@ -1,16 +1,16 @@
 package handlers;
 
+import static java.lang.System.nanoTime;
+
+
 import camera.Camera;
 import camera.CameraActivity;
 import camera.CameraChestDetector;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.System.nanoTime;
 
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
@@ -141,16 +141,18 @@ public class CameraHandler {
      * Change the activity with the last known activity.
      */
     public void changeActivity() {
-        double average = 0;
+        double ratio = 0;
         for (Camera camera : cameraList) {
-            average += camera.getActivity().getLastActivity();
+            ratio += camera.getActivity().calculateRatio();
         }
-        average = average / (double) cameraList.size();
+        ratio = ratio / (double) cameraList.size();
 
-        final int hardCodedAverage = 5;
-        if (average < hardCodedAverage) {
+        final double oneThird = 0.33;
+        final double twoThird = 0.67;
+
+        if (ratio < oneThird) {
             active = Activity.LOW;
-        } else if (average < 2 * hardCodedAverage) {
+        } else if (ratio < twoThird) {
             active = Activity.MEDIUM;
         } else {
             active = Activity.HIGH;
