@@ -257,7 +257,7 @@ public class RoomController {
             <= chestList.get(pos).getTargetDurationInSec())) {
             behindSchedule = true;
             chestTimeStampList.get(pos).setTextFill(Color.RED);
-        } else {
+        } else if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED){
             behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
