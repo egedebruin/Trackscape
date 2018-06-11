@@ -23,6 +23,7 @@ public class RoomController {
     private Pane statusPane;
     private CameraHandler cameraHandler;
     private int progressCompleted;
+    private Label gameStatus;
     private Label numOfChestsOpened;
     private Label activityStatus;
     private boolean snoozeHint = false;
@@ -48,7 +49,7 @@ public class RoomController {
         chestTimeStampList = new ArrayList<>();
 
         if (chestList != null) {
-            for (Chest chest : chestList) {
+            for (int i = 0; i < chestList.size(); i++) {
                 chestTimeStampList.add(new Label());
             }
         }
@@ -179,7 +180,7 @@ public class RoomController {
                 updateActivity();
                 // Update the warningPane
                 // When people are behind on schedule
-                if (behindSchedule && !snoozeHint) {
+                if (behindSchedule && !snoozeHint && !allChestsOpened()) {
                     // Get the warningPane of the statusPane and set it on visible
                     statusPane.getChildren().get(2).setVisible(true);
                 } else {
@@ -242,6 +243,14 @@ public class RoomController {
                     chestTimeStampList.get(i).setText("");
                 }
                 updateTimeChestsPanel(time, i);
+
+                if (time > TimeUnit.SECONDS.toNanos(progress.getRoom().getTargetDuration())) {
+                    gameStatus.setText(" Time is up! Game has ended.");
+                    gameStatus.setTextFill(Color.RED);
+                } else {
+                    gameStatus.setText(" Game has started");
+                    gameStatus.setTextFill(Color.FORESTGREEN);
+                }
             }
         }
     }
@@ -257,7 +266,7 @@ public class RoomController {
             <= chestList.get(pos).getTargetDurationInSec())) {
             behindSchedule = true;
             chestTimeStampList.get(pos).setTextFill(Color.RED);
-        } else if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED){
+        } else if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED) {
             behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
@@ -336,5 +345,13 @@ public class RoomController {
      */
     public void setActivityStatus(final Label activity) {
         this.activityStatus = activity;
+    }
+
+    /**
+     * Set the gameStatus.
+     * @param gameStat the label that shows the game status
+     */
+    public void setGameStatus(final Label gameStat) {
+        this.gameStatus = gameStat;
     }
 }

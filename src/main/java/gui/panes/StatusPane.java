@@ -29,6 +29,7 @@ public class StatusPane {
      */
     private RoomController roomController;
     private FlowPane statusPane;
+    private Label gameStatus;
     private Label numOfChestsOpened;
     private Label activity;
 
@@ -114,6 +115,9 @@ public class StatusPane {
         status.getStyleClass().add("bold");
 
         final int buttonWidth = 20;
+        gameStatus = new Label(" Game will start soon");
+        gameStatus.setGraphic(Util.createImageViewLogo(
+            "//icons//star", buttonWidth));
         numOfChestsOpened = new Label(" Chests opened: 0 / "
             + roomController.getProgress().getRoom().getChestList().size());
         numOfChestsOpened.setGraphic(Util.createImageViewLogo(
@@ -122,9 +126,10 @@ public class StatusPane {
         activity.setGraphic(Util.createImageViewLogo(
             "//icons//star", buttonWidth));
 
-        progressPane.getChildren().addAll(status,
+        progressPane.getChildren().addAll(status, gameStatus,
                 numOfChestsOpened, activity, createChestTimePane());
 
+        roomController.setGameStatus(gameStatus);
         roomController.setNumOfChestsOpened(numOfChestsOpened);
         roomController.setActivityStatus(activity);
 
@@ -208,7 +213,8 @@ public class StatusPane {
             }
         };
         Timer hintTimer = new Timer();
-        final int timeUntilWarning = 5000;
+        // Wait 30 seconds before showing another warning
+        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
         hintTimer.schedule(task, timeUntilWarning);
     }
 
