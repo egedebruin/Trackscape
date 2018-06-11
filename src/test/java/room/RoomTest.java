@@ -124,7 +124,7 @@ public class RoomTest {
         room.unsetChestSectionsCompletedTill(subsections);
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
         assertEquals(chest2.getChestState(), Chest.Status.OPENED);
-        assertEquals(chest3.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
+        assertEquals(chest3.getChestState(), Chest.Status.TO_BE_OPENED);
         assertEquals(chest3.countSubsectionsCompleted(), 1);
 
     }
