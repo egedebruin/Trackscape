@@ -122,6 +122,7 @@ public class CameraHandler {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
             active = Activity.LOW;
+            camera.getActivity().setStarted(true);
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
