@@ -8,12 +8,15 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import room.Room;
 
+/**
+ * Handler for /section API calls.
+ */
 public class APISectionHandler extends AbstractHandler {
 
     private Room room;
 
     /**
-     * Constructor for the APIChestHandler.
+     * Constructor for the APISectionHandler.
      * @param newRoom the room for this handler.
      */
     public APISectionHandler(final Room newRoom) {

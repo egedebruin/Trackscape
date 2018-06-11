@@ -143,6 +143,9 @@ public class Room {
         }
     }
 
+    /**
+     * Sets the next section with state TO_BE_OPENED completed.
+     */
     public void setNextSectionOpened() {
         for (Chest chest : chestList) {
             if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {

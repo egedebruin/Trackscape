@@ -53,6 +53,7 @@ public class RoomTest {
         assertEquals(2, room.getNumberOfPeople());
         assertEquals(chestList, room.getChestList());
         assertEquals(1, room.getTargetDuration());
+        assertEquals(1, room.getPort());
     }
 
     /**
@@ -95,7 +96,7 @@ public class RoomTest {
     }
 
     /**
-     * TEst if setNextChestOpened opens next chest.
+     * Test if setNextChestOpened opens next chest.
      */
     @Test
     void setNextChestOpened() {
@@ -104,6 +105,17 @@ public class RoomTest {
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
         room.updateRoom();
         room.setNextChestOpened();
+        room.updateRoom();
+        assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
+    }
+
+    @Test
+    void setNextSectionCompleted() {
+        chestList.add(new Chest(1, TARGETTIME));
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
+        assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
+        room.updateRoom();
+        room.setNextSectionOpened();
         room.updateRoom();
         assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
     }
