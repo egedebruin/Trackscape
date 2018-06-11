@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import camera.Camera;
 import gui.MonitorScene;
 import api.APIHandler;
 import handlers.CameraHandler;
@@ -29,6 +30,7 @@ public class MainController {
     private boolean configured = false;
     private boolean videoPlaying = false;
     private APIHandler apiHandler;
+    private AnimationTimer streamTimer;
 
     /**
      * Constructor method.
@@ -51,7 +53,14 @@ public class MainController {
     public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
-        cameraHandler.addCamera(streamUrl);
+        Camera camera = cameraHandler.addCamera(streamUrl);
+        streamTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                camera.loadFrame();
+            }
+        };
+        streamTimer.start();
     }
 
     /**
@@ -70,6 +79,9 @@ public class MainController {
      * @param imageViews list of panels that show the frames
      */
     public void grabTimeFrame(final List<ImageView> imageViews) {
+        if (streamTimer != null) {
+            streamTimer.stop();
+        }
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(final long now) {

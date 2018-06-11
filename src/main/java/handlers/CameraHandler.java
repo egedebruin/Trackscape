@@ -113,11 +113,12 @@ public class CameraHandler {
      * @param newFrame The new frame.
      */
     public void processFrame(final Camera camera, final Mat newFrame) {
+        final int activityThreshold = 5;
         CameraActivity activity = camera.getActivity();
         activity.divideFrame(newFrame);
 
         activity.addActivities(newFrame, camera.getFrameCounter());
-        if (activity.getLastActivity() > 2 && beginTime == -1) {
+        if (activity.getLastActivity() > activityThreshold && beginTime == -1) {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
             active = Activity.LOW;
