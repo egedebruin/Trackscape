@@ -113,14 +113,16 @@ public class CameraHandler {
      * @param newFrame The new frame.
      */
     public void processFrame(final Camera camera, final Mat newFrame) {
+        final int activityThreshold = 5;
         CameraActivity activity = camera.getActivity();
         activity.divideFrame(newFrame);
 
         activity.addActivities(newFrame, camera.getFrameCounter());
-        if (activity.getLastActivity() > 2 && beginTime == -1) {
+        if (activity.getLastActivity() > activityThreshold && beginTime == -1) {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
             active = Activity.LOW;
+            camera.getActivity().setStarted(true);
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
@@ -129,7 +131,9 @@ public class CameraHandler {
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = cameraChestDetector.
                 checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
-            chestFound = mats.size() > 0;
+            if (mats.size() > 0) {
+                chestFound = true;
+            }
             for (Mat mat : mats) {
                 Pair<Mat, Long> tuple = new Pair<>(mat, nanoTime());
                 informationHandler.addMatrix(tuple);
@@ -142,7 +146,8 @@ public class CameraHandler {
      */
     public void changeActivity() {
         double ratio = 0;
-        for (Camera camera : cameraList) {
+        for (int i = 0; i < cameraList.size(); i++) {
+            Camera camera = cameraList.get(i);
             ratio += camera.getActivity().calculateRatio();
         }
         ratio = ratio / (double) cameraList.size();
