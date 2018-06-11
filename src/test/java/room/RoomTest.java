@@ -109,8 +109,11 @@ public class RoomTest {
         assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
     }
 
+    /**
+     * Test if setNextSectionOpened opens next section.
+     */
     @Test
-    void setNextSectionCompleted() {
+    void setNextSectionOpened() {
         chestList.add(new Chest(1, TARGETTIME));
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
