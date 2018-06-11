@@ -1,7 +1,6 @@
 package camera;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -20,6 +19,7 @@ public class CameraActivity {
     private static final int FRAMES = 1;
     private double lastActivity = 0;
     private int frameCounter;
+    private boolean started = false;
 
     /**
      * Constructor for the class.
@@ -93,7 +93,9 @@ public class CameraActivity {
 
         // Only add the activityList to the list when at least some frames are processed.
         if (frameCounter > minFrames) {
-            activityList.get(partNumber).add(change);
+            if (started) {
+                activityList.get(partNumber).add(change);
+            }
             return change;
         }
         return 0;
@@ -105,12 +107,11 @@ public class CameraActivity {
      */
     public double calculateRatio() {
         List<Double> activities = activityList.get(FRAMES);
-        Collections.sort(activities);
-        int i;
-        for (i = 0; i < activities.size(); i++) {
-            double activity = activities.get(i);
-            if (activity > lastActivity) {
-                break;
+        int i = 0;
+
+        for (Double activity : activities) {
+            if (activity <= lastActivity) {
+                i++;
             }
         }
         return (double) i / (double) activities.size();
@@ -163,5 +164,21 @@ public class CameraActivity {
      */
     public void setFrameCounter(final int newFrameCounter) {
         this.frameCounter = newFrameCounter;
+    }
+
+    /**
+     * If the camera is started, only adds to list when this is true.
+     * @return true if started, false otherwise.
+     */
+    public boolean isStarted() {
+        return started;
+    }
+
+    /**
+     * Set if the camera is started.
+     * @param newStarted the boolean started.
+     */
+    public void setStarted(final boolean newStarted) {
+        this.started = newStarted;
     }
 }
