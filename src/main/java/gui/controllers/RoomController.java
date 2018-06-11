@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import api.APIHandler;
 import handlers.CameraHandler;
 import javafx.scene.layout.GridPane;
 import room.Progress;
@@ -13,6 +14,7 @@ public class RoomController {
     private GridPane progressBar;
     private CameraHandler cameraHandler;
     private int progressCompleted;
+    private APIHandler apiHandler;
 
     /**
      * Constructor.
@@ -28,6 +30,12 @@ public class RoomController {
     public void configure(final String configFile) {
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
+
+        apiHandler = new APIHandler(progress.getRoom());
+        int port = progress.getRoom().getPort();
+        apiHandler.setServer(port);
+
+        apiHandler.startServer();
     }
 
     /**
@@ -36,6 +44,7 @@ public class RoomController {
     public void closeController() {
         if (progressBar != null) {
             progressBar.getChildren().clear();
+            apiHandler.stopServer();
         }
     }
 
@@ -64,7 +73,6 @@ public class RoomController {
      */
     private void newItemDone(final int index) {
         int chestsOpened = progress.getRoom().getChestsOpened();
-        fillProgress(index);
         int completedSections = progress.getSubSectionCountFromBarIndex(index);
         progress.setSubSectionCount(completedSections);
         progress.getRoom().setChestSectionsCompletedTill(completedSections);
@@ -171,6 +179,7 @@ public class RoomController {
     public void update() {
         if (progress != null) {
             progress.updateProgress();
+            fillProgress(progress.getFillCount());
         }
     }
 
@@ -181,23 +190,8 @@ public class RoomController {
     public String confirmedChest() {
         if (getProgress() != null) {
             getProgress().getRoom().setNextChestOpened();
-            fillProgress(getProgress().getFillCount());
         }
         return progress.getRoom().getChestsOpened() + "/"
             + progress.getRoom().getChestList().size();
-    }
-
-    /**
-     * Check if all chests are opened.
-     * @return true if all chests are opened, false otherwise
-     */
-    public boolean allChestsOpened() {
-        if (progress == null) {
-            return false;
-        }
-        if (progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened()) {
-            return true;
-        }
-        return false;
     }
 }

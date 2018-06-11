@@ -15,6 +15,7 @@ public class Room {
     private long targetDurationInSec;
     private long startTime;
     private int chestsOpened;
+    private int port;
 
     /**
      * Constructor.
@@ -24,9 +25,10 @@ public class Room {
      * @param cameraLinks the links for the cameras
      * @param chests a list of chests
      * @param duration the target duration
+     * @param portNumber the port number
      */
     public Room(final long roomid, final int nOPeople, final List<String> cameraLinks,
-                final List<Chest> chests, final int duration) {
+                final List<Chest> chests, final int duration, final int portNumber) {
         id = roomid;
         cameraHandler = new CameraHandler();
         numberOfPeople = nOPeople;
@@ -36,6 +38,7 @@ public class Room {
         chestList = chests;
         targetDurationInSec = duration;
         startTime = System.currentTimeMillis();
+        port = portNumber;
     }
 
     /**
@@ -151,8 +154,8 @@ public class Room {
                 chest.setApprovedChestFoundByHost(true);
                 completedSections -= chest.getNumberOfSubSections();
             } else {
+                chest.resetChest();
                 while (completedSections > 0) {
-                    chest.resetChest();
                     chest.subSectionCompleted();
                     completedSections--;
                 }
@@ -193,5 +196,13 @@ public class Room {
             }
         }
         return chestsOpened;
+    }
+
+    /**
+     * Get the port of the server.
+     * @return the port number.
+     */
+    public int getPort() {
+        return port;
     }
 }

@@ -1,26 +1,26 @@
 package api;
 
-import gui.controllers.MainController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import room.Room;
 
 /**
  * Handler for /chest API calls.
  */
 public class APIChestHandler extends AbstractHandler {
 
-    private MainController controller;
+    private Room room;
 
     /**
      * Constructor for the APIChestHandler.
-     * @param mainController the mainController for this handler.
+     * @param newRoom the room for this handler.
      */
-    public APIChestHandler(final MainController mainController) {
-        controller = mainController;
+    public APIChestHandler(final Room newRoom) {
+        room = newRoom;
     }
 
     @Override
@@ -31,15 +31,13 @@ public class APIChestHandler extends AbstractHandler {
         if (request.getParameter("opened") == null) {
             body = "Parameter opened not found in request";
         } else if (request.getParameter("opened").equals("true")) {
-            if (controller.getRoomController().allChestsOpened()) {
+            if (room.getChestList().size() == room.getChestsOpened()) {
                 body = "All chests are already opened";
             } else {
-                String log = "";
-                if (controller.getConfigured()) {
-                    log = controller.getRoomController().confirmedChest();
-                }
-                controller.getTimeLogController().addInformation("Found chest " + log);
+                room.setNextChestOpened();
+                String log = room.getChestsOpened() + "/" + room.getChestList().size();
                 body = "Found chest " + log;
+                room.getCameraHandler().getInformationHandler().addInformation("body");
             }
         }
 
