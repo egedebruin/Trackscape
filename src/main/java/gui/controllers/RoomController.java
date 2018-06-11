@@ -2,6 +2,7 @@ package gui.controllers;
 
 import gui.Util;
 import handlers.CameraHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -252,6 +253,7 @@ public class RoomController {
                     gameStatus.setText(" Time is up! Game has ended.");
                     gameStatus.setTextFill(Color.RED);
                 } else {
+                    setProgressBarActive(true);
                     gameStatus.setText(" Game has started");
                     gameStatus.setTextFill(Color.FORESTGREEN);
                 }
@@ -319,6 +321,16 @@ public class RoomController {
      */
     public void setProgressBar(final GridPane newProgressBar) {
         this.progressBar = newProgressBar;
+    }
+
+    /**
+     * Set the progressBar on inactive
+     * @param active whether the progessbar should be active or not
+     */
+    public void setProgressBarActive(final boolean active) {
+        for (Node child : progressBar.getChildren()) {
+            child.setDisable(!active);
+        }
     }
 
     /**
