@@ -246,4 +246,12 @@ public class TimeLogController {
     public void setImageView(final ImageView iv) {
         this.imageView = iv;
     }
+
+    /**
+     * get the timestamp when the chest was found in the video.
+     * @return timestamp the chest was found on
+     */
+    public long getChestTimestamp() {
+        return chestTimestamp;
+    }
 }

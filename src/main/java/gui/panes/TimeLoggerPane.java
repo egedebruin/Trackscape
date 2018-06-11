@@ -139,7 +139,8 @@ public class TimeLoggerPane {
         approveButton.setOnAction(event -> {
             String chestsFound = "";
             if (mainController.getConfigured()) {
-                chestsFound = mainController.getRoomController().confirmedChest();
+                long timestamp = timeLogController.getChestTimestamp();
+                chestsFound = mainController.getRoomController().confirmedChestString(timestamp);
             }
             timeLogController.confirmedChest(chestsFound);
         });

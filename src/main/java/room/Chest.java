@@ -2,7 +2,7 @@ package room;
 
 import org.opencv.core.MatOfPoint;
 
-import java.util.concurrent.TimeUnit;
+import static room.Chest.Status.WAITING_FOR_SECTION_TO_START;
 
 /**
  * Class describing a Chest as the can be found in an escape room.
@@ -31,7 +31,7 @@ public class Chest {
     private MatOfPoint positionInFrame;
     private long targetDurationInSec;
     private long beginOfSectionTimeInSec;
-    private long timeFound;
+    private long timeFound = -1;
     private int numberOfSubSections;
     private boolean[] subsectionCompleted;
     private boolean approvedChestFoundByHost;
@@ -49,14 +49,15 @@ public class Chest {
         numberOfSubSections = Math.max(noSubsections, 1);
         subsectionCompleted = new boolean[numberOfSubSections];
         targetDurationInSec = targetTimeInSeconds;
-        chestState = Status.WAITING_FOR_SECTION_TO_START;
+        chestState = WAITING_FOR_SECTION_TO_START;
+
     }
 
     /**
      * Method that resets teh chest to WAITING_FOR_SUBSECTION_TO_START.
      */
     public void resetChest() {
-        chestState = Status.WAITING_FOR_SECTION_TO_START;
+        chestState = WAITING_FOR_SECTION_TO_START;
         subsectionCompleted = new boolean[numberOfSubSections];
         approvedChestFoundByHost = false;
     }
@@ -70,14 +71,16 @@ public class Chest {
      *
      */
     private void updateStatus() {
-        if (chestState == Status.WAITING_FOR_SECTION_TO_START) {
+        if (chestState == WAITING_FOR_SECTION_TO_START) {
             chestState = Status.TO_BE_OPENED;
-            beginOfSectionTimeInSec = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime());
             positionInFrame = new MatOfPoint();
+            timeFound = -1;
         } else if (chestState == Status.TO_BE_OPENED
             && (approvedChestFoundByHost || countSubsectionsCompleted() == numberOfSubSections)) {
             chestState = Status.OPENED;
-            timeFound = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()) - beginOfSectionTimeInSec;
+            if (timeFound < 0) {
+                timeFound = System.nanoTime();
+            }
         }
     }
 
@@ -181,5 +184,13 @@ public class Chest {
      */
     public void setChestState(final Status state) {
         this.chestState = state;
+    }
+
+    /**
+     * Set the timeFound.
+     * @param timestamp timestamp in nanotime
+     */
+    public void setTimeFound(final long timestamp) {
+        this.timeFound = timestamp;
     }
 }

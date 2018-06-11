@@ -131,11 +131,14 @@ public class Room {
 
     /**
      * Sets the next chest with state TO_BE_OPENED OPENED, by approving it to be opened.
+     * @param timestamp the timestamp when the chest was opened
      */
-    public void setNextChestOpened() {
+    public void setNextChestOpened(final long timestamp) {
         for (Chest chest : chestList) {
             if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
                 chest.setApprovedChestFoundByHost(true);
+                chest.setTimeFound(timestamp);
+                break;
             }
         }
     }
@@ -149,6 +152,9 @@ public class Room {
         for (Chest chest : chestList) {
             if (chest.getNumberOfSubSections() <= completedSections) {
                 chest.setApprovedChestFoundByHost(true);
+                if (chest.getTimeFound() < 0) {
+                    chest.setTimeFound(System.nanoTime());
+                }
                 completedSections -= chest.getNumberOfSubSections();
             } else {
                 while (completedSections > 0) {

@@ -1,12 +1,13 @@
 package api;
 
 import gui.controllers.MainController;
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Handler for /chest API calls.
@@ -36,7 +37,7 @@ public class APIChestHandler extends AbstractHandler {
             } else {
                 String log = "";
                 if (controller.getConfigured()) {
-                    log = controller.getRoomController().confirmedChest();
+                    log = controller.getRoomController().confirmedChestString(System.nanoTime());
                 }
                 controller.getTimeLogController().addInformation("Found chest " + log);
                 body = "Found chest " + log;

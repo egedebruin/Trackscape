@@ -213,12 +213,13 @@ public class RoomController {
         }
     }
 
-     /** Method for when a chest if confirmed by the host.
+    /** Method for when a chest if confirmed by the host.
+     * @param timestamp the timestamp when the chest was opened
      * @return string format of how many chests are opened
      */
-    public String confirmedChest() {
+    public String confirmedChestString(final long timestamp) {
         if (getProgress() != null) {
-            getProgress().getRoom().setNextChestOpened();
+            getProgress().getRoom().setNextChestOpened(timestamp);
             fillProgress(getProgress().getFillCount());
         }
         return progress.getRoom().getChestsOpened() + "/"
@@ -236,7 +237,10 @@ public class RoomController {
                 Chest currentChest = chestList.get(i);
                 long time = elapsedTime - cameraHandler.getBeginTime();
 
-                if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                if (currentChest.getChestState() == Chest.Status.OPENED) {
+                    time = currentChest.getTimeFound() - cameraHandler.getBeginTime();
+                    chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
+                } else if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
                 } else if (currentChest.getChestState()
                     == Chest.Status.WAITING_FOR_SECTION_TO_START) {
