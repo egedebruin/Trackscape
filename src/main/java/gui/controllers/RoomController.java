@@ -236,6 +236,10 @@ public class RoomController {
                 Chest currentChest = chestList.get(i);
                 long time = elapsedTime - cameraHandler.getBeginTime();
 
+//                if (currentChest.getChestState() == Chest.Status.OPENED) {
+//                    chestTimeStampList.get(i).setText(Util.getTimeString(
+//                        currentChest.getTimeFound(), false));
+//                } else
                 if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
                 } else if (currentChest.getChestState()
