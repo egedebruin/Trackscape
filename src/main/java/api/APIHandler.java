@@ -34,8 +34,12 @@ public class APIHandler {
         handler.setHandler(new APIChestHandler(room));
         //For more handlers, create like above two lines and add handler to collection below.
 
+        ContextHandler sectionHandler = new ContextHandler("/section");
+        sectionHandler.setHandler(new APISectionHandler(room));
+
         HandlerCollection collection = new HandlerCollection();
         collection.addHandler(handler);
+        collection.addHandler(sectionHandler);
 
         server.setHandler(collection);
     }

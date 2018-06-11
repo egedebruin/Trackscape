@@ -143,6 +143,14 @@ public class Room {
         }
     }
 
+    public void setNextSectionOpened() {
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                chest.subSectionCompleted();
+            }
+        }
+    }
+
     /**
      * Sets the chests and subsections completed up till the subsection at completedSections.
      * @param completedSubSections number of completed sections
