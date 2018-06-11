@@ -128,12 +128,7 @@ public class RoomController {
     public void fillProgress(final int stage) {
         for (int k = 0; k <= stage; k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
-            if (k == progressBar.getChildren().size() - 1) {
-                // Done! Last box is unlocked.
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            } else {
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            }
+            progressBar.getChildren().get(k).getStyleClass().add("progress-made");
             k++;
         }
         progressCompleted = stage;
