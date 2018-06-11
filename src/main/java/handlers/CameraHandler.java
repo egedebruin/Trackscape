@@ -119,7 +119,7 @@ public class CameraHandler {
         activity.addActivities(newFrame, camera.getFrameCounter());
         if (activity.getLastActivity() > 2 && beginTime == -1) {
             beginTime = nanoTime();
-            informationHandler.addInformation("Detected active");
+            informationHandler.addInformation("Detected activity");
             active = Activity.LOW;
         }
 
