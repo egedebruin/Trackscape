@@ -235,11 +235,10 @@ public class RoomController {
      * @param elapsedTime the elapsed time
      */
     public void changeTime(final long elapsedTime) {
-        if (chestList.size() > 0) {
+        if (chestList.size() > 0 && cameraHandler.getBeginTime() != -1) {
             for (int i = 0; i < chestList.size(); i++) {
                 Chest currentChest = chestList.get(i);
-                long time = elapsedTime - TimeUnit.SECONDS.toNanos(
-                        currentChest.getBeginOfSectionTimeInSec());
+                long time = elapsedTime - cameraHandler.getBeginTime();
 
                 if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
