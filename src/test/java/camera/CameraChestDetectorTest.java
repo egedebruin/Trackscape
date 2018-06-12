@@ -1,11 +1,11 @@
 package camera;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
 import handlers.CameraHandler;
-import java.io.File;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -34,9 +34,14 @@ class CameraChestDetectorTest {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(shortVideoLinkWithBoxes);
         ch.processFrames();
+        boolean found = false;
         while (ch.isChanged()) {
             ch.processFrames();
+            if (ch.isChestFound()) {
+                found = true;
+                break;
+            }
         }
-        assertTrue(ch.isChestFound());
+        assertTrue(found);
     }
 }
