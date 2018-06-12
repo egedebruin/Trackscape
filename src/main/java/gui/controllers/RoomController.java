@@ -74,6 +74,7 @@ public class RoomController {
         snoozeHint = false;
         behindSchedule = false;
         progressCompleted = 0;
+        progress = null;
         if (progressBar != null) {
             progressBar.getChildren().clear();
             apiHandler.stopServer();
