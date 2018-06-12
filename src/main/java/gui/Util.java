@@ -50,9 +50,10 @@ public final class Util {
      * Convert nano seconds to right time string.
      *
      * @param time Time in nano seconds.
+     * @param enableHours Boolean that defines whether hours should be enabled
      * @return Correct time string.
      */
-    public static String getTimeString(final long time) {
+    public static String getTimeString(final long time, final boolean enableHours) {
         final int sixtySeconds = 60;
         final int nineSeconds = 9;
 
@@ -73,18 +74,24 @@ public final class Util {
         if (hours <= nineSeconds) {
             hr = "0" + hours;
         }
-        return hr + ":" + min + ":" + sec;
+
+        if (enableHours) {
+            return hr + ":" + min + ":" + sec;
+        } else {
+            return min + ":" + sec;
+        }
+
     }
 
     /**
-     * Create the imageView for a button logo.
+     * Create the imageView for a button or label.
      * @param fileName the name of the file
      * @param buttonWidth the width of the button
      * @return ImageView of the logo
      */
-    public static ImageView createButtonLogo(final String fileName, final int buttonWidth) {
+    public static ImageView createImageViewLogo(final String fileName, final int buttonWidth) {
         File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\buttons\\" + fileName + ".png");
+            + "\\src\\main\\java\\gui\\images\\" + fileName + ".png");
         Image img = new Image(streamEnd.toURI().toString());
         ImageView logo = new ImageView();
         logo.setFitWidth(buttonWidth);

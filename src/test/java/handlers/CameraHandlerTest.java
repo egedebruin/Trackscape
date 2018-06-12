@@ -150,4 +150,13 @@ class CameraHandlerTest {
         ch.setAllChestsDetected(true);
         assertTrue(ch.areAllChestsDetected());
     }
+
+    /**
+     * Test getActive method.
+     */
+    @Test
+    void testGetActive() {
+        CameraHandler c = new CameraHandler();
+        assertEquals(c.getActive(), CameraHandler.Activity.ZERO);
+    }
 }
