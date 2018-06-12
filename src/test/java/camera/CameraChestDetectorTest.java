@@ -14,7 +14,6 @@ class CameraChestDetectorTest {
 
     private final String shortVideoLinkWithBoxes = "files" + File.separator
         + "escaperoomwithopenbox.mov";
-    private static final int SLEEPYTIME = 10;
     static {
         // These should be at the start of the application,
         // so if the main changes this should be included.
