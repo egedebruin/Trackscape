@@ -79,6 +79,17 @@ public class APISectionHandlerTest {
         http2.connect();
         http2.getResponseCode();
         assertEquals(0, room.getChestList().get(0).countSubsectionsCompleted());
+
+        for (int i = 0; i < room.getChestList().size(); i++) {
+            room.setNextChestOpened(0);
+            room.updateRoom();
+        }
+
+        HttpURLConnection http3 = (HttpURLConnection)
+            new URL("http://localhost:8080/section?completed=true").openConnection();
+        http3.connect();
+        http3.getResponseCode();
+        assertEquals(room.getChestList().size(), room.getChestsOpened());
         handler.stopServer();
     }
 }

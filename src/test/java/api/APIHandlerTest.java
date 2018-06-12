@@ -61,4 +61,17 @@ public class APIHandlerTest {
         apiHandler.stopServer();
         assertFalse(apiHandler.getServer().isStarted());
     }
+
+    /**
+     * Test if server with wrong port cannot be started.
+     */
+    @Test
+    void testStartFailed() {
+        final int magicInt = 123456;
+        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
+        APIHandler apiHandler = new APIHandler(room);
+        apiHandler.setServer(magicInt);
+        apiHandler.startServer();
+        assertFalse(apiHandler.getServer().isStarted());
+    }
 }

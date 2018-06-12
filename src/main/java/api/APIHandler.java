@@ -52,7 +52,6 @@ public class APIHandler {
             server.start();
         } catch (Exception e) {
             System.out.println("Server could not be started");
-            e.printStackTrace();
         }
     }
 
@@ -64,7 +63,6 @@ public class APIHandler {
             server.stop();
         } catch (Exception e) {
             System.out.println("Server could not be stopped");
-            e.printStackTrace();
         }
     }
 
