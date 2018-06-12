@@ -139,7 +139,7 @@ public class RoomController {
      * @param stage the current progress stage of the game
      */
     public void fillProgress(final int stage) {
-        for (int k = 0; k <= progressBar.getChildren().size(); k++) {
+        for (int k = 0; k < progressBar.getChildren().size(); k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
             if (k <= stage) {
                 progressBar.getChildren().get(k).getStyleClass().add("progress-made");
