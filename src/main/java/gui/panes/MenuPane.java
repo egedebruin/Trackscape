@@ -160,7 +160,7 @@ public class MenuPane {
                 fillInPane.add(players, 0, 0);
                 fillInPane.add(playerField, 1, 0);
 
-                final Label chests = new Label("Amount of chest: ");
+                final Label chests = new Label("Amount of chests: ");
                 final TextField chestField = new TextField();
                 fillInPane.add(chests, 0, 1);
                 fillInPane.add(chestField, 1, 1);
@@ -168,11 +168,20 @@ public class MenuPane {
                 Button proceed = new Button("Proceed");
                 proceed.setOnAction(t1 -> {
                     int filledInChests = Integer.parseInt(chestField.getText());
-                    for (int i = 0; i < filledInChests*2; i = i + 2) {
+                    int j = 1;
+                    for (int i = 0; i < filledInChests*3; i = i + 3) {
+                        Label settings = new Label("Settings for chest " + j);
+                        settings.setStyle("-fx-font-weight: bold");
                         Label sections = new Label("Amount of sections: ");
-                        Label targetDuration = new Label("The target duration of this chest:");
-                        fillInPane.add(sections, 0, i + 3);
-                        fillInPane.add(targetDuration, 0, i + 4);
+                        Label targetDuration = new Label("The target duration of this chest in sec: ");
+                        TextField sectionField = new TextField();
+                        TextField durationField = new TextField();
+                        fillInPane.add(settings, 0, i + 3);
+                        fillInPane.add(sections, 0, i + 4);
+                        fillInPane.add(sectionField, 1, i + 4);
+                        fillInPane.add(targetDuration, 0, i + 5);
+                        fillInPane.add(durationField, 1, i + 5);
+                        j++;
                     }
                 });
                 fillInPane.add(proceed, 0, 2);
@@ -181,9 +190,9 @@ public class MenuPane {
                 submit.setOnAction(t1 -> {
                     manualStage.close();
                 });
-                fillInPane.add(submit, 6, 7);
+//                fillInPane.add(submit, 6, 7);
 
-                Scene manualConfigScene = new Scene(fillInPane, 750, 350);
+                Scene manualConfigScene = new Scene(fillInPane, 420, 350);
                 manualStage.setScene(manualConfigScene);
                 manualStage.show();
             }
