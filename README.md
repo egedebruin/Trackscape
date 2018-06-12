@@ -16,3 +16,22 @@ BEP
 * Copy opencv\build\bin\opencv_ffmpeg341_64.dll to Trackscape/libs
 
 [**OpenCV javafx examples**](https://github.com/opencv-java/opencv-java-tutorials)
+
+
+**API**
+
+When a configuration is started, a server will also be available for API calls. The port of the API calls can be 
+determined in the config file, when it isn't given the default port is 8080. There are two API calls:
+
+CALL=
+* section?completed=true
+* chest?opened=true
+
+The first call sets the next section to completed. The second call sets the next chest to opened.
+The API call has the following structure:
+
+\[IPADDRESS\]:\[PORT\]/\[CALL\]
+
+For example, the following call opens the next chest of a room which listens to port 8080 on a server on the same computer:
+
+http://localhost:8080/chest?opened=true
