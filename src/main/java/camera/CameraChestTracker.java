@@ -14,6 +14,8 @@ import java.util.List;
 public class CameraChestTracker {
 
     private List<MatOfPoint> previousContours;
+    private static final int TRACKERTIMEOUTFRAMES = 50;
+    private int currenttracktimeout = 0;
 
     /**
      * Method which removes areas from frame, if they have overlap with the previous frame.
@@ -34,11 +36,11 @@ public class CameraChestTracker {
             // Check if there is overlap between chests in subsequent frames.
             for (MatOfPoint points : contoursFrame) {
                 Rect rect = Imgproc.boundingRect(new MatOfPoint(points.toArray()));
-                if (rect.area() > minChestArea) {
+                if (rect.area() >= minChestArea) {
                     for (MatOfPoint points2 : previousContours) {
                         Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
 
-                        if (rect2.area() > minChestArea && doOverlap(rect, rect2)) {
+                        if (rect2.area() >= minChestArea && doOverlap(rect, rect2)) {
                             setRectToZerosInFrame(tempFrame, rect);
                         }
                     }
@@ -47,6 +49,13 @@ public class CameraChestTracker {
         }
 
         previousContours = contoursFrame;
+
+//        if (currenttracktimeout > 0) {
+//            currenttracktimeout--;
+//            return Mat.zeros(frame.size(),frame.type());
+//        } else if (previousContours.size() > 0) {
+//            currenttracktimeout = TRACKERTIMEOUTFRAMES;
+//        }
 
         return tempFrame;
     }
