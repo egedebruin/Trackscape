@@ -129,7 +129,7 @@ public class CameraHandler {
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
 
-        final int firstDetection = 100;
+        final int firstDetection = 80;
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = cameraChestDetector.
                 checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
