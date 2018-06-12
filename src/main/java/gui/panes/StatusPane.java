@@ -2,6 +2,8 @@ package gui.panes;
 
 import gui.Util;
 import gui.controllers.RoomController;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -14,11 +16,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import room.Chest;
-
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class that constructs the StatusPane for the VideoPane.
@@ -190,7 +187,7 @@ public class StatusPane {
         okButton.setGraphic(Util.createImageViewLogo("buttons\\okButton", buttonWidth));
         okButton.setCursor(Cursor.HAND);
         okButton.setOnAction(event -> {
-            startHintTimer();
+            roomController.startHintTimer();
         });
 
         warningPane.setAlignment(Pos.CENTER);
@@ -199,23 +196,6 @@ public class StatusPane {
         warningPane.getStyleClass().add("warning");
 
         return warningPane;
-    }
-
-    /**
-     * Make the warningPane invisible until time is up and players are still behind.
-     */
-    private void startHintTimer() {
-        roomController.snoozeHint(true);
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                roomController.snoozeHint(false);
-            }
-        };
-        Timer hintTimer = new Timer();
-        // Wait 30 seconds before showing another warning
-        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
-        hintTimer.schedule(task, timeUntilWarning);
     }
 
     /**

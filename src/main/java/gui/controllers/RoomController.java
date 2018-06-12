@@ -2,6 +2,8 @@ package gui.controllers;
 
 import gui.Util;
 import handlers.CameraHandler;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -369,5 +371,22 @@ public class RoomController {
      */
     public void setGameStatus(final Label gameStat) {
         this.gameStatus = gameStat;
+    }
+
+    /**
+     * Make the warningPane invisible until time is up and players are still behind.
+     */
+    public void startHintTimer() {
+        snoozeHint(true);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                snoozeHint(false);
+            }
+        };
+        Timer hintTimer = new Timer();
+        // Wait 30 seconds before showing another warning
+        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
+        hintTimer.schedule(task, timeUntilWarning);
     }
 }
