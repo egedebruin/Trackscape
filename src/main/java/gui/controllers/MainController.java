@@ -1,9 +1,11 @@
 package gui.controllers;
 
+import camera.Camera;
 import gui.MonitorScene;
 import api.APIHandler;
 import handlers.CameraHandler;
 import handlers.JsonHandler;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
@@ -29,6 +31,7 @@ public class MainController {
     private boolean configured = false;
     private boolean videoPlaying = false;
     private APIHandler apiHandler;
+    private List<AnimationTimer> streamTimers = new ArrayList<>();
 
     /**
      * Constructor method.
@@ -51,7 +54,15 @@ public class MainController {
     public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
-        cameraHandler.addCamera(streamUrl);
+        Camera camera = cameraHandler.addCamera(streamUrl);
+        AnimationTimer streamTimer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {
+                camera.loadFrame();
+            }
+        };
+        streamTimers.add(streamTimer);
+        streamTimer.start();
     }
 
     /**
@@ -70,6 +81,9 @@ public class MainController {
      * @param imageViews list of panels that show the frames
      */
     public void grabTimeFrame(final List<ImageView> imageViews) {
+        for (AnimationTimer streamTimer : streamTimers) {
+            streamTimer.stop();
+        }
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(final long now) {
@@ -77,7 +91,7 @@ public class MainController {
                 if (videoController.isClosed()) {
                     closeStream();
                 }
-                roomController.update();
+                roomController.update(now);
                 timeLogController.processFrame(now);
             }
         };
