@@ -5,12 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -154,6 +149,7 @@ public class MenuPane {
                 manualStage.initOwner(primaryStage);
 
                 GridPane fillInPane = new GridPane();
+                fillInPane.setAlignment(Pos.CENTER);
 
                 final Label players = new Label("Amount of players: ");
                 final TextField playerField = new TextField();
@@ -165,6 +161,10 @@ public class MenuPane {
                 fillInPane.add(chests, 0, 1);
                 fillInPane.add(chestField, 1, 1);
 
+                final int maxWidth = 60;
+                playerField.setMaxWidth(maxWidth);
+                chestField.setMaxWidth(maxWidth);
+
                 Button proceed = new Button("Proceed");
                 proceed.setOnAction(t1 -> {
                     int filledInChests = Integer.parseInt(chestField.getText());
@@ -172,10 +172,15 @@ public class MenuPane {
                     for (int i = 0; i < filledInChests*3; i = i + 3) {
                         Label settings = new Label("Settings for chest " + j);
                         settings.setStyle("-fx-font-weight: bold");
+
                         Label sections = new Label("Amount of sections: ");
-                        Label targetDuration = new Label("The target duration of this chest in sec: ");
+                        Label targetDuration = new Label("The target duration in sec: ");
                         TextField sectionField = new TextField();
                         TextField durationField = new TextField();
+
+                        sectionField.setMaxWidth(maxWidth);
+                        durationField.setMaxWidth(maxWidth);
+
                         fillInPane.add(settings, 0, i + 3);
                         fillInPane.add(sections, 0, i + 4);
                         fillInPane.add(sectionField, 1, i + 4);
@@ -183,6 +188,7 @@ public class MenuPane {
                         fillInPane.add(durationField, 1, i + 5);
                         j++;
                     }
+                    proceed.setVisible(false);
                 });
                 fillInPane.add(proceed, 0, 2);
 
@@ -192,7 +198,11 @@ public class MenuPane {
                 });
 //                fillInPane.add(submit, 6, 7);
 
-                Scene manualConfigScene = new Scene(fillInPane, 420, 350);
+                ScrollPane scrollPane = new ScrollPane();
+                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+                scrollPane.setContent(fillInPane);
+
+                Scene manualConfigScene = new Scene(scrollPane, 330, 350);
                 manualStage.setScene(manualConfigScene);
                 manualStage.show();
             }
