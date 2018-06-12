@@ -124,27 +124,6 @@ public class RoomTest {
     }
 
     /**
-     * Test if unsetChestTill sets only the chests till subsections and not further.
-     */
-    @Test
-    void unsetChestsTill() {
-        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
-        Chest chest = new Chest(1, TARGETTIME);
-        Chest chest2 = new Chest(1, TARGETTIME);
-        Chest chest3 = new Chest(2, TARGETTIME);
-        chestList.add(chest);
-        chestList.add(chest2);
-        chestList.add(chest3);
-        final int subsections = 3;
-        room.unsetChestSectionsCompletedTill(subsections);
-        assertEquals(chest.getChestState(), Chest.Status.OPENED);
-        assertEquals(chest2.getChestState(), Chest.Status.OPENED);
-        assertEquals(chest3.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
-        assertEquals(chest3.countSubsectionsCompleted(), 1);
-
-    }
-
-    /**
      * Test if getChestsOpened gets correct amount of chests opened.
      */
     @Test

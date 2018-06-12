@@ -181,15 +181,6 @@ public class Room {
     }
 
     /**
-     * Sets all chests up till completedsections.
-     * used when chests need to make negative progress.
-     * @param completedSections number of completed sections
-     */
-    public void unsetChestSectionsCompletedTill(final int completedSections) {
-        setChestSectionsCompletedTill(completedSections);
-    }
-
-    /**
      * Set allChestsDetected variable of cameraHandler
      * on true when all chests have been detected.
      * @param detectedAllChests boolean that says whether all chests are detected
