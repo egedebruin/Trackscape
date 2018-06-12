@@ -12,6 +12,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -57,22 +58,23 @@ public class MenuPane {
         MenuItem closeApp = new MenuItem("Close Application");
         settings.getItems().addAll(clearImageViewers, closeApp);
 
-        // Menu options for automatic configuration
+        // Menu options for (automatic) escape room configuration
         Menu config = new Menu("Configure the Escape Room");
         MenuItem configFile = new MenuItem("Load Configuration File...");
         MenuItem standardFile = new MenuItem("Use Standard Configuration");
-        config.getItems().addAll(configFile, standardFile);
+        MenuItem manual = new MenuItem("Manual Configuration");
+        config.getItems().addAll(configFile, standardFile, manual);
 
-        // Menu options for manual configuration
-        Menu configManual = new Menu("Manual Configuration");
+        // Menu options for adding extra media
+        Menu extraMedia = new Menu("Add extra media");
         MenuItem openVideo = new MenuItem("Add Video File...");
         MenuItem connectStream = new MenuItem("Add Stream...");
-        configManual.getItems().addAll(openVideo, connectStream);
+        extraMedia.getItems().addAll(openVideo, connectStream);
 
         // Add al submenus to main menu bar
         MenuBar menu = new MenuBar();
         menu.prefWidthProperty().bind(videoPane.widthProperty());
-        menu.getMenus().addAll(settings, config, configManual);
+        menu.getMenus().addAll(settings, config, extraMedia);
         StackPane menuPane = new StackPane();
         menuPane.getChildren().add(menu);
 
@@ -81,6 +83,7 @@ public class MenuPane {
         closeApp(closeApp);
         openConfig(configFile, primaryStage);
         standardConfig(standardFile);
+        manualConfig(manual, primaryStage);
         openVideo(openVideo, primaryStage);
         connectStream(connectStream, primaryStage);
 
@@ -138,6 +141,51 @@ public class MenuPane {
             if (!controller.isVideoPlaying() && !controller.getConfigured()) {
                 controller.configure("files/standard.json");
                 setCameraStatus();
+            }
+        });
+    }
+
+    private void manualConfig(final MenuItem manual, final Stage primaryStage) {
+        manual.setOnAction(t -> {
+            if (!controller.isVideoPlaying()) {
+                final Stage manualStage = new Stage();
+                manualStage.setTitle("Manual Escape Room Configuration");
+                manualStage.initModality(Modality.APPLICATION_MODAL);
+                manualStage.initOwner(primaryStage);
+
+                GridPane fillInPane = new GridPane();
+
+                final Label players = new Label("Amount of players: ");
+                final TextField playerField = new TextField();
+                fillInPane.add(players, 0, 0);
+                fillInPane.add(playerField, 1, 0);
+
+                final Label chests = new Label("Amount of chest: ");
+                final TextField chestField = new TextField();
+                fillInPane.add(chests, 0, 1);
+                fillInPane.add(chestField, 1, 1);
+
+                Button proceed = new Button("Proceed");
+                proceed.setOnAction(t1 -> {
+                    int filledInChests = Integer.parseInt(chestField.getText());
+                    for (int i = 0; i < filledInChests*2; i = i + 2) {
+                        Label sections = new Label("Amount of sections: ");
+                        Label targetDuration = new Label("The target duration of this chest:");
+                        fillInPane.add(sections, 0, i + 3);
+                        fillInPane.add(targetDuration, 0, i + 4);
+                    }
+                });
+                fillInPane.add(proceed, 0, 2);
+
+                Button submit = new Button("Submit");
+                submit.setOnAction(t1 -> {
+                    manualStage.close();
+                });
+                fillInPane.add(submit, 6, 7);
+
+                Scene manualConfigScene = new Scene(fillInPane, 750, 350);
+                manualStage.setScene(manualConfigScene);
+                manualStage.show();
             }
         });
     }
