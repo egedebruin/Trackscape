@@ -71,6 +71,7 @@ public class CameraActivityTest {
         assertNotNull(camera.getActivity());
         assertEquals(activity.getActivityList().get(parts), new ArrayList());
 
+        activity.setStarted(true);
         activity.setFrameCounter(0);
         activity.addActivity(frame1, parts, activity.getKnns().get(parts));
         assertEquals(activity.getActivityList().get(parts), new ArrayList());

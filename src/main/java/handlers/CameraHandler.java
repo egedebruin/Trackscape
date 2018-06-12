@@ -1,16 +1,16 @@
 package handlers;
 
+import static java.lang.System.nanoTime;
+
+
 import camera.Camera;
 import camera.CameraActivity;
 import camera.CameraChestDetector;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.System.nanoTime;
 
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
@@ -18,14 +18,19 @@ import static java.lang.System.nanoTime;
 public class CameraHandler {
 
     /**
-     * The list of the cameras.
+     * Enum for the activity.
      */
+    enum Activity {
+        ZERO, LOW, MEDIUM, HIGH;
+    }
+
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
+    private Activity active = Activity.ZERO;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -96,6 +101,9 @@ public class CameraHandler {
             frames.add(newFrame);
         }
 
+        if (active != Activity.ZERO) {
+            changeActivity();
+        }
         return frames;
     }
 
@@ -105,13 +113,18 @@ public class CameraHandler {
      * @param newFrame The new frame.
      */
     public void processFrame(final Camera camera, final Mat newFrame) {
+        final int activityThreshold = 5;
         CameraActivity activity = camera.getActivity();
         activity.divideFrame(newFrame);
 
         activity.addActivities(newFrame, camera.getFrameCounter());
-        if (activity.getLastActivity() > 2 && beginTime == -1) {
+        if (activity.getLastActivity() > activityThreshold && beginTime == -1) {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
+            active = Activity.LOW;
+            for (Camera cam : cameraList) {
+                cam.getActivity().setStarted(true);
+            }
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
@@ -120,12 +133,45 @@ public class CameraHandler {
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = cameraChestDetector.
                 checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);
-            chestFound = mats.size() > 0;
+            if (mats.size() > 0) {
+                chestFound = true;
+            }
             for (Mat mat : mats) {
                 Pair<Mat, Long> tuple = new Pair<>(mat, nanoTime());
                 informationHandler.addMatrix(tuple);
             }
         }
+    }
+
+    /**
+     * Change the activity with the last known activity.
+     */
+    public void changeActivity() {
+        double ratio = 0;
+        for (int i = 0; i < cameraList.size(); i++) {
+            Camera camera = cameraList.get(i);
+            ratio += camera.getActivity().calculateRatio();
+        }
+        ratio = ratio / (double) cameraList.size();
+
+        final double oneThird = 0.33;
+        final double twoThird = 0.67;
+
+        if (ratio < oneThird) {
+            active = Activity.LOW;
+        } else if (ratio < twoThird) {
+            active = Activity.MEDIUM;
+        } else {
+            active = Activity.HIGH;
+        }
+    }
+
+    /**
+     * Get the activity.
+     * @return The activity.
+     */
+    public Activity getActive() {
+        return active;
     }
 
     /**

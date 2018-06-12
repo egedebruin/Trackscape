@@ -104,7 +104,7 @@ public class RoomTest {
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
         room.updateRoom();
-        room.setNextChestOpened();
+        room.setNextChestOpened(System.nanoTime());
         room.updateRoom();
         assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
     }

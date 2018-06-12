@@ -34,7 +34,7 @@ public class APIChestHandler extends AbstractHandler {
             if (room.getChestList().size() == room.getChestsOpened()) {
                 body = "All chests are already opened";
             } else {
-                room.setNextChestOpened();
+                room.setNextChestOpened(System.nanoTime());
                 String log = room.getChestsOpened() + "/" + room.getChestList().size();
                 body = "Found chest " + log;
                 room.getCameraHandler().getInformationHandler().addInformation(body);

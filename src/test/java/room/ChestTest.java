@@ -109,4 +109,13 @@ class ChestTest {
 
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
     }
+
+    /**
+     * Test getTargetDurationInSec method.
+     */
+    @Test
+    void getTargetDurationInSecTest() {
+        Chest chest = new Chest(1, TARGETTIME);
+        assertEquals(chest.getTargetDurationInSec(), TARGETTIME);
+    }
 }

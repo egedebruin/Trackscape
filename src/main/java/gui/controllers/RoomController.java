@@ -1,9 +1,21 @@
 package gui.controllers;
 
 import api.APIHandler;
+import gui.Util;
 import handlers.CameraHandler;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import room.Chest;
 import room.Progress;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller for the gui with a room.
@@ -11,10 +23,18 @@ import room.Progress;
 public class RoomController {
 
     private Progress progress;
-    private GridPane progressBar;
+    private Pane progressBar;
+    private Pane statusPane;
     private CameraHandler cameraHandler;
     private int progressCompleted;
     private APIHandler apiHandler;
+    private Label gameStatus;
+    private Label numOfChestsOpened;
+    private Label activityStatus;
+    private boolean snoozeHint = false;
+    private boolean behindSchedule = false;
+    private List<Chest> chestList;
+    private List<Label> chestTimeStampList;
 
     /**
      * Constructor.
@@ -36,15 +56,30 @@ public class RoomController {
         apiHandler.setServer(port);
 
         apiHandler.startServer();
+
+        chestList = progress.getRoom().getChestList();
+        chestTimeStampList = new ArrayList<>();
+
+        if (chestList != null) {
+            for (int i = 0; i < chestList.size(); i++) {
+                chestTimeStampList.add(new Label());
+            }
+        }
     }
 
     /**
      * Close the controller when the stream is closed.
      */
     public void closeController() {
+        snoozeHint = false;
+        behindSchedule = false;
+        progressCompleted = 0;
         if (progressBar != null) {
             progressBar.getChildren().clear();
             apiHandler.stopServer();
+        }
+        if (statusPane != null) {
+            statusPane.getChildren().clear();
         }
     }
 
@@ -106,13 +141,7 @@ public class RoomController {
     public void fillProgress(final int stage) {
         for (int k = 0; k <= stage; k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
-
-            if (k == progressBar.getChildren().size() - 1) {
-                // Done! Last box is unlocked.
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            } else {
-                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
-            }
+            progressBar.getChildren().get(k).getStyleClass().add("progress-made");
             k++;
         }
         progressCompleted = stage;
@@ -150,6 +179,138 @@ public class RoomController {
     }
 
     /**
+     * Update the roomController.
+     * @param now the actual time in nanoseconds
+     */
+    public void update(final long now) {
+        if (progress != null) {
+            progress.updateProgress();
+            changeTime(now);
+            if (statusPane.getChildren().size() > 0) {
+                // Update the progressPane
+                updateChests(progress.getRoom().getChestsOpened());
+                updateActivity();
+                // Update the warningPane
+                // When people are behind on schedule
+                if (behindSchedule && !snoozeHint && !allChestsOpened()) {
+                    // Get the warningPane of the statusPane and set it on visible
+                    statusPane.getChildren().get(2).setVisible(true);
+                } else {
+                    statusPane.getChildren().get(2).setVisible(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Update the activity Label.
+     */
+    private void updateActivity() {
+        String activeString = "" + this.getCameraHandler().getActive();
+        activityStatus.setText(" Current activity: " + activeString.toLowerCase());
+    }
+
+    /**
+     * Updates the amount of chests present in the room.
+     * @param chests the amount of chests
+     */
+    public void updateChests(final int chests) {
+        numOfChestsOpened.setText(" Chests opened: " + chests + "/"
+            + getProgress().getRoom().getChestList().size());
+        if (allChestsOpened()) {
+            numOfChestsOpened.setText(" All chests have been opened!");
+            numOfChestsOpened.setTextFill(Color.FORESTGREEN);
+        } else {
+            numOfChestsOpened.setTextFill(Color.BLACK);
+        }
+    }
+
+    /** Method for when a chest if confirmed by the host.
+     * @param timestamp the timestamp when the chest was opened
+     * @return string format of how many chests are opened
+     */
+    public String confirmedChestString(final long timestamp) {
+        if (getProgress() != null) {
+            getProgress().getRoom().setNextChestOpened(timestamp);
+        }
+        return progress.getRoom().getChestsOpened() + "/"
+            + progress.getRoom().getChestList().size();
+    }
+
+    /**
+     * Changes the time of the timer.
+     *
+     * @param elapsedTime the elapsed time
+     */
+    public void changeTime(final long elapsedTime) {
+        if (chestList.size() > 0 && cameraHandler.getBeginTime() != -1) {
+            for (int i = 0; i < chestList.size(); i++) {
+                Chest currentChest = chestList.get(i);
+                long time = elapsedTime - cameraHandler.getBeginTime();
+
+                if (currentChest.getChestState() == Chest.Status.OPENED) {
+                    time = currentChest.getTimeFound() - cameraHandler.getBeginTime();
+                    chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
+                } else if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                    chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
+                } else if (currentChest.getChestState()
+                    == Chest.Status.WAITING_FOR_SECTION_TO_START) {
+                    chestTimeStampList.get(i).setText("");
+                }
+                updateTimeChestsPanel(time, i);
+
+                if (time > TimeUnit.SECONDS.toNanos(progress.getRoom().getTargetDuration())) {
+                    gameStatus.setText(" Time is up! Game has ended.");
+                    gameStatus.setTextFill(Color.RED);
+                } else {
+                    setProgressBarActive();
+                    gameStatus.setText(" Game has started");
+                    gameStatus.setTextFill(Color.FORESTGREEN);
+                }
+            }
+        }
+    }
+
+    /**
+     * Update the colors of the time text and check if the team is behind schedule.
+     * @param time the current time - time chest was discovered
+     * @param pos the current position in the chestlist
+     */
+    private void updateTimeChestsPanel(final long time, final int pos) {
+        if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED
+            && !(TimeUnit.NANOSECONDS.toSeconds(time)
+            <= chestList.get(pos).getTargetDurationInSec())) {
+            behindSchedule = true;
+            chestTimeStampList.get(pos).setTextFill(Color.RED);
+        } else if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED) {
+            behindSchedule = false;
+            chestTimeStampList.get(pos).setTextFill(Color.GREEN);
+        }
+    }
+
+    /**
+     * Check if all chests are opened.
+     * @return true if all chests are opened, false otherwise
+     */
+    public boolean allChestsOpened() {
+        if (progress == null) {
+            return false;
+        }
+        if (progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Snooze the warningPane when hint is given by host.
+     * @param snooze whether the warningPane should be snoozed or not.
+     */
+    public void snoozeHint(final boolean snooze) {
+        snoozeHint = snooze;
+    }
+
+    /**
      * Get the camera handler.
      * @return The camera handler.
      */
@@ -162,8 +323,7 @@ public class RoomController {
      * @return The progress object.
      */
     public Progress getProgress() {
-        return progress;
-    }
+        return progress; }
 
     /**
      * Set the progressBar.
@@ -174,24 +334,66 @@ public class RoomController {
     }
 
     /**
-     * Update the roomController.
+     * Set the progressBar on inactive.
      */
-    public void update() {
-        if (progress != null) {
-            progress.updateProgress();
-            fillProgress(progress.getFillCount());
+    private void setProgressBarActive() {
+        for (Node child : progressBar.getChildren()) {
+            child.setDisable(false);
         }
     }
 
     /**
-     * Method for when a chest if confirmed by the host.
-     * @return string format of how many chests are opened
+     * Set the statusPane.
+     * @param pane the statusPane
      */
-    public String confirmedChest() {
-        if (getProgress() != null) {
-            getProgress().getRoom().setNextChestOpened();
-        }
-        return progress.getRoom().getChestsOpened() + "/"
-            + progress.getRoom().getChestList().size();
+    public void setStatusPane(final Pane pane) {
+        this.statusPane = pane; }
+
+    /**
+     * Set the numOfChestsOpened label.
+     * @param label the label showing the amount of chests opened
+     */
+    public void setNumOfChestsOpened(final Label label) {
+        this.numOfChestsOpened = label; }
+
+    /**
+     * Get the chestTimeStampList.
+     * @return the list
+     */
+    public List<Label> getChestTimeStampList() {
+        return chestTimeStampList;
+    }
+
+    /**
+     * Set the activityStatus.
+     * @param activity the label that shows activity status
+     */
+    public void setActivityStatus(final Label activity) {
+        this.activityStatus = activity;
+    }
+
+    /**
+     * Set the gameStatus.
+     * @param gameStat the label that shows the game status
+     */
+    public void setGameStatus(final Label gameStat) {
+        this.gameStatus = gameStat;
+    }
+
+    /**
+     * Make the warningPane invisible until time is up and players are still behind.
+     */
+    public void startHintTimer() {
+        snoozeHint(true);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                snoozeHint(false);
+            }
+        };
+        Timer hintTimer = new Timer();
+        // Wait 30 seconds before showing another warning
+        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
+        hintTimer.schedule(task, timeUntilWarning);
     }
 }

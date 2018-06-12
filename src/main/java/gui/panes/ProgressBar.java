@@ -98,6 +98,7 @@ public class ProgressBar {
         // Add initial stylesheet
         for (int m = 0; m < progressStages.size(); m++) {
             progressStages.get(m).getStyleClass().add("progress-reset");
+            progressStages.get(m).setDisable(true);
         }
     }
 

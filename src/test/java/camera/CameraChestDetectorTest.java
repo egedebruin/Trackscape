@@ -35,10 +35,14 @@ class CameraChestDetectorTest {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(shortVideoLinkWithBoxes);
         ch.processFrames();
+        boolean found = false;
         while (ch.isChanged()) {
             ch.processFrames();
+            if (ch.isChestFound()) {
+                found = true;
+                break;
+            }
         }
-        TimeUnit.SECONDS.sleep(SLEEPYTIME);
-        assertTrue(ch.isChestFound());
+        assertTrue(found);
     }
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "roomId": 0,
+    "cameras": [
+      {
+        "link": "rtsp://192.168.0.217:554/stream1"
+      },
+      {
+        "link": "rtsp://192.168.0.159:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream"
+      }
+    ],
+    "people": 5,
+    "chests": [
+      {
+        "sections": 2,
+        "targetDuration": 120
+      },
+      {
+        "sections": 3,
+        "targetDuration": 220
+      },
+      {
+        "sections": 1,
+        "targetDuration": 30
+      }
+    ],
+    "targetDuration": 500,
+    "port": 7070
+  }
+]
