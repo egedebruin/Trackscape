@@ -139,4 +139,17 @@ public class RoomTest {
         assertEquals(1, room.getChestsOpened());
     }
 
+    /**
+     * Test if totalSubsections returns correct number.
+     */
+    @Test
+    void totalSubsectionsTest() {
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
+        Chest chest = new Chest(1, TARGETTIME);
+        Chest chest2 = new Chest(1, TARGETTIME);
+        chestList.add(chest);
+        chestList.add(chest2);
+        assertEquals(2, room.getTotalSubsections());
+    }
+
 }

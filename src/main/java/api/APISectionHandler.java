@@ -35,7 +35,8 @@ public class APISectionHandler extends AbstractHandler {
                 body = "All chests are already opened";
             } else {
                 room.setNextSectionOpened();
-                body = "Completed section";
+                String log = room.calculateSubsectionsDone() + "/" + room.getTotalSubsections();
+                body = "Completed section " + log;
                 room.getCameraHandler().getInformationHandler().addInformation(body);
             }
         }

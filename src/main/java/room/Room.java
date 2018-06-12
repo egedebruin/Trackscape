@@ -210,4 +210,38 @@ public class Room {
     public int getPort() {
         return port;
     }
+
+    /**
+     * Calculate the progress by checking each Chest.
+     * For each opened chest the total number of subsections is added to the total.
+     * For each to be opened chest the total amount of completed subsections get added to the total.
+     * For each waiting for subsection to start chest nothing is added to the total.
+     *
+     * @return subSectionCount (=total)
+     */
+    public int calculateSubsectionsDone() {
+        int progressMeter = 0;
+        // Counts the open chests, chestList is ordered in the following manner:
+        // OPENED : TO_BE_OPENED : WAITING_FOR_SECTION_TO_START
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.OPENED) {
+                progressMeter += chest.getNumberOfSubSections();
+            } else if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                progressMeter += chest.countSubsectionsCompleted();
+            }
+        }
+        return progressMeter;
+    }
+
+    /**
+     * Get the total number of subsections.
+     * @return the number of subsections
+     */
+    public int getTotalSubsections() {
+        int total = 0;
+        for (Chest chest : chestList) {
+            total += chest.getNumberOfSubSections();
+        }
+        return total;
+    }
 }
