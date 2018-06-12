@@ -157,8 +157,8 @@ public class Room {
                 }
                 completedSections -= chest.getNumberOfSubSections();
             } else {
+                chest.resetChest();
                 while (completedSections > 0) {
-                    chest.resetChest();
                     chest.subSectionCompleted();
                     completedSections--;
                 }
@@ -172,9 +172,6 @@ public class Room {
      * @param completedSections number of completed sections
      */
     public void unsetChestSectionsCompletedTill(final int completedSections) {
-        for (Chest chest : chestList) {
-            chest.resetChest();
-        }
         setChestSectionsCompletedTill(completedSections);
     }
 
