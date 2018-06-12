@@ -324,7 +324,7 @@ public class RoomController {
     }
 
     /**
-     * Set the progressBar on inactive
+     * Set the progressBar on inactive.
      * @param active whether the progessbar should be active or not
      */
     public void setProgressBarActive(final boolean active) {

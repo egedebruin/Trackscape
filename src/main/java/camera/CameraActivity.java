@@ -167,14 +167,6 @@ public class CameraActivity {
     }
 
     /**
-     * If the camera is started, only adds to list when this is true.
-     * @return true if started, false otherwise.
-     */
-    public boolean isStarted() {
-        return started;
-    }
-
-    /**
      * Set if the camera is started.
      * @param newStarted the boolean started.
      */

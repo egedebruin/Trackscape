@@ -171,22 +171,6 @@ public class Chest {
     }
 
     /**
-     * Get the time of when the search for a chest begins.
-     * @return beginOfSectionsTimeInSec
-     */
-    public long getBeginOfSectionTimeInSec() {
-        return beginOfSectionTimeInSec;
-    }
-
-    /**
-     * Set the state of the chest.
-     * @param state the new state
-     */
-    public void setChestState(final Status state) {
-        this.chestState = state;
-    }
-
-    /**
      * Set the timeFound.
      * @param timestamp timestamp in nanotime
      */
