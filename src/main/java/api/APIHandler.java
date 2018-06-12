@@ -68,4 +68,11 @@ public class APIHandler {
         }
     }
 
+    /**
+     * Returns the server.
+     * @return the server
+     */
+    public Server getServer() {
+        return server;
+    }
 }

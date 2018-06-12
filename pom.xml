@@ -44,6 +44,14 @@
             <artifactId>jetty-server</artifactId>
             <version>9.4.10.v20180503</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <name>BEP Trackscape</name>
     <url>https://github.com/egedebruin/Trackscape</url>
