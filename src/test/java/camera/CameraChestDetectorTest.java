@@ -1,10 +1,10 @@
 package camera;
 
 import handlers.CameraHandler;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,7 +15,7 @@ class CameraChestDetectorTest {
 
     private final String shortVideoLinkWithBoxes = "files" + File.separator
         + "escaperoomwithopenbox.mov";
-
+    private static final int SLEEPYTIME = 10;
     static {
         // These should be at the start of the application,
         // so if the main changes this should be included.
@@ -38,7 +38,7 @@ class CameraChestDetectorTest {
         while (ch.isChanged()) {
             ch.processFrames();
         }
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(SLEEPYTIME);
         assertTrue(ch.isChestFound());
     }
 }

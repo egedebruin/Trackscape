@@ -3,10 +3,10 @@
     "roomId": 0,
     "cameras": [
       {
-        "link": "files/postits.mov"
+        "link": "files/postit.mov"
       },
       {
-        "link": "files/webcasts.mov"
+        "link": "files/webcast.mov"
       }
     ],
     "people": 5,
