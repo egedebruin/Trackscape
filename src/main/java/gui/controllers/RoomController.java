@@ -2,8 +2,6 @@ package gui.controllers;
 
 import gui.Util;
 import handlers.CameraHandler;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -14,6 +12,8 @@ import room.Progress;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -255,7 +255,7 @@ public class RoomController {
                     gameStatus.setText(" Time is up! Game has ended.");
                     gameStatus.setTextFill(Color.RED);
                 } else {
-                    setProgressBarActive(true);
+                    setProgressBarActive();
                     gameStatus.setText(" Game has started");
                     gameStatus.setTextFill(Color.FORESTGREEN);
                 }
@@ -327,11 +327,10 @@ public class RoomController {
 
     /**
      * Set the progressBar on inactive.
-     * @param active whether the progessbar should be active or not
      */
-    public void setProgressBarActive(final boolean active) {
+    private void setProgressBarActive() {
         for (Node child : progressBar.getChildren()) {
-            child.setDisable(!active);
+            child.setDisable(false);
         }
     }
 

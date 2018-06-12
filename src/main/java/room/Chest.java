@@ -60,6 +60,7 @@ public class Chest {
         chestState = WAITING_FOR_SECTION_TO_START;
         subsectionCompleted = new boolean[numberOfSubSections];
         approvedChestFoundByHost = false;
+        timeFound = -1;
     }
 
     /**
