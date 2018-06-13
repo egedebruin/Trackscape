@@ -55,32 +55,34 @@ public final class Util {
      */
     public static String getTimeString(final long time, final boolean enableHours) {
         final int sixtySeconds = 60;
-        final int nineSeconds = 9;
 
         int seconds = (int) TimeUnit.NANOSECONDS.toSeconds(time) % sixtySeconds;
         int minutes = (int) TimeUnit.NANOSECONDS.toMinutes(time) % sixtySeconds;
         int hours = (int) TimeUnit.NANOSECONDS.toHours(time);
 
-        String sec = Integer.toString(seconds);
-        String min = Integer.toString(minutes);
-        String hr = Integer.toString(hours);
-
-        if (seconds <= nineSeconds) {
-            sec = "0" + seconds;
-        }
-        if (minutes <= nineSeconds) {
-            min = "0" + minutes;
-        }
-        if (hours <= nineSeconds) {
-            hr = "0" + hours;
-        }
+        String sec = putTimeUnitInString(seconds);
+        String min = putTimeUnitInString(minutes);
+        String hr = putTimeUnitInString(hours);
 
         if (enableHours) {
             return hr + ":" + min + ":" + sec;
         } else {
             return min + ":" + sec;
         }
+    }
 
+    /**
+     * Make a string of the timeUnit (add a 0 when it exists out of only one integer).
+     * @param timeUnit seconds, minutes, or hours
+     * @return String of the timeUnit
+     */
+    private static String putTimeUnitInString(final int timeUnit) {
+        final int nineSeconds = 9;
+        if (timeUnit < nineSeconds) {
+            return "0" + timeUnit;
+        } else {
+            return Integer.toString(timeUnit);
+        }
     }
 
     /**
