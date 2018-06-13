@@ -1,11 +1,10 @@
 package camera;
 
+import handlers.CameraHandler;
 import org.junit.jupiter.api.Test;
-import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CameraChestDetectorTest {
 
     private final String shortVideoLinkWithBoxes = "files" + File.separator
-        + "openchest.png";
+        + "escaperoomwithopenbox.mov";
     private static final int MAGICTIMEOUT = 15;
 
     static {
@@ -34,22 +33,22 @@ class CameraChestDetectorTest {
      */
     @Test
     void includeChestContoursInFrameCallTest() throws InterruptedException {
-        CameraChestDetector cameraChestDetector = new CameraChestDetector();
+        CameraHandler ch = new CameraHandler();
+        ch.addCamera(shortVideoLinkWithBoxes);
+        ch.processFrames();
 
+        boolean found = false;
+        while (ch.isChanged()) {
+            ch.processFrames();
+            if (ch.isChestFound()) {
+                found = true;
+                break;
+            }
+        }
 
+        TimeUnit.SECONDS.sleep(MAGICTIMEOUT);
+        assertTrue(found);
 
-        VideoCapture vc = new VideoCapture(shortVideoLinkWithBoxes);
-        vc.open(shortVideoLinkWithBoxes);
-
-        Camera cam = new Camera(vc, shortVideoLinkWithBoxes, 1);
-
-        Mat frame = cam.getLastFrame();
-
-        Mat hsv = Mat.ones(frame.size(), frame.type());
-
-        List<Mat> mats = cameraChestDetector.includeChestContoursInFrame(frame, hsv);
-
-        assertTrue(mats.size() > 0);
 
     }
 }

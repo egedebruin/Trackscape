@@ -164,6 +164,10 @@ public class Camera {
         return tracker;
     }
 
+    /**
+     * Get the detector.
+     * @return this.detector
+     */
     public CameraChestDetector getChestDetector() {
         return detector;
     }

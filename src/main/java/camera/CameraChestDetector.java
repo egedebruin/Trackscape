@@ -97,7 +97,13 @@ public class CameraChestDetector extends CameraObjectDetector {
         return detectedMats;
     }
 
-    private Rect calculateCutout(Rect rect, Mat frame) {
+    /**
+     * Calculates the rect boundaries, to cut out of the frame.
+     * @param rect the bounding box around a chest
+     * @param frame the current frame
+     * @return the bounding box, but slightly larger to cut out of the frame.
+     */
+    private Rect calculateCutout(final Rect rect, final Mat frame) {
         final int axisOffset = 50;
         final int sizeOffset = 100;
 

@@ -131,7 +131,8 @@ public class CameraHandler {
 
         final int firstDetection = 80;
         if (camera.getFrameCounter() > firstDetection) {
-            List<Mat> mats = camera.getChestDetector().checkForChests(newFrame, camera, subtraction);
+            List<Mat> mats = camera.getChestDetector().
+                checkForChests(newFrame, camera, subtraction);
             chestFound = mats.size() > 0;
 
             for (Mat mat : mats) {
