@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import room.Chest;
 import room.Progress;
+import room.Room;
 
 /**
  * Controller for the gui with a room.
@@ -32,12 +33,27 @@ public class RoomController extends Controller {
     private boolean configured;
 
     /**
-     * Creates a new camerahandler depending on the config.
-     * @param configFile The configfile for this room.
+     * Creates a new progress depending on the room given.
+     * @param room the new room
+     */
+    public void configureRoom(final Room room) {
+        progress = new Progress(room);
+        configure();
+    }
+
+    /**
+     * Creates a new progress depending on the config.
+     * @param configFile the configFile for this room.
      */
     public void configure(final String configFile) {
         progress = new Progress(configFile);
+        configure();
+    }
 
+    /**
+     * Configures everything needed.
+     */
+    private void configure() {
         for (String link : progress.getRoom().getLinkList()) {
             getCameraHandler().addCamera(link, progress.getRoom().getChestList().size());
         }

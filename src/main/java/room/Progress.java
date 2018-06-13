@@ -33,6 +33,15 @@ public class Progress {
     }
 
     /**
+     * Constructor.
+     * @param newRoom predefined room
+     */
+    public Progress(final Room newRoom) {
+        room = newRoom;
+        init();
+    }
+
+    /**
      * Initialize the progress.
      */
     private void init() {
