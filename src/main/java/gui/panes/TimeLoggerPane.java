@@ -135,7 +135,16 @@ public class TimeLoggerPane {
         Button approveButton = new Button();
         approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         approveButton.setVisible(false);
+        return addFunctionalityApproveButton(approveButton, viewHeight);
+    }
 
+    /**
+     * Add functionality to the approveButton when something happens to it.
+     * @param approveButton the button
+     * @param viewHeight the height of the image set on the button
+     * @return the approveButton
+     */
+    private Button addFunctionalityApproveButton(final Button approveButton, final int viewHeight) {
         approveButton.setCursor(Cursor.HAND);
         approveButton.setOnAction(event -> {
             String chestsFound = "";
@@ -152,7 +161,6 @@ public class TimeLoggerPane {
         approveButton.setOnMouseExited(event -> {
             approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         });
-
         return approveButton;
     }
 
