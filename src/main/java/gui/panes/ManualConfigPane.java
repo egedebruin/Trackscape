@@ -22,6 +22,7 @@ public class ManualConfigPane {
      * Class parameters.
      */
     private MainController controller;
+    private Stage manualStage;
 
     /**
      * Constructor for ManualConfigPane.
@@ -34,7 +35,7 @@ public class ManualConfigPane {
     public void createManualConfig(final MenuItem manual, final Stage primaryStage) {
         manual.setOnAction(t -> {
             if (!controller.isVideoPlaying()) {
-                final Stage manualStage = new Stage();
+                manualStage = new Stage();
                 manualStage.setTitle("Manual Escape Room Configuration");
                 manualStage.initModality(Modality.APPLICATION_MODAL);
                 manualStage.initOwner(primaryStage);
@@ -60,10 +61,6 @@ public class ManualConfigPane {
                 proceedButtonAction(playerField, chestField, maxWidth, fillInPane, proceed);
                 fillInPane.add(proceed, 0, 2);
 
-                Button submit = new Button("Submit");
-                submit.setOnAction(t1 -> {
-                    manualStage.close();
-                });
 //                fillInPane.add(submit, 6, 7);
 
                 ScrollPane scrollPane = new ScrollPane();
@@ -104,8 +101,18 @@ public class ManualConfigPane {
                         fillInPane.add(sectionField, 1, line + 4);
                         fillInPane.add(targetDuration, 0, line + 5);
                         fillInPane.add(durationField, 1, line + 5);
-
                     }
+
+                    Button submit = new Button("Submit");
+                    fillInPane.add(submit, 0, filledInChests * 3 + 3);
+                    submit.setOnAction(t2 -> {
+                        try {
+                            int players = Integer.parseInt(playerField.getText());
+                            manualStage.close();
+                        } catch (NumberFormatException e) {
+                            error.setVisible(true);
+                        }
+                    });
                     proceed.setVisible(false);
                     chestField.setEditable(false);
                 } catch (NumberFormatException e) {
