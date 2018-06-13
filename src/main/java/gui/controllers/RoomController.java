@@ -325,6 +325,7 @@ public class RoomController extends Controller {
      */
     public void startHintTimer() {
         final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
+
         snoozeHint = true;
         TimerTask task = new TimerTask() {
             @Override

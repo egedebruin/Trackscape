@@ -40,25 +40,24 @@ public class TimeLoggerPane {
      * @return timerPane
      */
     public Pane createTimeLoggerPane() {
-        FlowPane timerPane = new FlowPane();
-        timerPane.setAlignment(Pos.TOP_CENTER);
         final int largePadding = 15;
         final int smallPadding = 5;
+        final int top = 5;
+        final int bottom = 5;
+
+        FlowPane timerPane = new FlowPane();
+        timerPane.setAlignment(Pos.TOP_CENTER);
         timerPane.setPadding(new Insets(largePadding, 0, smallPadding, largePadding));
 
         Label description = new Label("Time playing: ");
         Label l = new Label("00:00:00");
         timeLogController.setTimerLabel(l);
 
-        final int top = 5;
-        final int bottom = 5;
-
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(top, 0, bottom, 0));
         vBox.getChildren().add(l);
 
-        timerPane.getChildren().addAll(description, vBox, createLoggerPane(),
-                createApproveArea());
+        timerPane.getChildren().addAll(description, vBox, createLoggerPane(), createApproveArea());
 
         return timerPane;
     }
@@ -69,15 +68,15 @@ public class TimeLoggerPane {
      * @return loggerPane The logger pane
      */
     private Pane createLoggerPane() {
+        final int width = 400;
+        final int height = 300;
+
         FlowPane loggerPane = new FlowPane();
         loggerPane.setAlignment(Pos.CENTER);
 
         TextArea logText = new TextArea();
         logText.setEditable(false);
         timeLogController.setInformationBox(logText);
-
-        final int width = 400;
-        final int height = 300;
 
         logText.setPrefSize(width, height);
 
@@ -97,6 +96,8 @@ public class TimeLoggerPane {
      */
     public Pane createApproveArea() {
         final int padding = 20;
+        final int viewHeight = 70;
+
         FlowPane buttonPane = new FlowPane();
         buttonPane.setAlignment(Pos.BOTTOM_CENTER);
         buttonPane.setPadding(new Insets(padding, padding, 0, 0));
@@ -110,12 +111,11 @@ public class TimeLoggerPane {
         Label timeStamp = new Label();
         timeStamp.setVisible(false);
 
-        final int viewHeight = 70;
         Button approveButton = createApproveButton(viewHeight);
         Button disapproveButton = createDisapproveButton(viewHeight);
 
         buttonPane.getChildren().addAll(imageView, timeStamp, question,
-                approveButton, disapproveButton);
+            approveButton, disapproveButton);
 
         timeLogController.setQuestion(question);
         timeLogController.setApproveButton(approveButton);

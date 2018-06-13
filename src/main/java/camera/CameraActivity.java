@@ -28,8 +28,9 @@ public class CameraActivity {
      * Constructor for the class.
      */
     public CameraActivity() {
-        this.activityList = new ArrayList<>();
         final int threshold = 1000;
+
+        this.activityList = new ArrayList<>();
         for (int i = 0; i < FRAMES; i++) {
             frameParts.add(new Mat());
             activityList.add(new ArrayList<>());
@@ -83,6 +84,8 @@ public class CameraActivity {
      */
     public double addActivity(final Mat frame, final int partNumber,
                               final BackgroundSubtractorKNN knn) {
+        final int minFrames = 50;
+
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
         Scalar meanValues = Core.mean(subtraction);
@@ -91,8 +94,6 @@ public class CameraActivity {
         for (double v : meanValues.val) {
             change += v;
         }
-
-        final int minFrames = 50;
 
         // Only add the activityList to the list when at least some frames are processed.
         if (frameCounter > minFrames) {

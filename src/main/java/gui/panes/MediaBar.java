@@ -62,6 +62,7 @@ public class MediaBar {
         final int bottom = 25;
         final int left = 10;
         final int spacing = 0;
+        final int buttonWidth = 70;
 
         // Create mediabar for video options
         HBox mediaBar = new HBox();
@@ -69,7 +70,6 @@ public class MediaBar {
         mediaBar.setPadding(new Insets(top, right, bottom, left));
         mediaBar.setSpacing(spacing);
 
-        final int buttonWidth = 70;
         mediaBar.getChildren().addAll(createPlayButton(buttonWidth), createStopButton(buttonWidth));
 
         return mediaBar;
@@ -135,6 +135,8 @@ public class MediaBar {
      * Initializes the imageViews with a black image.
      */
     private void initializeImageViewers() {
+        final int height = 300;
+
         mediaPane.getMediaPlayerPane().getChildren().clear();
 
         imageViews.clear();
@@ -143,10 +145,9 @@ public class MediaBar {
         }
 
         File streamEnd = new File(System.getProperty("user.dir")
-                + "\\src\\main\\java\\gui\\images\\black.png");
+            + "\\src\\main\\java\\gui\\images\\black.png");
         Image black = new Image(streamEnd.toURI().toString());
 
-        final int height = 300;
         for (int i = 0; i < imageViews.size(); i++) {
             imageViews.get(i).setImage(black);
             imageViews.get(i).setFitHeight(height);
