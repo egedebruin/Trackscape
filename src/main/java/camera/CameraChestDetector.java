@@ -72,16 +72,14 @@ public class CameraChestDetector extends CameraObjectDetector {
                                                     final Mat blackWhiteChestFrame) {
         List<Mat> detectedMats = new ArrayList<>();
         List<MatOfPoint> contours = new ArrayList<>();
-        Mat contourMat = new Mat();
-        Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
+        Imgproc.findContours(blackWhiteChestFrame, contours, new Mat(),
             Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
         ArrayList<Rect> rects = new ArrayList<>();
         for (MatOfPoint contour: contours) {
-            MatOfPoint contourPoints = new MatOfPoint(contour.toArray());
 
             // Get bounding rect of contour
-            Rect newrect = Imgproc.boundingRect(contourPoints);
+            Rect newrect = Imgproc.boundingRect(new MatOfPoint(contour.toArray()));
 
             // If not all spots are filled add newrect to the biggest rects.
             if (newrect.area() > MINCHESTAREA) {
