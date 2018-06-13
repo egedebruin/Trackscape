@@ -1,8 +1,10 @@
 package room;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
+import handlers.InformationHandler;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class RoomTest {
     private List<Chest> chestList = new ArrayList<>();
     private static final long TARGETTIME = 120;
     private static final long TARGETTIME2 = 100;
+    private InformationHandler informationHandler = new InformationHandler();
 
     /**
      * Tests for all getters in class.
@@ -52,6 +55,8 @@ public class RoomTest {
         assertEquals(chestList, room.getChestList());
         assertEquals(1, room.getTargetDuration());
         assertEquals(1, room.getPort());
+        assertNull(room.getInformationHandler());
+        assertEquals(cameraLinks, room.getLinkList());
     }
 
     /**
@@ -76,6 +81,9 @@ public class RoomTest {
 
         room.setTargetDuration(2);
         assertEquals(2, room.getTargetDuration());
+
+        room.setInformationHandler(informationHandler);
+        assertEquals(informationHandler, room.getInformationHandler());
     }
 
     /**
@@ -133,6 +141,21 @@ public class RoomTest {
         chestList.add(chest);
         chestList.add(chest2);
         assertEquals(2, room.getTotalSubsections());
+    }
+
+    /**
+     * Test setChestCompletedTill method.
+     */
+    @Test
+    void testSetChestCompletedTill() {
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
+        Chest chest = new Chest(1, TARGETTIME);
+        Chest chest2 = new Chest(2, TARGETTIME);
+        chestList.add(chest);
+        chestList.add(chest2);
+        room.setChestSectionsCompletedTill(2);
+        room.updateRoom();
+        assertEquals(1, room.getChestsOpened());
     }
 
 }

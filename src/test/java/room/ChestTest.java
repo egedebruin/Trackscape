@@ -118,4 +118,15 @@ class ChestTest {
         Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.getTargetDurationInSec(), TARGETTIME);
     }
+
+    /**
+     * Test getTimeFount method.
+     */
+    @Test
+    void getTimeFoundTest() {
+        Chest chest = new Chest(1, TARGETTIME);
+        assertEquals(-1, chest.getTimeFound());
+        chest.setTimeFound(1);
+        assertEquals(1, chest.getTimeFound());
+    }
 }

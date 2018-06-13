@@ -155,4 +155,12 @@ public class Progress {
         room.setNextChestOpened(timestamp);
         return room.getChestsOpened() + "/" + room.getChestList().size();
     }
+
+    /**
+     * Get the ApiHandler.
+     * @return the APIHandler
+     */
+    public APIHandler getApiHandler() {
+        return apiHandler;
+    }
 }
