@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.TimerController;
+import gui.controllers.Timer;
 import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import gui.controllers.VideoController;
@@ -35,7 +35,7 @@ public class MenuPane {
     private Label cameraStatus;
     private TimeLogController timeLogController;
     private VideoController videoController;
-    private TimerController timerController;
+    private Timer timer;
     private RoomController roomController;
     private static SimpleObjectProperty<File> lastKnownDirectoryProperty
             = new SimpleObjectProperty<>();
@@ -43,17 +43,17 @@ public class MenuPane {
     /**
      * Constructor for menuPane.
      * @param roomControl the roomController
-     * @param timerControl the timerController
+     * @param timerControl the timer
      * @param timeLogControl the timeLogController
      * @param videoControl the videoController
      * @param pane the mediaPane
      */
-    public MenuPane(final RoomController roomControl, final TimerController timerControl,
+    public MenuPane(final RoomController roomControl, final Timer timerControl,
                     final TimeLogController timeLogControl, final VideoController videoControl,
                     final MediaPane pane) {
         this.mediaPane = pane;
         roomController = roomControl;
-        timerController = timerControl;
+        timer = timerControl;
         timeLogController = timeLogControl;
         videoController = videoControl;
     }
@@ -254,7 +254,7 @@ public class MenuPane {
      * Close the stream(s) and reset the application.
      */
     public void endStream() {
-        timerController.stopTimer();
+        timer.stopTimer();
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
     }

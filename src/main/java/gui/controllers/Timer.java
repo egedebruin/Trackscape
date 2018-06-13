@@ -4,9 +4,9 @@ import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 
 /**
- * TimerController class for controlling GUI elements.
+ * Class for AnimationTimer and closing all controllers.
  */
-public class TimerController {
+public class Timer {
 
     /**
      * Class parameters.
@@ -22,8 +22,8 @@ public class TimerController {
      * @param timeLogControl the timeLogController
      * @param videoControl the videoController
      */
-    public TimerController(final RoomController roomControl, final TimeLogController timeLogControl,
-                           final VideoController videoControl) {
+    public Timer(final RoomController roomControl, final TimeLogController timeLogControl,
+                 final VideoController videoControl) {
         roomController = roomControl;
         timeLogController = timeLogControl;
         videoController = videoControl;
