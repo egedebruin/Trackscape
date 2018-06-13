@@ -73,6 +73,11 @@
                         <version>5.2.0-M1</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <excludes>
+                        <exclude>**/CameraChestDetectorTest.java</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
