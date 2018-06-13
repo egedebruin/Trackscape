@@ -1,16 +1,15 @@
 package handlers;
 
-import static java.lang.System.nanoTime;
-
-
 import camera.Camera;
 import camera.CameraActivity;
-import camera.CameraChestDetector;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.System.nanoTime;
 
 /**
  * Class for handling the cameras. Holds a list of the cameras en controls it.
@@ -26,7 +25,7 @@ public class CameraHandler {
 
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
-    private CameraChestDetector cameraChestDetector = new CameraChestDetector();
+//    private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
@@ -77,7 +76,7 @@ public class CameraHandler {
             camera = new Camera(videoCapture, link, chests);
         }
         cameraList.add(camera);
-        cameraChestDetector.addCameraToDetector(camera);
+//        cameraChestDetector.addCameraToDetector(camera);
         return camera;
     }
 
@@ -128,13 +127,11 @@ public class CameraHandler {
             }
         }
 
-        Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
+        Mat subtraction = camera.getChestDetector().subtractFrame(newFrame);
 
         final int firstDetection = 80;
         if (camera.getFrameCounter() > firstDetection) {
-            List<Mat> mats = cameraChestDetector.
-
-            checkForChests(newFrame, camera, subtraction);
+            List<Mat> mats = camera.getChestDetector().checkForChests(newFrame, camera, subtraction);
             chestFound = mats.size() > 0;
 
             for (Mat mat : mats) {

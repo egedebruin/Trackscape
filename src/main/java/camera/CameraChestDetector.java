@@ -9,7 +9,6 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -22,8 +21,6 @@ public class CameraChestDetector extends CameraObjectDetector {
     private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 205);
     private static final double MINCHESTAREA = 550;
     private Boolean isOpened = false;
-    private final Comparator<Rect> comparator = new RectComparator();
-    private List<Camera> cameraList = new ArrayList<>();
 
     /**
      * Method that checks for boxes in a frame.
@@ -37,7 +34,7 @@ public class CameraChestDetector extends CameraObjectDetector {
      */
     public List<Mat> checkForChests(final Mat newFrame, final Camera camera,
                                     final Mat subtraction) {
-        int noOfChests = camera.getNumOfChestsInRoom();
+
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
         List<Mat> mats = new ArrayList<>();
@@ -48,7 +45,7 @@ public class CameraChestDetector extends CameraObjectDetector {
         detectChest(subtracted);
 
         if (isOpened) {
-            mats = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
+            mats = includeChestContoursInFrame(newFrame, subtracted);
         }
         return mats;
     }
@@ -61,7 +58,6 @@ public class CameraChestDetector extends CameraObjectDetector {
      */
     private void detectChest(final Mat image) {
         isOpened = Core.countNonZero(image) > MINCHESTAREA;
-
     }
 
     /**
@@ -69,19 +65,18 @@ public class CameraChestDetector extends CameraObjectDetector {
      * @param frame the frame that needs bounding boxes.
      * @param blackWhiteChestFrame the frame that needs bounding boxes,
      *                            but the boxes are already found.
-     * @param noOfChests the number of chests in the room.
      *
-     * @return true iff a boundingbox is drawn.
+     * @return List of sub matrices in which a chest is found
      */
-    private List<Mat> includeChestContoursInFrame(final Mat frame, final Mat blackWhiteChestFrame,
-                                                    final int noOfChests) {
+     List<Mat> includeChestContoursInFrame(final Mat frame,
+                                                    final Mat blackWhiteChestFrame) {
         List<Mat> detectedMats = new ArrayList<>();
         List<MatOfPoint> contours = new ArrayList<>();
         Mat contourMat = new Mat();
         Imgproc.findContours(blackWhiteChestFrame, contours, contourMat,
             Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        ArrayList<Rect> rects = new ArrayList<>(noOfChests);
+        ArrayList<Rect> rects = new ArrayList<>();
         for (MatOfPoint contour: contours) {
             MatOfPoint contourPoints = new MatOfPoint(contour.toArray());
 
@@ -89,45 +84,31 @@ public class CameraChestDetector extends CameraObjectDetector {
             Rect newrect = Imgproc.boundingRect(contourPoints);
             // If not all spots are filled add newrect to the biggest rects.
             if (newrect.area() > MINCHESTAREA) {
-                addToRects(newrect, rects, noOfChests);
+                rects.add(newrect);
             }
         }
-        final int axisOffset = 50;
-        final int sizeOffset = 100;
+
         for (Rect rect : rects) {
             if (rect.area() > MINCHESTAREA) {
-                Rect cutoutChest = new Rect(rect.x - axisOffset, rect.y - axisOffset,
-                    rect.width + sizeOffset, rect.height + sizeOffset);
-                Point topLeft = new Point(Math.max(cutoutChest.tl().x, 0),
-                    Math.max(0, cutoutChest.tl().y));
-                Point bottomRight = new Point(Math.min(cutoutChest.br().x,
-                    frame.width() - 1), Math.min(cutoutChest.br().y, frame.height() - 1));
-                //Imgproc.rectangle(frame, topLeft, bottomRight, CHESTBOXCOLOUR, 2);
-                Rect r = new Rect(topLeft, bottomRight);
+                Rect r = calculateCutout(rect, frame);
                 detectedMats.add(frame.submat(r));
             }
         }
         return detectedMats;
     }
 
-    /**
-     * Method that adds a new rect to rects if the new rect is big enough.
-     * @param newrect   The candidate rect that might be added to rects.
-     * @param rects     array of the noOfChests biggest rects.
-     * @param noOfChests    number of chests.
-     */
-    private void addToRects(final Rect newrect, final ArrayList<Rect> rects, final int noOfChests) {
-        if (rects.size() < noOfChests) {
-            rects.add(newrect);
-            rects.sort(comparator);
-        } else {
-            // if all spots are filled only add newrect if
-            // it is larger than the smallest of the biggest
-            if (newrect.area() > rects.get(rects.size() - 1).area()) {
-                rects.set(rects.size() - 1, newrect);
-                rects.sort(comparator);
-            }
-        }
+    private Rect calculateCutout(Rect rect, Mat frame) {
+        final int axisOffset = 50;
+        final int sizeOffset = 100;
+
+        Rect cutoutChest = new Rect(rect.x - axisOffset, rect.y - axisOffset,
+            rect.width + sizeOffset, rect.height + sizeOffset);
+        Point topLeft = new Point(Math.max(cutoutChest.tl().x, 0),
+            Math.max(0, cutoutChest.tl().y));
+        Point bottomRight = new Point(Math.min(cutoutChest.br().x,
+            frame.width() - 1), Math.min(cutoutChest.br().y, frame.height() - 1));
+
+        return new Rect(topLeft, bottomRight);
     }
 
     /**
@@ -142,11 +123,4 @@ public class CameraChestDetector extends CameraObjectDetector {
         return dest;
     }
 
-    /**
-     * Add camera to the chestDetector's cameraList.
-     * @param cam the camera that needs to be added to the list
-     */
-    public void addCameraToDetector(final Camera cam) {
-        cameraList.add(cam);
-    }
 }

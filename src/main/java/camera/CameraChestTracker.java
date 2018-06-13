@@ -55,13 +55,6 @@ public class CameraChestTracker {
 
         previousContours = contoursFrame;
 
-//        if (currenttracktimeout > 0) {
-//            currenttracktimeout--;
-//            return Mat.zeros(frame.size(),frame.type());
-//        } else if (previousContours.size() > 0) {
-//            currenttracktimeout = TRACKERTIMEOUTFRAMES;
-//        }
-
         return tempFrame;
     }
 

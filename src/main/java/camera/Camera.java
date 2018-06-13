@@ -21,6 +21,7 @@ public class Camera {
     private int frameCounter = -1;
     private CameraActivity activity = new CameraActivity();
     private CameraChestTracker tracker = new CameraChestTracker();
+    private CameraChestDetector detector = new CameraChestDetector();
 
     /**
      * Constructor for a camera with possibility to specify no chests and persons.
@@ -161,5 +162,9 @@ public class Camera {
      */
     public CameraChestTracker getTracker() {
         return tracker;
+    }
+
+    public CameraChestDetector getChestDetector() {
+        return detector;
     }
 }
