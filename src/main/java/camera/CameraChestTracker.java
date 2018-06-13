@@ -14,8 +14,7 @@ import java.util.List;
 public class CameraChestTracker {
 
     private List<MatOfPoint> previousContours;
-    private static final int TRACKERTIMEOUTFRAMES = 50;
-    private int currenttracktimeout = 0;
+    private static final int BOUNDINGBOXINCREASESCREENRATIO = 16;
 
     /**
      * Method which removes areas from frame, if they have overlap with the previous frame.
@@ -39,9 +38,15 @@ public class CameraChestTracker {
                 if (rect.area() >= minChestArea) {
                     for (MatOfPoint points2 : previousContours) {
                         Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
+                        if (rect2.area() >= minChestArea) {
 
-                        if (rect2.area() >= minChestArea && doOverlap(rect, rect2)) {
-                            setRectToZerosInFrame(tempFrame, rect);
+                            // Increase the area in which overlap could be found
+                            rect2.width += frame.width() / BOUNDINGBOXINCREASESCREENRATIO;
+                            rect2.height += frame.height() / BOUNDINGBOXINCREASESCREENRATIO;
+
+                            if (doOverlap(rect, rect2)) {
+                                setRectToZerosInFrame(tempFrame, rect);
+                            }
                         }
                     }
                 }

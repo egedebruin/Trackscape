@@ -18,8 +18,8 @@ import java.util.List;
  * Class for describing a chest found in a camerastream/video/image.
  */
 public class CameraChestDetector extends CameraObjectDetector {
-    private static final Scalar CHESTCOLOUR_LOWER = new Scalar(19, 100, 60);
-    private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 255);
+    private static final Scalar CHESTCOLOUR_LOWER = new Scalar(17, 120, 80);
+    private static final Scalar CHESTCOLOUR_UPPER = new Scalar(35, 255, 205);
     private static final double MINCHESTAREA = 550;
     private Boolean isOpened = false;
     private final Comparator<Rect> comparator = new RectComparator();
@@ -41,11 +41,14 @@ public class CameraChestDetector extends CameraObjectDetector {
         Mat dest = getChestsFromFrame(bgrToHsv(newFrame));
         Mat subtracted = new Mat();
         List<Mat> mats = new ArrayList<>();
-        Core.bitwise_and(dest, subtraction, subtracted);
+
+        Mat tracked = camera.getTracker().trackChests(dest, MINCHESTAREA);
+
+        Core.bitwise_and(tracked, subtraction, subtracted);
         detectChest(subtracted);
-        Mat tracked = camera.getTracker().trackChests(subtracted, MINCHESTAREA);
+
         if (isOpened) {
-            mats = includeChestContoursInFrame(newFrame, tracked, noOfChests);
+            mats = includeChestContoursInFrame(newFrame, subtracted, noOfChests);
         }
         return mats;
     }
