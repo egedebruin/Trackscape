@@ -4,6 +4,7 @@ import handlers.CameraHandler;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,6 +15,7 @@ class CameraChestDetectorTest {
 
     private final String shortVideoLinkWithBoxes = "files" + File.separator
         + "escaperoomwithopenbox.mov";
+    private static final int MAGICTIMEOUT = 15;
 
     static {
         // These should be at the start of the application,
@@ -44,6 +46,7 @@ class CameraChestDetectorTest {
             }
         }
 
+        TimeUnit.SECONDS.sleep(MAGICTIMEOUT);
         assertTrue(found);
 
     }
