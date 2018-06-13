@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 /**
  * Class for the TimeLogController, to control the time and log.
  */
-public class TimeLogController {
+public class TimeLogController extends Controller {
 
     private Label timerLabel;
     private TextArea informationArea;
@@ -25,18 +25,35 @@ public class TimeLogController {
     private Button approveButton;
     private Button notApproveButton;
     private InformationHandler informationHandler = new InformationHandler();
-    private CameraHandler cameraHandler;
     private ImageView imageView;
     private long chestTimestamp = -1;
     private Label timeStamp;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
-     * @param handler The cameraHandler.
      */
-    public TimeLogController(final CameraHandler handler) {
-        cameraHandler = handler;
-        cameraHandler.setInformationHandler(informationHandler);
+    public TimeLogController() {
+        informationHandler = getCameraHandler().getInformationHandler();
+    }
+
+    /**
+     * Close this controller when the stream is closed.
+     */
+    public void closeController() {
+        timerLabel.setText("00:00:00");
+        clearButtons();
+        imageView.setImage(null);
+        informationHandler.clearMatQueue();
+    }
+
+    /**
+     * Process the frames depending on the changes in cameraHandler.
+     * @param now The current time.
+     */
+    public void update(final long now) {
+        changeTime(now);
+        checkMatInformation();
+        checkInformation();
     }
 
     /**
@@ -45,8 +62,8 @@ public class TimeLogController {
      * @param elapsedTime the elapsed time
      */
     public void changeTime(final long elapsedTime) {
-        if (cameraHandler.getBeginTime() != -1) {
-            long time = elapsedTime - cameraHandler.getBeginTime();
+        if (getCameraHandler().getBeginTime() != -1) {
+            long time = elapsedTime - getCameraHandler().getBeginTime();
             timerLabel.setText(Util.getTimeString(time, true));
         }
     }
@@ -66,7 +83,7 @@ public class TimeLogController {
      * @param time The timestamp.
      */
     public void addInformation(final String text, final long time) {
-        long elapsedTime = time - cameraHandler.getBeginTime();
+        long elapsedTime = time - getCameraHandler().getBeginTime();
         String newText = Util.getTimeString(elapsedTime, true) + ": " + text;
         informationArea.appendText(newText + "\n");
     }
@@ -82,7 +99,7 @@ public class TimeLogController {
      * Check if there is information to be shown.
      */
     public void checkInformation() {
-        if (cameraHandler.getBeginTime() != -1) {
+        if (getCameraHandler().getBeginTime() != -1) {
             String log = informationHandler.getInformation();
 
             if (!log.equals("empty")) {
@@ -117,16 +134,6 @@ public class TimeLogController {
         imageView.setVisible(false);
         timeStamp.setVisible(false);
         chestTimestamp = -1;
-    }
-
-    /**
-     * Close this controller when the stream is closed.
-     */
-    public void closeController() {
-        timerLabel.setText("00:00:00");
-        clearButtons();
-        imageView.setImage(null);
-        informationHandler.clearMatQueue();
     }
 
     /**
@@ -181,20 +188,10 @@ public class TimeLogController {
     }
 
     /**
-     * Process the frames depending on the changes in cameraHandler.
-     * @param now The current time.
-     */
-    public void processFrame(final long now) {
-        changeTime(now);
-        checkMatInformation();
-        checkInformation();
-    }
-
-    /**
      * Check the information from the Mat queue for pictures of chests.
      */
     public void checkMatInformation() {
-        if (cameraHandler.areAllChestsDetected()) {
+        if (getCameraHandler().areAllChestsDetected()) {
             clearButtons();
         } else if (chestTimestamp == -1) {
                 Pair<Mat, Long> mat = informationHandler.getMatrix();
@@ -205,7 +202,7 @@ public class TimeLogController {
                     imageView.setVisible(true);
                     timeStamp.setVisible(true);
                     timeStamp.setText("Time detected: " + (Util.getTimeString(mat.getValue()
-                            - cameraHandler.getBeginTime(), true)));
+                            - getCameraHandler().getBeginTime(), true)));
 
                     Image image = newChestFrame(mat);
                     imageView.setImage(image);
@@ -228,15 +225,6 @@ public class TimeLogController {
             Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
 
         return SwingFXUtils.toFXImage(resizedSubFrame, null);
-    }
-
-    /**
-     * Set the cameraHandler with the right informationHandler.
-     * @param handler The new cameraHandler.
-     */
-    public void setCameraHandler(final CameraHandler handler) {
-        handler.setInformationHandler(informationHandler);
-        this.cameraHandler = handler;
     }
 
     /**

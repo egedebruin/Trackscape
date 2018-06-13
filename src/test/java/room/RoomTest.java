@@ -81,21 +81,6 @@ public class RoomTest {
     }
 
     /**
-     * Tests for cameraHandler in class.
-     */
-    @Test
-    void testCameraHandler() {
-        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
-
-        assertNotNull(room.getCameraHandler());
-
-        CameraHandler newHandler = new CameraHandler();
-        room.setCameraHandler(newHandler);
-
-        assertEquals(newHandler, room.getCameraHandler());
-    }
-
-    /**
      * Test if setNextChestOpened opens next chest.
      */
     @Test

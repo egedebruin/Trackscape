@@ -37,7 +37,7 @@ public class APISectionHandler extends AbstractHandler {
                 room.setNextSectionOpened();
                 String log = room.calculateSubsectionsDone() + "/" + room.getTotalSubsections();
                 body = "Completed section " + log;
-                room.getCameraHandler().getInformationHandler().addInformation(body);
+                room.getInformationHandler().addInformation(body);
             }
         }
 

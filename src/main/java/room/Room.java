@@ -2,6 +2,8 @@ package room;
 
 import handlers.CameraHandler;
 
+import handlers.InformationHandler;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,12 +12,11 @@ import java.util.List;
 public class Room {
     private long id;
     private List<Chest> chestList;
-    private CameraHandler cameraHandler;
     private int numberOfPeople;
     private long targetDurationInSec;
-    private long startTime;
-    private int chestsOpened;
+    private List<String> linkList;
     private int port;
+    private InformationHandler informationHandler;
 
     /**
      * Constructor.
@@ -30,14 +31,11 @@ public class Room {
     public Room(final long roomid, final int nOPeople, final List<String> cameraLinks,
                 final List<Chest> chests, final int duration, final int portNumber) {
         id = roomid;
-        cameraHandler = new CameraHandler();
         numberOfPeople = nOPeople;
-        for (String link: cameraLinks) {
-            cameraHandler.addCamera(link, chests.size());
-        }
+        linkList = new ArrayList<>();
+        linkList.addAll(cameraLinks);
         chestList = chests;
         targetDurationInSec = duration;
-        startTime = System.currentTimeMillis();
         port = portNumber;
     }
 
@@ -71,22 +69,6 @@ public class Room {
      */
     public void setChestList(final List<Chest> chestsList) {
         this.chestList = chestsList;
-    }
-
-    /**
-     * Get cameraHandler.
-     * @return cameraHandler
-     */
-    public CameraHandler getCameraHandler() {
-        return cameraHandler;
-    }
-
-    /**
-     * Set cameraHandler.
-     * @param camerasHandler the camerahandler
-     */
-    public void setCameraHandler(final CameraHandler camerasHandler) {
-        this.cameraHandler = camerasHandler;
     }
 
     /**
@@ -181,20 +163,11 @@ public class Room {
     }
 
     /**
-     * Set allChestsDetected variable of cameraHandler
-     * on true when all chests have been detected.
-     * @param detectedAllChests boolean that says whether all chests are detected
-     */
-    public void setAllChestsDetected(final boolean detectedAllChests) {
-        cameraHandler.setAllChestsDetected(detectedAllChests);
-    }
-
-    /**
      * Get the amount of chests opened.
      * @return amount of chests opened
      */
     public int getChestsOpened() {
-        chestsOpened = 0;
+        int chestsOpened = 0;
         for (Chest chest : chestList) {
             if (chest.getChestState() == Chest.Status.OPENED) {
                 chestsOpened++;
@@ -243,5 +216,17 @@ public class Room {
             total += chest.getNumberOfSubSections();
         }
         return total;
+    }
+
+    public List<String> getLinkList() {
+        return linkList;
+    }
+
+    public InformationHandler getInformationHandler() {
+        return informationHandler;
+    }
+
+    public void setInformationHandler(InformationHandler informationHandler) {
+        this.informationHandler = informationHandler;
     }
 }

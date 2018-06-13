@@ -1,12 +1,12 @@
 package gui;
 
-import gui.controllers.MainController;
-import javafx.application.Application;
-import javafx.stage.Stage;
-
+import gui.controllers.Controller;
+import handlers.CameraHandler;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Main.
@@ -21,8 +21,6 @@ public class Main extends Application {
         + "\\src\\main\\java\\gui\\stylesheet.css");
     private String stylesheet = "file:///"
         + css.getAbsolutePath().replace("\\", "/");
-    private MainController mainController = new MainController();
-    private MonitorScene monitorScene = new MonitorScene(mainController);
 
     /**
      * main.
@@ -55,6 +53,11 @@ public class Main extends Application {
         final int height = gd.getDisplayMode().getHeight();
         primaryStage.setWidth(width);
         primaryStage.setHeight(height);
+
+        CameraHandler cameraHandler = new CameraHandler();
+        Controller.setCameraHandler(cameraHandler);
+
+        MonitorScene monitorScene = new MonitorScene();
 
         // Set the scene and show primaryStage
         primaryStage.setTitle("TrackScape");

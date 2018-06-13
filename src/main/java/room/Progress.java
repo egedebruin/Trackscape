@@ -1,5 +1,6 @@
 package room;
 
+import api.APIHandler;
 import handlers.JsonHandler;
 
 /**
@@ -8,6 +9,7 @@ import handlers.JsonHandler;
 public class Progress {
     private Room room;
     private int subSectionCount;
+    private APIHandler apiHandler;
 
     /**
      * Constructor.
@@ -18,6 +20,12 @@ public class Progress {
     public Progress(final String configfile, final int roomid) {
         room = new JsonHandler(configfile).createRooms().get(roomid);
         subSectionCount = 0;
+
+        apiHandler = new APIHandler(room);
+        int port = room.getPort();
+        apiHandler.setServer(port);
+
+        apiHandler.startServer();
     }
 
     /**
@@ -68,11 +76,6 @@ public class Progress {
     public void updateProgress() {
         room.updateRoom();
         subSectionCount = calculateProgress();
-        if (subSectionCount == getTotalSections()) {
-            room.setAllChestsDetected(true);
-        } else {
-            room.setAllChestsDetected(false);
-        }
     }
 
     /**
@@ -102,10 +105,14 @@ public class Progress {
     }
 
     /**
-     * GEt subsectioncount.
+     * Get subsectioncount.
      * @return this.subsectioncount
      */
     public int getSubSectionCount() {
         return subSectionCount;
+    }
+
+    public void stopServer() {
+        apiHandler.stopServer();
     }
 }

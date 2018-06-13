@@ -20,14 +20,12 @@ import java.util.concurrent.TimeUnit;
 /**
  * Controller for the gui with a room.
  */
-public class RoomController {
+public class RoomController extends Controller {
 
     private Progress progress;
     private Pane progressBar;
     private Pane statusPane;
-    private CameraHandler cameraHandler;
     private int progressCompleted;
-    private APIHandler apiHandler;
     private Label gameStatus;
     private Label numOfChestsOpened;
     private Label activityStatus;
@@ -35,6 +33,7 @@ public class RoomController {
     private boolean behindSchedule = false;
     private List<Chest> chestList;
     private List<Label> chestTimeStampList;
+    private boolean configured;
 
     /**
      * Constructor.
@@ -49,13 +48,11 @@ public class RoomController {
      */
     public void configure(final String configFile) {
         progress = new Progress(configFile);
-        cameraHandler = progress.getRoom().getCameraHandler();
 
-        apiHandler = new APIHandler(progress.getRoom());
-        int port = progress.getRoom().getPort();
-        apiHandler.setServer(port);
-
-        apiHandler.startServer();
+        for (String link : progress.getRoom().getLinkList()) {
+            getCameraHandler().addCamera(link, progress.getRoom().getChestList().size());
+        }
+        progress.getRoom().setInformationHandler(getCameraHandler().getInformationHandler());
 
         chestList = progress.getRoom().getChestList();
         chestTimeStampList = new ArrayList<>();
@@ -65,6 +62,7 @@ public class RoomController {
                 chestTimeStampList.add(new Label());
             }
         }
+        configured = true;
     }
 
     /**
@@ -77,10 +75,36 @@ public class RoomController {
         progress = null;
         if (progressBar != null) {
             progressBar.getChildren().clear();
-            apiHandler.stopServer();
+            progress.stopServer();
         }
         if (statusPane != null) {
             statusPane.getChildren().clear();
+        }
+        configured = false;
+    }
+
+    /**
+     * Update the roomController.
+     * @param now the actual time in nanoseconds
+     */
+    public void update(final long now) {
+        if (progress != null) {
+            progress.updateProgress();
+            fillProgress(progress.getFillCount());
+            changeTime(now);
+            if (statusPane.getChildren().size() > 0) {
+                // Update the progressPane
+                updateChests(progress.getRoom().getChestsOpened());
+                updateActivity();
+                // Update the warningPane
+                // When people are behind on schedule
+                if (behindSchedule && !snoozeHint && !allChestsOpened()) {
+                    // Get the warningPane of the statusPane and set it on visible
+                    statusPane.getChildren().get(2).setVisible(true);
+                } else {
+                    statusPane.getChildren().get(2).setVisible(false);
+                }
+            }
         }
     }
 
@@ -116,7 +140,7 @@ public class RoomController {
         int amountNewChests = progress.getRoom().getChestsOpened();
         for (int i = chestsOpened + 1; i < amountNewChests + 1; i++) {
             String chestsFound = i + "/" + progress.getRoom().getChestList().size();
-            cameraHandler.getInformationHandler().addInformation("Found chest " + chestsFound);
+            getCameraHandler().getInformationHandler().addInformation("Found chest " + chestsFound);
         }
     }
 
@@ -131,7 +155,7 @@ public class RoomController {
         progress.updateProgress();
         int newChests = progress.getRoom().getChestsOpened();
         for (int i = chestsOpened; i > newChests; i--) {
-            cameraHandler.getInformationHandler().addInformation("Removed chest " + i);
+            getCameraHandler().getInformationHandler().addInformation("Removed chest " + i);
         }
     }
 
@@ -166,31 +190,6 @@ public class RoomController {
         } else {
             // When the next item is already done, reset until this item
             progressCompleted = stage;
-        }
-    }
-
-    /**
-     * Update the roomController.
-     * @param now the actual time in nanoseconds
-     */
-    public void update(final long now) {
-        if (progress != null) {
-            progress.updateProgress();
-            fillProgress(progress.getFillCount());
-            changeTime(now);
-            if (statusPane.getChildren().size() > 0) {
-                // Update the progressPane
-                updateChests(progress.getRoom().getChestsOpened());
-                updateActivity();
-                // Update the warningPane
-                // When people are behind on schedule
-                if (behindSchedule && !snoozeHint && !allChestsOpened()) {
-                    // Get the warningPane of the statusPane and set it on visible
-                    statusPane.getChildren().get(2).setVisible(true);
-                } else {
-                    statusPane.getChildren().get(2).setVisible(false);
-                }
-            }
         }
     }
 
@@ -235,13 +234,13 @@ public class RoomController {
      * @param elapsedTime the elapsed time
      */
     public void changeTime(final long elapsedTime) {
-        if (chestList.size() > 0 && cameraHandler.getBeginTime() != -1) {
+        if (chestList.size() > 0 && getCameraHandler().getBeginTime() != -1) {
             for (int i = 0; i < chestList.size(); i++) {
                 Chest currentChest = chestList.get(i);
-                long time = elapsedTime - cameraHandler.getBeginTime();
+                long time = elapsedTime - getCameraHandler().getBeginTime();
 
                 if (currentChest.getChestState() == Chest.Status.OPENED) {
-                    time = currentChest.getTimeFound() - cameraHandler.getBeginTime();
+                    time = currentChest.getTimeFound() - getCameraHandler().getBeginTime();
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
                 } else if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
@@ -300,14 +299,6 @@ public class RoomController {
      */
     public void snoozeHint(final boolean snooze) {
         snoozeHint = snooze;
-    }
-
-    /**
-     * Get the camera handler.
-     * @return The camera handler.
-     */
-    public CameraHandler getCameraHandler() {
-        return cameraHandler;
     }
 
     /**
@@ -387,5 +378,9 @@ public class RoomController {
         // Wait 30 seconds before showing another warning
         final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
         hintTimer.schedule(task, timeUntilWarning);
+    }
+
+    public boolean isConfigured() {
+        return configured;
     }
 }

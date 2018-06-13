@@ -78,7 +78,7 @@ public class StatusPane {
         ImageView cam = Util.createImageViewLogo("icons\\camIcon", buttonWidth);
 
         Label cameras = new Label(""
-            + roomController.getProgress().getRoom().getCameraHandler().listSize());
+            + roomController.getProgress().getRoom().getLinkList().size());
         cameras.setGraphic(cam);
         Label persons = new Label(""
             + roomController.getProgress().getRoom().getNumberOfPeople());
