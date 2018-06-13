@@ -1,7 +1,7 @@
 package gui.panes;
 
 import gui.Util;
-import gui.controllers.StartingAnimationTimerAndCloseControllers;
+import gui.controllers.TimerManager;
 import gui.controllers.VideoController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +25,7 @@ public class MediaBar {
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private VideoController videoController;
-    private StartingAnimationTimerAndCloseControllers startingAnimationTimerAndCloseControllers;
+    private TimerManager timerManager;
     private MenuPane menuPane;
     private MediaPane mediaPane;
     private StatusPane statusPane;
@@ -34,17 +34,17 @@ public class MediaBar {
     /**
      * Constructor for MediaBar.
      * @param videoControl the videoController
-     * @param startingAnimationTimerAndCloseControllersControl the startingAnimationTimerAndCloseControllers
+     * @param timerManagerControl the timerManager
      * @param menu the menu
      * @param media the mediaplayer
      * @param status the statuspane
      * @param progress the progress bar
      */
     public MediaBar(final VideoController videoControl,
-                    final StartingAnimationTimerAndCloseControllers startingAnimationTimerAndCloseControllersControl, final MenuPane menu,
+                    final TimerManager timerManagerControl, final MenuPane menu,
                     final MediaPane media, final StatusPane status, final ProgressBar progress) {
         this.videoController = videoControl;
-        this.startingAnimationTimerAndCloseControllers = startingAnimationTimerAndCloseControllersControl;
+        this.timerManager = timerManagerControl;
         this.menuPane = menu;
         this.mediaPane = media;
         this.statusPane = status;
@@ -86,7 +86,7 @@ public class MediaBar {
                 initializeImageViewers();
                 initializeProgressBar();
                 initializeStatus();
-                startingAnimationTimerAndCloseControllers.startTimer();
+                timerManager.startTimer();
                 videoController.setImageViews(imageViews);
             }
         });

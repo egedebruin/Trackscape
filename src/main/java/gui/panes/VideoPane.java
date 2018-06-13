@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.StartingAnimationTimerAndCloseControllers;
+import gui.controllers.TimerManager;
 import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import gui.controllers.VideoController;
@@ -29,15 +29,15 @@ public class VideoPane {
         RoomController roomController = new RoomController();
         TimeLogController timeLogController = new TimeLogController();
         VideoController videoController = new VideoController();
-        StartingAnimationTimerAndCloseControllers startingAnimationTimerAndCloseControllers = new StartingAnimationTimerAndCloseControllers(roomController, timeLogController,
+        TimerManager timerManager = new TimerManager(roomController, timeLogController,
             videoController);
 
         mediaPane = new MediaPane();
         progressBar = new ProgressBar(roomController);
         statusPane = new StatusPane(roomController);
-        menuPane = new MenuPane(roomController, startingAnimationTimerAndCloseControllers, timeLogController,
+        menuPane = new MenuPane(roomController, timerManager, timeLogController,
             videoController, mediaPane);
-        mediaBar = new MediaBar(videoController, startingAnimationTimerAndCloseControllers, menuPane, mediaPane, statusPane,
+        mediaBar = new MediaBar(videoController, timerManager, menuPane, mediaPane, statusPane,
             progressBar);
         timeLoggerPane = new TimeLoggerPane(timeLogController, roomController);
     }
