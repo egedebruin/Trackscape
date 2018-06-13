@@ -20,12 +20,11 @@ public class CameraHandler {
      * Enum for the activity.
      */
     enum Activity {
-        ZERO, LOW, MEDIUM, HIGH;
+        ZERO, LOW, MEDIUM, HIGH
     }
 
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
-//    private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
@@ -76,7 +75,6 @@ public class CameraHandler {
             camera = new Camera(videoCapture, link, chests);
         }
         cameraList.add(camera);
-//        cameraChestDetector.addCameraToDetector(camera);
         return camera;
     }
 
@@ -86,6 +84,8 @@ public class CameraHandler {
      * @return The new frames as a list of Mat.
      */
     public List<Mat> processFrames() {
+        final int frequency = 10;
+
         List<Mat> frames = new ArrayList<>();
         for (Camera camera : cameraList) {
             Mat newFrame = camera.getLastFrame();
@@ -93,7 +93,6 @@ public class CameraHandler {
                 camera.setFirstFrame(newFrame);
             }
 
-            final int frequency = 10;
             if (camera.getFrameCounter() % frequency == 0) {
                 Thread thread = new Thread(() -> processFrame(camera, newFrame));
                 thread.start();
@@ -114,6 +113,8 @@ public class CameraHandler {
      */
     public void processFrame(final Camera camera, final Mat newFrame) {
         final int activityThreshold = 5;
+        final int firstDetection = 80;
+
         CameraActivity activity = camera.getActivity();
         activity.divideFrame(newFrame);
 
@@ -129,7 +130,6 @@ public class CameraHandler {
 
         Mat subtraction = camera.getChestDetector().subtractFrame(newFrame);
 
-        final int firstDetection = 80;
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = camera.getChestDetector().
                 checkForChests(newFrame, camera, subtraction);
@@ -146,15 +146,15 @@ public class CameraHandler {
      * Change the activity with the last known activity.
      */
     public void changeActivity() {
+        final double oneThird = 0.33;
+        final double twoThird = 0.67;
+
         double ratio = 0;
         for (int i = 0; i < cameraList.size(); i++) {
             Camera camera = cameraList.get(i);
             ratio += camera.getActivity().calculateRatio();
         }
         ratio = ratio / (double) cameraList.size();
-
-        final double oneThird = 0.33;
-        final double twoThird = 0.67;
 
         if (ratio < oneThird) {
             active = Activity.LOW;

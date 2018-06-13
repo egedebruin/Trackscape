@@ -13,10 +13,13 @@ import org.opencv.video.Video;
  */
 public class CameraActivity {
 
+    /**
+     * Amount of divided frames.
+     */
+    public static final int FRAMES = 1;
     private List<Mat> frameParts = new ArrayList<>();
     private List<List<Double>> activityList;
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
-    private static final int FRAMES = 1;
     private double lastActivity = 0;
     private int frameCounter;
     private boolean started = false;
@@ -123,14 +126,6 @@ public class CameraActivity {
      */
     public double getLastActivity() {
         return lastActivity;
-    }
-
-    /**
-     * Get the number of frames that one frame should be divided in.
-     * @return frames
-     */
-    public int getFrames() {
-        return FRAMES;
     }
 
     /**

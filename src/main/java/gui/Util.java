@@ -40,8 +40,7 @@ public final class Util {
         videoMatImage.get(0, 0, buffer);
         BufferedImage image = new BufferedImage(
             videoMatImage.cols(), videoMatImage.rows(), type);
-        final byte[] targetPixels =
-            ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
         return image;
     }
