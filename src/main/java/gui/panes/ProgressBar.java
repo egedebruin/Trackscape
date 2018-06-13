@@ -50,20 +50,22 @@ public class ProgressBar {
      * Construct and initialize progressbar.
      */
     public void constructProgressBar() {
-        createItems();
+        if (controller.isConfigured()) {
+            createItems();
 
-        int spot = 0;
-        for (int k = 0; k < progressStages.size(); k++) {
-            progressBar.add(progressStages.get(k), spot, 0);
-            spot = spot + 1;
-            if (k != progressStages.size() - 1) {
-                progressBar.add(createLineLabel(), spot, 0);
+            int spot = 0;
+            for (int k = 0; k < progressStages.size(); k++) {
+                progressBar.add(progressStages.get(k), spot, 0);
                 spot = spot + 1;
+                if (k != progressStages.size() - 1) {
+                    progressBar.add(createLineLabel(), spot, 0);
+                    spot = spot + 1;
+                }
             }
+            controller.setProgressBar(progressBar);
+            controller.setItemsOnDone();
         }
-        controller.setProgressBar(progressBar);
-        controller.setItemsOnDone();
-        }
+    }
 
     /**
      * Create the items of the progress bar.

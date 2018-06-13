@@ -89,7 +89,7 @@ public class CameraActivity {
             change += v;
         }
 
-        final int minFrames = 30;
+        final int minFrames = 50;
 
         // Only add the activityList to the list when at least some frames are processed.
         if (frameCounter > minFrames) {
