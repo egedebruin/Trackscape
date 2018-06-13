@@ -32,6 +32,9 @@ public class Progress {
         init();
     }
 
+    /**
+     * Initialize the progress.
+     */
     private void init() {
         subSectionCount = 0;
 
@@ -116,10 +119,18 @@ public class Progress {
         return subSectionCount;
     }
 
+    /**
+     * Stop the apiServer.
+     */
     public void stopServer() {
         apiHandler.stopServer();
     }
 
+    /**
+     * Configure a new progress when clicked on progressBar.
+     * @param index the index of new progress
+     * @return the new amount of chests opened
+     */
     public int newProgress(final int index) {
         int completedSections = getSubSectionCountFromBarIndex(index);
         setSubSectionCount(completedSections);

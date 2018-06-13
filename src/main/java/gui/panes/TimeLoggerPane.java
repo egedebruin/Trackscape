@@ -25,7 +25,9 @@ public class TimeLoggerPane {
     private RoomController roomController;
 
     /**
-     * Constructor for TimeLoggerPane.
+     * Constructor for timeLoggerPane.
+     * @param timeControl the timeController
+     * @param roomControl the roomController
      */
     public TimeLoggerPane(final TimeLogController timeControl, final RoomController roomControl) {
         timeLogController = timeControl;

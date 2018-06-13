@@ -216,14 +216,26 @@ public class Room {
         return total;
     }
 
+    /**
+     * Get the links of the cameras.
+     * @return links of the cameras
+     */
     public List<String> getLinkList() {
         return linkList;
     }
 
+    /**
+     * Get the informationHandler.
+     * @return the informationHandler
+     */
     public InformationHandler getInformationHandler() {
         return informationHandler;
     }
 
+    /**
+     * Set a new informationHandler.
+     * @param newHandler the new informationHandler
+     */
     public void setInformationHandler(final InformationHandler newHandler) {
         this.informationHandler = newHandler;
     }

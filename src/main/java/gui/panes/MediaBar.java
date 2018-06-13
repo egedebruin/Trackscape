@@ -33,8 +33,11 @@ public class MediaBar {
 
     /**
      * Constructor for MediaBar.
+     * @param videoControl the videoController
+     * @param timerControl the timerController
      * @param menu the menu
      * @param media the mediaplayer
+     * @param status the statuspane
      * @param progress the progress bar
      */
     public MediaBar(final VideoController videoControl,

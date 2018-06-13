@@ -34,9 +34,7 @@ public class TimeLogController extends Controller {
         informationHandler = getCameraHandler().getInformationHandler();
     }
 
-    /**
-     * Close this controller when the stream is closed.
-     */
+    @Override
     public void closeController() {
         timerLabel.setText("00:00:00");
         clearButtons();
@@ -44,10 +42,7 @@ public class TimeLogController extends Controller {
         informationHandler.clearMatQueue();
     }
 
-    /**
-     * Process the frames depending on the changes in cameraHandler.
-     * @param now The current time.
-     */
+    @Override
     public void update(final long now) {
         changeTime(now);
         checkMatInformation();

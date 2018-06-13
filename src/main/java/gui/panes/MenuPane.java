@@ -41,7 +41,11 @@ public class MenuPane {
             = new SimpleObjectProperty<>();
 
     /**
-     * Constructor for MenuPane.
+     * Constructor for menuPane.
+     * @param roomControl the roomController
+     * @param timerControl the timerController
+     * @param timeLogControl the timeLogController
+     * @param videoControl the videoController
      * @param pane the mediaPane
      */
     public MenuPane(final RoomController roomControl, final TimerController timerControl,

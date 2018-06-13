@@ -1,6 +1,5 @@
 package gui.controllers;
 
-import camera.Camera;
 import gui.Util;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -48,10 +47,7 @@ public class VideoController extends Controller {
         return processedFrames;
     }
 
-    /**
-     * updateImageViews.
-     * Retrieve current frames and show in ImageViews
-     */
+    @Override
     public void update(final long now) {
         List<Image> currentFrames = requestFrames();
         for (int i = 0; i < currentFrames.size(); i++) {
@@ -59,6 +55,7 @@ public class VideoController extends Controller {
         }
     }
 
+    @Override
     public void closeController() {
         File streamEnd = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\images\\black.png");
@@ -88,15 +85,7 @@ public class VideoController extends Controller {
     public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
-        Camera camera = getCameraHandler().addCamera(streamUrl);
-//        AnimationTimer streamTimer = new AnimationTimer() {
-//            @Override
-//            public void handle(final long now) {
-//                camera.loadFrame();
-//            }
-//        };
-//        streamTimers.add(streamTimer);
-//        streamTimer.start();
+        getCameraHandler().addCamera(streamUrl);
     }
 
     /**
@@ -109,10 +98,18 @@ public class VideoController extends Controller {
         getCameraHandler().addCamera(fileUrl);
     }
 
+    /**
+     * Set the imageViews.
+     * @param newViews the new imageViews
+     */
     public void setImageViews(final List<ImageView> newViews) {
         this.imageViews = newViews;
     }
 
+    /**
+     * Set if the videoController is closed.
+     * @param newClosed new closed variable
+     */
     public void setClosed(final boolean newClosed) {
         this.closed = newClosed;
     }

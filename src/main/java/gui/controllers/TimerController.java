@@ -17,7 +17,10 @@ public class TimerController {
     private VideoController videoController;
 
     /**
-     * Constructor method.
+     * Constructor for timerController.
+     * @param roomControl the roomController
+     * @param timeLogControl the timeLogController
+     * @param videoControl the videoController
      */
     public TimerController(final RoomController roomControl, final TimeLogController timeLogControl,
                            final VideoController videoControl) {

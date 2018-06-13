@@ -63,9 +63,7 @@ public class RoomController extends Controller {
         configured = true;
     }
 
-    /**
-     * Close the controller when the stream is closed.
-     */
+    @Override
     public void closeController() {
         snoozeHint = false;
         behindSchedule = false;
@@ -81,10 +79,7 @@ public class RoomController extends Controller {
         progress = null;
     }
 
-    /**
-     * Update the roomController.
-     * @param now the actual time in nanoseconds
-     */
+    @Override
     public void update(final long now) {
         if (progress != null) {
             progress.updateProgress();
@@ -233,6 +228,10 @@ public class RoomController extends Controller {
         }
     }
 
+    /**
+     * Change information about if room is ended.
+     * @param elapsedTime The time of the room.
+     */
     public void changeInformation(final long elapsedTime) {
         if (getCameraHandler().getBeginTime() != -1) {
             long time = elapsedTime - getCameraHandler().getBeginTime();
@@ -247,6 +246,9 @@ public class RoomController extends Controller {
         }
     }
 
+    /**
+     * Update the warning pane, show if needed and hide if not needed.
+     */
     public void updateWarningPane() {
         // Update the warningPane
         // When people are behind on schedule
@@ -371,6 +373,10 @@ public class RoomController extends Controller {
         hintTimer.schedule(task, timeUntilWarning);
     }
 
+    /**
+     * If the room is configured.
+     * @return true if configured, false otherwise
+     */
     public boolean isConfigured() {
         return configured;
     }

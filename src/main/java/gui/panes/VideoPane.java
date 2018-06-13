@@ -70,6 +70,9 @@ public class VideoPane {
         return videoPane;
     }
 
+    /**
+     * Create the needed controllers.
+     */
     public void createControllers() {
         roomController = new RoomController();
         timeLogController = new TimeLogController();
