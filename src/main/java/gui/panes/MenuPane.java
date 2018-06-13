@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.Timer;
+import gui.controllers.StartingAnimationTimerAndCloseControllers;
 import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import gui.controllers.VideoController;
@@ -35,7 +35,7 @@ public class MenuPane {
     private Label cameraStatus;
     private TimeLogController timeLogController;
     private VideoController videoController;
-    private Timer timer;
+    private StartingAnimationTimerAndCloseControllers startingAnimationTimerAndCloseControllers;
     private RoomController roomController;
     private static SimpleObjectProperty<File> lastKnownDirectoryProperty
             = new SimpleObjectProperty<>();
@@ -43,17 +43,17 @@ public class MenuPane {
     /**
      * Constructor for menuPane.
      * @param roomControl the roomController
-     * @param timerControl the timer
+     * @param startingAnimationTimerAndCloseControllersControl the startingAnimationTimerAndCloseControllers
      * @param timeLogControl the timeLogController
      * @param videoControl the videoController
      * @param pane the mediaPane
      */
-    public MenuPane(final RoomController roomControl, final Timer timerControl,
+    public MenuPane(final RoomController roomControl, final StartingAnimationTimerAndCloseControllers startingAnimationTimerAndCloseControllersControl,
                     final TimeLogController timeLogControl, final VideoController videoControl,
                     final MediaPane pane) {
         this.mediaPane = pane;
         roomController = roomControl;
-        timer = timerControl;
+        startingAnimationTimerAndCloseControllers = startingAnimationTimerAndCloseControllersControl;
         timeLogController = timeLogControl;
         videoController = videoControl;
     }
@@ -254,7 +254,7 @@ public class MenuPane {
      * Close the stream(s) and reset the application.
      */
     public void endStream() {
-        timer.stopTimer();
+        startingAnimationTimerAndCloseControllers.stopTimer();
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
     }

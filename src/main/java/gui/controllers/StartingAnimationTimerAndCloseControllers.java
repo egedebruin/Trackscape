@@ -6,7 +6,7 @@ import javafx.animation.AnimationTimer;
 /**
  * Class for AnimationTimer and closing all controllers.
  */
-public class Timer {
+public class StartingAnimationTimerAndCloseControllers {
 
     /**
      * Class parameters.
@@ -22,8 +22,8 @@ public class Timer {
      * @param timeLogControl the timeLogController
      * @param videoControl the videoController
      */
-    public Timer(final RoomController roomControl, final TimeLogController timeLogControl,
-                 final VideoController videoControl) {
+    public StartingAnimationTimerAndCloseControllers(final RoomController roomControl, final TimeLogController timeLogControl,
+                                                     final VideoController videoControl) {
         roomController = roomControl;
         timeLogController = timeLogControl;
         videoController = videoControl;

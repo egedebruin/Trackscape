@@ -1,7 +1,7 @@
 package gui.panes;
 
 import gui.Util;
-import gui.controllers.Timer;
+import gui.controllers.StartingAnimationTimerAndCloseControllers;
 import gui.controllers.VideoController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +25,7 @@ public class MediaBar {
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private VideoController videoController;
-    private Timer timer;
+    private StartingAnimationTimerAndCloseControllers startingAnimationTimerAndCloseControllers;
     private MenuPane menuPane;
     private MediaPane mediaPane;
     private StatusPane statusPane;
@@ -34,17 +34,17 @@ public class MediaBar {
     /**
      * Constructor for MediaBar.
      * @param videoControl the videoController
-     * @param timerControl the timer
+     * @param startingAnimationTimerAndCloseControllersControl the startingAnimationTimerAndCloseControllers
      * @param menu the menu
      * @param media the mediaplayer
      * @param status the statuspane
      * @param progress the progress bar
      */
     public MediaBar(final VideoController videoControl,
-                    final Timer timerControl, final MenuPane menu,
+                    final StartingAnimationTimerAndCloseControllers startingAnimationTimerAndCloseControllersControl, final MenuPane menu,
                     final MediaPane media, final StatusPane status, final ProgressBar progress) {
         this.videoController = videoControl;
-        this.timer = timerControl;
+        this.startingAnimationTimerAndCloseControllers = startingAnimationTimerAndCloseControllersControl;
         this.menuPane = menu;
         this.mediaPane = media;
         this.statusPane = status;
@@ -86,7 +86,7 @@ public class MediaBar {
                 initializeImageViewers();
                 initializeProgressBar();
                 initializeStatus();
-                timer.startTimer();
+                startingAnimationTimerAndCloseControllers.startTimer();
                 videoController.setImageViews(imageViews);
             }
         });
