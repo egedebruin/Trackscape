@@ -30,7 +30,6 @@ public class Chest {
     private Status chestState;
     private MatOfPoint positionInFrame;
     private long targetDurationInSec;
-    private long beginOfSectionTimeInSec;
     private long timeFound = -1;
     private int numberOfSubSections;
     private boolean[] subsectionCompleted;
@@ -139,13 +138,10 @@ public class Chest {
 
     /**
      * Setter for approvedChestFoundByHost.
-     * @param isChestFound Whether the chest is found or not.
      */
-    public void setApprovedChestFoundByHost(final boolean isChestFound) {
-        if (isChestFound) {
-            this.approvedChestFoundByHost = isChestFound;
-            chestState = Status.OPENED;
-        }
+    public void setApprovedChestFoundByHost() {
+        approvedChestFoundByHost = true;
+        chestState = Status.OPENED;
     }
 
     /**

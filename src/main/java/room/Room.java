@@ -119,7 +119,7 @@ public class Room {
     public void setNextChestOpened(final long timestamp) {
         for (Chest chest : chestList) {
             if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
-                chest.setApprovedChestFoundByHost(true);
+                chest.setApprovedChestFoundByHost();
                 chest.setTimeFound(timestamp);
                 break;
             }
@@ -145,7 +145,7 @@ public class Room {
         int completedSections = completedSubSections;
         for (Chest chest : chestList) {
             if (chest.getNumberOfSubSections() <= completedSections) {
-                chest.setApprovedChestFoundByHost(true);
+                chest.setApprovedChestFoundByHost();
                 if (chest.getTimeFound() < 0) {
                     chest.setTimeFound(System.nanoTime());
                 }

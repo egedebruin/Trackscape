@@ -46,7 +46,7 @@ class ProgressTest {
         assertEquals(progress.calculateProgress(), 0);
         chest.subSectionCompleted();
         assertEquals(progress.calculateProgress(), 1);
-        chest.setApprovedChestFoundByHost(true);
+        chest.setApprovedChestFoundByHost();
         chest.updateStatus(precedingChest);
         assertEquals(progress.calculateProgress(), FIRSTCHESTNOOFSECTIONS);
     }
@@ -65,12 +65,12 @@ class ProgressTest {
         chest2.updateStatus(chest);
         chest2.subSectionCompleted();
         assertEquals(progress.calculateProgress(), 0);
-        chest2.setApprovedChestFoundByHost(true);
+        chest2.setApprovedChestFoundByHost();
         assertEquals(progress.calculateProgress(), SECONDCHESTNOOFSECTIONS);
 
         chest.updateStatus(precedingChest);
         chest.subSectionCompleted();
-        chest.setApprovedChestFoundByHost(true);
+        chest.setApprovedChestFoundByHost();
         chest.updateStatus(precedingChest);
         assertEquals(progress.calculateProgress(), COMBINEDNOOFSECTIONS);
     }
@@ -145,7 +145,7 @@ class ProgressTest {
         final int expected = -2;
         assertEquals(expected, progress.getFillCount());
         updateProgress();
-        progress.getRoom().getChestList().get(0).setApprovedChestFoundByHost(true);
+        progress.getRoom().getChestList().get(0).setApprovedChestFoundByHost();
         updateProgress();
         assertEquals((FIRSTCHESTNOOFSECTIONS - 1) * 2, progress.getFillCount());
     }

@@ -126,7 +126,7 @@ public class RoomTest {
         chestList.add(chest2);
         assertEquals(0, room.getChestsOpened());
 
-        chest.setApprovedChestFoundByHost(true);
+        chest.setApprovedChestFoundByHost();
         assertEquals(1, room.getChestsOpened());
     }
 

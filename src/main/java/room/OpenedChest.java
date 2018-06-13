@@ -13,7 +13,7 @@ public class OpenedChest extends Chest {
      */
    public OpenedChest() {
        super(NOSUBSECTION, TARGETTIME);
-       setApprovedChestFoundByHost(true);
+       setApprovedChestFoundByHost();
    }
 
 }

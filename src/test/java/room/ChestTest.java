@@ -35,7 +35,7 @@ class ChestTest {
         assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
         chest.updateStatus(precedingChest);
         assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
-        chest.setApprovedChestFoundByHost(true);
+        chest.setApprovedChestFoundByHost();
         chest.updateStatus(precedingChest);
         assertEquals(chest.getChestState(), Chest.Status.OPENED);
         chest.updateStatus(precedingChest);
