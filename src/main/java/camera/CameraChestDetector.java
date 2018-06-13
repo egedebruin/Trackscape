@@ -68,7 +68,7 @@ public class CameraChestDetector extends CameraObjectDetector {
      *
      * @return List of sub matrices in which a chest is found
      */
-     List<Mat> includeChestContoursInFrame(final Mat frame,
+     private List<Mat> includeChestContoursInFrame(final Mat frame,
                                                     final Mat blackWhiteChestFrame) {
         List<Mat> detectedMats = new ArrayList<>();
         List<MatOfPoint> contours = new ArrayList<>();
@@ -82,6 +82,7 @@ public class CameraChestDetector extends CameraObjectDetector {
 
             // Get bounding rect of contour
             Rect newrect = Imgproc.boundingRect(contourPoints);
+
             // If not all spots are filled add newrect to the biggest rects.
             if (newrect.area() > MINCHESTAREA) {
                 rects.add(newrect);
@@ -89,10 +90,7 @@ public class CameraChestDetector extends CameraObjectDetector {
         }
 
         for (Rect rect : rects) {
-            if (rect.area() > MINCHESTAREA) {
-                Rect r = calculateCutout(rect, frame);
-                detectedMats.add(frame.submat(r));
-            }
+            detectedMats.add(frame.submat(calculateCutout(rect, frame)));
         }
         return detectedMats;
     }
