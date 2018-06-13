@@ -185,8 +185,12 @@ public class MenuPane {
      * @param connectStream menuOption
      * @param primaryStage starting stage
      */
-    private void connectStream(
-            final MenuItem connectStream, final Stage primaryStage) {
+    private void connectStream(final MenuItem connectStream, final Stage primaryStage) {
+        final int spacing = 6;
+        final int insetPositions = 10;
+        final int popUpWidth = 500;
+        final int popUpHeight = 100;
+
         connectStream.setOnAction(t -> {
             if (videoController.isClosed()) {
                 // Set up pop up window
@@ -199,13 +203,10 @@ public class MenuPane {
                 final TextField field = new TextField();
                 Button submit = new Button("Submit");
 
-                final int spacing = 6;
-                final int insetPositions = 10;
-
                 // Set up box in pop up window
                 VBox popUpVBox = new VBox();
                 popUpVBox.setPadding(new Insets(insetPositions,
-                        insetPositions, insetPositions, insetPositions));
+                    insetPositions, insetPositions, insetPositions));
                 popUpVBox.getChildren().addAll(fieldLabel, field, submit);
                 popUpVBox.setSpacing(spacing);
                 popUpVBox.setAlignment(Pos.CENTER);
@@ -223,9 +224,6 @@ public class MenuPane {
                         setCameraStatus();
                     }
                 });
-
-                final int popUpWidth = 500;
-                final int popUpHeight = 100;
 
                 Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
                 streamStage.setScene(popUp);

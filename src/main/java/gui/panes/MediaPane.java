@@ -13,16 +13,8 @@ import java.io.File;
  * Class that constructs the MediaPane for the VideoPane.
  */
 public class MediaPane {
-    /**
-     * Class parameters.
-     */
-    private FlowPane mediaPane = new FlowPane();
 
-    /**
-     * Constructor for MediaPane.
-     */
-    public MediaPane() {
-    }
+    private FlowPane mediaPane = new FlowPane();
 
     /**
      * Create the pane that holds all imageViewers.

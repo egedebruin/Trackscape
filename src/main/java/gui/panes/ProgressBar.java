@@ -71,13 +71,14 @@ public class ProgressBar {
      * Create the items of the progress bar.
      */
     private void createItems() {
+        final int sectionsForMaxScreen = 10;
+
         List<Chest> chests = controller.getProgress().getRoom().getChestList();
 
         GraphicsDevice gd =
             GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int screenWidth = gd.getDisplayMode().getWidth();
 
-        final int sectionsForMaxScreen = 10;
         if (controller.getProgress().getTotalSections() < sectionsForMaxScreen) {
             final int screenParts = 6;
             fittedWidth = (screenWidth)
@@ -130,11 +131,13 @@ public class ProgressBar {
      * @return ChestLabel
      */
     private Label createChestLabel() {
+        final double size = 1.4 * fittedWidth;
+        final double circleSize = 1.3 * fittedWidth + 25;
+
         File chest = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\images\\progressbar\\blackchest.png");
         Image chestImage = new Image(chest.toURI().toString());
 
-        final double size = 1.4 * fittedWidth;
         ImageView chestIV = new ImageView(chestImage);
         chestIV.setFitWidth(size);
         chestIV.setFitHeight(size);
@@ -142,7 +145,6 @@ public class ProgressBar {
         Label chestLabel = new Label("");
         chestLabel.setGraphic(chestIV);
 
-        final double circleSize = 1.3 * fittedWidth + 25;
         chestLabel.setMinHeight(circleSize);
         chestLabel.setMinWidth(circleSize);
         chestLabel.setAlignment(Pos.CENTER);
@@ -157,6 +159,8 @@ public class ProgressBar {
      */
     private Label createPuzzleLabel() {
         final int puzzlePieces = 8;
+        final double circleSize = fittedWidth + 20;
+
         Random random = new Random();
 
         File puzzle = new File(System.getProperty("user.dir")
@@ -164,16 +168,14 @@ public class ProgressBar {
             + random.nextInt(puzzlePieces) + ".png");
         Image puzzleImage = new Image(puzzle.toURI().toString());
 
-        final double size = fittedWidth;
         ImageView puzzleIV = new ImageView(puzzleImage);
-        puzzleIV.setFitWidth(size);
-        puzzleIV.setFitHeight(size);
+        puzzleIV.setFitWidth(fittedWidth);
+        puzzleIV.setFitHeight(fittedWidth);
 
         Label puzzleLabel = new Label();
         puzzleLabel.setAlignment(Pos.CENTER);
         puzzleLabel.setGraphic(puzzleIV);
 
-        final double circleSize = fittedWidth + 20;
         puzzleLabel.setMinHeight(circleSize);
         puzzleLabel.setMinWidth(circleSize);
 
