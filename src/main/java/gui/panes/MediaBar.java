@@ -70,33 +70,55 @@ public class MediaBar {
         mediaBar.setSpacing(spacing);
 
         final int buttonWidth = 70;
-        // Create the play button
+        mediaBar.getChildren().addAll(createPlayButton(buttonWidth), createStopButton(buttonWidth));
+
+        return mediaBar;
+    }
+
+    /**
+     * Create the playButton for the mediaBar.
+     * @param buttonWidth the width of the button
+     * @return playButton
+     */
+    private Button createPlayButton(final int buttonWidth) {
         final Button playButton = new Button();
         playButton.getStyleClass().add("media-buttons");
         playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth));
         playButton.setCursor(Cursor.HAND);
-        playButton.setOnAction(event -> {
-            if (videoController.getCameras() == 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("TrackScape");
-                alert.setContentText("There are no cameras to be shown!");
-                alert.showAndWait();
-            } else if (videoController.isClosed()) {
-                videoController.setClosed(false);
-                initializeImageViewers();
-                initializeProgressBar();
-                initializeStatus();
-                timerManager.startTimer();
-                videoController.setImageViews(imageViews);
-            }
-        });
+        playButton.setOnAction(event -> initializeConfigurations());
         playButton.setOnMouseEntered(event
             -> playButton.setGraphic(Util.createImageViewLogo(
-                "buttons\\playActive", buttonWidth)));
+            "buttons\\playActive", buttonWidth)));
         playButton.setOnMouseExited(event
             -> playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth)));
+        return playButton;
+    }
 
-        // Create the stop button
+    /**
+     * Initialize things that are needed to start the video.
+     */
+    private void initializeConfigurations() {
+        if (videoController.getCameras() == 0) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("TrackScape");
+            alert.setContentText("There are no cameras to be shown!");
+            alert.showAndWait();
+        } else if (videoController.isClosed()) {
+            videoController.setClosed(false);
+            initializeImageViewers();
+            initializeProgressBar();
+            initializeStatus();
+            timerManager.startTimer();
+            videoController.setImageViews(imageViews);
+        }
+    }
+
+    /**
+     * Create the stopButton for the mediaBar.
+     * @param buttonWidth the width of the button
+     * @return stopButton
+     */
+    private Button createStopButton(final int buttonWidth) {
         final Button stopButton = new Button();
         stopButton.getStyleClass().add("media-buttons");
         stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth));
@@ -106,10 +128,7 @@ public class MediaBar {
             -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stopActive", buttonWidth)));
         stopButton.setOnMouseExited(event
             -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth)));
-
-        mediaBar.getChildren().addAll(playButton, stopButton);
-
-        return mediaBar;
+        return stopButton;
     }
 
     /**
