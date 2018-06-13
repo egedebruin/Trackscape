@@ -30,9 +30,9 @@ public class JsonHandlerTest {
     /**
      * Class variables.
      */
-    private final String jsonFile = "files/newProgress/testConfig.json";
-    private final String jsonFile2 = "files/newProgress/testConfig2.json";
-    private final String emptyJsonFile = "files/newProgress/empty.json";
+    private final String jsonFile = "files/test/testConfig.json";
+    private final String jsonFile2 = "files/test/testConfig2.json";
+    private final String emptyJsonFile = "files/test/empty.json";
     private final int jsonPeople = 5;
     private final int jsonChests = 3;
     private JsonHandler handler;

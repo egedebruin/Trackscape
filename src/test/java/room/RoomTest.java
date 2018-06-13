@@ -25,7 +25,7 @@ public class RoomTest {
     }
 
     /**
-     * REset cameralist and handeler after all teststr/.
+     * Reset cameralist and handeler after all teststr/.
      */
     @AfterEach
     void reset() {

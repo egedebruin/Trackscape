@@ -32,7 +32,7 @@ public class APISectionHandlerTest {
      */
     @Test
     void testConstructor() {
-        Room room = new JsonHandler("files/newProgress/testConfig.json").createSingleRoom();
+        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
         APISectionHandler handler = new APISectionHandler(room);
         assertNotNull(handler);
     }
@@ -43,7 +43,7 @@ public class APISectionHandlerTest {
      */
     @Test
     void testHandleCorrect() throws IOException {
-        Room room = new JsonHandler("files/newProgress/testConfig.json").createSingleRoom();
+        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
         room.updateRoom();
         APIHandler handler = new APIHandler(room);
         handler.startServer();
@@ -63,7 +63,7 @@ public class APISectionHandlerTest {
      */
     @Test
     void testHandleIncorrect() throws IOException {
-        Room room = new JsonHandler("files/newProgress/testConfig.json").createSingleRoom();
+        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
         room.updateRoom();
         APIHandler handler = new APIHandler(room);
         handler.startServer();

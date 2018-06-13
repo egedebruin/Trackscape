@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 class ProgressTest {
 
-    private String testConfigFile = "files/newProgress/testConfig.json";
+    private String testConfigFile = "files/test/testConfig.json";
     private Chest precedingChest = new OpenedChest();
     private static final int FIRSTCHESTNOOFSECTIONS = 21;
     private static final int SECONDCHESTNOOFSECTIONS = 3;
