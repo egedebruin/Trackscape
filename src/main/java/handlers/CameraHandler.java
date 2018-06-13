@@ -122,12 +122,14 @@ public class CameraHandler {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
             active = Activity.LOW;
-            camera.getActivity().setStarted(true);
+            for (Camera cam : cameraList) {
+                cam.getActivity().setStarted(true);
+            }
         }
 
         Mat subtraction = cameraChestDetector.subtractFrame(newFrame);
 
-        final int firstDetection = 100;
+        final int firstDetection = 80;
         if (camera.getFrameCounter() > firstDetection) {
             List<Mat> mats = cameraChestDetector.
                 checkForChests(newFrame, camera.getNumOfChestsInRoom(), subtraction);

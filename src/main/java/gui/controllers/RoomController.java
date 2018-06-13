@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import api.APIHandler;
 import gui.Util;
 import handlers.CameraHandler;
 import javafx.scene.Node;
@@ -26,6 +27,7 @@ public class RoomController {
     private Pane statusPane;
     private CameraHandler cameraHandler;
     private int progressCompleted;
+    private APIHandler apiHandler;
     private Label gameStatus;
     private Label numOfChestsOpened;
     private Label activityStatus;
@@ -48,6 +50,13 @@ public class RoomController {
     public void configure(final String configFile) {
         progress = new Progress(configFile);
         cameraHandler = progress.getRoom().getCameraHandler();
+
+        apiHandler = new APIHandler(progress.getRoom());
+        int port = progress.getRoom().getPort();
+        apiHandler.setServer(port);
+
+        apiHandler.startServer();
+
         chestList = progress.getRoom().getChestList();
         chestTimeStampList = new ArrayList<>();
 
@@ -65,8 +74,10 @@ public class RoomController {
         snoozeHint = false;
         behindSchedule = false;
         progressCompleted = 0;
+        progress = null;
         if (progressBar != null) {
             progressBar.getChildren().clear();
+            apiHandler.stopServer();
         }
         if (statusPane != null) {
             statusPane.getChildren().clear();
@@ -98,15 +109,13 @@ public class RoomController {
      */
     private void newItemDone(final int index) {
         int chestsOpened = progress.getRoom().getChestsOpened();
-        fillProgress(index);
         int completedSections = progress.getSubSectionCountFromBarIndex(index);
         progress.setSubSectionCount(completedSections);
         progress.getRoom().setChestSectionsCompletedTill(completedSections);
         progress.updateProgress();
         int amountNewChests = progress.getRoom().getChestsOpened();
         for (int i = chestsOpened + 1; i < amountNewChests + 1; i++) {
-            String chestsFound = i + "/"
-                + progress.getRoom().getChestList().size();
+            String chestsFound = i + "/" + progress.getRoom().getChestList().size();
             cameraHandler.getInformationHandler().addInformation("Found chest " + chestsFound);
         }
     }
@@ -116,9 +125,10 @@ public class RoomController {
      */
     private void itemsRemoved() {
         int chestsOpened = progress.getRoom().getChestsOpened();
-        int completedSections =
-            progress.getSubSectionCountFromBarIndex(progressCompleted);
-        progress.getRoom().unsetChestSectionsCompletedTill(completedSections);
+        int completedSections = progress.getSubSectionCountFromBarIndex(progressCompleted);
+        progress.setSubSectionCount(completedSections);
+        progress.getRoom().setChestSectionsCompletedTill(completedSections);
+        progress.updateProgress();
         int newChests = progress.getRoom().getChestsOpened();
         for (int i = chestsOpened; i > newChests; i--) {
             cameraHandler.getInformationHandler().addInformation("Removed chest " + i);
@@ -130,9 +140,13 @@ public class RoomController {
      * @param stage the current progress stage of the game
      */
     public void fillProgress(final int stage) {
-        for (int k = 0; k <= stage; k++) {
+        for (int k = 0; k < progressBar.getChildren().size(); k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
-            progressBar.getChildren().get(k).getStyleClass().add("progress-made");
+            if (k <= stage) {
+                progressBar.getChildren().get(k).getStyleClass().add("progress-made");
+            } else {
+                progressBar.getChildren().get(k).getStyleClass().add("progress-reset");
+            }
             k++;
         }
         progressCompleted = stage;
@@ -148,25 +162,11 @@ public class RoomController {
             .getStyleClass().toString().contains("progress-reset")) {
             // At the end state of the progress bar or
             // when the next item is not already done, reset this item
-            clearStyleSheet(stage);
             progressCompleted = stage - 2;
         } else {
             // When the next item is already done, reset until this item
-            for (int k = stage + 2; k < progressBar.getChildren().size(); k++) {
-                clearStyleSheet(k);
-                k++;
-            }
             progressCompleted = stage;
         }
-    }
-
-    /**
-     * Clear the stylesheet of current stage item.
-     * @param stage the current stage item
-     */
-    private void clearStyleSheet(final int stage) {
-        progressBar.getChildren().get(stage).getStyleClass().clear();
-        progressBar.getChildren().get(stage).getStyleClass().add("progress-reset");
     }
 
     /**
@@ -176,6 +176,7 @@ public class RoomController {
     public void update(final long now) {
         if (progress != null) {
             progress.updateProgress();
+            fillProgress(progress.getFillCount());
             changeTime(now);
             if (statusPane.getChildren().size() > 0) {
                 // Update the progressPane
@@ -223,7 +224,6 @@ public class RoomController {
     public String confirmedChestString(final long timestamp) {
         if (getProgress() != null) {
             getProgress().getRoom().setNextChestOpened(timestamp);
-            fillProgress(getProgress().getFillCount());
         }
         return progress.getRoom().getChestsOpened() + "/"
             + progress.getRoom().getChestList().size();
