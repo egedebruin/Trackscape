@@ -9,17 +9,17 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import room.Room;
 
 /**
- * Handler for /chest API calls.
+ * Handler for /section API calls.
  */
-public class APIChestHandler extends AbstractHandler {
+public class APISectionHandler extends AbstractHandler {
 
     private Room room;
 
     /**
-     * Constructor for the APIChestHandler.
+     * Constructor for the APISectionHandler.
      * @param newRoom the room for this handler.
      */
-    public APIChestHandler(final Room newRoom) {
+    public APISectionHandler(final Room newRoom) {
         room = newRoom;
     }
 
@@ -28,15 +28,15 @@ public class APIChestHandler extends AbstractHandler {
                        final HttpServletResponse response) throws IOException {
         String body = "Nothing happened";
 
-        if (request.getParameter("opened") == null) {
-            body = "Parameter opened not found in request";
-        } else if (request.getParameter("opened").equals("true")) {
+        if (request.getParameter("completed") == null) {
+            body = "Parameter completed not found in request";
+        } else if (request.getParameter("completed").equals("true")) {
             if (room.getChestList().size() == room.getChestsOpened()) {
                 body = "All chests are already opened";
             } else {
-                room.setNextChestOpened(System.nanoTime());
-                String log = room.getChestsOpened() + "/" + room.getChestList().size();
-                body = "Found chest " + log;
+                room.setNextSectionOpened();
+                String log = room.calculateSubsectionsDone() + "/" + room.getTotalSubsections();
+                body = "Completed section " + log;
                 room.getCameraHandler().getInformationHandler().addInformation(body);
             }
         }

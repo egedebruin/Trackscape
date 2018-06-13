@@ -130,7 +130,8 @@ public class JsonHandler {
             int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
             List<Chest> chests = createChests(roomId);
-            Room room = new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
+            int port = getPortNumber(roomId);
+            Room room = new Room(roomId, amountPeople, cameraLinks, chests, targetDuration, port);
             rooms.add(room);
         }
         return rooms;
@@ -148,9 +149,11 @@ public class JsonHandler {
             int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
             List<Chest> chests = createChests(roomId);
-            return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
+            int port = getPortNumber(roomId);
+            return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration, port);
         }
-        return new Room(0, 0, new ArrayList<>(), null, 0);
+        final int defaultPort = 8080;
+        return new Room(0, 0, new ArrayList<>(), null, 0, defaultPort);
     }
 
     /**
