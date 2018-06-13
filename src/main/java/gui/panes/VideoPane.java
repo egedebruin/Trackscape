@@ -1,11 +1,10 @@
 package gui.panes;
 
-import gui.controllers.MainController;
+import gui.controllers.TimerController;
 import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import gui.controllers.VideoController;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -25,7 +24,7 @@ public class VideoPane {
     private RoomController roomController;
     private TimeLogController timeLogController;
     private VideoController videoController;
-    private MainController timerController;
+    private TimerController timerController;
 
     /**
      * Constructor for VideoPane.
@@ -75,6 +74,6 @@ public class VideoPane {
         roomController = new RoomController();
         timeLogController = new TimeLogController();
         videoController = new VideoController();
-        timerController = new MainController(roomController, timeLogController, videoController);
+        timerController = new TimerController(roomController, timeLogController, videoController);
     }
 }

@@ -31,7 +31,7 @@ public class APIHandlerTest {
      */
     @Test
     void testConstructor() {
-        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
+        Room room = new JsonHandler("files/newProgress/testConfig.json").createSingleRoom();
         APIHandler apiHandler = new APIHandler(room);
         HandlerCollection collection = (HandlerCollection) apiHandler.getServer().getHandler();
         assertEquals(2, collection.getHandlers().length);
@@ -42,7 +42,7 @@ public class APIHandlerTest {
      */
     @Test
     void testStartServer() {
-        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
+        Room room = new JsonHandler("files/newProgress/testConfig.json").createSingleRoom();
         APIHandler apiHandler = new APIHandler(room);
         apiHandler.startServer();
         assertTrue(apiHandler.getServer().isStarted());
@@ -54,7 +54,7 @@ public class APIHandlerTest {
      */
     @Test
     void testStopServer() {
-        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
+        Room room = new JsonHandler("files/newProgress/testConfig.json").createSingleRoom();
         APIHandler apiHandler = new APIHandler(room);
         apiHandler.startServer();
         assertTrue(apiHandler.getServer().isStarted());
@@ -68,7 +68,7 @@ public class APIHandlerTest {
     @Test
     void testStartFailed() {
         final int magicInt = 123456;
-        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
+        Room room = new JsonHandler("files/newProgress/testConfig.json").createSingleRoom();
         APIHandler apiHandler = new APIHandler(room);
         apiHandler.setServer(magicInt);
         apiHandler.startServer();

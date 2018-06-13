@@ -1,7 +1,7 @@
 package gui.panes;
 
 import gui.Util;
-import gui.controllers.MainController;
+import gui.controllers.TimerController;
 import gui.controllers.VideoController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +25,7 @@ public class MediaBar {
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private VideoController videoController;
-    private MainController timerController;
+    private TimerController timerController;
     private MenuPane menuPane;
     private MediaPane mediaPane;
     private StatusPane statusPane;
@@ -38,7 +38,7 @@ public class MediaBar {
      * @param progress the progress bar
      */
     public MediaBar(final VideoController videoControl,
-                    final MainController timerControl, final MenuPane menu,
+                    final TimerController timerControl, final MenuPane menu,
                     final MediaPane media, final StatusPane status, final ProgressBar progress) {
         this.videoController = videoControl;
         this.timerController = timerControl;

@@ -32,7 +32,7 @@ public class Progress {
         init();
     }
 
-    private void init () {
+    private void init() {
         subSectionCount = 0;
 
         apiHandler = new APIHandler(room);
@@ -118,5 +118,13 @@ public class Progress {
 
     public void stopServer() {
         apiHandler.stopServer();
+    }
+
+    public int newProgress(final int index) {
+        int completedSections = getSubSectionCountFromBarIndex(index);
+        setSubSectionCount(completedSections);
+        room.setChestSectionsCompletedTill(completedSections);
+        updateProgress();
+        return room.getChestsOpened();
     }
 }

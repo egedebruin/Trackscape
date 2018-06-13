@@ -6,7 +6,7 @@ import javafx.animation.AnimationTimer;
 /**
  * TimerController class for controlling GUI elements.
  */
-public class MainController {
+public class TimerController {
 
     /**
      * Class parameters.
@@ -19,8 +19,8 @@ public class MainController {
     /**
      * Constructor method.
      */
-    public MainController(final RoomController roomControl, final TimeLogController timeLogControl,
-                          final VideoController videoControl) {
+    public TimerController(final RoomController roomControl, final TimeLogController timeLogControl,
+                           final VideoController videoControl) {
         roomController = roomControl;
         timeLogController = timeLogControl;
         videoController = videoControl;

@@ -1,7 +1,6 @@
 package gui.panes;
 
 import gui.Util;
-import gui.controllers.MainController;
 import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;

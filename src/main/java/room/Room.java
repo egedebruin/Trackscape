@@ -1,7 +1,5 @@
 package room;
 
-import handlers.CameraHandler;
-
 import handlers.InformationHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -226,7 +224,7 @@ public class Room {
         return informationHandler;
     }
 
-    public void setInformationHandler(InformationHandler informationHandler) {
-        this.informationHandler = informationHandler;
+    public void setInformationHandler(final InformationHandler newHandler) {
+        this.informationHandler = newHandler;
     }
 }

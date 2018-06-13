@@ -1,8 +1,12 @@
 package gui.controllers;
 
-import api.APIHandler;
 import gui.Util;
-import handlers.CameraHandler;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -10,12 +14,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import room.Chest;
 import room.Progress;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Controller for the gui with a room.
@@ -92,19 +90,11 @@ public class RoomController extends Controller {
             progress.updateProgress();
             fillProgress(progress.getFillCount());
             changeTime(now);
-            if (statusPane.getChildren().size() > 0) {
-                // Update the progressPane
-                updateChests(progress.getRoom().getChestsOpened());
-                updateActivity();
-                // Update the warningPane
-                // When people are behind on schedule
-                if (behindSchedule && !snoozeHint && !allChestsOpened()) {
-                    // Get the warningPane of the statusPane and set it on visible
-                    statusPane.getChildren().get(2).setVisible(true);
-                } else {
-                    statusPane.getChildren().get(2).setVisible(false);
-                }
-            }
+            changeInformation(now);
+            // Update the progressPane
+            updateChests(progress.getRoom().getChestsOpened());
+            updateActivity();
+            updateWarningPane();
         }
     }
 
@@ -112,19 +102,17 @@ public class RoomController extends Controller {
      * Let the host set items on done when the team has finished them.
      */
     public void setItemsOnDone() {
-        progressBar.getChildren().forEach(item -> {
-            item.setOnMouseClicked(event -> {
-                if (item.getId() != "line") {
-                    int index = progressBar.getChildren().indexOf(item);
-                    if (item.getStyleClass().toString().contains("progress-reset")) {
-                        newItemDone(index);
-                    } else {
-                        resetProgress(index);
-                        itemsRemoved();
-                    }
+        progressBar.getChildren().forEach(item -> item.setOnMouseClicked(event -> {
+            if (!Objects.equals(item.getId(), "line")) {
+                int index = progressBar.getChildren().indexOf(item);
+                if (item.getStyleClass().toString().contains("progress-reset")) {
+                    newItemDone(index);
+                } else {
+                    resetProgress(index);
+                    itemsRemoved();
                 }
-            });
-        });
+            }
+        }));
     }
 
     /**
@@ -132,13 +120,9 @@ public class RoomController extends Controller {
      * @param index the index of the new item
      */
     private void newItemDone(final int index) {
-        int chestsOpened = progress.getRoom().getChestsOpened();
-        int completedSections = progress.getSubSectionCountFromBarIndex(index);
-        progress.setSubSectionCount(completedSections);
-        progress.getRoom().setChestSectionsCompletedTill(completedSections);
-        progress.updateProgress();
-        int amountNewChests = progress.getRoom().getChestsOpened();
-        for (int i = chestsOpened + 1; i < amountNewChests + 1; i++) {
+        int oldChests = progress.getRoom().getChestsOpened();
+        int newChests = progress.newProgress(index);
+        for (int i = oldChests + 1; i < newChests + 1; i++) {
             String chestsFound = i + "/" + progress.getRoom().getChestList().size();
             getCameraHandler().getInformationHandler().addInformation("Found chest " + chestsFound);
         }
@@ -148,14 +132,27 @@ public class RoomController extends Controller {
      * Logic for when items are removed.
      */
     private void itemsRemoved() {
-        int chestsOpened = progress.getRoom().getChestsOpened();
-        int completedSections = progress.getSubSectionCountFromBarIndex(progressCompleted);
-        progress.setSubSectionCount(completedSections);
-        progress.getRoom().setChestSectionsCompletedTill(completedSections);
-        progress.updateProgress();
-        int newChests = progress.getRoom().getChestsOpened();
-        for (int i = chestsOpened; i > newChests; i--) {
+        int oldChests = progress.getRoom().getChestsOpened();
+        int newChests = progress.newProgress(progressCompleted);
+        for (int i = oldChests; i > newChests; i--) {
             getCameraHandler().getInformationHandler().addInformation("Removed chest " + i);
+        }
+    }
+
+    /**
+     * Resets the progressbar to the current stage.
+     * @param stage the current progress stage of the game
+     */
+    private void resetProgress(final int stage) {
+        if (stage == progressBar.getChildren().size() - 1
+            || progressBar.getChildren().get(stage + 2)
+            .getStyleClass().toString().contains("progress-reset")) {
+            // At the end state of the progress bar or
+            // when the next item is not already done, reset this item
+            progressCompleted = stage - 2;
+        } else {
+            // When the next item is already done, reset until this item
+            progressCompleted = stage;
         }
     }
 
@@ -177,27 +174,10 @@ public class RoomController extends Controller {
     }
 
     /**
-     * Resets the progressbar to the current stage.
-     * @param stage the current progress stage of the game
-     */
-    private void resetProgress(final int stage) {
-        if (stage == progressBar.getChildren().size() - 1
-            || progressBar.getChildren().get(stage + 2)
-            .getStyleClass().toString().contains("progress-reset")) {
-            // At the end state of the progress bar or
-            // when the next item is not already done, reset this item
-            progressCompleted = stage - 2;
-        } else {
-            // When the next item is already done, reset until this item
-            progressCompleted = stage;
-        }
-    }
-
-    /**
      * Update the activity Label.
      */
     private void updateActivity() {
-        String activeString = "" + this.getCameraHandler().getActive();
+        String activeString = "" + getCameraHandler().getActive();
         activityStatus.setText(" Current activity: " + activeString.toLowerCase());
     }
 
@@ -249,16 +229,32 @@ public class RoomController extends Controller {
                     chestTimeStampList.get(i).setText("");
                 }
                 updateTimeChestsPanel(time, i);
-
-                if (time > TimeUnit.SECONDS.toNanos(progress.getRoom().getTargetDuration())) {
-                    gameStatus.setText(" Time is up! Game has ended.");
-                    gameStatus.setTextFill(Color.RED);
-                } else {
-                    setProgressBarActive();
-                    gameStatus.setText(" Game has started");
-                    gameStatus.setTextFill(Color.FORESTGREEN);
-                }
             }
+        }
+    }
+
+    public void changeInformation(final long elapsedTime) {
+        if (getCameraHandler().getBeginTime() != -1) {
+            long time = elapsedTime - getCameraHandler().getBeginTime();
+            if (time > TimeUnit.SECONDS.toNanos(progress.getRoom().getTargetDuration())) {
+                gameStatus.setText(" Time is up! Game has ended.");
+                gameStatus.setTextFill(Color.RED);
+            } else {
+                setProgressBarActive();
+                gameStatus.setText(" Game has started");
+                gameStatus.setTextFill(Color.FORESTGREEN);
+            }
+        }
+    }
+
+    public void updateWarningPane() {
+        // Update the warningPane
+        // When people are behind on schedule
+        if (behindSchedule && !snoozeHint && !allChestsOpened()) {
+            // Get the warningPane of the statusPane and set it on visible
+            statusPane.getChildren().get(2).setVisible(true);
+        } else {
+            statusPane.getChildren().get(2).setVisible(false);
         }
     }
 
@@ -284,13 +280,8 @@ public class RoomController extends Controller {
      * @return true if all chests are opened, false otherwise
      */
     public boolean allChestsOpened() {
-        if (progress == null) {
-            return false;
-        }
-        if (progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened()) {
-            return true;
-        }
-        return false;
+        return progress != null
+            && progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened();
     }
 
     /**

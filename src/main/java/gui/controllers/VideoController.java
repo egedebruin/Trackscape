@@ -2,12 +2,10 @@ package gui.controllers;
 
 import camera.Camera;
 import gui.Util;
-import handlers.CameraHandler;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -41,8 +39,8 @@ public class VideoController extends Controller {
         if (!getCameraHandler().isChanged()) {
             closed = true;
         } else {
-            for (int j = 0; j < frames.size(); j++) {
-                BufferedImage bufferedFrame = Util.matToBufferedImage(frames.get(j));
+            for (Mat frame : frames) {
+                BufferedImage bufferedFrame = Util.matToBufferedImage(frame);
                 processedFrames.add(SwingFXUtils.toFXImage(bufferedFrame, null));
             }
             closed = false;
@@ -65,8 +63,8 @@ public class VideoController extends Controller {
         File streamEnd = new File(System.getProperty("user.dir")
             + "\\src\\main\\java\\gui\\images\\black.png");
         Image blackFrame = new Image(streamEnd.toURI().toString());
-        for (int i = 0; i < imageViews.size(); i++) {
-            imageViews.get(i).setImage(blackFrame);
+        for (ImageView imageView : imageViews) {
+            imageView.setImage(blackFrame);
         }
         getCameraHandler().closeHandler();
         closed = true;
@@ -115,7 +113,7 @@ public class VideoController extends Controller {
         this.imageViews = newViews;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
+    public void setClosed(final boolean newClosed) {
+        this.closed = newClosed;
     }
 }
