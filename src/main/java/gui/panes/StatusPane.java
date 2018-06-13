@@ -75,6 +75,8 @@ public class StatusPane {
      */
     private Pane createSetupPane() {
         final int buttonWidth = 50;
+        final int hgap = 30;
+
         ImageView ppl = Util.createImageViewLogo("icons\\peopleIcon", buttonWidth);
         ImageView box = Util.createImageViewLogo("icons\\chestIcon", buttonWidth);
         ImageView cam = Util.createImageViewLogo("icons\\camIcon", buttonWidth);
@@ -90,7 +92,6 @@ public class StatusPane {
         chests.setGraphic(box);
 
         GridPane setupPane = new GridPane();
-        final int hgap = 30;
         setupPane.setHgap(hgap);
 
         setupPane.add(cameras, 0, 0);
@@ -105,17 +106,18 @@ public class StatusPane {
      * @return progressPane
      */
     private Pane createProgressPane() {
+        final int prefWidth = 350;
+
         Label status = new Label("Status\n");
         status.getStyleClass().add("bold");
 
         initializeProgressLabels();
 
-        final int prefWidth = 350;
         VBox progressPane = new VBox();
         progressPane.setPrefWidth(prefWidth);
         progressPane.setAlignment(Pos.CENTER_LEFT);
         progressPane.getChildren().addAll(status, gameStatus,
-                numOfChestsOpened, activity, createChestTimePane());
+            numOfChestsOpened, activity, createChestTimePane());
 
         return progressPane;
     }
@@ -125,6 +127,7 @@ public class StatusPane {
      */
     private void initializeProgressLabels() {
         final int buttonWidth = 20;
+
         gameStatus = new Label(" Game will start soon");
         gameStatus.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
         numOfChestsOpened = new Label(" Chests opened: 0 / "
@@ -143,8 +146,9 @@ public class StatusPane {
      * @return chestTimePane
      */
     private Pane createChestTimePane() {
-        GridPane chestTimePane = new GridPane();
         final int topInset = 20;
+
+        GridPane chestTimePane = new GridPane();
         chestTimePane.getStyleClass().add("grid-lines");
         chestTimePane.setPadding(new Insets(topInset, 0, 0, 0));
         chestTimePane.setAlignment(Pos.CENTER);
@@ -164,7 +168,7 @@ public class StatusPane {
             chestLabel.setTextAlignment(TextAlignment.CENTER);
             Label timeLabel = roomController.getChestTimeStampList().get(i);
             Label targetLabel = new Label(Util.getTimeString(TimeUnit.SECONDS.toNanos(
-                    chestList.get(i).getTargetDurationInSec()), false));
+                chestList.get(i).getTargetDurationInSec()), false));
             chestTimePane.add(chestLabel, 0, (i + 1));
             chestTimePane.add(timeLabel, 1, (i + 1));
             chestTimePane.add(targetLabel, 2, (i + 1));
@@ -178,16 +182,17 @@ public class StatusPane {
      * @return the warningPane
      */
     private Pane createWarningSign() {
+        final int warningWidth = 150;
+        final int buttonWidth = 125;
+
         FlowPane warningPane = new FlowPane();
 
-        final int warningWidth = 150;
         ImageView warningView = Util.createImageViewLogo("icons\\warning", warningWidth);
 
         Label warningLabel = new Label(
             " The team is getting behind schedule! \nThey could use a hint.");
         warningLabel.setTextAlignment(TextAlignment.CENTER);
 
-        final int buttonWidth = 125;
         Button okButton = new Button();
         okButton.setGraphic(Util.createImageViewLogo("buttons\\okButton", buttonWidth));
         okButton.setCursor(Cursor.HAND);
