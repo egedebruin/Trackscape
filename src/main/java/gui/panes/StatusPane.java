@@ -105,34 +105,37 @@ public class StatusPane {
      * @return progressPane
      */
     private Pane createProgressPane() {
+        Label status = new Label("Status\n");
+        status.getStyleClass().add("bold");
+
+        initializeProgressLabels();
+
         final int prefWidth = 350;
         VBox progressPane = new VBox();
         progressPane.setPrefWidth(prefWidth);
         progressPane.setAlignment(Pos.CENTER_LEFT);
-
-        Label status = new Label("Status\n");
-        status.getStyleClass().add("bold");
-
-        final int buttonWidth = 20;
-        gameStatus = new Label(" Game will start soon");
-        gameStatus.setGraphic(Util.createImageViewLogo(
-            "//icons//star", buttonWidth));
-        numOfChestsOpened = new Label(" Chests opened: 0 / "
-            + roomController.getProgress().getRoom().getChestList().size());
-        numOfChestsOpened.setGraphic(Util.createImageViewLogo(
-            "//icons//star", buttonWidth));
-        activity = new Label(" Current activity: low");
-        activity.setGraphic(Util.createImageViewLogo(
-            "//icons//star", buttonWidth));
-
         progressPane.getChildren().addAll(status, gameStatus,
                 numOfChestsOpened, activity, createChestTimePane());
+
+        return progressPane;
+    }
+
+    /**
+     * Initialize and set the dynamic labels for the progressPane in roomController.
+     */
+    private void initializeProgressLabels() {
+        final int buttonWidth = 20;
+        gameStatus = new Label(" Game will start soon");
+        gameStatus.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
+        numOfChestsOpened = new Label(" Chests opened: 0 / "
+            + roomController.getProgress().getRoom().getChestList().size());
+        numOfChestsOpened.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
+        activity = new Label(" Current activity: low");
+        activity.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
 
         roomController.setGameStatus(gameStatus);
         roomController.setNumOfChestsOpened(numOfChestsOpened);
         roomController.setActivityStatus(activity);
-
-        return progressPane;
     }
 
     /**
