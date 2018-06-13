@@ -27,9 +27,8 @@ public class CameraChestTracker {
 
         // calculate the contours in frame
         List<MatOfPoint> contoursFrame = new ArrayList<>();
-        Mat contourMatFrame = new Mat();
         Imgproc.findContours(tempFrame, contoursFrame,
-            contourMatFrame, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+            new Mat(), Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
         if (previousContours != null) {
             // Check if there is overlap between chests in subsequent frames.
@@ -39,14 +38,7 @@ public class CameraChestTracker {
                     for (MatOfPoint points2 : previousContours) {
                         Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
                         if (rect2.area() >= minChestArea) {
-
-                            // Increase the area in which overlap could be found
-                            rect2.width += frame.width() / BOUNDINGBOXINCREASESCREENRATIO;
-                            rect2.height += frame.height() / BOUNDINGBOXINCREASESCREENRATIO;
-
-                            if (doOverlap(rect, rect2)) {
-                                setRectToZerosInFrame(tempFrame, rect);
-                            }
+                            compareRects(rect, rect2, tempFrame);
                         }
                     }
                 }
@@ -56,6 +48,23 @@ public class CameraChestTracker {
         previousContours = contoursFrame;
 
         return tempFrame;
+    }
+
+    /**
+     * Compares two rects.
+     * If they have overlap then tempFrame is adjusted to remove overlapping areas.
+     * @param rect The first rect (from the current frame)
+     * @param rect2 The second rect (from the previous frame)
+     * @param tempFrame the frame that tracks chests
+     */
+    private void compareRects(final Rect rect, final Rect rect2, final Mat tempFrame) {
+            // Increase the area in which overlap could be found
+            rect2.width += tempFrame.width() / BOUNDINGBOXINCREASESCREENRATIO;
+            rect2.height += tempFrame.height() / BOUNDINGBOXINCREASESCREENRATIO;
+
+            if (doOverlap(rect, rect2)) {
+                setRectToZerosInFrame(tempFrame, rect);
+            }
     }
 
     /**
