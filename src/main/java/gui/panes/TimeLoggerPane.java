@@ -1,7 +1,7 @@
 package gui.panes;
 
 import gui.Util;
-import gui.controllers.MainController;
+import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,15 +22,16 @@ public class TimeLoggerPane {
      * Class parameters.
      */
     private TimeLogController timeLogController;
-    private MainController mainController;
+    private RoomController roomController;
 
     /**
-     * Constructor for TimeLoggerPane.
-     * @param control the mainController
+     * Constructor for timeLoggerPane.
+     * @param timeControl the timeController
+     * @param roomControl the roomController
      */
-    public TimeLoggerPane(final MainController control) {
-        this.mainController = control;
-        this.timeLogController = control.getTimeLogController();
+    public TimeLoggerPane(final TimeLogController timeControl, final RoomController roomControl) {
+        timeLogController = timeControl;
+        roomController = roomControl;
     }
 
     /**
@@ -138,9 +139,9 @@ public class TimeLoggerPane {
         approveButton.setCursor(Cursor.HAND);
         approveButton.setOnAction(event -> {
             String chestsFound = "";
-            if (mainController.getConfigured()) {
+            if (roomController.isConfigured()) {
                 long timestamp = timeLogController.getChestTimestamp();
-                chestsFound = mainController.getRoomController().confirmedChestString(timestamp);
+                chestsFound = roomController.getProgress().confirmedChestString(timestamp);
             }
             timeLogController.confirmedChest(chestsFound);
         });

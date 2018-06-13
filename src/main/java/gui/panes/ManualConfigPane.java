@@ -1,6 +1,6 @@
 package gui.panes;
 
-import gui.controllers.MainController;
+import gui.controllers.VideoController;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,8 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.xml.soap.Text;
-
 /**
  * Class that creates the ManualConfigPane in a new Scene.
  */
@@ -21,20 +19,20 @@ public class ManualConfigPane {
     /**
      * Class parameters.
      */
-    private MainController controller;
+    private VideoController controller;
     private Stage manualStage;
 
     /**
      * Constructor for ManualConfigPane.
      * @param control the mainController
      */
-    public ManualConfigPane(final MainController control) {
+    public ManualConfigPane(final VideoController control) {
         this.controller = control;
     }
 
     public void createManualConfig(final MenuItem manual, final Stage primaryStage) {
         manual.setOnAction(t -> {
-            if (!controller.isVideoPlaying()) {
+            if (controller.isClosed()) {
                 manualStage = new Stage();
                 manualStage.setTitle("Manual Escape Room Configuration");
                 manualStage.initModality(Modality.APPLICATION_MODAL);

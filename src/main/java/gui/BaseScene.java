@@ -1,6 +1,6 @@
 package gui;
 
-import gui.controllers.MainController;
+import java.io.File;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,24 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.io.File;
-
 /**
  * Abstract class for Scenes with repeated methods.
  */
 public abstract class BaseScene {
-    /**
-     * Class parameters.
-     */
-    private MainController mainController;
-
-    /**
-     * Constructor for BaseScene.
-     * @param crtl the mainController
-     */
-    public BaseScene(final MainController crtl) {
-        this.mainController = crtl;
-    }
 
     /**
      * createTopPane.
@@ -71,13 +57,4 @@ public abstract class BaseScene {
 
         return bottomPane;
     }
-
-    /**
-     * Get the mainController.
-     * @return mainController
-     */
-    public MainController getMainController() {
-        return mainController;
-    }
-
 }

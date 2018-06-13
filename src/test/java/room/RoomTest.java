@@ -1,15 +1,15 @@
 package room;
 
-import handlers.CameraHandler;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+
+import handlers.InformationHandler;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the class Room.
@@ -27,7 +27,7 @@ public class RoomTest {
     }
 
     /**
-     * REset cameralist and handeler after all teststr/.
+     * Reset cameralist and handeler after all teststr/.
      */
     @AfterEach
     void reset() {
@@ -40,6 +40,7 @@ public class RoomTest {
     private List<Chest> chestList = new ArrayList<>();
     private static final long TARGETTIME = 120;
     private static final long TARGETTIME2 = 100;
+    private InformationHandler informationHandler = new InformationHandler();
 
     /**
      * Tests for all getters in class.
@@ -54,6 +55,8 @@ public class RoomTest {
         assertEquals(chestList, room.getChestList());
         assertEquals(1, room.getTargetDuration());
         assertEquals(1, room.getPort());
+        assertNull(room.getInformationHandler());
+        assertEquals(cameraLinks, room.getLinkList());
     }
 
     /**
@@ -78,21 +81,9 @@ public class RoomTest {
 
         room.setTargetDuration(2);
         assertEquals(2, room.getTargetDuration());
-    }
 
-    /**
-     * Tests for cameraHandler in class.
-     */
-    @Test
-    void testCameraHandler() {
-        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
-
-        assertNotNull(room.getCameraHandler());
-
-        CameraHandler newHandler = new CameraHandler();
-        room.setCameraHandler(newHandler);
-
-        assertEquals(newHandler, room.getCameraHandler());
+        room.setInformationHandler(informationHandler);
+        assertEquals(informationHandler, room.getInformationHandler());
     }
 
     /**
@@ -135,7 +126,7 @@ public class RoomTest {
         chestList.add(chest2);
         assertEquals(0, room.getChestsOpened());
 
-        chest.setApprovedChestFoundByHost(true);
+        chest.setApprovedChestFoundByHost();
         assertEquals(1, room.getChestsOpened());
     }
 
@@ -150,6 +141,21 @@ public class RoomTest {
         chestList.add(chest);
         chestList.add(chest2);
         assertEquals(2, room.getTotalSubsections());
+    }
+
+    /**
+     * Test setChestCompletedTill method.
+     */
+    @Test
+    void testSetChestCompletedTill() {
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
+        Chest chest = new Chest(1, TARGETTIME);
+        Chest chest2 = new Chest(2, TARGETTIME);
+        chestList.add(chest);
+        chestList.add(chest2);
+        room.setChestSectionsCompletedTill(2);
+        room.updateRoom();
+        assertEquals(1, room.getChestsOpened());
     }
 
 }

@@ -62,9 +62,11 @@ public class StatusPane {
      * Initialize the statusPane with its children.
      */
     public void initializeStatusPane() {
-        statusPane.getChildren().addAll(createSetupPane(),
-            createProgressPane(), createWarningSign());
-        statusPane.setVisible(true);
+        if (roomController.isConfigured()) {
+            statusPane.getChildren().addAll(createSetupPane(),
+                createProgressPane(), createWarningSign());
+            statusPane.setVisible(true);
+        }
     }
 
     /**
@@ -78,7 +80,7 @@ public class StatusPane {
         ImageView cam = Util.createImageViewLogo("icons\\camIcon", buttonWidth);
 
         Label cameras = new Label(""
-            + roomController.getProgress().getRoom().getCameraHandler().listSize());
+            + roomController.getProgress().getRoom().getLinkList().size());
         cameras.setGraphic(cam);
         Label persons = new Label(""
             + roomController.getProgress().getRoom().getNumberOfPeople());

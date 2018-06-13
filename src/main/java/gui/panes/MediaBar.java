@@ -1,7 +1,8 @@
 package gui.panes;
 
 import gui.Util;
-import gui.controllers.MainController;
+import gui.controllers.TimerManager;
+import gui.controllers.VideoController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -18,11 +19,13 @@ import java.util.ArrayList;
  * Class that creates the MediaBar for the VideoPane.
  */
 public class MediaBar {
+
     /**
      * Class parameters.
      */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
-    private MainController controller;
+    private VideoController videoController;
+    private TimerManager timerManager;
     private MenuPane menuPane;
     private MediaPane mediaPane;
     private StatusPane statusPane;
@@ -30,16 +33,18 @@ public class MediaBar {
 
     /**
      * Constructor for MediaBar.
-     * @param control the controller
+     * @param videoControl the videoController
+     * @param timerManagerControl the timerManager
      * @param menu the menu
      * @param media the mediaplayer
-     * @param status the status of the game
+     * @param status the statuspane
      * @param progress the progress bar
      */
-    public MediaBar(final MainController control, final MenuPane menu,
-                    final MediaPane media, final StatusPane status,
-                    final ProgressBar progress) {
-        this.controller = control;
+    public MediaBar(final VideoController videoControl,
+                    final TimerManager timerManagerControl, final MenuPane menu,
+                    final MediaPane media, final StatusPane status, final ProgressBar progress) {
+        this.videoController = videoControl;
+        this.timerManager = timerManagerControl;
         this.menuPane = menu;
         this.mediaPane = media;
         this.statusPane = status;
@@ -71,20 +76,18 @@ public class MediaBar {
         playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth));
         playButton.setCursor(Cursor.HAND);
         playButton.setOnAction(event -> {
-            if (controller.getCameras() == 0) {
-                controller.closeStream();
+            if (videoController.getCameras() == 0) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("TrackScape");
                 alert.setContentText("There are no cameras to be shown!");
                 alert.showAndWait();
-            } else if (!controller.isVideoPlaying()) {
-                controller.setVideoPlaying(true);
+            } else if (videoController.isClosed()) {
+                videoController.setClosed(false);
                 initializeImageViewers();
-                if (controller.getConfigured()) {
-                    initializeProgressBar();
-                    initializeStatus();
-                }
-                controller.grabTimeFrame(imageViews);
+                initializeProgressBar();
+                initializeStatus();
+                timerManager.startTimer();
+                videoController.setImageViews(imageViews);
             }
         });
         playButton.setOnMouseEntered(event
@@ -116,7 +119,7 @@ public class MediaBar {
         mediaPane.getMediaPlayerPane().getChildren().clear();
 
         imageViews.clear();
-        for (int k = 0; k < controller.getCameras(); k++) {
+        for (int k = 0; k < videoController.getCameras(); k++) {
             imageViews.add(new ImageView());
         }
 
