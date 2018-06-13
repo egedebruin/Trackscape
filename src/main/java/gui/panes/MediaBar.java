@@ -82,6 +82,7 @@ public class MediaBar {
                 videoController.setClosed(false);
                 initializeImageViewers();
                 initializeProgressBar();
+                initializeStatus();
                 timerController.startTimer();
                 videoController.setImageViews(imageViews);
             }

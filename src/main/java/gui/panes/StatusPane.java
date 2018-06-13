@@ -62,9 +62,11 @@ public class StatusPane {
      * Initialize the statusPane with its children.
      */
     public void initializeStatusPane() {
-        statusPane.getChildren().addAll(createSetupPane(),
-            createProgressPane(), createWarningSign());
-        statusPane.setVisible(true);
+        if (roomController.isConfigured()) {
+            statusPane.getChildren().addAll(createSetupPane(),
+                createProgressPane(), createWarningSign());
+            statusPane.setVisible(true);
+        }
     }
 
     /**

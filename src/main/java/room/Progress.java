@@ -19,13 +19,7 @@ public class Progress {
      */
     public Progress(final String configfile, final int roomid) {
         room = new JsonHandler(configfile).createRooms().get(roomid);
-        subSectionCount = 0;
-
-        apiHandler = new APIHandler(room);
-        int port = room.getPort();
-        apiHandler.setServer(port);
-
-        apiHandler.startServer();
+        init();
     }
 
     /**
@@ -35,7 +29,17 @@ public class Progress {
      */
     public Progress(final String configfile) {
         room = new JsonHandler(configfile).createSingleRoom();
+        init();
+    }
+
+    private void init () {
         subSectionCount = 0;
+
+        apiHandler = new APIHandler(room);
+        int port = room.getPort();
+        apiHandler.setServer(port);
+
+        apiHandler.startServer();
     }
 
     /**

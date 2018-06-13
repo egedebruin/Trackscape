@@ -72,7 +72,6 @@ public class RoomController extends Controller {
         snoozeHint = false;
         behindSchedule = false;
         progressCompleted = 0;
-        progress = null;
         if (progressBar != null) {
             progressBar.getChildren().clear();
             progress.stopServer();
@@ -81,6 +80,7 @@ public class RoomController extends Controller {
             statusPane.getChildren().clear();
         }
         configured = false;
+        progress = null;
     }
 
     /**

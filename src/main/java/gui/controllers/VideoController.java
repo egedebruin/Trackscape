@@ -69,6 +69,7 @@ public class VideoController extends Controller {
             imageViews.get(i).setImage(blackFrame);
         }
         getCameraHandler().closeHandler();
+        closed = true;
     }
 
     /**

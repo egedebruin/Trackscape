@@ -64,7 +64,7 @@ public class VideoPane {
         // put the timelogger in the left of the videopane
         videoPane.setLeft(timeLoggerPane.createTimeLoggerPane());
         // put the escape room status in the right of the videopane
-        videoPane.setRight(new FlowPane()); // escape room status will be displayed here
+        videoPane.setRight(statusPane.createStatusPane());
         // put the mediabar and progressbar in the bottom of the videopane
         videoPane.setBottom(progressBar.createProgressBarPane());
 
