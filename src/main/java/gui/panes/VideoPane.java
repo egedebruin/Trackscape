@@ -21,16 +21,17 @@ public class VideoPane {
     private ProgressBar progressBar;
     private StatusPane statusPane;
     private TimeLoggerPane timeLoggerPane;
-    private RoomController roomController;
-    private TimeLogController timeLogController;
-    private VideoController videoController;
-    private TimerController timerController;
 
     /**
      * Constructor for VideoPane.
      */
     public VideoPane() {
-        createControllers();
+        RoomController roomController = new RoomController();
+        TimeLogController timeLogController = new TimeLogController();
+        VideoController videoController = new VideoController();
+        TimerController timerController = new TimerController(roomController, timeLogController,
+            videoController);
+
         mediaPane = new MediaPane();
         progressBar = new ProgressBar(roomController);
         statusPane = new StatusPane(roomController);
@@ -68,15 +69,5 @@ public class VideoPane {
         videoPane.setBottom(progressBar.createProgressBarPane());
 
         return videoPane;
-    }
-
-    /**
-     * Create the needed controllers.
-     */
-    public void createControllers() {
-        roomController = new RoomController();
-        timeLogController = new TimeLogController();
-        videoController = new VideoController();
-        timerController = new TimerController(roomController, timeLogController, videoController);
     }
 }
