@@ -57,11 +57,7 @@ public class ManualConfigPane {
                 chestField.setMaxWidth(maxWidth);
 
                 Button proceed = new Button("Proceed");
-                proceed.setOnAction(t1 -> {
-                    proceedButtonAction(chestField, maxWidth, fillInPane);
-                    proceed.setVisible(false);
-                    chestField.setEditable(false);
-                });
+                proceedButtonAction(playerField, chestField, maxWidth, fillInPane, proceed);
                 fillInPane.add(proceed, 0, 2);
 
                 Button submit = new Button("Submit");
@@ -81,28 +77,44 @@ public class ManualConfigPane {
         });
     }
 
-    public void proceedButtonAction(TextField chestField, int maxWidth, GridPane fillInPane) {
-        int filledInChests = Integer.parseInt(chestField.getText());
-        int j = 1;
-        for (int i = 0; i < filledInChests*3; i = i + 3) {
-            Label settings = new Label("Settings for chest " + j);
-            settings.setStyle("-fx-font-weight: bold");
+    public void proceedButtonAction(TextField playerField, TextField chestField, int maxWidth, GridPane fillInPane, Button proceed) {
+        Label error = new Label("Please fill in a number!");
+        fillInPane.add(error, 0, 3);
+        error.setVisible(false);
+        proceed.setOnAction(t1 -> {
+            if (!chestField.getText().isEmpty() && !playerField.getText().isEmpty()) {
+                int filledInChests = 0;
+                try {
+                    filledInChests = Integer.parseInt(chestField.getText());
+                    error.setVisible(false);
+                    for (int i = 1; i <= filledInChests; i++) {
+                        Label settings = new Label("Settings for chest " + i);
+                        settings.setStyle("-fx-font-weight: bold");
 
-            Label sections = new Label("Amount of sections: ");
-            Label targetDuration = new Label("The target duration in sec: ");
-            TextField sectionField = new TextField();
-            TextField durationField = new TextField();
+                        Label sections = new Label("Amount of sections: ");
+                        Label targetDuration = new Label("The target duration in sec: ");
+                        TextField sectionField = new TextField();
+                        TextField durationField = new TextField();
 
-            sectionField.setMaxWidth(maxWidth);
-            durationField.setMaxWidth(maxWidth);
+                        sectionField.setMaxWidth(maxWidth);
+                        durationField.setMaxWidth(maxWidth);
+                        int line = (i - 1) * 3;
+                        fillInPane.add(settings, 0, line + 3);
+                        fillInPane.add(sections, 0, line + 4);
+                        fillInPane.add(sectionField, 1, line + 4);
+                        fillInPane.add(targetDuration, 0, line + 5);
+                        fillInPane.add(durationField, 1, line + 5);
 
-            fillInPane.add(settings, 0, i + 3);
-            fillInPane.add(sections, 0, i + 4);
-            fillInPane.add(sectionField, 1, i + 4);
-            fillInPane.add(targetDuration, 0, i + 5);
-            fillInPane.add(durationField, 1, i + 5);
-            j++;
-        }
+                    }
+                    proceed.setVisible(false);
+                    chestField.setEditable(false);
+                } catch (NumberFormatException e) {
+                    error.setVisible(true);
+                }
+            } else {
+                error.setVisible(true);
+            }
+        });
     }
 
 
