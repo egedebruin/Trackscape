@@ -1,25 +1,25 @@
 package api;
 
-import gui.controllers.MainController;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
+import room.Room;
 
 /**
  * Class for the APIHandler.
  */
 public class APIHandler {
 
-    private MainController controller;
+    private Room room;
     private final int defaultPort = 8080;
     private Server server;
 
     /**
      * Constructor of APIHandler.
-     * @param mainController the mainController for this handler.
+     * @param newRoom the room for this handler.
      */
-    public APIHandler(final MainController mainController) {
-        controller = mainController;
+    public APIHandler(final Room newRoom) {
+        room = newRoom;
         setServer(defaultPort);
     }
 
@@ -31,11 +31,15 @@ public class APIHandler {
         server = new Server(port);
 
         ContextHandler handler = new ContextHandler("/chest");
-        handler.setHandler(new APIChestHandler(controller));
+        handler.setHandler(new APIChestHandler(room));
         //For more handlers, create like above two lines and add handler to collection below.
+
+        ContextHandler sectionHandler = new ContextHandler("/section");
+        sectionHandler.setHandler(new APISectionHandler(room));
 
         HandlerCollection collection = new HandlerCollection();
         collection.addHandler(handler);
+        collection.addHandler(sectionHandler);
 
         server.setHandler(collection);
     }
@@ -48,7 +52,6 @@ public class APIHandler {
             server.start();
         } catch (Exception e) {
             System.out.println("Server could not be started");
-            e.printStackTrace();
         }
     }
 
@@ -60,8 +63,14 @@ public class APIHandler {
             server.stop();
         } catch (Exception e) {
             System.out.println("Server could not be stopped");
-            e.printStackTrace();
         }
     }
 
+    /**
+     * Returns the server.
+     * @return the server
+     */
+    public Server getServer() {
+        return server;
+    }
 }

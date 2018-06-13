@@ -2,7 +2,6 @@ package camera;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -15,12 +14,12 @@ import org.opencv.video.Video;
 public class CameraActivity {
 
     private List<Mat> frameParts = new ArrayList<>();
-    private List<List<double[]>> activityList;
+    private List<List<Double>> activityList;
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
-    private long firstTime = -1;
     private static final int FRAMES = 1;
     private double lastActivity = 0;
     private int frameCounter;
+    private boolean started = false;
 
     /**
      * Constructor for the class.
@@ -94,18 +93,28 @@ public class CameraActivity {
 
         // Only add the activityList to the list when at least some frames are processed.
         if (frameCounter > minFrames) {
-            if (firstTime == -1) {
-                firstTime = System.currentTimeMillis();
+            if (started) {
+                activityList.get(partNumber).add(change);
             }
-
-            long currentTime = System.currentTimeMillis() - firstTime;
-
-            double[] tuple = {TimeUnit.MILLISECONDS.toSeconds(currentTime), change};
-
-            activityList.get(partNumber).add(tuple);
             return change;
         }
         return 0;
+    }
+
+    /**
+     * Calculate the ratio in which the last activity falls.
+     * @return The ratio.
+     */
+    public double calculateRatio() {
+        List<Double> activities = activityList.get(FRAMES);
+        int i = 0;
+
+        for (Double activity : activities) {
+            if (activity <= lastActivity) {
+                i++;
+            }
+        }
+        return (double) i / (double) activities.size();
     }
 
     /**
@@ -129,7 +138,7 @@ public class CameraActivity {
      *
      * @return The activityList.
      */
-    public List<List<double[]>> getActivityList() {
+    public List<List<Double>> getActivityList() {
         return activityList;
     }
 
@@ -155,5 +164,13 @@ public class CameraActivity {
      */
     public void setFrameCounter(final int newFrameCounter) {
         this.frameCounter = newFrameCounter;
+    }
+
+    /**
+     * Set if the camera is started.
+     * @param newStarted the boolean started.
+     */
+    public void setStarted(final boolean newStarted) {
+        this.started = newStarted;
     }
 }

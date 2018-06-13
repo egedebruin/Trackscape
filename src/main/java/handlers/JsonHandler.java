@@ -130,7 +130,8 @@ public class JsonHandler {
             int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
             List<Chest> chests = createChests(roomId);
-            Room room = new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
+            int port = getPortNumber(roomId);
+            Room room = new Room(roomId, amountPeople, cameraLinks, chests, targetDuration, port);
             rooms.add(room);
         }
         return rooms;
@@ -148,9 +149,11 @@ public class JsonHandler {
             int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
             List<Chest> chests = createChests(roomId);
-            return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration);
+            int port = getPortNumber(roomId);
+            return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration, port);
         }
-        return new Room(0, 0, new ArrayList<>(), null, 0);
+        final int defaultPort = 8080;
+        return new Room(0, 0, new ArrayList<>(), null, 0, defaultPort);
     }
 
     /**
@@ -165,11 +168,13 @@ public class JsonHandler {
         if (array == null) {
             return new ArrayList<>();
         }
+        int totalDuration = 0;
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
             int sections = Math.toIntExact((long) object.get("sections"));
             int targetDuration = Math.toIntExact((long) object.get("targetDuration"));
-            Chest chest = new Chest(sections, targetDuration);
+            totalDuration += targetDuration;
+            Chest chest = new Chest(sections, totalDuration);
             chests.add(chest);
         }
         return chests;

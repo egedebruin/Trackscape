@@ -1,7 +1,6 @@
 package camera;
 
 import handlers.CameraHandler;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -15,7 +14,6 @@ class CameraChestDetectorTest {
 
     private final String shortVideoLinkWithBoxes = "files" + File.separator
         + "escaperoomwithopenbox.mov";
-
     static {
         // These should be at the start of the application,
         // so if the main changes this should be included.
@@ -35,10 +33,14 @@ class CameraChestDetectorTest {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(shortVideoLinkWithBoxes);
         ch.processFrames();
+        boolean found = false;
         while (ch.isChanged()) {
             ch.processFrames();
+            if (ch.isChestFound()) {
+                found = true;
+                break;
+            }
         }
-        TimeUnit.SECONDS.sleep(5);
-        assertTrue(ch.isChestFound());
+        assertTrue(found);
     }
 }

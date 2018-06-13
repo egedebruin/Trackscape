@@ -48,11 +48,12 @@ public class RoomTest {
     void testGetters() {
         cameraLinks.add("ajax");
         chestList.add(new Chest(1, TARGETTIME));
-        room = new Room(0, 2, cameraLinks, chestList, 1);
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(0, room.getId());
         assertEquals(2, room.getNumberOfPeople());
         assertEquals(chestList, room.getChestList());
         assertEquals(1, room.getTargetDuration());
+        assertEquals(1, room.getPort());
     }
 
     /**
@@ -62,7 +63,7 @@ public class RoomTest {
     void testSetters() {
         cameraLinks.add("ajax");
         chestList.add(new Chest(1, TARGETTIME));
-        room = new Room(0, 2, cameraLinks, chestList, 1);
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
 
         List<Chest> chestList2 = new ArrayList<>();
         chestList2.add(new Chest(0, TARGETTIME2));
@@ -84,7 +85,7 @@ public class RoomTest {
      */
     @Test
     void testCameraHandler() {
-        room = new Room(0, 2, cameraLinks, chestList, 1);
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
 
         assertNotNull(room.getCameraHandler());
 
@@ -95,38 +96,31 @@ public class RoomTest {
     }
 
     /**
-     * TEst if setNextChestOpened opens next chest.
+     * Test if setNextChestOpened opens next chest.
      */
     @Test
     void setNextChestOpened() {
         chestList.add(new Chest(1, TARGETTIME));
-        room = new Room(0, 2, cameraLinks, chestList, 1);
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
         room.updateRoom();
-        room.setNextChestOpened();
+        room.setNextChestOpened(System.nanoTime());
         room.updateRoom();
         assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
     }
 
     /**
-     * Test if unsetChestTill sets only the chests till subsections and not further.
+     * Test if setNextSectionOpened opens next section.
      */
     @Test
-    void unsetChestsTill() {
-        room = new Room(0, 2, cameraLinks, chestList, 1);
-        Chest chest = new Chest(1, TARGETTIME);
-        Chest chest2 = new Chest(1, TARGETTIME);
-        Chest chest3 = new Chest(2, TARGETTIME);
-        chestList.add(chest);
-        chestList.add(chest2);
-        chestList.add(chest3);
-        final int subsections = 3;
-        room.unsetChestSectionsCompletedTill(subsections);
-        assertEquals(chest.getChestState(), Chest.Status.OPENED);
-        assertEquals(chest2.getChestState(), Chest.Status.OPENED);
-        assertEquals(chest3.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
-        assertEquals(chest3.countSubsectionsCompleted(), 1);
-
+    void setNextSectionOpened() {
+        chestList.add(new Chest(1, TARGETTIME));
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
+        assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
+        room.updateRoom();
+        room.setNextSectionOpened();
+        room.updateRoom();
+        assertEquals(chestList.get(0).getChestState(), Chest.Status.OPENED);
     }
 
     /**
@@ -134,7 +128,7 @@ public class RoomTest {
      */
     @Test
     void getChestsOpenedTest() {
-        room = new Room(0, 2, cameraLinks, chestList, 1);
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         Chest chest = new Chest(1, TARGETTIME);
         Chest chest2 = new Chest(2, TARGETTIME);
         chestList.add(chest);
@@ -143,6 +137,19 @@ public class RoomTest {
 
         chest.setApprovedChestFoundByHost(true);
         assertEquals(1, room.getChestsOpened());
+    }
+
+    /**
+     * Test if totalSubsections returns correct number.
+     */
+    @Test
+    void totalSubsectionsTest() {
+        room = new Room(0, 2, cameraLinks, chestList, 1, 1);
+        Chest chest = new Chest(1, TARGETTIME);
+        Chest chest2 = new Chest(1, TARGETTIME);
+        chestList.add(chest);
+        chestList.add(chest2);
+        assertEquals(2, room.getTotalSubsections());
     }
 
 }

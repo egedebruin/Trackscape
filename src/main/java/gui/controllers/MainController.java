@@ -1,17 +1,16 @@
 package gui.controllers;
 
+import camera.Camera;
 import gui.MonitorScene;
-import api.APIHandler;
 import handlers.CameraHandler;
-import handlers.JsonHandler;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * MainController class for controlling GUI elements.
@@ -28,7 +27,7 @@ public class MainController {
     private RoomController roomController;
     private boolean configured = false;
     private boolean videoPlaying = false;
-    private APIHandler apiHandler;
+    private List<AnimationTimer> streamTimers = new ArrayList<>();
 
     /**
      * Constructor method.
@@ -38,7 +37,6 @@ public class MainController {
         videoController = new VideoController(cameraHandler);
         timeLogController = new TimeLogController(cameraHandler);
         roomController = new RoomController();
-        apiHandler = new APIHandler(this);
     }
 
     /**
@@ -51,7 +49,15 @@ public class MainController {
     public void createStream(final Stage streamStage, final TextField field) {
         String streamUrl = field.getText();
         streamStage.close();
-        cameraHandler.addCamera(streamUrl);
+        Camera camera = cameraHandler.addCamera(streamUrl);
+        AnimationTimer streamTimer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {
+                camera.loadFrame();
+            }
+        };
+        streamTimers.add(streamTimer);
+        streamTimer.start();
     }
 
     /**
@@ -70,6 +76,9 @@ public class MainController {
      * @param imageViews list of panels that show the frames
      */
     public void grabTimeFrame(final List<ImageView> imageViews) {
+        for (AnimationTimer streamTimer : streamTimers) {
+            streamTimer.stop();
+        }
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(final long now) {
@@ -77,13 +86,12 @@ public class MainController {
                 if (videoController.isClosed()) {
                     closeStream();
                 }
-                roomController.update();
+                roomController.update(now);
                 timeLogController.processFrame(now);
             }
         };
         timeLogController.clearInformationArea();
         animationTimer.start();
-        apiHandler.startServer();
     }
 
     /**
@@ -105,7 +113,6 @@ public class MainController {
         }
         configured = false;
         videoPlaying = false;
-        apiHandler.stopServer();
     }
 
     /**
@@ -129,14 +136,10 @@ public class MainController {
     public void configure(final String jsonHandler) {
         roomController.configure(jsonHandler);
 
-        int port = new JsonHandler(jsonHandler).
-            getPortNumber(roomController.getProgress().getRoom().getId());
-        apiHandler.setServer(port);
-
+        // Set the correct cameraHandlers.
         for (int i = 0; i < cameraHandler.listSize(); i++) {
             roomController.getCameraHandler().addCamera(cameraHandler.getCamera(i).getLink());
         }
-
         cameraHandler = roomController.getCameraHandler();
         timeLogController.setCameraHandler(cameraHandler);
         videoController.setCameraHandler(cameraHandler);

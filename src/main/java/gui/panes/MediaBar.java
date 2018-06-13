@@ -4,6 +4,7 @@ import gui.Util;
 import gui.controllers.MainController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -24,6 +25,7 @@ public class MediaBar {
     private MainController controller;
     private MenuPane menuPane;
     private MediaPane mediaPane;
+    private StatusPane statusPane;
     private ProgressBar progressBar;
 
     /**
@@ -31,13 +33,16 @@ public class MediaBar {
      * @param control the controller
      * @param menu the menu
      * @param media the mediaplayer
+     * @param status the status of the game
      * @param progress the progress bar
      */
     public MediaBar(final MainController control, final MenuPane menu,
-                    final MediaPane media, final ProgressBar progress) {
+                    final MediaPane media, final StatusPane status,
+                    final ProgressBar progress) {
         this.controller = control;
         this.menuPane = menu;
         this.mediaPane = media;
+        this.statusPane = status;
         this.progressBar = progress;
     }
 
@@ -63,7 +68,8 @@ public class MediaBar {
         // Create the play button
         final Button playButton = new Button();
         playButton.getStyleClass().add("media-buttons");
-        playButton.setGraphic(Util.createButtonLogo("play", buttonWidth));
+        playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth));
+        playButton.setCursor(Cursor.HAND);
         playButton.setOnAction(event -> {
             if (controller.getCameras() == 0) {
                 controller.closeStream();
@@ -76,27 +82,27 @@ public class MediaBar {
                 initializeImageViewers();
                 if (controller.getConfigured()) {
                     initializeProgressBar();
+                    initializeStatus();
                 }
                 controller.grabTimeFrame(imageViews);
             }
         });
         playButton.setOnMouseEntered(event
-            -> playButton.setGraphic(Util.createButtonLogo(
-                "playActive", buttonWidth)));
+            -> playButton.setGraphic(Util.createImageViewLogo(
+                "buttons\\playActive", buttonWidth)));
         playButton.setOnMouseExited(event
-            -> playButton.setGraphic(Util.createButtonLogo("play", buttonWidth)));
+            -> playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth)));
 
         // Create the stop button
         final Button stopButton = new Button();
         stopButton.getStyleClass().add("media-buttons");
-        stopButton.setGraphic(Util.createButtonLogo("stop", buttonWidth));
-        stopButton.setOnAction(event -> {
-            menuPane.endStream();
-        });
+        stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth));
+        stopButton.setCursor(Cursor.HAND);
+        stopButton.setOnAction(event -> menuPane.endStream());
         stopButton.setOnMouseEntered(event
-            -> stopButton.setGraphic(Util.createButtonLogo("stopActive", buttonWidth)));
+            -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stopActive", buttonWidth)));
         stopButton.setOnMouseExited(event
-            -> stopButton.setGraphic(Util.createButtonLogo("stop", buttonWidth)));
+            -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth)));
 
         mediaBar.getChildren().addAll(playButton, stopButton);
 
@@ -135,6 +141,14 @@ public class MediaBar {
     private void initializeProgressBar() {
         progressBar.getProgressBar().getChildren().clear();
         progressBar.constructProgressBar();
+    }
+
+    /**
+     * Initialize the statusPane with current configuration.
+     */
+    private void initializeStatus() {
+        statusPane.getStatusPane().getChildren().clear();
+        statusPane.initializeStatusPane();
     }
 
 }

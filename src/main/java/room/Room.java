@@ -15,6 +15,7 @@ public class Room {
     private long targetDurationInSec;
     private long startTime;
     private int chestsOpened;
+    private int port;
 
     /**
      * Constructor.
@@ -24,9 +25,10 @@ public class Room {
      * @param cameraLinks the links for the cameras
      * @param chests a list of chests
      * @param duration the target duration
+     * @param portNumber the port number
      */
     public Room(final long roomid, final int nOPeople, final List<String> cameraLinks,
-                final List<Chest> chests, final int duration) {
+                final List<Chest> chests, final int duration, final int portNumber) {
         id = roomid;
         cameraHandler = new CameraHandler();
         numberOfPeople = nOPeople;
@@ -36,6 +38,7 @@ public class Room {
         chestList = chests;
         targetDurationInSec = duration;
         startTime = System.currentTimeMillis();
+        port = portNumber;
     }
 
     /**
@@ -131,11 +134,25 @@ public class Room {
 
     /**
      * Sets the next chest with state TO_BE_OPENED OPENED, by approving it to be opened.
+     * @param timestamp the timestamp when the chest was opened
      */
-    public void setNextChestOpened() {
+    public void setNextChestOpened(final long timestamp) {
         for (Chest chest : chestList) {
             if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
                 chest.setApprovedChestFoundByHost(true);
+                chest.setTimeFound(timestamp);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Sets the next section with state TO_BE_OPENED completed.
+     */
+    public void setNextSectionOpened() {
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                chest.subSectionCompleted();
             }
         }
     }
@@ -149,27 +166,18 @@ public class Room {
         for (Chest chest : chestList) {
             if (chest.getNumberOfSubSections() <= completedSections) {
                 chest.setApprovedChestFoundByHost(true);
+                if (chest.getTimeFound() < 0) {
+                    chest.setTimeFound(System.nanoTime());
+                }
                 completedSections -= chest.getNumberOfSubSections();
             } else {
+                chest.resetChest();
                 while (completedSections > 0) {
-                    chest.resetChest();
                     chest.subSectionCompleted();
                     completedSections--;
                 }
             }
         }
-    }
-
-    /**
-     * Sets all chests up till completedsections.
-     * used when chests need to make negative progress.
-     * @param completedSections number of completed sections
-     */
-    public void unsetChestSectionsCompletedTill(final int completedSections) {
-        for (Chest chest : chestList) {
-            chest.resetChest();
-        }
-        setChestSectionsCompletedTill(completedSections);
     }
 
     /**
@@ -193,5 +201,47 @@ public class Room {
             }
         }
         return chestsOpened;
+    }
+
+    /**
+     * Get the port of the server.
+     * @return the port number.
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
+     * Calculate the progress by checking each Chest.
+     * For each opened chest the total number of subsections is added to the total.
+     * For each to be opened chest the total amount of completed subsections get added to the total.
+     * For each waiting for subsection to start chest nothing is added to the total.
+     *
+     * @return subSectionCount (=total)
+     */
+    public int calculateSubsectionsDone() {
+        int progressMeter = 0;
+        // Counts the open chests, chestList is ordered in the following manner:
+        // OPENED : TO_BE_OPENED : WAITING_FOR_SECTION_TO_START
+        for (Chest chest : chestList) {
+            if (chest.getChestState() == Chest.Status.OPENED) {
+                progressMeter += chest.getNumberOfSubSections();
+            } else if (chest.getChestState() == Chest.Status.TO_BE_OPENED) {
+                progressMeter += chest.countSubsectionsCompleted();
+            }
+        }
+        return progressMeter;
+    }
+
+    /**
+     * Get the total number of subsections.
+     * @return the number of subsections
+     */
+    public int getTotalSubsections() {
+        int total = 0;
+        for (Chest chest : chestList) {
+            total += chest.getNumberOfSubSections();
+        }
+        return total;
     }
 }

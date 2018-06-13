@@ -5,6 +5,7 @@ import gui.controllers.MainController;
 import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -40,8 +41,11 @@ public class TimeLoggerPane {
     public Pane createTimeLoggerPane() {
         FlowPane timerPane = new FlowPane();
         timerPane.setAlignment(Pos.TOP_CENTER);
+        final int largePadding = 15;
+        final int smallPadding = 5;
+        timerPane.setPadding(new Insets(largePadding, 0, smallPadding, largePadding));
 
-        Label description = new Label("Time playing:");
+        Label description = new Label("Time playing: ");
         Label l = new Label("00:00:00");
         timeLogController.setTimerLabel(l);
 
@@ -128,22 +132,24 @@ public class TimeLoggerPane {
      */
     private Button createApproveButton(final int viewHeight) {
         Button approveButton = new Button();
-        approveButton.setGraphic(Util.createButtonLogo("approve", viewHeight));
+        approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         approveButton.setVisible(false);
 
+        approveButton.setCursor(Cursor.HAND);
         approveButton.setOnAction(event -> {
             String chestsFound = "";
             if (mainController.getConfigured()) {
-                chestsFound = mainController.getRoomController().confirmedChest();
+                long timestamp = timeLogController.getChestTimestamp();
+                chestsFound = mainController.getRoomController().confirmedChestString(timestamp);
             }
             timeLogController.confirmedChest(chestsFound);
         });
         approveButton.setOnMouseEntered(event -> {
-            approveButton.setGraphic(Util.createButtonLogo(
-                "approveActive", viewHeight));
+            approveButton.setGraphic(Util.createImageViewLogo(
+                "buttons\\approveActive", viewHeight));
         });
         approveButton.setOnMouseExited(event -> {
-            approveButton.setGraphic(Util.createButtonLogo("approve", viewHeight));
+            approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         });
 
         return approveButton;
@@ -156,16 +162,17 @@ public class TimeLoggerPane {
      */
     private Button createDisapproveButton(final int viewHeight) {
         Button notApprove = new Button();
-        notApprove.setGraphic(Util.createButtonLogo("disapprove", viewHeight));
+        notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
         notApprove.setVisible(false);
+        notApprove.setCursor(Cursor.HAND);
 
         notApprove.setOnAction(event -> timeLogController.unConfirm());
         notApprove.setOnMouseEntered(event -> {
-            notApprove.setGraphic(Util.createButtonLogo(
-                "disapproveActive", viewHeight));
+            notApprove.setGraphic(Util.createImageViewLogo(
+                "buttons\\disapproveActive", viewHeight));
         });
         notApprove.setOnMouseExited(event -> {
-            notApprove.setGraphic(Util.createButtonLogo("disapprove", viewHeight));
+            notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
         });
 
         return notApprove;
