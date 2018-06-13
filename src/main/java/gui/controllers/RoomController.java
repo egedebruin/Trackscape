@@ -23,22 +23,13 @@ public class RoomController extends Controller {
     private Progress progress;
     private Pane progressBar;
     private Pane statusPane;
-    private int progressCompleted;
     private Label gameStatus;
     private Label numOfChestsOpened;
     private Label activityStatus;
     private boolean snoozeHint = false;
     private boolean behindSchedule = false;
-    private List<Chest> chestList;
     private List<Label> chestTimeStampList;
     private boolean configured;
-
-    /**
-     * Constructor.
-     */
-    public RoomController() {
-        progressCompleted = 0;
-    }
 
     /**
      * Creates a new camerahandler depending on the config.
@@ -52,7 +43,7 @@ public class RoomController extends Controller {
         }
         progress.getRoom().setInformationHandler(getCameraHandler().getInformationHandler());
 
-        chestList = progress.getRoom().getChestList();
+        List<Chest> chestList = progress.getRoom().getChestList();
         chestTimeStampList = new ArrayList<>();
 
         if (chestList != null) {
@@ -67,7 +58,6 @@ public class RoomController extends Controller {
     public void closeController() {
         snoozeHint = false;
         behindSchedule = false;
-        progressCompleted = 0;
         if (progressBar != null) {
             progressBar.getChildren().clear();
             progress.stopServer();
@@ -103,8 +93,8 @@ public class RoomController extends Controller {
                 if (item.getStyleClass().toString().contains("progress-reset")) {
                     newItemDone(index);
                 } else {
-                    resetProgress(index);
-                    itemsRemoved();
+                    int newIndex = resetProgress(index);
+                    itemsRemoved(newIndex);
                 }
             }
         }));
@@ -125,10 +115,11 @@ public class RoomController extends Controller {
 
     /**
      * Logic for when items are removed.
+     * @param index the index of the new item
      */
-    private void itemsRemoved() {
+    private void itemsRemoved(final int index) {
         int oldChests = progress.getRoom().getChestsOpened();
-        int newChests = progress.newProgress(progressCompleted);
+        int newChests = progress.newProgress(index);
         for (int i = oldChests; i > newChests; i--) {
             getCameraHandler().getInformationHandler().addInformation("Removed chest " + i);
         }
@@ -137,17 +128,18 @@ public class RoomController extends Controller {
     /**
      * Resets the progressbar to the current stage.
      * @param stage the current progress stage of the game
+     * @return newIndex
      */
-    private void resetProgress(final int stage) {
+    private int resetProgress(final int stage) {
         if (stage == progressBar.getChildren().size() - 1
             || progressBar.getChildren().get(stage + 2)
             .getStyleClass().toString().contains("progress-reset")) {
             // At the end state of the progress bar or
             // when the next item is not already done, reset this item
-            progressCompleted = stage - 2;
+            return stage - 2;
         } else {
             // When the next item is already done, reset until this item
-            progressCompleted = stage;
+            return stage;
         }
     }
 
@@ -165,7 +157,6 @@ public class RoomController extends Controller {
             }
             k++;
         }
-        progressCompleted = stage;
     }
 
     /**
@@ -209,6 +200,7 @@ public class RoomController extends Controller {
      * @param elapsedTime the elapsed time
      */
     public void changeTime(final long elapsedTime) {
+        List<Chest> chestList = progress.getRoom().getChestList();
         if (chestList.size() > 0 && getCameraHandler().getBeginTime() != -1) {
             for (int i = 0; i < chestList.size(); i++) {
                 Chest currentChest = chestList.get(i);
@@ -266,6 +258,7 @@ public class RoomController extends Controller {
      * @param pos the current position in the chestlist
      */
     private void updateTimeChestsPanel(final long time, final int pos) {
+        List<Chest> chestList = progress.getRoom().getChestList();
         if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED
             && !(TimeUnit.NANOSECONDS.toSeconds(time)
             <= chestList.get(pos).getTargetDurationInSec())) {
