@@ -138,4 +138,21 @@ public class Progress {
         updateProgress();
         return room.getChestsOpened();
     }
+
+    /**
+     * Check if all chests are opened.
+     * @return true if all chests are opened, false otherwise
+     */
+    public boolean allChestsOpened() {
+        return room.getChestList().size() == room.getChestsOpened();
+    }
+
+    /** Method for when a chest if confirmed by the host.
+     * @param timestamp the timestamp when the chest was opened
+     * @return string format of how many chests are opened
+     */
+    public String confirmedChestString(final long timestamp) {
+        room.setNextChestOpened(timestamp);
+        return room.getChestsOpened() + "/" + room.getChestList().size();
+    }
 }

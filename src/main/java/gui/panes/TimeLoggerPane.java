@@ -141,7 +141,7 @@ public class TimeLoggerPane {
             String chestsFound = "";
             if (roomController.isConfigured()) {
                 long timestamp = timeLogController.getChestTimestamp();
-                chestsFound = roomController.confirmedChestString(timestamp);
+                chestsFound = roomController.getProgress().confirmedChestString(timestamp);
             }
             timeLogController.confirmedChest(chestsFound);
         });

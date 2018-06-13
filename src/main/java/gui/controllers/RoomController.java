@@ -174,24 +174,12 @@ public class RoomController extends Controller {
     public void updateChests(final int chests) {
         numOfChestsOpened.setText(" Chests opened: " + chests + "/"
             + getProgress().getRoom().getChestList().size());
-        if (allChestsOpened()) {
+        if (progress.allChestsOpened()) {
             numOfChestsOpened.setText(" All chests have been opened!");
             numOfChestsOpened.setTextFill(Color.FORESTGREEN);
         } else {
             numOfChestsOpened.setTextFill(Color.BLACK);
         }
-    }
-
-    /** Method for when a chest if confirmed by the host.
-     * @param timestamp the timestamp when the chest was opened
-     * @return string format of how many chests are opened
-     */
-    public String confirmedChestString(final long timestamp) {
-        if (getProgress() != null) {
-            getProgress().getRoom().setNextChestOpened(timestamp);
-        }
-        return progress.getRoom().getChestsOpened() + "/"
-            + progress.getRoom().getChestList().size();
     }
 
     /**
@@ -244,7 +232,7 @@ public class RoomController extends Controller {
     public void updateWarningPane() {
         // Update the warningPane
         // When people are behind on schedule
-        if (behindSchedule && !snoozeHint && !allChestsOpened()) {
+        if (behindSchedule && !snoozeHint && !progress.allChestsOpened()) {
             // Get the warningPane of the statusPane and set it on visible
             statusPane.getChildren().get(2).setVisible(true);
         } else {
@@ -268,23 +256,6 @@ public class RoomController extends Controller {
             behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
-    }
-
-    /**
-     * Check if all chests are opened.
-     * @return true if all chests are opened, false otherwise
-     */
-    public boolean allChestsOpened() {
-        return progress != null
-            && progress.getRoom().getChestList().size() == progress.getRoom().getChestsOpened();
-    }
-
-    /**
-     * Snooze the warningPane when hint is given by host.
-     * @param snooze whether the warningPane should be snoozed or not.
-     */
-    public void snoozeHint(final boolean snooze) {
-        snoozeHint = snooze;
     }
 
     /**
@@ -353,11 +324,11 @@ public class RoomController extends Controller {
      * Make the warningPane invisible until time is up and players are still behind.
      */
     public void startHintTimer() {
-        snoozeHint(true);
+        snoozeHint = true;
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                snoozeHint(false);
+                snoozeHint = false;
             }
         };
         Timer hintTimer = new Timer();
