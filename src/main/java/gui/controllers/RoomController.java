@@ -177,8 +177,10 @@ public class RoomController extends Controller {
         if (progress.allChestsOpened()) {
             numOfChestsOpened.setText(" All chests have been opened!");
             numOfChestsOpened.setTextFill(Color.FORESTGREEN);
+            getCameraHandler().setAllChestsDetected(true);
         } else {
             numOfChestsOpened.setTextFill(Color.BLACK);
+            getCameraHandler().setAllChestsDetected(false);
         }
     }
 

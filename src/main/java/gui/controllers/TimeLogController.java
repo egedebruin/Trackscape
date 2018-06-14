@@ -191,7 +191,7 @@ public class TimeLogController extends Controller {
         if (getCameraHandler().areAllChestsDetected()) {
             clearButtons();
         } else if (chestTimestamp == -1) {
-                processMat();
+            processMat();
         }
     }
 
