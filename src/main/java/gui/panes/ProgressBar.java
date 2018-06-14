@@ -51,7 +51,7 @@ public class ProgressBar {
      */
     public void constructProgressBar() {
         if (controller.isConfigured()) {
-            createItems();
+            initProgressBar();
             fillProgressBarWithItems();
             controller.setProgressBar(progressBar);
             controller.setItemsOnDone();
@@ -74,12 +74,10 @@ public class ProgressBar {
     }
 
     /**
-     * Create the items of the progress bar.
+     * Adjust size for the progressBar and create the items for the progress bar.
      */
-    private void createItems() {
+    private void initProgressBar() {
         final int sectionsForMaxScreen = 10;
-
-        List<Chest> chests = controller.getProgress().getRoom().getChestList();
 
         GraphicsDevice gd =
             GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -94,8 +92,16 @@ public class ProgressBar {
             fittedWidth = (screenWidth)
                 / (screenParts * (controller.getProgress().getTotalSections()));
         }
+        initProgressBarItems();
+    }
 
+    /**
+     * Create the labels for the puzzles and chests.
+     */
+    private void initProgressBarItems() {
+        List<Chest> chests = controller.getProgress().getRoom().getChestList();
         progressStages = new ArrayList<>();
+
         // Add chests and their puzzle steps to the list
         for (Chest chest : chests) {
             for (int i = 1; i < chest.getNumberOfSubSections(); i++) {
