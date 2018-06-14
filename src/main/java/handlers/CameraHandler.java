@@ -2,6 +2,7 @@ package handlers;
 
 import camera.Camera;
 import camera.CameraActivity;
+import javafx.animation.AnimationTimer;
 import javafx.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -30,6 +31,7 @@ public class CameraHandler {
     private long beginTime = -1;
     private boolean chestFound = false;
     private Activity active = Activity.ZERO;
+    private List<AnimationTimer> timers = new ArrayList<>();
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -76,7 +78,18 @@ public class CameraHandler {
             camera = new Camera(videoCapture, link, chests);
         }
         cameraList.add(camera);
-//        cameraChestDetector.addCameraToDetector(camera);
+
+        if (link.startsWith("rtsp")) {
+            AnimationTimer timer = new AnimationTimer() {
+                @Override
+                public void handle(final long now) {
+                    camera.loadFrame();
+                }
+            };
+            timer.start();
+            timers.add(timer);
+        }
+
         return camera;
     }
 
@@ -86,6 +99,7 @@ public class CameraHandler {
      * @return The new frames as a list of Mat.
      */
     public List<Mat> processFrames() {
+        clearTimers();
         List<Mat> frames = new ArrayList<>();
         for (Camera camera : cameraList) {
             Mat newFrame = camera.getLastFrame();
@@ -105,6 +119,16 @@ public class CameraHandler {
             changeActivity();
         }
         return frames;
+    }
+
+    /**
+     * Stop and clear all timers.
+     */
+    private void clearTimers() {
+        for (AnimationTimer timer : timers) {
+            timer.stop();
+        }
+        timers.clear();
     }
 
     /**
