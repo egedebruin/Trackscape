@@ -66,42 +66,77 @@ public class MenuPane {
      */
     public Pane createMenuPane(final Pane videoPane, final Stage primaryStage) {
         // Menu options for settings
-        Menu settings = new Menu("Settings");
-        MenuItem clearImageViewers = new MenuItem("Reset Application");
-        MenuItem closeApp = new MenuItem("Close Application");
-        settings.getItems().addAll(clearImageViewers, closeApp);
+        Menu settings = createSettings();
 
         // Menu options for automatic configuration
-        Menu config = new Menu("Configure the Escape Room");
-        MenuItem configFile = new MenuItem("Load Configuration File...");
-        MenuItem standardFile = new MenuItem("Use Standard Configuration");
-        config.getItems().addAll(configFile, standardFile);
+        Menu config = createConfig(primaryStage);
 
-        // Menu options for manual configuration
-        Menu configManual = new Menu("Manual Configuration");
-        MenuItem openVideo = new MenuItem("Add Video File...");
-        MenuItem connectStream = new MenuItem("Add Stream...");
-        configManual.getItems().addAll(openVideo, connectStream);
+        // Menu options for adding extra media
+        Menu extraMedia = createExtraMedia(primaryStage);
 
         // Add al submenus to main menu bar
         MenuBar menu = new MenuBar();
         menu.prefWidthProperty().bind(videoPane.widthProperty());
-        menu.getMenus().addAll(settings, config, configManual);
+        menu.getMenus().addAll(settings, config, extraMedia);
         StackPane menuPane = new StackPane();
         menuPane.getChildren().add(menu);
-
-        // When menu options are clicked
-        resetCameras(clearImageViewers);
-        closeApp(closeApp);
-        openConfig(configFile, primaryStage);
-        standardConfig(standardFile);
-        openVideo(openVideo, primaryStage);
-        connectStream(connectStream, primaryStage);
 
         return menuPane;
     }
 
-    //---------------------------------------- BEGIN OF ALL MENU OPTIONS
+    /**
+     * Creates the settings menu option for the menu pane.
+     * @return the settings Menu
+     */
+    private Menu createSettings() {
+        Menu settings = new Menu("Settings");
+
+        MenuItem clearImageViewers = new MenuItem("Reset Application");
+        resetCameras(clearImageViewers);
+
+        MenuItem closeApp = new MenuItem("Close Application");
+        closeApp(closeApp);
+
+        settings.getItems().addAll(clearImageViewers, closeApp);
+        return settings;
+    }
+
+    /**
+     * Creates the config menu option for the menu pane.
+     * @param primaryStage the primary stage
+     * @return the config menu
+     */
+    private Menu createConfig(final Stage primaryStage) {
+        Menu config = new Menu("Configure the Escape Room");
+
+        MenuItem configFile = new MenuItem("Load Configuration File...");
+        openConfig(configFile, primaryStage);
+
+        MenuItem standardFile = new MenuItem("Use Standard Configuration");
+        standardConfig(standardFile);
+
+        config.getItems().addAll(configFile, standardFile);
+        return config;
+    }
+
+    /**
+     * Creates the add extra media menu option in the menu pane.
+     * @param primaryStage the primary stage
+     * @return the add extra media menu
+     */
+    private Menu createExtraMedia(final Stage primaryStage) {
+        Menu extraMedia = new Menu("Manual Configuration");
+
+        MenuItem openVideo = new MenuItem("Add Video File...");
+        openVideo(openVideo, primaryStage);
+
+        MenuItem connectStream = new MenuItem("Add Stream...");
+        connectStream(connectStream, primaryStage);
+
+        extraMedia.getItems().addAll(openVideo, connectStream);
+        return extraMedia;
+    }
+
     /**
      * Remove all current cameras.
      * @param clearImageViewers the current imageViewers
@@ -249,8 +284,6 @@ public class MenuPane {
         popUpVBox.setAlignment(Pos.CENTER);
         return popUpVBox;
     }
-
-    //---------------------------------------- END OF ALL MENU OPTIONS
 
     /**
      * Display in a label how many cameras are active.
