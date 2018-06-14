@@ -186,8 +186,6 @@ public class MenuPane {
      * @param primaryStage starting stage
      */
     private void connectStream(final MenuItem connectStream, final Stage primaryStage) {
-        final int spacing = 6;
-        final int insetPositions = 10;
         final int popUpWidth = 500;
         final int popUpHeight = 100;
 
@@ -198,38 +196,49 @@ public class MenuPane {
                 streamStage.initModality(Modality.APPLICATION_MODAL);
                 streamStage.initOwner(primaryStage);
 
-                // Set up layout of the pop up window
-                final Label fieldLabel = new Label("Enter url of the RTSP stream:");
-                final TextField field = new TextField();
-                Button submit = new Button("Submit");
-
-                // Set up box in pop up window
-                VBox popUpVBox = new VBox();
-                popUpVBox.setPadding(new Insets(insetPositions,
-                    insetPositions, insetPositions, insetPositions));
-                popUpVBox.getChildren().addAll(fieldLabel, field, submit);
-                popUpVBox.setSpacing(spacing);
-                popUpVBox.setAlignment(Pos.CENTER);
-
-                // Save the url of the RTSP stream by clicking on submit
-                submit.setOnAction(t1 -> {
-                    videoController.createStream(streamStage, field);
-                    setCameraStatus();
-                });
-
-                // Save the url of the RTSP stream by pressing on the enter key
-                field.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode() == KeyCode.ENTER) {
-                        videoController.createStream(streamStage, field);
-                        setCameraStatus();
-                    }
-                });
-
-                Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
+                Scene popUp = new Scene(createPopUpWindow(streamStage), popUpWidth, popUpHeight);
                 streamStage.setScene(popUp);
                 streamStage.show();
             }
         });
+    }
+
+    /**
+     * Create the pop-up window that asks for stream input.
+     * @param streamStage the new stage for the pop-up window
+     * @return VBox with the pop-up
+     */
+    private VBox createPopUpWindow(final Stage streamStage) {
+        final int spacing = 6;
+        final int insetPositions = 10;
+        // Set up layout of the pop up window
+        final Label fieldLabel = new Label("Enter url of the RTSP stream:");
+        final TextField field = new TextField();
+        Button submit = new Button("Submit");
+
+        // Set up box in pop up window
+        VBox popUpVBox = new VBox();
+        popUpVBox.setPadding(new Insets(insetPositions,
+            insetPositions, insetPositions, insetPositions));
+        popUpVBox.getChildren().addAll(fieldLabel, field, submit);
+        popUpVBox.setSpacing(spacing);
+        popUpVBox.setAlignment(Pos.CENTER);
+
+        // Save the url of the RTSP stream by clicking on submit
+        submit.setOnAction(t1 -> {
+            videoController.createStream(streamStage, field);
+            setCameraStatus();
+        });
+
+        // Save the url of the RTSP stream by pressing on the enter key
+        field.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                videoController.createStream(streamStage, field);
+                setCameraStatus();
+            }
+        });
+
+        return popUpVBox;
     }
     //---------------------------------------- END OF ALL MENU OPTIONS
 
