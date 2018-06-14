@@ -116,11 +116,11 @@ public class MenuPane {
 
         MenuItem standardFile = new MenuItem("Use Standard Configuration");
         standardConfig(standardFile);
-        
+
         MenuItem manual = new MenuItem("Manual Configuration");
         manualConfigPane.createManualConfig(manual, primaryStage);
 
-        config.getItems().addAll(configFile, standardFile);
+        config.getItems().addAll(configFile, standardFile, manual);
         return config;
     }
 
