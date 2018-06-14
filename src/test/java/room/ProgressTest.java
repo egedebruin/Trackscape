@@ -4,8 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Class for testing progress.
@@ -43,7 +46,7 @@ class ProgressTest {
         assertEquals(progress.calculateProgress(), 0);
         chest.subSectionCompleted();
         assertEquals(progress.calculateProgress(), 1);
-        chest.setApprovedChestFoundByHost(true);
+        chest.setApprovedChestFoundByHost();
         chest.updateStatus(precedingChest);
         assertEquals(progress.calculateProgress(), FIRSTCHESTNOOFSECTIONS);
     }
@@ -62,12 +65,12 @@ class ProgressTest {
         chest2.updateStatus(chest);
         chest2.subSectionCompleted();
         assertEquals(progress.calculateProgress(), 0);
-        chest2.setApprovedChestFoundByHost(true);
+        chest2.setApprovedChestFoundByHost();
         assertEquals(progress.calculateProgress(), SECONDCHESTNOOFSECTIONS);
 
         chest.updateStatus(precedingChest);
         chest.subSectionCompleted();
-        chest.setApprovedChestFoundByHost(true);
+        chest.setApprovedChestFoundByHost();
         chest.updateStatus(precedingChest);
         assertEquals(progress.calculateProgress(), COMBINEDNOOFSECTIONS);
     }
@@ -142,7 +145,7 @@ class ProgressTest {
         final int expected = -2;
         assertEquals(expected, progress.getFillCount());
         updateProgress();
-        progress.getRoom().getChestList().get(0).setApprovedChestFoundByHost(true);
+        progress.getRoom().getChestList().get(0).setApprovedChestFoundByHost();
         updateProgress();
         assertEquals((FIRSTCHESTNOOFSECTIONS - 1) * 2, progress.getFillCount());
     }
@@ -157,6 +160,52 @@ class ProgressTest {
         final int newsubsections = 3;
         progress.setSubSectionCount(newsubsections);
         assertEquals(newsubsections, progress.getSubSectionCount());
+    }
+
+    /**
+     * Test stopServer method.
+     */
+    @Test
+    void testStopServer() {
+        Progress progress = new Progress(testConfigFile, 0);
+        assertTrue(progress.getApiHandler().getServer().isStarted());
+        progress.stopServer();
+        assertFalse(progress.getApiHandler().getServer().isStarted());
+    }
+
+    /**
+     * Test newProgress method.
+     */
+    @Test
+    void testNewProgress() {
+        Progress progress = new Progress(testConfigFile, 0);
+        assertEquals(0, progress.newProgress(2));
+    }
+
+    /**
+     * Test allChestsOpened method.
+     */
+    @Test
+    void testAllChestsOpened() {
+        Progress progress = new Progress(testConfigFile, 0);
+        assertFalse(progress.allChestsOpened());
+        progress.getRoom().updateRoom();
+        progress.getRoom().setNextChestOpened(0);
+        progress.getRoom().updateRoom();
+        progress.getRoom().setNextChestOpened(0);
+        progress.getRoom().updateRoom();
+        progress.getRoom().setNextChestOpened(0);
+        assertTrue(progress.allChestsOpened());
+    }
+
+    /**
+     * Test confirmedChestString method.
+     */
+    @Test
+    void testConfirmedChestString() {
+        Progress progress = new Progress(testConfigFile, 0);
+        progress.getRoom().updateRoom();
+        assertEquals("1/3", progress.confirmedChestString(0));
     }
 
 

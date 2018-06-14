@@ -1,6 +1,9 @@
 package gui.panes;
 
-import gui.controllers.MainController;
+import gui.controllers.TimerManager;
+import gui.controllers.RoomController;
+import gui.controllers.TimeLogController;
+import gui.controllers.VideoController;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -12,26 +15,31 @@ public class VideoPane {
     /**
      * Class parameters.
      */
-    private MainController controller;
     private MediaPane mediaPane;
     private MenuPane menuPane;
     private MediaBar mediaBar;
     private ProgressBar progressBar;
-    private TimeLoggerPane timeLoggerPane;
     private StatusPane statusPane;
+    private TimeLoggerPane timeLoggerPane;
 
     /**
      * Constructor for VideoPane.
-     * @param control the mainController
      */
-    public VideoPane(final MainController control) {
-        this.controller = control;
+    public VideoPane() {
+        RoomController roomController = new RoomController();
+        TimeLogController timeLogController = new TimeLogController();
+        VideoController videoController = new VideoController();
+        TimerManager timerManager = new TimerManager(roomController, timeLogController,
+            videoController);
+
         mediaPane = new MediaPane();
-        progressBar = new ProgressBar(controller.getRoomController());
-        statusPane = new StatusPane(controller.getRoomController());
-        menuPane = new MenuPane(controller, mediaPane);
-        mediaBar = new MediaBar(controller, menuPane, mediaPane, statusPane, progressBar);
-        timeLoggerPane = new TimeLoggerPane(controller);
+        progressBar = new ProgressBar(roomController);
+        statusPane = new StatusPane(roomController);
+        menuPane = new MenuPane(roomController, timerManager, timeLogController,
+            videoController, mediaPane);
+        mediaBar = new MediaBar(videoController, timerManager, menuPane, mediaPane, statusPane,
+            progressBar);
+        timeLoggerPane = new TimeLoggerPane(timeLogController, roomController);
     }
 
     /**
@@ -55,7 +63,7 @@ public class VideoPane {
         videoPane.setCenter(mediaPlayer);
         // put the timelogger in the left of the videopane
         videoPane.setLeft(timeLoggerPane.createTimeLoggerPane());
-        // escape room status will be displayed here
+        // put the escape room status in the right of the videopane
         videoPane.setRight(statusPane.createStatusPane());
         // put the mediabar and progressbar in the bottom of the videopane
         videoPane.setBottom(progressBar.createProgressBarPane());

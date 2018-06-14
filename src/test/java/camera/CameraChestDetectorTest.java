@@ -14,6 +14,7 @@ class CameraChestDetectorTest {
 
     private final String shortVideoLinkWithBoxes = "files" + File.separator
         + "escaperoomwithopenbox.mov";
+
     static {
         // These should be at the start of the application,
         // so if the main changes this should be included.
@@ -33,6 +34,7 @@ class CameraChestDetectorTest {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(shortVideoLinkWithBoxes);
         ch.processFrames();
+
         boolean found = false;
         while (ch.isChanged()) {
             ch.processFrames();
@@ -41,6 +43,9 @@ class CameraChestDetectorTest {
                 break;
             }
         }
+
         assertTrue(found);
+
+
     }
 }

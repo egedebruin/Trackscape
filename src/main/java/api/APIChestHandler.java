@@ -37,7 +37,7 @@ public class APIChestHandler extends AbstractHandler {
                 room.setNextChestOpened(System.nanoTime());
                 String log = room.getChestsOpened() + "/" + room.getChestList().size();
                 body = "Found chest " + log;
-                room.getCameraHandler().getInformationHandler().addInformation(body);
+                room.getInformationHandler().addInformation(body);
             }
         }
 

@@ -1,6 +1,7 @@
 package gui.panes;
 
-import gui.controllers.MainController;
+import gui.controllers.RoomController;
+import gui.controllers.VideoController;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,15 +22,18 @@ public class ManualConfigPane {
     /**
      * Class parameters.
      */
-    private MainController controller;
+    private VideoController videoController;
+    private RoomController roomController;
     private Stage manualStage;
 
     /**
      * Constructor for ManualConfigPane.
-     * @param control the mainController
+     * @param vControl the videoController
+     * @param rControl the roomController
      */
-    public ManualConfigPane(final MainController control) {
-        this.controller = control;
+    public ManualConfigPane(final VideoController vControl, final RoomController rControl) {
+        this.videoController = vControl;
+        this.roomController = rControl;
     }
 
     /**
@@ -39,7 +43,7 @@ public class ManualConfigPane {
      */
     public void createManualConfig(final MenuItem manual, final Stage primaryStage) {
         manual.setOnAction(t -> {
-            if (!controller.isVideoPlaying()) {
+            if (videoController.isClosed()) {
                 manualStage = new Stage();
                 manualStage.setTitle("Manual Escape Room Configuration");
                 manualStage.initModality(Modality.APPLICATION_MODAL);
@@ -134,7 +138,7 @@ public class ManualConfigPane {
                                 sectionIntList.add(Integer.parseInt(sectionList.get(i).getText().trim()));
                                 durationIntList.add(Integer.parseInt(durationList.get(i).getText().trim()));
                             }
-                            controller.getRoomController().manualConfig(players, filledInChests, sectionIntList, durationIntList);
+                            roomController.manualConfig(players, filledInChests, sectionIntList, durationIntList);
                             manualStage.close();
                         } catch (NumberFormatException e) {
                             submitError.setVisible(true);

@@ -1,5 +1,6 @@
 package room;
 
+import api.APIHandler;
 import handlers.JsonHandler;
 
 /**
@@ -8,6 +9,7 @@ import handlers.JsonHandler;
 public class Progress {
     private Room room;
     private int subSectionCount;
+    private APIHandler apiHandler;
 
     /**
      * Constructor.
@@ -17,7 +19,7 @@ public class Progress {
      */
     public Progress(final String configfile, final int roomid) {
         room = new JsonHandler(configfile).createRooms().get(roomid);
-        subSectionCount = 0;
+        init();
     }
 
     /**
@@ -27,7 +29,29 @@ public class Progress {
      */
     public Progress(final String configfile) {
         room = new JsonHandler(configfile).createSingleRoom();
+        init();
+    }
+
+    /**
+     * Constructor.
+     * @param newRoom predefined room
+     */
+    public Progress(final Room newRoom) {
+        room = newRoom;
+        init();
+    }
+
+    /**
+     * Initialize the progress.
+     */
+    private void init() {
         subSectionCount = 0;
+
+        apiHandler = new APIHandler(room);
+        int port = room.getPort();
+        apiHandler.setServer(port);
+
+        apiHandler.startServer();
     }
 
     /**
@@ -68,11 +92,6 @@ public class Progress {
     public void updateProgress() {
         room.updateRoom();
         subSectionCount = calculateProgress();
-        if (subSectionCount == getTotalSections()) {
-            room.setAllChestsDetected(true);
-        } else {
-            room.setAllChestsDetected(false);
-        }
     }
 
     /**
@@ -102,10 +121,55 @@ public class Progress {
     }
 
     /**
-     * GEt subsectioncount.
+     * Get subsectioncount.
      * @return this.subsectioncount
      */
     public int getSubSectionCount() {
         return subSectionCount;
+    }
+
+    /**
+     * Stop the apiServer.
+     */
+    public void stopServer() {
+        apiHandler.stopServer();
+    }
+
+    /**
+     * Configure a new progress when clicked on progressBar.
+     * @param index the index of new progress
+     * @return the new amount of chests opened
+     */
+    public int newProgress(final int index) {
+        int completedSections = getSubSectionCountFromBarIndex(index);
+        setSubSectionCount(completedSections);
+        room.setChestSectionsCompletedTill(completedSections);
+        updateProgress();
+        return room.getChestsOpened();
+    }
+
+    /**
+     * Check if all chests are opened.
+     * @return true if all chests are opened, false otherwise
+     */
+    public boolean allChestsOpened() {
+        return room.getChestList().size() == room.getChestsOpened();
+    }
+
+    /** Method for when a chest if confirmed by the host.
+     * @param timestamp the timestamp when the chest was opened
+     * @return string format of how many chests are opened
+     */
+    public String confirmedChestString(final long timestamp) {
+        room.setNextChestOpened(timestamp);
+        return room.getChestsOpened() + "/" + room.getChestList().size();
+    }
+
+    /**
+     * Get the ApiHandler.
+     * @return the APIHandler
+     */
+    public APIHandler getApiHandler() {
+        return apiHandler;
     }
 }
