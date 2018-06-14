@@ -1,16 +1,16 @@
 package camera;
 
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
+import org.junit.jupiter.api.Test;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
+
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Test for the Camera activity Class.
@@ -45,7 +45,7 @@ public class CameraActivityTest {
 
         assertNotNull(fp);
         assertNotEquals(new ArrayList<Mat>(), activity.getFrameParts());
-        if (activity.FRAMES > 1) {
+        if (CameraActivity.FRAMES > 1) {
             assertEquals(fp.get(0).size(), fp.get(1).size());   //equal divisions
         }
     }
@@ -60,13 +60,11 @@ public class CameraActivityTest {
         Camera camera = new Camera(videoCapture, link);
         CameraActivity activity = camera.getActivity();
 
-        final int frames = 10;
-        for (int i = 0; i < frames; i++) {
-            camera.loadFrame();
-        }
+        loadFrames(camera);
+
         Mat frame1 = camera.loadFrame();
         Mat frame2 = camera.loadFrame();
-        int parts = activity.FRAMES;
+        int parts = CameraActivity.FRAMES;
 
         assertNotNull(camera.getActivity());
         assertEquals(activity.getActivityList().get(parts), new ArrayList());
@@ -80,6 +78,17 @@ public class CameraActivityTest {
         activity.addActivity(frame2, parts, activity.getKnns().get(parts));
 
         assertNotEquals(activity.getActivityList().get(parts), new ArrayList());
+    }
+
+    /**
+     * Loads a set amount of frames for the given camera.
+     * @param camera the camera that gets its frame loaded
+     */
+    private void loadFrames(final Camera camera) {
+        final int frames = 10;
+        for (int i = 0; i < frames; i++) {
+            camera.loadFrame();
+        }
     }
 
 }
