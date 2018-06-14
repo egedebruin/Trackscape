@@ -221,10 +221,10 @@ public class TimeLogController extends Controller {
      * @return the image
      */
     private Image newChestFrame(final Pair<Mat, Long> mat) {
-        BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
-
         final int newWidth = 300;
         final int newHeight = 200;
+
+        BufferedImage bufferedFrame = Util.matToBufferedImage(mat.getKey());
         BufferedImage resizedSubFrame =
             Util.resizeBufferedImage(bufferedFrame, newWidth, newHeight);
 

@@ -21,12 +21,14 @@ public class CameraHandler {
      * Enum for the activity.
      */
     enum Activity {
-        ZERO, LOW, MEDIUM, HIGH;
+        ZERO, LOW, MEDIUM, HIGH
     }
+
+    private static final int ACTIVITY_THRESHOLD = 5;
+    private static final int FIRST_DETECTION = 80;
 
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
-//    private CameraChestDetector cameraChestDetector = new CameraChestDetector();
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
@@ -80,17 +82,24 @@ public class CameraHandler {
         cameraList.add(camera);
 
         if (link.startsWith("rtsp")) {
-            AnimationTimer timer = new AnimationTimer() {
-                @Override
-                public void handle(final long now) {
-                    camera.loadFrame();
-                }
-            };
-            timer.start();
-            timers.add(timer);
+            streamTimer(camera);
         }
-
         return camera;
+    }
+
+    /**
+     * Create a temporary timer for a stream.
+     * @param camera the camera
+     */
+    private void streamTimer(final Camera camera) {
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(final long now) {
+                camera.loadFrame();
+            }
+        };
+        timer.start();
+        timers.add(timer);
     }
 
     /**
@@ -99,7 +108,9 @@ public class CameraHandler {
      * @return The new frames as a list of Mat.
      */
     public List<Mat> processFrames() {
+        final int frequency = 10;
         clearTimers();
+
         List<Mat> frames = new ArrayList<>();
         for (Camera camera : cameraList) {
             Mat newFrame = camera.getLastFrame();
@@ -107,7 +118,6 @@ public class CameraHandler {
                 camera.setFirstFrame(newFrame);
             }
 
-            final int frequency = 10;
             if (camera.getFrameCounter() % frequency == 0) {
                 Thread thread = new Thread(() -> processFrame(camera, newFrame));
                 thread.start();
@@ -136,13 +146,30 @@ public class CameraHandler {
      * @param camera The camera of the frame.
      * @param newFrame The new frame.
      */
-    public void processFrame(final Camera camera, final Mat newFrame) {
-        final int activityThreshold = 5;
-        CameraActivity activity = camera.getActivity();
-        activity.divideFrame(newFrame);
+    private void processFrame(final Camera camera, final Mat newFrame) {
 
-        activity.addActivities(newFrame, camera.getFrameCounter());
-        if (activity.getLastActivity() > activityThreshold && beginTime == -1) {
+        // First calculate the activity and set it accordingly in camera
+        // if enough activity is found the escape room gets started
+        // this is done by setting cameras on active (activity per camera gets started)
+        processActivity(camera, newFrame);
+
+        // Secondly Detect and Track chests in the camera
+        // change chestFound accordingly
+        // put found chests in the information handler
+        processDetectionAndTrackingOfChests(camera, newFrame);
+    }
+
+    /**
+     * Processes the frame from the current camera to calculate the activity.
+     * @param camera the camera
+     * @param frame the frame
+     */
+    private void processActivity(final Camera camera, final Mat frame) {
+        CameraActivity activity = camera.getActivity();
+        activity.divideFrame(frame);
+
+        activity.addActivities(frame, camera.getFrameCounter());
+        if (activity.getLastActivity() > ACTIVITY_THRESHOLD && beginTime == -1) {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
             active = Activity.LOW;
@@ -150,13 +177,19 @@ public class CameraHandler {
                 cam.getActivity().setStarted(true);
             }
         }
+    }
 
-        Mat subtraction = camera.getChestDetector().subtractFrame(newFrame);
+    /**
+     * Processes the frame from the current camera to detect and track chests.
+     * @param camera the camera
+     * @param frame the frame
+     */
+    private void processDetectionAndTrackingOfChests(final Camera camera, final Mat frame) {
+        Mat subtraction = camera.getChestDetector().subtractFrame(frame);
 
-        final int firstDetection = 80;
-        if (camera.getFrameCounter() > firstDetection) {
+        if (camera.getFrameCounter() > FIRST_DETECTION) {
             List<Mat> mats = camera.getChestDetector().
-                checkForChests(newFrame, camera, subtraction);
+                checkForChests(frame, camera, subtraction);
             chestFound = mats.size() > 0;
 
             for (Mat mat : mats) {
@@ -165,20 +198,19 @@ public class CameraHandler {
             }
         }
     }
-
     /**
      * Change the activity with the last known activity.
      */
     public void changeActivity() {
+        final double oneThird = 0.33;
+        final double twoThird = 0.67;
+
         double ratio = 0;
         for (int i = 0; i < cameraList.size(); i++) {
             Camera camera = cameraList.get(i);
             ratio += camera.getActivity().calculateRatio();
         }
         ratio = ratio / (double) cameraList.size();
-
-        final double oneThird = 0.33;
-        final double twoThird = 0.67;
 
         if (ratio < oneThird) {
             active = Activity.LOW;
