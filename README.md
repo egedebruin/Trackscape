@@ -6,6 +6,7 @@ BEP
 [![Build status](https://ci.appveyor.com/api/projects/status/wyfdfhpg79289ceg?svg=true)](https://ci.appveyor.com/project/Jasperkroes/trackscape)
 
 **Description**
+
 This product aims to assist hosts of Escape Rooms in the process of observing players during an Escape Room game. It intents to give a clear overview of the current situation of the game. 
 
 **Instructions for OpenCV**
