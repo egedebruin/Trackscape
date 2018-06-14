@@ -67,6 +67,9 @@ public class RoomController {
         }
     }
 
+    public void manualConfig(int players, int chests, ArrayList<Integer> sectionList, ArrayList<Integer> durationList) {
+    }
+
     /**
      * Close the controller when the stream is closed.
      */
