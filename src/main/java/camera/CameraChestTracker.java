@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class CameraChestTracker {
 
+    private static final int BOUNDING_BOX_INCREASE_SCREEN_RATIO = 16;
     private List<MatOfPoint> previousContours;
-    private static final int BOUNDINGBOXINCREASESCREENRATIO = 16;
 
     /**
      * Method which removes areas from frame, if they have overlap with the previous frame.
@@ -25,37 +25,58 @@ public class CameraChestTracker {
     public Mat trackChests(final Mat frame, final double minChestArea) {
         Mat tempFrame = frame.clone();
 
-        // calculate the contours in frame
+        // Calculate the contours in frame
         List<MatOfPoint> contoursFrame = new ArrayList<>();
-        Mat contourMatFrame = new Mat();
         Imgproc.findContours(tempFrame, contoursFrame,
-            contourMatFrame, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+            new Mat(), Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
         if (previousContours != null) {
-            // Check if there is overlap between chests in subsequent frames.
-            for (MatOfPoint points : contoursFrame) {
-                Rect rect = Imgproc.boundingRect(new MatOfPoint(points.toArray()));
-                if (rect.area() >= minChestArea) {
-                    for (MatOfPoint points2 : previousContours) {
-                        Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
-                        if (rect2.area() >= minChestArea) {
+            // Checks if there is a chest in the tempFrame
+            // that has overlap with a chest in the previous frame.
+            // if such a chest exists it will be removed from tempFrame
+            checkForOverlap(contoursFrame, minChestArea, tempFrame);
+        }
+        previousContours = contoursFrame;
 
-                            // Increase the area in which overlap could be found
-                            rect2.width += frame.width() / BOUNDINGBOXINCREASESCREENRATIO;
-                            rect2.height += frame.height() / BOUNDINGBOXINCREASESCREENRATIO;
+        return tempFrame;
+    }
 
-                            if (doOverlap(rect, rect2)) {
-                                setRectToZerosInFrame(tempFrame, rect);
-                            }
-                        }
+    /**
+     * Check for overlap between chests in subsequent frames.
+     * @param contoursFrame a frame that shows contours
+     * @param minChestArea the minimum size of chest area
+     * @param tempFrame clone of the current frame
+     */
+    private void checkForOverlap(final List<MatOfPoint> contoursFrame,
+                                 final double minChestArea, final Mat tempFrame) {
+        for (MatOfPoint points : contoursFrame) {
+            Rect rect = Imgproc.boundingRect(new MatOfPoint(points.toArray()));
+            if (rect.area() >= minChestArea) {
+                for (MatOfPoint points2 : previousContours) {
+                    Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
+                    if (rect2.area() >= minChestArea) {
+                        compareRects(rect, rect2, tempFrame);
                     }
                 }
             }
         }
+    }
 
-        previousContours = contoursFrame;
+    /**
+     * Compares two rects.
+     * If they have overlap then tempFrame is adjusted to remove overlapping areas.
+     * @param rect The first rect (from the current frame)
+     * @param rect2 The second rect (from the previous frame)
+     * @param tempFrame the frame that tracks chests
+     */
+    private void compareRects(final Rect rect, final Rect rect2, final Mat tempFrame) {
+            // Increase the area in which overlap could be found
+            rect2.width += tempFrame.width() / BOUNDING_BOX_INCREASE_SCREEN_RATIO;
+            rect2.height += tempFrame.height() / BOUNDING_BOX_INCREASE_SCREEN_RATIO;
 
-        return tempFrame;
+            if (doOverlap(rect, rect2)) {
+                setRectToZerosInFrame(tempFrame, rect);
+            }
     }
 
     /**

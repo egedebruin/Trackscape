@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public class Camera {
 
-    private static final int DEFAULTNUMOFCHESTS = 1;
+    private static final int DEFAULT_NUM_OF_CHESTS = 1;
     private VideoCapture videoCapture;
     private String link;
     private Mat firstFrame;
@@ -34,7 +34,7 @@ public class Camera {
                   final int numOfChests) {
         this.videoCapture = newCapture;
         this.link = newLink;
-        this.numOfChestsInRoom = Math.max(DEFAULTNUMOFCHESTS, numOfChests);
+        this.numOfChestsInRoom = Math.max(DEFAULT_NUM_OF_CHESTS, numOfChests);
     }
 
     /**
@@ -46,7 +46,7 @@ public class Camera {
     public Camera(final VideoCapture newCapture, final String newLink) {
         this.videoCapture = newCapture;
         this.link = newLink;
-        this.numOfChestsInRoom = DEFAULTNUMOFCHESTS;
+        this.numOfChestsInRoom = DEFAULT_NUM_OF_CHESTS;
     }
 
     /**

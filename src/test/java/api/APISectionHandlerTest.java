@@ -1,16 +1,16 @@
 package api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-
 import handlers.JsonHandler;
+import org.junit.jupiter.api.Test;
+import room.Room;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.junit.jupiter.api.Test;
-import room.Room;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests for APISectionHandler class.
@@ -62,7 +62,31 @@ public class APISectionHandlerTest {
      * @throws IOException exception
      */
     @Test
-    void testHandleIncorrect() throws IOException {
+    void testHandleCorrectUrlSection() throws IOException {
+        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
+        room.updateRoom();
+        APIHandler handler = new APIHandler(room);
+        handler.startServer();
+
+        for (int i = 0; i < room.getChestList().size(); i++) {
+            room.setNextChestOpened(0);
+            room.updateRoom();
+        }
+
+        HttpURLConnection http3 = (HttpURLConnection)
+            new URL("http://localhost:8080/section?completed=true").openConnection();
+        http3.connect();
+        http3.getResponseCode();
+        assertEquals(room.getChestList().size(), room.getChestsOpened());
+        handler.stopServer();
+    }
+
+    /**
+     * Test if incorrect http request doesn't complete section.
+     * @throws IOException exception
+     */
+    @Test
+    void testHandleIncorrectUrl() throws IOException {
         Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
         room.updateRoom();
         APIHandler handler = new APIHandler(room);
@@ -79,17 +103,5 @@ public class APISectionHandlerTest {
         http2.connect();
         http2.getResponseCode();
         assertEquals(0, room.getChestList().get(0).countSubsectionsCompleted());
-
-        for (int i = 0; i < room.getChestList().size(); i++) {
-            room.setNextChestOpened(0);
-            room.updateRoom();
-        }
-
-        HttpURLConnection http3 = (HttpURLConnection)
-            new URL("http://localhost:8080/section?completed=true").openConnection();
-        http3.connect();
-        http3.getResponseCode();
-        assertEquals(room.getChestList().size(), room.getChestsOpened());
-        handler.stopServer();
     }
 }

@@ -13,10 +13,13 @@ import org.opencv.video.Video;
  */
 public class CameraActivity {
 
+    /**
+     * Amount of divided frames.
+     */
+    public static final int FRAMES = 1;
     private List<Mat> frameParts = new ArrayList<>();
     private List<List<Double>> activityList;
     private List<BackgroundSubtractorKNN> knns = new ArrayList<>();
-    private static final int FRAMES = 1;
     private double lastActivity = 0;
     private int frameCounter;
     private boolean started = false;
@@ -25,8 +28,9 @@ public class CameraActivity {
      * Constructor for the class.
      */
     public CameraActivity() {
-        this.activityList = new ArrayList<>();
         final int threshold = 1000;
+
+        this.activityList = new ArrayList<>();
         for (int i = 0; i < FRAMES; i++) {
             frameParts.add(new Mat());
             activityList.add(new ArrayList<>());
@@ -80,6 +84,8 @@ public class CameraActivity {
      */
     public double addActivity(final Mat frame, final int partNumber,
                               final BackgroundSubtractorKNN knn) {
+        final int minFrames = 50;
+
         Mat subtraction = new Mat();
         knn.apply(frame, subtraction);
         Scalar meanValues = Core.mean(subtraction);
@@ -88,8 +94,6 @@ public class CameraActivity {
         for (double v : meanValues.val) {
             change += v;
         }
-
-        final int minFrames = 50;
 
         // Only add the activityList to the list when at least some frames are processed.
         if (frameCounter > minFrames) {
@@ -123,14 +127,6 @@ public class CameraActivity {
      */
     public double getLastActivity() {
         return lastActivity;
-    }
-
-    /**
-     * Get the number of frames that one frame should be divided in.
-     * @return frames
-     */
-    public int getFrames() {
-        return FRAMES;
     }
 
     /**

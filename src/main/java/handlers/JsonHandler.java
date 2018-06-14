@@ -1,5 +1,6 @@
 package handlers;
 
+import api.APIHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -92,11 +93,10 @@ public class JsonHandler {
      * @return The port
      */
     public int getPortNumber(final long roomId) {
-        final int defaultPort = 8080;
         JSONObject room = getRoomById(roomId);
         Object res = room.get("port");
         if (res == null) {
-            return defaultPort;
+            return APIHandler.DEFAULT_PORT;
         }
         long amount = (long) res;
         return Math.toIntExact(amount);
@@ -152,8 +152,7 @@ public class JsonHandler {
             int port = getPortNumber(roomId);
             return new Room(roomId, amountPeople, cameraLinks, chests, targetDuration, port);
         }
-        final int defaultPort = 8080;
-        return new Room(0, 0, new ArrayList<>(), null, 0, defaultPort);
+        return new Room(0, 0, new ArrayList<>(), null, 0, APIHandler.DEFAULT_PORT);
     }
 
     /**
