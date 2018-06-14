@@ -81,7 +81,7 @@ public class MenuPane {
         config.getItems().addAll(configFile, standardFile, manual);
 
         // Menu options for adding extra media
-        Menu extraMedia = new Menu("Add extra media");
+        Menu extraMedia = new Menu("Add Media");
         MenuItem openVideo = new MenuItem("Add Video File...");
         MenuItem connectStream = new MenuItem("Add Stream...");
         extraMedia.getItems().addAll(openVideo, connectStream);
