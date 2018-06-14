@@ -7,7 +7,7 @@ BEP
 
 **Description**
 
-This product aims to assist hosts of Escape Rooms in the process of observing players during an Escape Room game. It intents to give a clear overview of the current situation of the game. 
+This product aims to assist hosts of Escape Rooms in the process of observing players during an Escape Room game. It intends to give a clear overview of the current situation of the game. 
 
 **Instructions for OpenCV**
 
