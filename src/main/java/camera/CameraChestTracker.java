@@ -31,6 +31,9 @@ public class CameraChestTracker {
             new Mat(), Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
         if (previousContours != null) {
+            // Checks if there is a chest in the tempFrame
+            // that has overlap with a chest in the previous frame.
+            // if such a chest exists it will be removed from tempFrame
             checkForOverlap(contoursFrame, minChestArea, tempFrame);
         }
         previousContours = contoursFrame;
