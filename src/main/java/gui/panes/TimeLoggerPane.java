@@ -6,6 +6,7 @@ import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -40,25 +41,24 @@ public class TimeLoggerPane {
      * @return timerPane
      */
     public Pane createTimeLoggerPane() {
-        FlowPane timerPane = new FlowPane();
-        timerPane.setAlignment(Pos.TOP_CENTER);
         final int largePadding = 15;
         final int smallPadding = 5;
+        final int top = 5;
+        final int bottom = 5;
+
+        FlowPane timerPane = new FlowPane();
+        timerPane.setAlignment(Pos.TOP_CENTER);
         timerPane.setPadding(new Insets(largePadding, 0, smallPadding, largePadding));
 
         Label description = new Label("Time playing: ");
         Label l = new Label("00:00:00");
         timeLogController.setTimerLabel(l);
 
-        final int top = 5;
-        final int bottom = 5;
-
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(top, 0, bottom, 0));
         vBox.getChildren().add(l);
 
-        timerPane.getChildren().addAll(description, vBox, createLoggerPane(),
-                createApproveArea());
+        timerPane.getChildren().addAll(description, vBox, createLoggerPane(), createApproveArea());
 
         return timerPane;
     }
@@ -69,15 +69,15 @@ public class TimeLoggerPane {
      * @return loggerPane The logger pane
      */
     private Pane createLoggerPane() {
+        final int width = 400;
+        final int height = 300;
+
         FlowPane loggerPane = new FlowPane();
         loggerPane.setAlignment(Pos.CENTER);
 
         TextArea logText = new TextArea();
         logText.setEditable(false);
         timeLogController.setInformationBox(logText);
-
-        final int width = 400;
-        final int height = 300;
 
         logText.setPrefSize(width, height);
 
@@ -97,25 +97,36 @@ public class TimeLoggerPane {
      */
     public Pane createApproveArea() {
         final int padding = 20;
-        FlowPane buttonPane = new FlowPane();
-        buttonPane.setAlignment(Pos.BOTTOM_CENTER);
-        buttonPane.setPadding(new Insets(padding, padding, 0, 0));
+
+        FlowPane confirmChestPane = new FlowPane();
+        confirmChestPane.setAlignment(Pos.BOTTOM_CENTER);
+        confirmChestPane.setPadding(new Insets(padding, padding, 0, 0));
+
+        createNodesForApproveArea(confirmChestPane);
+
+        return confirmChestPane;
+    }
+
+    /**
+     * Create the children for the confirmChestPane.
+     * @param confirmChestPane the pane for the approveArea
+     * @return the confirmChestPane
+     */
+    private Pane createNodesForApproveArea(final Pane confirmChestPane) {
+        final int viewHeight = 70;
 
         Label question = new Label("      Is this a newly opened chest?      ");
-        question.setVisible(false);
-
         ImageView imageView = new ImageView();
-        imageView.setVisible(false);
-
         Label timeStamp = new Label();
-        timeStamp.setVisible(false);
-
-        final int viewHeight = 70;
         Button approveButton = createApproveButton(viewHeight);
         Button disapproveButton = createDisapproveButton(viewHeight);
 
-        buttonPane.getChildren().addAll(imageView, timeStamp, question,
-                approveButton, disapproveButton);
+        confirmChestPane.getChildren().addAll(imageView, timeStamp, question,
+            approveButton, disapproveButton);
+
+        for (Node child : confirmChestPane.getChildren()) {
+            child.setVisible(false);
+        }
 
         timeLogController.setQuestion(question);
         timeLogController.setApproveButton(approveButton);
@@ -123,7 +134,7 @@ public class TimeLoggerPane {
         timeLogController.setImageView(imageView);
         timeLogController.setTimeStamp(timeStamp);
 
-        return buttonPane;
+        return confirmChestPane;
     }
 
     /**
@@ -134,9 +145,17 @@ public class TimeLoggerPane {
     private Button createApproveButton(final int viewHeight) {
         Button approveButton = new Button();
         approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
-        approveButton.setVisible(false);
-
         approveButton.setCursor(Cursor.HAND);
+        return addFunctionalityApproveButton(approveButton, viewHeight);
+    }
+
+    /**
+     * Add functionality to the approveButton when something happens to it.
+     * @param approveButton the button
+     * @param viewHeight the height of the image set on the button
+     * @return the approveButton
+     */
+    private Button addFunctionalityApproveButton(final Button approveButton, final int viewHeight) {
         approveButton.setOnAction(event -> {
             String chestsFound = "";
             if (roomController.isConfigured()) {
@@ -152,7 +171,6 @@ public class TimeLoggerPane {
         approveButton.setOnMouseExited(event -> {
             approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
         });
-
         return approveButton;
     }
 
@@ -162,21 +180,30 @@ public class TimeLoggerPane {
      * @return notApprove button
      */
     private Button createDisapproveButton(final int viewHeight) {
-        Button notApprove = new Button();
-        notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
-        notApprove.setVisible(false);
-        notApprove.setCursor(Cursor.HAND);
-
-        notApprove.setOnAction(event -> timeLogController.unConfirm());
-        notApprove.setOnMouseEntered(event -> {
-            notApprove.setGraphic(Util.createImageViewLogo(
-                "buttons\\disapproveActive", viewHeight));
-        });
-        notApprove.setOnMouseExited(event -> {
-            notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
-        });
-
-        return notApprove;
+        Button disapproveButton = new Button();
+        disapproveButton.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
+        disapproveButton.setCursor(Cursor.HAND);
+        return addFunctionalityDisapproveButton(disapproveButton, viewHeight);
     }
 
+    /**
+     * Add functionality to the disapproveButton when something happens to it.
+     * @param disapproveButton the button
+     * @param viewHeight the height of the image set on the button
+     * @return the disapproveButton
+     */
+    private Button addFunctionalityDisapproveButton(
+        final Button disapproveButton, final int viewHeight) {
+        disapproveButton.setOnAction(event -> timeLogController.unConfirm());
+        disapproveButton.setOnMouseEntered(event -> {
+            disapproveButton.setGraphic(Util.createImageViewLogo(
+                "buttons\\disapproveActive", viewHeight));
+        });
+        disapproveButton.setOnMouseExited(event -> {
+            disapproveButton.setGraphic(
+                Util.createImageViewLogo("buttons\\disapprove", viewHeight));
+        });
+
+        return disapproveButton;
+    }
 }

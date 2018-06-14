@@ -68,23 +68,13 @@ public class MenuPane {
      */
     public Pane createMenuPane(final Pane videoPane, final Stage primaryStage) {
         // Menu options for settings
-        Menu settings = new Menu("Settings");
-        MenuItem clearImageViewers = new MenuItem("Reset Application");
-        MenuItem closeApp = new MenuItem("Close Application");
-        settings.getItems().addAll(clearImageViewers, closeApp);
+        Menu settings = createSettings();
 
-        // Menu options for (automatic) escape room configuration
-        Menu config = new Menu("Configure the Escape Room");
-        MenuItem configFile = new MenuItem("Load Configuration File...");
-        MenuItem standardFile = new MenuItem("Use Standard Configuration");
-        MenuItem manual = new MenuItem("Manual Configuration");
-        config.getItems().addAll(configFile, standardFile, manual);
+        // Menu options for automatic configuration
+        Menu config = createConfig(primaryStage);
 
         // Menu options for adding extra media
-        Menu extraMedia = new Menu("Add Media");
-        MenuItem openVideo = new MenuItem("Add Video File...");
-        MenuItem connectStream = new MenuItem("Add Stream...");
-        extraMedia.getItems().addAll(openVideo, connectStream);
+        Menu extraMedia = createExtraMedia(primaryStage);
 
         // Add al submenus to main menu bar
         MenuBar menu = new MenuBar();
@@ -93,19 +83,65 @@ public class MenuPane {
         StackPane menuPane = new StackPane();
         menuPane.getChildren().add(menu);
 
-        // When menu options are clicked
-        resetCameras(clearImageViewers);
-        closeApp(closeApp);
-        openConfig(configFile, primaryStage);
-        standardConfig(standardFile);
-        manualConfigPane.createManualConfig(manual, primaryStage);
-        openVideo(openVideo, primaryStage);
-        connectStream(connectStream, primaryStage);
-
         return menuPane;
     }
 
-    //---------------------------------------- BEGIN OF ALL MENU OPTIONS
+    /**
+     * Creates the settings menu option for the menu pane.
+     * @return the settings Menu
+     */
+    private Menu createSettings() {
+        Menu settings = new Menu("Settings");
+
+        MenuItem clearImageViewers = new MenuItem("Reset Application");
+        resetCameras(clearImageViewers);
+
+        MenuItem closeApp = new MenuItem("Close Application");
+        closeApp(closeApp);
+
+        settings.getItems().addAll(clearImageViewers, closeApp);
+        return settings;
+    }
+
+    /**
+     * Creates the config menu option for the menu pane.
+     * @param primaryStage the primary stage
+     * @return the config menu
+     */
+    private Menu createConfig(final Stage primaryStage) {
+        Menu config = new Menu("Configure the Escape Room");
+
+        MenuItem configFile = new MenuItem("Load Configuration File...");
+        openConfig(configFile, primaryStage);
+
+        MenuItem standardFile = new MenuItem("Use Standard Configuration");
+        standardConfig(standardFile);
+        
+        MenuItem manual = new MenuItem("Manual Configuration");
+        manualConfigPane.createManualConfig(manual, primaryStage);
+
+        config.getItems().addAll(configFile, standardFile);
+        return config;
+    }
+
+    /**
+     * Creates the add extra media menu option in the menu pane.
+     * @param primaryStage the primary stage
+     * @return the add extra media menu
+     */
+    private Menu createExtraMedia(final Stage primaryStage) {
+        Menu extraMedia = new Menu("Manual Configuration");
+
+        MenuItem openVideo = new MenuItem("Add Video File...");
+        openVideo(openVideo, primaryStage);
+
+        MenuItem connectStream = new MenuItem("Add Stream...");
+        connectStream(connectStream, primaryStage);
+
+        extraMedia.getItems().addAll(openVideo, connectStream);
+        return extraMedia;
+    }
+
     /**
      * Remove all current cameras.
      * @param clearImageViewers the current imageViewers
@@ -189,8 +225,10 @@ public class MenuPane {
      * @param connectStream menuOption
      * @param primaryStage starting stage
      */
-    private void connectStream(
-            final MenuItem connectStream, final Stage primaryStage) {
+    private void connectStream(final MenuItem connectStream, final Stage primaryStage) {
+        final int popUpWidth = 500;
+        final int popUpHeight = 100;
+
         connectStream.setOnAction(t -> {
             if (videoController.isClosed()) {
                 // Set up pop up window
@@ -198,46 +236,59 @@ public class MenuPane {
                 streamStage.initModality(Modality.APPLICATION_MODAL);
                 streamStage.initOwner(primaryStage);
 
-                // Set up layout of the pop up window
-                final Label fieldLabel = new Label("Enter url of the RTSP stream:");
-                final TextField field = new TextField();
-                Button submit = new Button("Submit");
-
-                final int spacing = 6;
-                final int insetPositions = 10;
-
-                // Set up box in pop up window
-                VBox popUpVBox = new VBox();
-                popUpVBox.setPadding(new Insets(insetPositions,
-                        insetPositions, insetPositions, insetPositions));
-                popUpVBox.getChildren().addAll(fieldLabel, field, submit);
-                popUpVBox.setSpacing(spacing);
-                popUpVBox.setAlignment(Pos.CENTER);
-
-                // Save the url of the RTSP stream by clicking on submit
-                submit.setOnAction(t1 -> {
-                    videoController.createStream(streamStage, field);
-                    setCameraStatus();
-                });
-
-                // Save the url of the RTSP stream by pressing on the enter key
-                field.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode() == KeyCode.ENTER) {
-                        videoController.createStream(streamStage, field);
-                        setCameraStatus();
-                    }
-                });
-
-                final int popUpWidth = 500;
-                final int popUpHeight = 100;
-
-                Scene popUp = new Scene(popUpVBox, popUpWidth, popUpHeight);
+                Scene popUp = new Scene(createPopUpWindow(streamStage), popUpWidth, popUpHeight);
                 streamStage.setScene(popUp);
                 streamStage.show();
             }
         });
     }
-    //---------------------------------------- END OF ALL MENU OPTIONS
+
+    /**
+     * Create the pop-up window that asks for stream input.
+     * @param streamStage the new stage for the pop-up window
+     * @return VBox with the pop-up
+     */
+    private VBox createPopUpWindow(final Stage streamStage) {
+        // Set up layout of the pop up window
+        final Label fieldLabel = new Label("Enter url of the RTSP stream:");
+        final TextField field = new TextField();
+        Button submit = new Button("Submit");
+
+        // Save the url of the RTSP stream by pressing on the enter key
+        field.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                videoController.createStream(streamStage, field);
+                setCameraStatus();
+            }
+        });
+
+        // Save the url of the RTSP stream by clicking on submit
+        submit.setOnAction(t1 -> {
+            videoController.createStream(streamStage, field);
+            setCameraStatus();
+        });
+
+        // Set up box in pop up window
+        VBox popUpVBox = constructPopUpVBox();
+        popUpVBox.getChildren().addAll(fieldLabel, field, submit);
+
+        return popUpVBox;
+    }
+
+    /**
+     * Construct the VBox for the pop-up window.
+     * @return popUpVBox
+     */
+    private VBox constructPopUpVBox() {
+        final int spacing = 6;
+        final int insetPositions = 10;
+        VBox popUpVBox = new VBox();
+        popUpVBox.setPadding(new Insets(insetPositions,
+            insetPositions, insetPositions, insetPositions));
+        popUpVBox.setSpacing(spacing);
+        popUpVBox.setAlignment(Pos.CENTER);
+        return popUpVBox;
+    }
 
     /**
      * Display in a label how many cameras are active.

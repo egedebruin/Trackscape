@@ -348,6 +348,8 @@ public class RoomController extends Controller {
      * Make the warningPane invisible until time is up and players are still behind.
      */
     public void startHintTimer() {
+        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
+
         snoozeHint = true;
         TimerTask task = new TimerTask() {
             @Override
@@ -357,7 +359,6 @@ public class RoomController extends Controller {
         };
         Timer hintTimer = new Timer();
         // Wait 30 seconds before showing another warning
-        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
         hintTimer.schedule(task, timeUntilWarning);
     }
 

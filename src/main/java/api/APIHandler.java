@@ -10,8 +10,11 @@ import room.Room;
  */
 public class APIHandler {
 
+    /**
+     * The default port.
+     */
+    public static final int DEFAULT_PORT = 8080;
     private Room room;
-    private final int defaultPort = 8080;
     private Server server;
 
     /**
@@ -20,7 +23,7 @@ public class APIHandler {
      */
     public APIHandler(final Room newRoom) {
         room = newRoom;
-        setServer(defaultPort);
+        setServer(DEFAULT_PORT);
     }
 
     /**
