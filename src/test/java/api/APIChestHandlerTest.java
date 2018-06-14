@@ -1,16 +1,16 @@
 package api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-
 import handlers.JsonHandler;
+import org.junit.jupiter.api.Test;
+import room.Room;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.junit.jupiter.api.Test;
-import room.Room;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests for the APIChestHandler class.
@@ -79,6 +79,18 @@ public class APIChestHandlerTest {
         http2.connect();
         http2.getResponseCode();
         assertEquals(0, room.getChestsOpened());
+    }
+
+    /**
+     * Test if API works when all chests are already opened.
+     * @throws IOException exception
+     */
+    @Test
+    void testAllChestsAlreadyOpened() throws IOException {
+        Room room = new JsonHandler("files/test/testConfig.json").createSingleRoom();
+        room.updateRoom();
+        APIHandler handler = new APIHandler(room);
+        handler.startServer();
 
         for (int i = 0; i < room.getChestList().size(); i++) {
             room.setNextChestOpened(0);
