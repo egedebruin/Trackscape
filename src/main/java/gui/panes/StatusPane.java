@@ -2,8 +2,6 @@ package gui.panes;
 
 import gui.Util;
 import gui.controllers.RoomController;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -16,6 +14,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import room.Chest;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class that constructs the StatusPane for the VideoPane.
@@ -138,7 +139,7 @@ public class StatusPane {
     }
 
     /**
-     * Create the pane where chests and current time are shown.
+     * Create the pane where chests and current/target time are shown.
      * @return chestTimePane
      */
     private Pane createChestTimePane() {
@@ -146,17 +147,22 @@ public class StatusPane {
 
         GridPane chestTimePane = new GridPane();
         chestTimePane.getStyleClass().add("grid-lines");
-        chestTimePane.setPadding(new Insets(topInset, 0, 0, 0));
         chestTimePane.setAlignment(Pos.CENTER);
+        chestTimePane.setPadding(new Insets(topInset, 0, 0, 0));
 
-        Label chest = new Label("  Chest  ");
-        Label elapsedTime = new Label("  Time  ");
-        Label targetTime = new Label("  Target  ");
+        chestTimePane.add(new Label("  Chest  "), 0, 0);
+        chestTimePane.add(new Label("  Time  "), 1, 0);
+        chestTimePane.add(new Label("  Target  "), 2, 0);
 
-        chestTimePane.add(chest, 0, 0);
-        chestTimePane.add(elapsedTime, 1, 0);
-        chestTimePane.add(targetTime, 2, 0);
+        return addLabelsPerChest(chestTimePane);
+    }
 
+    /**
+     * Add the chestNumber, currentTime, and targetTime labels for each chest to the gridPane.
+     * @param chestTimePane the pane where current and target times of chests are shown.
+     * @return chestTimePane
+     */
+    private Pane addLabelsPerChest(final GridPane chestTimePane) {
         List<Chest> chestList = roomController.getProgress().getRoom().getChestList();
 
         for (int i = 0; i < chestList.size(); i++) {
