@@ -79,6 +79,7 @@ public class APIChestHandlerTest {
         http2.connect();
         http2.getResponseCode();
         assertEquals(0, room.getChestsOpened());
+        handler.stopServer();
     }
 
     /**
