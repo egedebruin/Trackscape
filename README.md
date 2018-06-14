@@ -1,13 +1,14 @@
-# Trackscape
+# TrackScape
 BEP
 
 [![BCH compliance](https://bettercodehub.com/edge/badge/egedebruin/Trackscape?branch=master)](https://bettercodehub.com/)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/wyfdfhpg79289ceg?svg=true)](https://ci.appveyor.com/project/Jasperkroes/trackscape)
 
+**Description**
+This product aims to assist hosts of Escape Rooms in the process of observing players during an Escape Room game. It intents to give a clear overview of the current situation of the game. 
 
-
-**OpenCV**
+**Instructions for OpenCV**
 
 * Download OpenCV from https://opencv.org/releases.html
     * For Windows: Choose 3.4.1 Win Pack
@@ -18,7 +19,7 @@ BEP
 [**OpenCV javafx examples**](https://github.com/opencv-java/opencv-java-tutorials)
 
 
-**API**
+**Instructions for working with the API**
 
 When a configuration is started, a server will also be available for API calls. The API calls will be processed only when 
 activity is found on the cameras. 
