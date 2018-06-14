@@ -148,7 +148,7 @@ public class CameraHandler {
     }
 
     /**
-     * rocesses the frame from the current camera to detect and track chests.
+     * Processes the frame from the current camera to detect and track chests.
      * @param camera the camera
      * @param frame the frame
      */
