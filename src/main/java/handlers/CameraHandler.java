@@ -23,14 +23,15 @@ public class CameraHandler {
         ZERO, LOW, MEDIUM, HIGH
     }
 
+    private static final int ACTIVITY_THRESHOLD = 5;
+    private static final int FIRST_DETECTION = 80;
+
     private List<Camera> cameraList = new ArrayList<>();
     private InformationHandler informationHandler;
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
     private Activity active = Activity.ZERO;
-    private static final int ACTIVITYTHRESHOLD = 5;
-    private static final int FIRSTDETECTION = 80;
 
     /**
      * Constructor for CameraHandler without specified information handler.
@@ -136,7 +137,7 @@ public class CameraHandler {
         activity.divideFrame(frame);
 
         activity.addActivities(frame, camera.getFrameCounter());
-        if (activity.getLastActivity() > ACTIVITYTHRESHOLD && beginTime == -1) {
+        if (activity.getLastActivity() > ACTIVITY_THRESHOLD && beginTime == -1) {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
             active = Activity.LOW;
@@ -154,7 +155,7 @@ public class CameraHandler {
     private void processDetectionAndTrackingOfChests(final Camera camera, final Mat frame) {
         Mat subtraction = camera.getChestDetector().subtractFrame(frame);
 
-        if (camera.getFrameCounter() > FIRSTDETECTION) {
+        if (camera.getFrameCounter() > FIRST_DETECTION) {
             List<Mat> mats = camera.getChestDetector().
                 checkForChests(frame, camera, subtraction);
             chestFound = mats.size() > 0;
