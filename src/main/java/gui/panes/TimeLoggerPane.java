@@ -170,21 +170,30 @@ public class TimeLoggerPane {
      * @return notApprove button
      */
     private Button createDisapproveButton(final int viewHeight) {
-        Button notApprove = new Button();
-        notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
-        notApprove.setVisible(false);
-        notApprove.setCursor(Cursor.HAND);
-
-        notApprove.setOnAction(event -> timeLogController.unConfirm());
-        notApprove.setOnMouseEntered(event -> {
-            notApprove.setGraphic(Util.createImageViewLogo(
-                "buttons\\disapproveActive", viewHeight));
-        });
-        notApprove.setOnMouseExited(event -> {
-            notApprove.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
-        });
-
-        return notApprove;
+        Button disapproveButton = new Button();
+        disapproveButton.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
+        disapproveButton.setCursor(Cursor.HAND);
+        return addFunctionalityDisapproveButton(disapproveButton, viewHeight);
     }
 
+    /**
+     * Add functionality to the disapproveButton when something happens to it.
+     * @param disapproveButton the button
+     * @param viewHeight the height of the image set on the button
+     * @return the disapproveButton
+     */
+    private Button addFunctionalityDisapproveButton(
+        final Button disapproveButton, final int viewHeight) {
+        disapproveButton.setOnAction(event -> timeLogController.unConfirm());
+        disapproveButton.setOnMouseEntered(event -> {
+            disapproveButton.setGraphic(Util.createImageViewLogo(
+                "buttons\\disapproveActive", viewHeight));
+        });
+        disapproveButton.setOnMouseExited(event -> {
+            disapproveButton.setGraphic(
+                Util.createImageViewLogo("buttons\\disapprove", viewHeight));
+        });
+
+        return disapproveButton;
+    }
 }
