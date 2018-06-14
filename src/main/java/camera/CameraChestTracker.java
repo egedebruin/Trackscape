@@ -25,29 +25,38 @@ public class CameraChestTracker {
     public Mat trackChests(final Mat frame, final double minChestArea) {
         Mat tempFrame = frame.clone();
 
-        // calculate the contours in frame
+        // Calculate the contours in frame
         List<MatOfPoint> contoursFrame = new ArrayList<>();
         Imgproc.findContours(tempFrame, contoursFrame,
             new Mat(), Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
         if (previousContours != null) {
-            // Check if there is overlap between chests in subsequent frames.
-            for (MatOfPoint points : contoursFrame) {
-                Rect rect = Imgproc.boundingRect(new MatOfPoint(points.toArray()));
-                if (rect.area() >= minChestArea) {
-                    for (MatOfPoint points2 : previousContours) {
-                        Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
-                        if (rect2.area() >= minChestArea) {
-                            compareRects(rect, rect2, tempFrame);
-                        }
+            checkForOverlap(contoursFrame, minChestArea, tempFrame);
+        }
+        previousContours = contoursFrame;
+
+        return tempFrame;
+    }
+
+    /**
+     * Check for overlap between chests in subsequent frames.
+     * @param contoursFrame a frame that shows contours
+     * @param minChestArea the minimum size of chest area
+     * @param tempFrame clone of the current frame
+     */
+    private void checkForOverlap(final List<MatOfPoint> contoursFrame,
+                                 final double minChestArea, final Mat tempFrame) {
+        for (MatOfPoint points : contoursFrame) {
+            Rect rect = Imgproc.boundingRect(new MatOfPoint(points.toArray()));
+            if (rect.area() >= minChestArea) {
+                for (MatOfPoint points2 : previousContours) {
+                    Rect rect2 = Imgproc.boundingRect(new MatOfPoint(points2.toArray()));
+                    if (rect2.area() >= minChestArea) {
+                        compareRects(rect, rect2, tempFrame);
                     }
                 }
             }
         }
-
-        previousContours = contoursFrame;
-
-        return tempFrame;
     }
 
     /**
