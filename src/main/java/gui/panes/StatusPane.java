@@ -77,19 +77,15 @@ public class StatusPane {
         final int buttonWidth = 50;
         final int hgap = 30;
 
-        ImageView ppl = Util.createImageViewLogo("icons\\peopleIcon", buttonWidth);
-        ImageView box = Util.createImageViewLogo("icons\\chestIcon", buttonWidth);
-        ImageView cam = Util.createImageViewLogo("icons\\camIcon", buttonWidth);
-
         Label cameras = new Label(""
             + roomController.getProgress().getRoom().getLinkList().size());
-        cameras.setGraphic(cam);
+        cameras.setGraphic(Util.createImageViewLogo("icons\\camIcon", buttonWidth));
         Label persons = new Label(""
             + roomController.getProgress().getRoom().getNumberOfPeople());
-        persons.setGraphic(ppl);
+        persons.setGraphic(Util.createImageViewLogo("icons\\peopleIcon", buttonWidth));
         Label chests = new Label(""
             + roomController.getProgress().getRoom().getChestList().size());
-        chests.setGraphic(box);
+        chests.setGraphic(Util.createImageViewLogo("icons\\chestIcon", buttonWidth));
 
         GridPane setupPane = new GridPane();
         setupPane.setHgap(hgap);
