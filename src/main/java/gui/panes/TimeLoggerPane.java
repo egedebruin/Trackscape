@@ -6,6 +6,7 @@ import gui.controllers.TimeLogController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -96,26 +97,36 @@ public class TimeLoggerPane {
      */
     public Pane createApproveArea() {
         final int padding = 20;
+
+        FlowPane confirmChestPane = new FlowPane();
+        confirmChestPane.setAlignment(Pos.BOTTOM_CENTER);
+        confirmChestPane.setPadding(new Insets(padding, padding, 0, 0));
+
+        createNodesForApproveArea(confirmChestPane);
+
+        return confirmChestPane;
+    }
+
+    /**
+     * Create the children for the confirmChestPane.
+     * @param confirmChestPane the pane for the approveArea
+     * @return the confirmChestPane
+     */
+    private Pane createNodesForApproveArea(final Pane confirmChestPane) {
         final int viewHeight = 70;
 
-        FlowPane buttonPane = new FlowPane();
-        buttonPane.setAlignment(Pos.BOTTOM_CENTER);
-        buttonPane.setPadding(new Insets(padding, padding, 0, 0));
-
         Label question = new Label("      Is this a newly opened chest?      ");
-        question.setVisible(false);
-
         ImageView imageView = new ImageView();
-        imageView.setVisible(false);
-
         Label timeStamp = new Label();
-        timeStamp.setVisible(false);
-
         Button approveButton = createApproveButton(viewHeight);
         Button disapproveButton = createDisapproveButton(viewHeight);
 
-        buttonPane.getChildren().addAll(imageView, timeStamp, question,
+        confirmChestPane.getChildren().addAll(imageView, timeStamp, question,
             approveButton, disapproveButton);
+
+        for (Node child : confirmChestPane.getChildren()) {
+            child.setVisible(false);
+        }
 
         timeLogController.setQuestion(question);
         timeLogController.setApproveButton(approveButton);
@@ -123,7 +134,7 @@ public class TimeLoggerPane {
         timeLogController.setImageView(imageView);
         timeLogController.setTimeStamp(timeStamp);
 
-        return buttonPane;
+        return confirmChestPane;
     }
 
     /**
@@ -134,7 +145,7 @@ public class TimeLoggerPane {
     private Button createApproveButton(final int viewHeight) {
         Button approveButton = new Button();
         approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
-        approveButton.setVisible(false);
+        approveButton.setCursor(Cursor.HAND);
         return addFunctionalityApproveButton(approveButton, viewHeight);
     }
 
@@ -145,7 +156,6 @@ public class TimeLoggerPane {
      * @return the approveButton
      */
     private Button addFunctionalityApproveButton(final Button approveButton, final int viewHeight) {
-        approveButton.setCursor(Cursor.HAND);
         approveButton.setOnAction(event -> {
             String chestsFound = "";
             if (roomController.isConfigured()) {
