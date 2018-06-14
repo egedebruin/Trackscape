@@ -70,7 +70,17 @@ public class RoomController extends Controller {
         configured = true;
     }
 
-    public void manualConfig(int players, int chests, int totalDuration, ArrayList<Integer> sectionList, ArrayList<Integer> durationList) {
+    /**
+     * Creates a new Room from manual configuration.
+     * @param players the amount of players in the game
+     * @param chests the amount of chests in the game
+     * @param totalDuration the total duration of the game
+     * @param sectionList the list with the amount of sections per chest
+     * @param durationList the list with the duration for each chest
+     */
+    public void manualConfig(final int players, final int chests,
+                             final int totalDuration, final ArrayList<Integer> sectionList,
+                             final ArrayList<Integer> durationList) {
         ArrayList<Chest> chestList = new ArrayList<>();
         int previous = 0;
         for (int i = 0; i < chests; i++) {
@@ -78,7 +88,10 @@ public class RoomController extends Controller {
             chestList.add(chest);
             previous += durationList.get(i);
         }
-        Room room = new Room(36, players, new ArrayList<>(), chestList, totalDuration, 8080);
+        final int roomId = 36;
+        final int portNumber = 8080;
+        Room room = new Room(roomId, players, new ArrayList<>(), chestList,
+                totalDuration, portNumber);
         configureRoom(room);
     }
 
