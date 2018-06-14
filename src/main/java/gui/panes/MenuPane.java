@@ -209,26 +209,10 @@ public class MenuPane {
      * @return VBox with the pop-up
      */
     private VBox createPopUpWindow(final Stage streamStage) {
-        final int spacing = 6;
-        final int insetPositions = 10;
         // Set up layout of the pop up window
         final Label fieldLabel = new Label("Enter url of the RTSP stream:");
         final TextField field = new TextField();
         Button submit = new Button("Submit");
-
-        // Set up box in pop up window
-        VBox popUpVBox = new VBox();
-        popUpVBox.setPadding(new Insets(insetPositions,
-            insetPositions, insetPositions, insetPositions));
-        popUpVBox.getChildren().addAll(fieldLabel, field, submit);
-        popUpVBox.setSpacing(spacing);
-        popUpVBox.setAlignment(Pos.CENTER);
-
-        // Save the url of the RTSP stream by clicking on submit
-        submit.setOnAction(t1 -> {
-            videoController.createStream(streamStage, field);
-            setCameraStatus();
-        });
 
         // Save the url of the RTSP stream by pressing on the enter key
         field.setOnKeyPressed(keyEvent -> {
@@ -238,8 +222,34 @@ public class MenuPane {
             }
         });
 
+        // Save the url of the RTSP stream by clicking on submit
+        submit.setOnAction(t1 -> {
+            videoController.createStream(streamStage, field);
+            setCameraStatus();
+        });
+
+        // Set up box in pop up window
+        VBox popUpVBox = constructPopUpVBox();
+        popUpVBox.getChildren().addAll(fieldLabel, field, submit);
+
         return popUpVBox;
     }
+
+    /**
+     * Construct the VBox for the pop-up window.
+     * @return popUpVBox
+     */
+    private VBox constructPopUpVBox() {
+        final int spacing = 6;
+        final int insetPositions = 10;
+        VBox popUpVBox = new VBox();
+        popUpVBox.setPadding(new Insets(insetPositions,
+            insetPositions, insetPositions, insetPositions));
+        popUpVBox.setSpacing(spacing);
+        popUpVBox.setAlignment(Pos.CENTER);
+        return popUpVBox;
+    }
+
     //---------------------------------------- END OF ALL MENU OPTIONS
 
     /**
