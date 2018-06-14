@@ -70,7 +70,16 @@ public class RoomController extends Controller {
         configured = true;
     }
 
-    public void manualConfig(int players, int chests, ArrayList<Integer> sectionList, ArrayList<Integer> durationList) {
+    public void manualConfig(int players, int chests, int totalDuration, ArrayList<Integer> sectionList, ArrayList<Integer> durationList) {
+        ArrayList<Chest> chestList = new ArrayList<>();
+        int previous = 0;
+        for (int i = 0; i < chests; i++) {
+            Chest chest = new Chest(sectionList.get(i), previous + durationList.get(i));
+            chestList.add(chest);
+            previous += durationList.get(i);
+        }
+        Room room = new Room(36, players, new ArrayList<>(), chestList, totalDuration, 8080);
+        configureRoom(room);
     }
 
     /**

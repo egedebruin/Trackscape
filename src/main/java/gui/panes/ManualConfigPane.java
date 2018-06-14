@@ -48,6 +48,7 @@ public class ManualConfigPane {
                 manualStage.setTitle("Manual Escape Room Configuration");
                 manualStage.initModality(Modality.APPLICATION_MODAL);
                 manualStage.initOwner(primaryStage);
+                manualStage.setResizable(false);
 
                 GridPane fillInPane = new GridPane();
                 fillInPane.setAlignment(Pos.CENTER);
@@ -62,19 +63,27 @@ public class ManualConfigPane {
                 fillInPane.add(chests, 0, 1);
                 fillInPane.add(chestField, 1, 1);
 
+                final Label totalDuration = new Label("Total duration of the escape room in sec: ");
+                final TextField totalDurationField = new TextField();
+                fillInPane.add(totalDuration, 0, 2);
+                fillInPane.add(totalDurationField, 1, 2);
+
                 final int maxWidth = 60;
                 playerField.setMaxWidth(maxWidth);
                 chestField.setMaxWidth(maxWidth);
+                totalDurationField.setMaxWidth(maxWidth);
 
                 Button proceed = new Button("Proceed");
-                proceedButtonAction(playerField, chestField, maxWidth, fillInPane, proceed);
-                fillInPane.add(proceed, 0, 2);
+                proceedButtonAction(playerField, chestField, totalDurationField, maxWidth, fillInPane, proceed);
+                fillInPane.add(proceed, 0, 3);
 
                 ScrollPane scrollPane = new ScrollPane();
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                 scrollPane.setContent(fillInPane);
+                scrollPane.setFitToHeight(true);
+                scrollPane.setFitToWidth(true);
 
-                Scene manualConfigScene = new Scene(scrollPane, 330, 350);
+                Scene manualConfigScene = new Scene(scrollPane, 360, 350);
                 manualStage.setScene(manualConfigScene);
                 manualStage.show();
             }
@@ -89,16 +98,17 @@ public class ManualConfigPane {
      * @param fillInPane the pane in which labels and textFields are added
      * @param proceed the proceed button
      */
-    public void proceedButtonAction(TextField playerField, TextField chestField, int maxWidth, GridPane fillInPane, Button proceed) {
+    public void proceedButtonAction(TextField playerField, TextField chestField, TextField totalDurationField, int maxWidth, GridPane fillInPane, Button proceed) {
         Label error = new Label("Please fill in a number!");
         Label submitError = new Label("Please fill in a number!");
-        fillInPane.add(error, 0, 3);
+        fillInPane.add(error, 0, 4);
         error.setVisible(false);
         proceed.setOnAction(t1 -> {
-            if (!chestField.getText().isEmpty() && !playerField.getText().isEmpty()) {
-                int filledInChests;
+            if (!chestField.getText().isEmpty() && !playerField.getText().isEmpty() && !totalDurationField.getText().isEmpty()) {
                 try {
-                    filledInChests = Integer.parseInt(chestField.getText());
+                    int filledInChests = Integer.parseInt(chestField.getText());
+                    int players = Integer.parseInt(playerField.getText().trim());
+                    int totalDuration = Integer.parseInt(totalDurationField.getText().trim());
                     error.setVisible(false);
                     ArrayList<TextField> sectionList = new ArrayList<>();
                     ArrayList<TextField> durationList = new ArrayList<>();
@@ -131,14 +141,13 @@ public class ManualConfigPane {
                     fillInPane.add(submitError, 0, filledInChests * 3 + 4);
                     submit.setOnAction(t2 -> {
                         try {
-                            int players = Integer.parseInt(playerField.getText().trim());
                             ArrayList<Integer> sectionIntList = new ArrayList<>();
                             ArrayList<Integer> durationIntList = new ArrayList<>();
                             for (int i = 0; i < sectionList.size(); i++) {
                                 sectionIntList.add(Integer.parseInt(sectionList.get(i).getText().trim()));
                                 durationIntList.add(Integer.parseInt(durationList.get(i).getText().trim()));
                             }
-                            roomController.manualConfig(players, filledInChests, sectionIntList, durationIntList);
+                            roomController.manualConfig(players, filledInChests, totalDuration, sectionIntList, durationIntList);
                             manualStage.close();
                         } catch (NumberFormatException e) {
                             submitError.setVisible(true);
@@ -146,6 +155,8 @@ public class ManualConfigPane {
                     });
                     proceed.setVisible(false);
                     chestField.setEditable(false);
+                    playerField.setEditable(false);
+                    totalDurationField.setEditable(false);
                 } catch (NumberFormatException e) {
                     error.setVisible(true);
                 }
