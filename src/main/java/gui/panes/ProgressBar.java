@@ -52,18 +52,24 @@ public class ProgressBar {
     public void constructProgressBar() {
         if (controller.isConfigured()) {
             createItems();
-
-            int spot = 0;
-            for (int k = 0; k < progressStages.size(); k++) {
-                progressBar.add(progressStages.get(k), spot, 0);
-                spot = spot + 1;
-                if (k != progressStages.size() - 1) {
-                    progressBar.add(createLineLabel(), spot, 0);
-                    spot = spot + 1;
-                }
-            }
+            fillProgressBarWithItems();
             controller.setProgressBar(progressBar);
             controller.setItemsOnDone();
+        }
+    }
+
+    /**
+     * Fill the progressBar with the puzzle and chest items.
+     */
+    private void fillProgressBarWithItems() {
+        int spot = 0;
+        for (int k = 0; k < progressStages.size(); k++) {
+            progressBar.add(progressStages.get(k), spot, 0);
+            spot = spot + 1;
+            if (k != progressStages.size() - 1) {
+                progressBar.add(createLineLabel(), spot, 0);
+                spot = spot + 1;
+            }
         }
     }
 
