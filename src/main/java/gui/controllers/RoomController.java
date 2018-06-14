@@ -14,7 +14,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import room.Chest;
 import room.Progress;
-import room.Room;
 
 /**
  * Controller for the gui with a room.
@@ -31,15 +30,6 @@ public class RoomController extends Controller {
     private boolean behindSchedule = false;
     private List<Label> chestTimeStampList;
     private boolean configured;
-
-    /**
-     * Creates a new progress depending on the room given.
-     * @param room the new room
-     */
-    public void configureRoom(final Room room) {
-        progress = new Progress(room);
-        configure();
-    }
 
     /**
      * Creates a new progress depending on the config.
@@ -81,18 +71,8 @@ public class RoomController extends Controller {
     public void manualConfig(final int players, final int chests,
                              final int totalDuration, final ArrayList<Integer> sectionList,
                              final ArrayList<Integer> durationList) {
-        ArrayList<Chest> chestList = new ArrayList<>();
-        int previous = 0;
-        for (int i = 0; i < chests; i++) {
-            Chest chest = new Chest(sectionList.get(i), previous + durationList.get(i));
-            chestList.add(chest);
-            previous += durationList.get(i);
-        }
-        final int roomId = 36;
-        final int portNumber = 8080;
-        Room room = new Room(roomId, players, new ArrayList<>(), chestList,
-                totalDuration, portNumber);
-        configureRoom(room);
+        progress = new Progress(players, chests, totalDuration, sectionList, durationList);
+        configure();
     }
 
     /**

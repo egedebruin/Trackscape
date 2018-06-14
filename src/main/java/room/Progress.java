@@ -2,6 +2,7 @@ package room;
 
 import api.APIHandler;
 import handlers.JsonHandler;
+import java.util.ArrayList;
 
 /**
  * Class describing the progress in a room.
@@ -34,10 +35,26 @@ public class Progress {
 
     /**
      * Constructor.
-     * @param newRoom predefined room
+     * @param players the amount of players in the game
+     * @param chests the amount of chests in the game
+     * @param totalDuration the total duration of the game
+     * @param sectionList the list with the amount of sections per chest
+     * @param durationList the list with the duration for each chest
      */
-    public Progress(final Room newRoom) {
-        room = newRoom;
+    public Progress(final int players, final int chests,
+                    final int totalDuration, final ArrayList<Integer> sectionList,
+                    final ArrayList<Integer> durationList) {
+        ArrayList<Chest> chestList = new ArrayList<>();
+        int previous = 0;
+        for (int i = 0; i < chests; i++) {
+            Chest chest = new Chest(sectionList.get(i), previous + durationList.get(i));
+            chestList.add(chest);
+            previous += durationList.get(i);
+        }
+        final int roomId = 36;
+        final int portNumber = 8080;
+        room = new Room(roomId, players, new ArrayList<>(), chestList,
+            totalDuration, portNumber);
         init();
     }
 
