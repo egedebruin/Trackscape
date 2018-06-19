@@ -29,6 +29,7 @@ public class TimeLogController extends Controller {
     private long chestTimestamp = -1;
     private Label timeStamp;
     private Mat img;
+    private long lastChest = -1;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
@@ -109,9 +110,11 @@ public class TimeLogController extends Controller {
      * @param chestsFound the string format of the amount of chests found
      */
     public void confirmedChest(final String chestsFound) {
+        final long timeOut = TimeUnit.SECONDS.toNanos(5);
         addInformation("Found chest " + chestsFound, chestTimestamp);
         Imgcodecs.imwrite("files/chests/correct/"
             + TimeUnit.NANOSECONDS.toMillis(chestTimestamp) + ".png", img);
+        lastChest = chestTimestamp + timeOut;
         clearButtons();
     }
 
@@ -194,21 +197,28 @@ public class TimeLogController extends Controller {
         if (getCameraHandler().areAllChestsDetected()) {
             clearButtons();
         } else if (chestTimestamp == -1) {
-                Pair<Mat, Long> mat = informationHandler.getMatrix();
-                if (mat != null) {
-                    question.setVisible(true);
-                    approveButton.setVisible(true);
-                    notApproveButton.setVisible(true);
-                    imageView.setVisible(true);
-                    timeStamp.setVisible(true);
-                    timeStamp.setText("Time detected: " + (Util.getTimeString(mat.getValue()
-                            - getCameraHandler().getBeginTime(), true)));
+            processChestMat();
+        }
+    }
 
-                    Image image = newChestFrame(mat);
-                    imageView.setImage(image);
-                    chestTimestamp = mat.getValue();
-                    img = mat.getKey();
-                }
+    /**
+     * Ask a new chest frame from the informationHandler and process it.
+     */
+    private void processChestMat() {
+        Pair<Mat, Long> mat = informationHandler.getMatrix();
+        if (mat != null && mat.getValue() > lastChest) {
+            question.setVisible(true);
+            approveButton.setVisible(true);
+            notApproveButton.setVisible(true);
+            imageView.setVisible(true);
+            timeStamp.setVisible(true);
+            timeStamp.setText("Time detected: " + (Util.getTimeString(mat.getValue()
+                - getCameraHandler().getBeginTime(), true)));
+
+            Image image = newChestFrame(mat);
+            imageView.setImage(image);
+            chestTimestamp = mat.getValue();
+            img = mat.getKey();
         }
     }
 
