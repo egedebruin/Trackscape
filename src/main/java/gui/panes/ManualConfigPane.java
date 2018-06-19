@@ -262,7 +262,8 @@ public class ManualConfigPane {
         label.setFont(font);
 
         if (bold) {
-            label.setStyle("-fx-font-weight: bold");
+            label.setStyle("-fx-font-size: 16pt;"
+                + "-fx-font-weight: bold");
         }
 
         return label;
@@ -301,7 +302,7 @@ public class ManualConfigPane {
      * @return the error label
      */
     private Label createFixedErrorMessage() {
-        Label error = creatErrorLabel();
+        Label error = createErrorLabel();
 
         final int rowIndex = 4;
         fillInPane.add(error, 0, rowIndex);
@@ -315,7 +316,7 @@ public class ManualConfigPane {
      * @return the submit error label
      */
     private Label createSubmitError(final int filledInChests) {
-        Label submitError = creatErrorLabel();
+        Label submitError = createErrorLabel();
 
         final int skipThree = 5;
         final int skipSix = 6;
@@ -329,7 +330,7 @@ public class ManualConfigPane {
      * Create an error label.
      * @return the error label
      */
-    private Label creatErrorLabel() {
+    private Label createErrorLabel() {
         Label errorLabel = new Label("Please fill in a number!");
         errorLabel.setVisible(false);
         return errorLabel;
