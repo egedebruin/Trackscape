@@ -93,8 +93,7 @@ public class ManualConfigPane {
      * @param playerField the field in which the amount of players need to be filled in
      */
     private void createPlayersLine(final TextField playerField) {
-        final Label players = new Label("Amount of players: ");
-        players.setFont(font);
+        final Label players = createLabel("Amount of players: ", false);
 
         playerField.setMaxWidth(maxWidth);
 
@@ -107,8 +106,7 @@ public class ManualConfigPane {
      * @param chestField the field in which the amount of chests need to be filled in
      */
     private void createChestsLine(final TextField chestField) {
-        final Label chests = new Label("Amount of chests: ");
-        chests.setFont(font);
+        final Label chests = createLabel("Amount of chests: ", false);
 
         chestField.setMaxWidth(maxWidth);
 
@@ -121,9 +119,8 @@ public class ManualConfigPane {
      * @param totalDurationField the field in which the total duration need to be filled in
      */
     private void createTotalDurationLine(final TextField totalDurationField) {
-        final Label totalDuration = new Label("Total duration of the escape room: ");
-        final Label seconds = createSecondsLabel();
-        totalDuration.setFont(font);
+        final Label totalDuration = createLabel("Total duration of the escape room: ", false);
+        final Label seconds = createLabel(" sec", false);
 
         totalDurationField.setMaxWidth(maxWidth);
 
@@ -187,20 +184,6 @@ public class ManualConfigPane {
     }
 
     /**
-     * Creates a fixed error message.
-     * @return the error label
-     */
-    private Label createFixedErrorMessage() {
-        Label error = new Label("Please fill in a number!");
-        error.setVisible(false);
-
-        final int rowIndex = 4;
-        fillInPane.add(error, 0, rowIndex);
-
-        return error;
-    }
-
-    /**
      * Handles the action after clicking on the proceed button.
      * @param chestField the field in which the amount of chests is filled in
      * @param playerField the field in which the amount of players is filled in
@@ -245,95 +228,55 @@ public class ManualConfigPane {
     private void createProceedItems(final int filledInChests,
                                     final ArrayList<TextField> sectionList,
                                     final ArrayList<TextField> durationList) {
-        final int skipFour = 5;
+        final int skipFive = 5;
         for (int i = 1; i <= filledInChests; i++) {
-            Label settings = createSettingsLabel(i);
-            Label sections = createSectionsLabel();
-            Label targetDuration = createTargetDurationLabel();
-            Label seconds = createSecondsLabel();
+            Label settings = createLabel("Settings for chest " + i, true);
+            Label sections = createLabel("Amount of sections: ", false);
+            Label targetDuration = createLabel("The target duration: ", false);
+            Label seconds = createLabel(" sec", false);
 
-            TextField sectionField = createSectionField();
-            TextField durationField = createDurationField();
+            TextField sectionField = createTextField();
+            TextField durationField = createTextField();
 
             sectionList.add(sectionField);
             durationList.add(durationField);
 
-            int line = (i - 1) * skipFour;
-            fillInPane.add(settings, 0, line + skipFour);
-            fillInPane.add(sections, 0, line + skipFour + 1);
-            fillInPane.add(sectionField, 1, line + skipFour + 1);
-            fillInPane.add(targetDuration, 0, line + skipFour + 2);
-            fillInPane.add(durationField, 1, line + skipFour + 2);
-            fillInPane.add(seconds, 2, line + skipFour + 2);
+            int line = (i - 1) * skipFive;
+            fillInPane.add(settings, 0, line + skipFive);
+            fillInPane.add(sections, 0, line + skipFive + 1);
+            fillInPane.add(sectionField, 1, line + skipFive + 1);
+            fillInPane.add(targetDuration, 0, line + skipFive + 2);
+            fillInPane.add(durationField, 1, line + skipFive + 2);
+            fillInPane.add(seconds, 2, line + skipFive + 2);
         }
     }
 
     /**
-     * Creates the settings label for each chest.
-     * @param i the ith chest
-     * @return the settings label
+     * Create a label with the given text.
+     * @param labelString the text for the label
+     * @param bold if the text needs to be bold
+     * @return the label
      */
-    private Label createSettingsLabel(final int i) {
-        Label settings = new Label("Settings for chest " + i);
-        settings.setStyle("-fx-font-weight: bold");
-        settings.setFont(font);
+    private Label createLabel(final String labelString, final boolean bold) {
+        Label label = new Label(labelString);
+        label.setFont(font);
 
-        return settings;
+        if (bold) {
+            label.setStyle("-fx-font-weight: bold");
+        }
+
+        return label;
     }
 
     /**
-     * Creates the sections label.
-     * @return the sections label
+     * Creates the text field.
+     * @return the text field
      */
-    private Label createSectionsLabel() {
-        Label sections = new Label("Amount of sections: ");
-        sections.setFont(font);
-
-        return sections;
-    }
-
-    /**
-     * Creates the target duration label.
-     * @return the target duration label
-     */
-    private Label createTargetDurationLabel() {
-        Label targetDuration = new Label("The target duration: ");
-        targetDuration.setFont(font);
-
-        return targetDuration;
-    }
-
-    /**
-     * Creates the seconds label.
-     * @return the seconds label
-     */
-    private Label createSecondsLabel() {
-        Label seconds = new Label(" sec");
-        seconds.setFont(font);
-
-        return seconds;
-    }
-
-    /**
-     * Creates the section field.
-     * @return the section field
-     */
-    private TextField createSectionField() {
+    private TextField createTextField() {
         TextField sectionField = new TextField();
         sectionField.setMaxWidth(maxWidth);
 
         return sectionField;
-    }
-
-    /**
-     * Creates the duration field.
-     * @return the duration field
-     */
-    private TextField createDurationField() {
-        TextField durationField = new TextField();
-        durationField.setMaxWidth(maxWidth);
-
-        return durationField;
     }
 
     /**
@@ -354,13 +297,25 @@ public class ManualConfigPane {
     }
 
     /**
+     * Creates a fixed error message.
+     * @return the error label
+     */
+    private Label createFixedErrorMessage() {
+        Label error = creatErrorLabel();
+
+        final int rowIndex = 4;
+        fillInPane.add(error, 0, rowIndex);
+
+        return error;
+    }
+
+    /**
      * Creates the submit error.
      * @param filledInChests the amount of chests filled in
      * @return the submit error label
      */
     private Label createSubmitError(final int filledInChests) {
-        Label submitError = new Label("Please fill in a number!");
-        submitError.setVisible(false);
+        Label submitError = creatErrorLabel();
 
         final int skipThree = 5;
         final int skipSix = 6;
@@ -368,6 +323,16 @@ public class ManualConfigPane {
         fillInPane.add(submitError, 0, filledInChests * skipThree + skipSix);
 
         return submitError;
+    }
+
+    /**
+     * Create an error label.
+     * @return the error label
+     */
+    private Label creatErrorLabel() {
+        Label errorLabel = new Label("Please fill in a number!");
+        errorLabel.setVisible(false);
+        return errorLabel;
     }
 
     /**

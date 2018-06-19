@@ -379,7 +379,7 @@ public class RoomController extends Controller {
     }
 
     /**
-     * Resets the progress to null
+     * Resets the progress to null.
      */
     public void resetProgressObject() {
         progress = null;
