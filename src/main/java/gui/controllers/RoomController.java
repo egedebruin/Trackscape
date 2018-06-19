@@ -79,7 +79,7 @@ public class RoomController extends Controller {
             // Update the progressPane
             updateChests(progress.getRoom().getChestsOpened());
             updateActivity();
-            updateWarningPane();
+            updateWarningPane(now);
         }
     }
 
@@ -228,11 +228,12 @@ public class RoomController extends Controller {
 
     /**
      * Update the warning pane, show if needed and hide if not needed.
+     * @param time the current time
      */
-    public void updateWarningPane() {
+    public void updateWarningPane(final long time) {
         // Update the warningPane
         // When people are behind on schedule
-        if (behindSchedule && !snoozeHint && !progress.allChestsOpened()) {
+        if (checkBehindSchedule(time) && !snoozeHint && !progress.allChestsOpened()) {
             // Get the warningPane of the statusPane and set it on visible
             statusPane.getChildren().get(2).setVisible(true);
         } else {
@@ -247,15 +248,32 @@ public class RoomController extends Controller {
      */
     private void updateTimeChestsPanel(final long time, final int pos) {
         List<Chest> chestList = progress.getRoom().getChestList();
+        long currentSeconds = (TimeUnit.NANOSECONDS.toSeconds(time));
         if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED
-            && !(TimeUnit.NANOSECONDS.toSeconds(time)
-            <= chestList.get(pos).getTargetDurationInSec())) {
-            behindSchedule = true;
+            && !(currentSeconds <= chestList.get(pos).getTargetDurationInSec())) {
             chestTimeStampList.get(pos).setTextFill(Color.RED);
         } else if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED) {
-            behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
+    }
+
+    /**
+     * Check if a warning pane needs to be shown.
+     * @param time the current time
+     * @return true if warning pane needs to be shown, false otherwise
+     */
+    private boolean checkBehindSchedule(final long time) {
+        if (getCameraHandler().getBeginTime() != -1) {
+            List<Chest> chestList = progress.getRoom().getChestList();
+            long seconds = TimeUnit.NANOSECONDS.toSeconds(time - getCameraHandler().getBeginTime());
+            for (Chest chest : chestList) {
+                if (chest.getChestState() == Chest.Status.TO_BE_OPENED
+                    && !(seconds <= chest.getWarningTimeInSec())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

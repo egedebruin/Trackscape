@@ -1,5 +1,6 @@
 package room;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ChestTest {
 
     private static final long TARGETTIME = 120;
+    private static final long WARNINGTIME = 60;
     private Chest precedingChest = new OpenedChest();
+    private Chest chest;
 
     static {
         // These should be at the start of the application,
@@ -25,11 +28,18 @@ class ChestTest {
     }
 
     /**
+     * Set chest before each test.
+     */
+    @BeforeEach
+    void setup() {
+        chest = new Chest(1, TARGETTIME, WARNINGTIME);
+    }
+
+    /**
      * Test for the updateStatus method, every transition is tested.
      */
     @Test
     void updateStatusTest() {
-        Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
         chest.updateStatus(precedingChest);
         assertEquals(chest.getChestState(), Chest.Status.TO_BE_OPENED);
@@ -47,7 +57,6 @@ class ChestTest {
      */
     @Test
     void getChestStateTest() {
-        Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
     }
 
@@ -56,7 +65,6 @@ class ChestTest {
      */
     @Test
     void countSubsectionsTest() {
-        Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.countSubsectionsCompleted(), 0);
         chest.subSectionCompleted();
         assertEquals(chest.countSubsectionsCompleted(), 1);
@@ -69,9 +77,8 @@ class ChestTest {
      */
     @Test
     void getNumberOfSubSectionsTest() {
-        Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.getNumberOfSubSections(), 1);
-        Chest chest2 = new Chest(-1, TARGETTIME);
+        Chest chest2 = new Chest(-1, TARGETTIME, WARNINGTIME);
         assertEquals(chest2.getNumberOfSubSections(), 1);
     }
 
@@ -80,7 +87,6 @@ class ChestTest {
      */
     @Test
     void subSectionCompletedTest() {
-        Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.countSubsectionsCompleted(), 0);
         chest.subSectionCompleted();
         assertEquals(chest.countSubsectionsCompleted(), 1);
@@ -93,7 +99,7 @@ class ChestTest {
      */
     @Test
     void countSubsectionsCompletedOpenedChestTest() {
-        Chest chest = new OpenedChest();
+        chest = new OpenedChest();
         assertEquals(chest.countSubsectionsCompleted(), 1);
     }
 
@@ -102,7 +108,6 @@ class ChestTest {
      */
     @Test
     void chestStateUpdateFromToBeOpenedToOpened() {
-        Chest chest = new Chest(1, TARGETTIME);
         chest.updateStatus(precedingChest);
         chest.subSectionCompleted();
         chest.updateStatus(precedingChest);
@@ -115,7 +120,6 @@ class ChestTest {
      */
     @Test
     void getTargetDurationInSecTest() {
-        Chest chest = new Chest(1, TARGETTIME);
         assertEquals(chest.getTargetDurationInSec(), TARGETTIME);
     }
 
@@ -124,9 +128,16 @@ class ChestTest {
      */
     @Test
     void getTimeFoundTest() {
-        Chest chest = new Chest(1, TARGETTIME);
         assertEquals(-1, chest.getTimeFound());
         chest.setTimeFound(1);
         assertEquals(1, chest.getTimeFound());
+    }
+
+    /**
+     * Test the getWarningTime method.
+     */
+    @Test
+    void getWarningTimeTest() {
+        assertEquals(WARNINGTIME, chest.getWarningTimeInSec());
     }
 }

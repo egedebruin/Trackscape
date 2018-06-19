@@ -30,6 +30,7 @@ public class Chest {
     private Status chestState;
     private MatOfPoint positionInFrame;
     private long targetDurationInSec;
+    private long warningTimeInSec;
     private long timeFound = -1;
     private int numberOfSubSections;
     private boolean[] subsectionCompleted;
@@ -43,11 +44,13 @@ public class Chest {
      * @param targetTimeInSeconds Time in seconds regarding the target time,
      *                            when peolpe take longer than this time they might enter a
      *                            critical stage.
+     * @param warningTime The time where a warning needs to be given to the user.
      */
-    public Chest(final int noSubsections, final long targetTimeInSeconds) {
+    public Chest(final int noSubsections, final long targetTimeInSeconds, final long warningTime) {
         numberOfSubSections = Math.max(noSubsections, 1);
         subsectionCompleted = new boolean[numberOfSubSections];
         targetDurationInSec = targetTimeInSeconds;
+        warningTimeInSec = warningTime;
         chestState = WAITING_FOR_SECTION_TO_START;
 
     }
@@ -173,5 +176,13 @@ public class Chest {
      */
     public void setTimeFound(final long timestamp) {
         this.timeFound = timestamp;
+    }
+
+    /**
+     * Get the warning time.
+     * @return the time in seconds
+     */
+    public long getWarningTimeInSec() {
+        return warningTimeInSec;
     }
 }

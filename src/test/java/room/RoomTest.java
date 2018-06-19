@@ -39,6 +39,8 @@ public class RoomTest {
     private List<String> cameraLinks = new ArrayList<>();
     private List<Chest> chestList = new ArrayList<>();
     private static final long TARGETTIME = 120;
+    private static final long WARNINGTIME = 60;
+    private static final long WARNINGTIME2 = 50;
     private static final long TARGETTIME2 = 100;
     private InformationHandler informationHandler = new InformationHandler();
 
@@ -48,7 +50,7 @@ public class RoomTest {
     @Test
     void testGetters() {
         cameraLinks.add("ajax");
-        chestList.add(new Chest(1, TARGETTIME));
+        chestList.add(new Chest(1, TARGETTIME, WARNINGTIME));
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(0, room.getId());
         assertEquals(2, room.getNumberOfPeople());
@@ -65,11 +67,11 @@ public class RoomTest {
     @Test
     void testSetters() {
         cameraLinks.add("ajax");
-        chestList.add(new Chest(1, TARGETTIME));
+        chestList.add(new Chest(1, TARGETTIME, WARNINGTIME));
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
 
         List<Chest> chestList2 = new ArrayList<>();
-        chestList2.add(new Chest(0, TARGETTIME2));
+        chestList2.add(new Chest(0, TARGETTIME2, WARNINGTIME2));
         room.setChestList(chestList2);
         assertEquals(chestList2, room.getChestList());
 
@@ -91,7 +93,7 @@ public class RoomTest {
      */
     @Test
     void setNextChestOpened() {
-        chestList.add(new Chest(1, TARGETTIME));
+        chestList.add(new Chest(1, TARGETTIME, WARNINGTIME));
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
         room.updateRoom();
@@ -105,7 +107,7 @@ public class RoomTest {
      */
     @Test
     void setNextSectionOpened() {
-        chestList.add(new Chest(1, TARGETTIME));
+        chestList.add(new Chest(1, TARGETTIME, WARNINGTIME));
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
         room.updateRoom();
@@ -120,8 +122,8 @@ public class RoomTest {
     @Test
     void getChestsOpenedTest() {
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
-        Chest chest = new Chest(1, TARGETTIME);
-        Chest chest2 = new Chest(2, TARGETTIME);
+        Chest chest = new Chest(1, TARGETTIME, WARNINGTIME);
+        Chest chest2 = new Chest(2, TARGETTIME, WARNINGTIME);
         chestList.add(chest);
         chestList.add(chest2);
         assertEquals(0, room.getChestsOpened());
@@ -136,8 +138,8 @@ public class RoomTest {
     @Test
     void totalSubsectionsTest() {
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
-        Chest chest = new Chest(1, TARGETTIME);
-        Chest chest2 = new Chest(1, TARGETTIME);
+        Chest chest = new Chest(1, TARGETTIME, WARNINGTIME);
+        Chest chest2 = new Chest(1, TARGETTIME, WARNINGTIME);
         chestList.add(chest);
         chestList.add(chest2);
         assertEquals(2, room.getTotalSubsections());
@@ -149,8 +151,8 @@ public class RoomTest {
     @Test
     void testSetChestCompletedTill() {
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
-        Chest chest = new Chest(1, TARGETTIME);
-        Chest chest2 = new Chest(2, TARGETTIME);
+        Chest chest = new Chest(1, TARGETTIME, WARNINGTIME);
+        Chest chest2 = new Chest(2, TARGETTIME, WARNINGTIME);
         chestList.add(chest);
         chestList.add(chest2);
         room.setChestSectionsCompletedTill(2);
