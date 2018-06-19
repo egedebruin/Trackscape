@@ -49,28 +49,28 @@ public class VideoControllerTest {
      */
     @Test
     void updateTest() {
-        VideoController videoController = new VideoController();
-        CameraHandler camHandler = new CameraHandler();
-        videoController.setCameraHandler(camHandler);
-        assertTrue(videoController.isClosed());
+        PlatformImpl.startup(() -> { });
+        PlatformImpl.runLater(() -> {
+            VideoController videoController = new VideoController();
+            videoController.setCameraHandler(new CameraHandler());
+            assertTrue(videoController.isClosed());
 
-        videoController.createVideo(file);
-        assertEquals(videoController.getCameras(), 1);
+            videoController.createVideo(file);
+            assertEquals(videoController.getCameras(), 1);
 
-        ArrayList<ImageView> ivs = new ArrayList();
-        for (int j = 0; j < videoController.getCameras(); j++) {
+            ArrayList<ImageView> ivs = new ArrayList();
             ivs.add(new ImageView());
-        }
-        videoController.setImageViews(ivs);
-        assertTrue(videoController.isClosed());
+            videoController.setImageViews(ivs);
+            assertTrue(videoController.isClosed());
 
-        videoController.update(0);
-        assertFalse(videoController.isClosed());
-        assertNotNull(videoController.getImageViews().get(0));
-        Image im = videoController.getImageViews().get(0).getImage();
+            videoController.update(0);
+            assertFalse(videoController.isClosed());
+            assertNotNull(videoController.getImageViews().get(0));
+            Image im = videoController.getImageViews().get(0).getImage();
 
-        videoController.update(0);
-        assertNotEquals(im, videoController.getImageViews().get(0).getImage());
+            videoController.update(0);
+            assertNotEquals(im, videoController.getImageViews().get(0).getImage());
+        });
     }
 
     /**
