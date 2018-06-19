@@ -191,14 +191,14 @@ public class TimeLogController extends Controller {
         if (getCameraHandler().areAllChestsDetected()) {
             clearButtons();
         } else if (chestTimestamp == -1) {
-            processMat();
+            processChestMat();
         }
     }
 
     /**
-     * Process a chest mat.
+     * Ask a new chest frame from the informationHandler and process it.
      */
-    private void processMat() {
+    private void processChestMat() {
         Pair<Mat, Long> mat = informationHandler.getMatrix();
         if (mat != null && mat.getValue() > lastChest) {
             question.setVisible(true);
