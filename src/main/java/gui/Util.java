@@ -77,7 +77,7 @@ public final class Util {
      */
     private static String putTimeUnitInString(final int timeUnit) {
         final int nineSeconds = 9;
-        if (timeUnit < nineSeconds) {
+        if (timeUnit <= nineSeconds) {
             return "0" + timeUnit;
         } else {
             return Integer.toString(timeUnit);
