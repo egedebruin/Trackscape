@@ -11,8 +11,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -21,9 +19,7 @@ import java.util.ArrayList;
  * Class that creates the ManualConfigPane in a new Scene.
  */
 public class ManualConfigPane {
-    /**
-     * Class parameters.
-     */
+
     private VideoController videoController;
     private RoomController roomController;
     private Stage manualStage;
@@ -54,8 +50,6 @@ public class ManualConfigPane {
         manual.setOnAction(t -> {
             if (videoController.isClosed()) {
                 manualStage.setTitle("Manual Escape Room Configuration");
-//                manualStage.initModality(Modality.APPLICATION_MODAL);
-//                manualStage.initOwner(primaryStage);
 
                 fillInPane.setAlignment(Pos.CENTER);
 
@@ -163,6 +157,7 @@ public class ManualConfigPane {
                                      final TextField totalDurationField, final Button proceed) {
         Label error = createFixedErrorMessage();
         proceed.setOnAction(t1 -> {
+            resetChestFillIn();
             if (!chestField.getText().isEmpty() && !playerField.getText().isEmpty()
                     && !totalDurationField.getText().isEmpty()) {
                 proceedAction(chestField, playerField, totalDurationField, error, proceed);
@@ -170,6 +165,12 @@ public class ManualConfigPane {
                 error.setVisible(true);
             }
         });
+    }
+
+    private void resetChestFillIn() {
+        fillInPane.getChildren().remove(9,fillInPane.getChildren().size());
+
+        roomController.resetProgressObject();
     }
 
     /**
@@ -217,8 +218,6 @@ public class ManualConfigPane {
                         submitError);
             });
 
-            configureItems(proceed, chestField, playerField, totalDurationField);
-
         } catch (NumberFormatException e) {
             error.setVisible(true);
         }
@@ -233,7 +232,7 @@ public class ManualConfigPane {
     private void createProceedItems(final int filledInChests,
                                     final ArrayList<TextField> sectionList,
                                     final ArrayList<TextField> durationList) {
-        final int skipFour = 4;
+        final int skipFour = 5;
         for (int i = 1; i <= filledInChests; i++) {
             Label settings = createSettingsLabel(i);
             Label sections = createSectionsLabel();
@@ -333,7 +332,7 @@ public class ManualConfigPane {
         Button submit = new Button("Submit");
         submit.setFont(font);
 
-        final int skipThree = 3;
+        final int skipThree = 5;
         final int skipFive = 5;
 
         fillInPane.add(submit, 0, filledInChests * skipThree + skipFive);
@@ -350,7 +349,7 @@ public class ManualConfigPane {
         Label submitError = new Label("Please fill in a number!");
         submitError.setVisible(false);
 
-        final int skipThree = 3;
+        final int skipThree = 5;
         final int skipSix = 6;
 
         fillInPane.add(submitError, 0, filledInChests * skipThree + skipSix);
@@ -387,21 +386,6 @@ public class ManualConfigPane {
         } catch (NumberFormatException e) {
             submitError.setVisible(true);
         }
-    }
-
-    /**
-     * Sets an item to invisible and sets two items to not editable.
-     * @param proceed the proceed button
-     * @param chestField the chestField
-     * @param playerField the playerField
-     * @param totalDurationField the totalDurationField
-     */
-    private void configureItems(final Button proceed, final TextField chestField,
-                                final TextField playerField, final TextField totalDurationField) {
-        proceed.setVisible(false);
-        chestField.setEditable(false);
-        playerField.setEditable(false);
-        totalDurationField.setEditable(false);
     }
 
 }

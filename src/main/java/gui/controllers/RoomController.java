@@ -1,12 +1,6 @@
 package gui.controllers;
 
 import gui.Util;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -14,6 +8,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import room.Chest;
 import room.Progress;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller for the gui with a room.
@@ -368,5 +369,10 @@ public class RoomController extends Controller {
      */
     public boolean isConfigured() {
         return configured;
+    }
+
+    public void resetProgressObject() {
+        progress = null;
+        this.configured = false;
     }
 }
