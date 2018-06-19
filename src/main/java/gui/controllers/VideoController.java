@@ -18,7 +18,7 @@ import org.opencv.core.Mat;
 public class VideoController extends Controller {
 
     private boolean closed;
-    private List<ImageView> imageViews;
+    private List<ImageView> imageViews = new ArrayList<>();
 
     /**
      * Constructor for the VideoController.

@@ -202,8 +202,10 @@ public class RoomController extends Controller {
         if (progress.allChestsOpened()) {
             numOfChestsOpened.setText(" All chests have been opened!");
             numOfChestsOpened.setTextFill(Color.FORESTGREEN);
+            getCameraHandler().setAllChestsDetected(true);
         } else {
             numOfChestsOpened.setTextFill(Color.BLACK);
+            getCameraHandler().setAllChestsDetected(false);
         }
     }
 
@@ -255,7 +257,6 @@ public class RoomController extends Controller {
      * Update the warning pane, show if needed and hide if not needed.
      */
     public void updateWarningPane() {
-        // Update the warningPane
         // When people are behind on schedule
         if (behindSchedule && !snoozeHint && !progress.allChestsOpened()) {
             // Get the warningPane of the statusPane and set it on visible
@@ -272,12 +273,18 @@ public class RoomController extends Controller {
      */
     private void updateTimeChestsPanel(final long time, final int pos) {
         List<Chest> chestList = progress.getRoom().getChestList();
-        if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED
+        Chest chest = chestList.get(pos);
+        if (chest.getChestState() == Chest.Status.TO_BE_OPENED
             && !(TimeUnit.NANOSECONDS.toSeconds(time)
-            <= chestList.get(pos).getTargetDurationInSec())) {
+            <= chest.getTargetDurationInSec())) {
             behindSchedule = true;
             chestTimeStampList.get(pos).setTextFill(Color.RED);
-        } else if (chestList.get(pos).getChestState() == Chest.Status.TO_BE_OPENED) {
+        } else if ((chest.getChestState() == Chest.Status.TO_BE_OPENED
+            && (TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec()))
+            || (chest.getChestState() == Chest.Status.OPENED
+            && TimeUnit.NANOSECONDS.toSeconds(
+                chest.getTimeFound() - getCameraHandler().getBeginTime())
+            < chest.getTargetDurationInSec())) {
             behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
