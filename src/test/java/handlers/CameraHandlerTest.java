@@ -1,7 +1,6 @@
 package handlers;
 
 import camera.Camera;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
