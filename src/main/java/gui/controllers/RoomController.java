@@ -267,6 +267,33 @@ public class RoomController extends Controller {
     }
 
     /**
+     * Make the warningPane invisible until time is up and players are still behind.
+     */
+    public void startHintTimer() {
+        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
+
+        snoozeHint = true;
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                snoozeHint = false;
+            }
+        };
+        Timer hintTimer = new Timer();
+        // Wait 30 seconds before showing another warning
+        hintTimer.schedule(task, timeUntilWarning);
+    }
+
+    /**
+     * Set the progressBar on inactive.
+     */
+    private void setProgressBarActive() {
+        for (Node child : progressBar.getChildren()) {
+            child.setDisable(false);
+        }
+    }
+
+    /**
      * Get the progress object.
      * @return The progress object.
      */
@@ -279,15 +306,6 @@ public class RoomController extends Controller {
      */
     public void setProgressBar(final GridPane newProgressBar) {
         this.progressBar = newProgressBar;
-    }
-
-    /**
-     * Set the progressBar on inactive.
-     */
-    private void setProgressBarActive() {
-        for (Node child : progressBar.getChildren()) {
-            child.setDisable(false);
-        }
     }
 
     /**
@@ -329,28 +347,26 @@ public class RoomController extends Controller {
     }
 
     /**
-     * Make the warningPane invisible until time is up and players are still behind.
-     */
-    public void startHintTimer() {
-        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
-
-        snoozeHint = true;
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                snoozeHint = false;
-            }
-        };
-        Timer hintTimer = new Timer();
-        // Wait 30 seconds before showing another warning
-        hintTimer.schedule(task, timeUntilWarning);
-    }
-
-    /**
      * If the room is configured.
      * @return true if configured, false otherwise
      */
     public boolean isConfigured() {
         return configured;
+    }
+
+    /**
+     * Return whether players are behind schedule.
+     * @return behindSchedule.
+     */
+    public boolean isBehindSchedule() {
+        return behindSchedule;
+    }
+
+    /**
+     * Return whether hint is snoozed.
+     * @return snoozeHint
+     */
+    public boolean getSnoozeHint() {
+        return snoozeHint;
     }
 }

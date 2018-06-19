@@ -1,0 +1,140 @@
+package gui.controllers;
+
+import com.sun.javafx.application.PlatformImpl;
+import handlers.CameraHandler;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * Test the VideoController class.
+ */
+public class VideoControllerTest {
+    private String videoLink = "files" + File.separator + "postit.mov";
+    private File file = new File(videoLink);
+
+    static {
+        // These should be at the start of the application,
+        // so if the main changes this should be included.
+        // Load OpenCV library.
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_ffmpeg341_64.dll");
+        System.load(System.getProperty("user.dir")
+            + File.separator + "libs" + File.separator + "opencv_java341.dll");
+    }
+
+    /**
+     * Test the constructor for VideoController object.
+     */
+    @Test
+    void constructorTest() {
+        VideoController vc = new VideoController();
+        assertNotNull(vc);
+        assertTrue(vc.isClosed());
+    }
+
+    /**
+     * Verify that frames are being returned.
+     */
+    @Test
+    void updateTest() {
+        VideoController vc = new VideoController();
+        CameraHandler camHandler = new CameraHandler();
+        vc.setCameraHandler(camHandler);
+        assertTrue(vc.isClosed());
+
+        vc.createVideo(file);
+        assertEquals(vc.getCameras(), 1);
+
+        ArrayList<ImageView> ivs = new ArrayList();
+        for (int j = 0; j < vc.getCameras(); j++) {
+            ivs.add(new ImageView());
+        }
+        vc.setImageViews(ivs);
+        assertTrue(vc.isClosed());
+
+        vc.update(0);
+        assertFalse(vc.isClosed());
+        assertNotNull(vc.getImageViews().get(0));
+        Image im = vc.getImageViews().get(0).getImage();
+
+        vc.update(0);
+        assertNotEquals(im, vc.getImageViews().get(0).getImage());
+    }
+
+    /**
+     * Test that controller is correctly closed.
+     */
+    @Test
+    void closeControllerTest() {
+        VideoController vc = new VideoController();
+        CameraHandler camHandler = new CameraHandler();
+        vc.setCameraHandler(camHandler);
+        PlatformImpl.startup(() -> { });
+
+        vc.closeController();
+        assertTrue(vc.isClosed());
+
+        Image currentImage = null;
+        for (ImageView imageView : vc.getImageViews()) {
+            currentImage = imageView.getImage();
+            assertNotNull(imageView.getImage());
+            assertEquals(currentImage, imageView.getImage());
+        }
+    }
+
+    /**
+     * Test if adding stream is correctly handled.
+     */
+    @Test
+    void createStream() {
+        PlatformImpl.startup(() -> { });
+        PlatformImpl.runLater(() -> {
+            VideoController vc = new VideoController();
+            CameraHandler camHandler = new CameraHandler();
+            vc.setCameraHandler(camHandler);
+            assertEquals(vc.getCameras(), 0);
+
+            TextField tf = new TextField();
+            tf.setText(videoLink);
+            vc.createStream(new Stage(), tf);
+            assertEquals(vc.getCameras(), 1);
+        });
+    }
+
+    /**
+     * Test if adding videos is correctly handled.
+     */
+    @Test
+    void createVideoTest() {
+        VideoController vc = new VideoController();
+        CameraHandler camHandler = new CameraHandler();
+        vc.setCameraHandler(camHandler);
+        assertEquals(vc.getCameras(), 0);
+        vc.createVideo(file);
+        assertEquals(vc.getCameras(), 1);
+    }
+
+    /**
+     * Test the setClosed method.
+     */
+    @Test
+    void setClosedTest() {
+        VideoController vc = new VideoController();
+        assertTrue(vc.isClosed());
+        vc.setClosed(false);
+        assertFalse(vc.isClosed());
+    }
+
+}
