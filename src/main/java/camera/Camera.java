@@ -19,6 +19,7 @@ public class Camera {
     private boolean changed = false;
     private int numOfChestsInRoom;
     private int frameCounter = -1;
+    private int roomId = -1;
     private CameraActivity activity = new CameraActivity();
     private CameraChestTracker tracker = new CameraChestTracker();
     private CameraChestDetector detector = new CameraChestDetector();
@@ -170,5 +171,21 @@ public class Camera {
      */
     public CameraChestDetector getChestDetector() {
         return detector;
+    }
+
+    /**
+     * Get the room id.
+     * @return the room id
+     */
+    public int getRoomId() {
+        return roomId;
+    }
+
+    /**
+     * Set a new room id.
+     * @param newId the new room id
+     */
+    public void setRoomId(final int newId) {
+        this.roomId = newId;
     }
 }

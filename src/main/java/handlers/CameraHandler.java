@@ -83,10 +83,10 @@ public class CameraHandler {
 
     /**
      * Get new frames from the cameras.
-     *
+     * @param roomId the roomId to get the frames from
      * @return The new frames as a list of Mat.
      */
-    public List<Mat> processFrames() {
+    public List<Mat> processFrames(final int roomId) {
         final int frequency = 10;
 
         List<Mat> frames = new ArrayList<>();
@@ -100,12 +100,11 @@ public class CameraHandler {
                 Thread thread = new Thread(() -> processFrame(camera, newFrame));
                 thread.start();
             }
-            frames.add(newFrame);
+            if (roomId == camera.getRoomId()) {
+                frames.add(newFrame);
+            }
         }
 
-        if (active != Activity.ZERO) {
-            changeActivity();
-        }
         return frames;
     }
 
@@ -166,34 +165,33 @@ public class CameraHandler {
             }
         }
     }
-    /**
-     * Change the activity with the last known activity.
-     */
-    public void changeActivity() {
-        final double oneThird = 0.33;
-        final double twoThird = 0.67;
-
-        double ratio = 0;
-        for (int i = 0; i < cameraList.size(); i++) {
-            Camera camera = cameraList.get(i);
-            ratio += camera.getActivity().calculateRatio();
-        }
-        ratio = ratio / (double) cameraList.size();
-
-        if (ratio < oneThird) {
-            active = Activity.LOW;
-        } else if (ratio < twoThird) {
-            active = Activity.MEDIUM;
-        } else {
-            active = Activity.HIGH;
-        }
-    }
 
     /**
      * Get the activity.
+     * @param roomId the roomId to get the activity from.
      * @return The activity.
      */
-    public Activity getActive() {
+    public Activity getActive(final int roomId) {
+        final double oneThird = 0.33;
+        final double twoThird = 0.67;
+
+        if (active != Activity.ZERO) {
+            double ratio = 0;
+            for (Camera camera : cameraList) {
+                if (camera.getRoomId() == roomId) {
+                    ratio += camera.getActivity().calculateRatio();
+                }
+            }
+            ratio = ratio / (double) cameraList.size();
+
+            active = Activity.HIGH;
+            if (ratio < oneThird) {
+                active = Activity.LOW;
+            } else if (ratio < twoThird) {
+                active = Activity.MEDIUM;
+            }
+        }
+
         return active;
     }
 
@@ -241,11 +239,12 @@ public class CameraHandler {
 
     /**
      * Returns whether a camera is changed or not.
+     * @param roomId the room id.
      * @return True if all cameras are changed, false otherwise.
      */
-    public boolean isChanged() {
+    public boolean isChanged(final int roomId) {
         for (Camera camera : cameraList) {
-            if (!camera.isChanged()) {
+            if (camera.getRoomId() == roomId && !camera.isChanged()) {
                 return false;
             }
         }

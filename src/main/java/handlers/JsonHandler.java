@@ -1,5 +1,8 @@
 package handlers;
 
+import static java.lang.Math.toIntExact;
+
+
 import api.APIHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -69,7 +72,7 @@ public class JsonHandler {
             return 0;
         }
         long amount = (long) res;
-        return Math.toIntExact(amount);
+        return toIntExact(amount);
     }
 
     /**
@@ -84,7 +87,7 @@ public class JsonHandler {
             return 0;
         }
         long amount = (long) res;
-        return Math.toIntExact(amount);
+        return toIntExact(amount);
     }
 
     /**
@@ -99,7 +102,7 @@ public class JsonHandler {
             return APIHandler.DEFAULT_PORT;
         }
         long amount = (long) res;
-        return Math.toIntExact(amount);
+        return toIntExact(amount);
     }
 
     /**
@@ -125,7 +128,7 @@ public class JsonHandler {
         List<Room> rooms = new ArrayList<>();
         for (Object o : jsonElement) {
             JSONObject roomObject = (JSONObject) o;
-            long roomId = (long) roomObject.get("roomId");
+            int roomId = toIntExact((long) roomObject.get("roomId"));
             int amountPeople = getAmountPeople(roomId);
             int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
@@ -144,7 +147,7 @@ public class JsonHandler {
     public Room createSingleRoom() {
         if (!jsonElement.isEmpty()) {
             JSONObject roomObject = (JSONObject) jsonElement.get(0);
-            long roomId = (long) roomObject.get("roomId");
+            int roomId = toIntExact((long) roomObject.get("roomId"));
             int amountPeople = getAmountPeople(roomId);
             int targetDuration = getTargetDuration(roomId);
             List<String> cameraLinks = getCameraLinks(roomId);
@@ -170,8 +173,8 @@ public class JsonHandler {
         int totalDuration = 0;
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
-            int sections = Math.toIntExact((long) object.get("sections"));
-            int targetDuration = Math.toIntExact((long) object.get("targetDuration"));
+            int sections = toIntExact((long) object.get("sections"));
+            int targetDuration = toIntExact((long) object.get("targetDuration"));
             totalDuration += targetDuration;
             Chest chest = new Chest(sections, totalDuration);
             chests.add(chest);

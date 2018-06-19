@@ -8,6 +8,7 @@ import handlers.CameraHandler;
 public abstract class Controller {
 
     private static CameraHandler cameraHandler;
+    private static int currentRoomId = -1;
 
     /**
      * Method to close the controller.
@@ -42,5 +43,21 @@ public abstract class Controller {
      */
     public int getCameras() {
         return cameraHandler.listSize();
+    }
+
+    /**
+     * Get the current roomId.
+     * @return the roomId
+     */
+    public static int getCurrentRoomId() {
+        return currentRoomId;
+    }
+
+    /**
+     * Set a new roomId.
+     * @param newRoomId the new roomId
+     */
+    public static void setCurrentRoomId(final int newRoomId) {
+        Controller.currentRoomId = newRoomId;
     }
 }

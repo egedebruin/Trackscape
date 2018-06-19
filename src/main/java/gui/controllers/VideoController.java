@@ -32,10 +32,10 @@ public class VideoController extends Controller {
      * @return list of frames in Mat format
      */
     private List<Image> requestFrames() {
-        List<Mat> frames = getCameraHandler().processFrames();
+        List<Mat> frames = getCameraHandler().processFrames(getCurrentRoomId());
         List<Image> processedFrames = new ArrayList<>();
 
-        if (!getCameraHandler().isChanged()) {
+        if (!getCameraHandler().isChanged(getCurrentRoomId())) {
             closed = true;
         } else {
             for (Mat frame : frames) {

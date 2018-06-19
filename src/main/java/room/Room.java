@@ -8,7 +8,7 @@ import java.util.List;
  * Class describing a room as found in the config file.
  */
 public class Room {
-    private long id;
+    private int id;
     private List<Chest> chestList;
     private int numberOfPeople;
     private long targetDurationInSec;
@@ -26,7 +26,7 @@ public class Room {
      * @param duration the target duration
      * @param portNumber the port number
      */
-    public Room(final long roomid, final int nOPeople, final List<String> cameraLinks,
+    public Room(final int roomid, final int nOPeople, final List<String> cameraLinks,
                 final List<Chest> chests, final int duration, final int portNumber) {
         id = roomid;
         numberOfPeople = nOPeople;
@@ -41,7 +41,7 @@ public class Room {
      * Getter id.
      * @return id.
      */
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -49,7 +49,7 @@ public class Room {
      * Set id.
      * @param ids the id
      */
-    public void setId(final long ids) {
+    public void setId(final int ids) {
         this.id = ids;
     }
 

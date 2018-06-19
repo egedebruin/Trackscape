@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import camera.Camera;
 import gui.Util;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,12 @@ public class RoomController extends Controller {
     public void configure(final String configFile) {
         progress = new Progress(configFile);
 
+        setCurrentRoomId(progress.getRoom().getId());
+
         for (String link : progress.getRoom().getLinkList()) {
-            getCameraHandler().addCamera(link, progress.getRoom().getChestList().size());
+            Camera camera =
+                getCameraHandler().addCamera(link, progress.getRoom().getChestList().size());
+            camera.setRoomId(progress.getRoom().getId());
         }
         progress.getRoom().setInformationHandler(getCameraHandler().getInformationHandler());
 
@@ -67,6 +72,7 @@ public class RoomController extends Controller {
         }
         configured = false;
         progress = null;
+        setCurrentRoomId(-1);
     }
 
     @Override
@@ -163,7 +169,7 @@ public class RoomController extends Controller {
      * Update the activity Label.
      */
     private void updateActivity() {
-        String activeString = "" + getCameraHandler().getActive();
+        String activeString = "" + getCameraHandler().getActive(getCurrentRoomId());
         activityStatus.setText(" Current activity: " + activeString.toLowerCase());
     }
 

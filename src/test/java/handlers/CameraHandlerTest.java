@@ -61,7 +61,7 @@ class CameraHandlerTest {
     void processFramesTest() {
         CameraHandler c = new CameraHandler();
         c.addCamera(videoLink);
-        assertNotNull(c.processFrames());
+        assertNotNull(c.processFrames(-1));
     }
 
     /**
@@ -105,9 +105,9 @@ class CameraHandlerTest {
     void testIsChanged() {
         CameraHandler ch  = new CameraHandler();
         ch.addCamera(videoLink);
-        assertFalse(ch.isChanged());
-        ch.processFrames();
-        assertTrue(ch.isChanged());
+        assertFalse(ch.isChanged(-1));
+        ch.processFrames(-1);
+        assertTrue(ch.isChanged(-1));
     }
 
     /**
@@ -157,6 +157,6 @@ class CameraHandlerTest {
     @Test
     void testGetActive() {
         CameraHandler c = new CameraHandler();
-        assertEquals(c.getActive(), CameraHandler.Activity.ZERO);
+        assertEquals(c.getActive(-1), CameraHandler.Activity.ZERO);
     }
 }
