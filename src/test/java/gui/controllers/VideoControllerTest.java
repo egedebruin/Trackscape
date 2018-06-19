@@ -49,28 +49,28 @@ public class VideoControllerTest {
      */
     @Test
     void updateTest() {
-        VideoController vc = new VideoController();
+        VideoController videoController = new VideoController();
         CameraHandler camHandler = new CameraHandler();
-        vc.setCameraHandler(camHandler);
-        assertTrue(vc.isClosed());
+        videoController.setCameraHandler(camHandler);
+        assertTrue(videoController.isClosed());
 
-        vc.createVideo(file);
-        assertEquals(vc.getCameras(), 1);
+        videoController.createVideo(file);
+        assertEquals(videoController.getCameras(), 1);
 
         ArrayList<ImageView> ivs = new ArrayList();
-        for (int j = 0; j < vc.getCameras(); j++) {
+        for (int j = 0; j < videoController.getCameras(); j++) {
             ivs.add(new ImageView());
         }
-        vc.setImageViews(ivs);
-        assertTrue(vc.isClosed());
+        videoController.setImageViews(ivs);
+        assertTrue(videoController.isClosed());
 
-        vc.update(0);
-        assertFalse(vc.isClosed());
-        assertNotNull(vc.getImageViews().get(0));
-        Image im = vc.getImageViews().get(0).getImage();
+        videoController.update(0);
+        assertFalse(videoController.isClosed());
+        assertNotNull(videoController.getImageViews().get(0));
+        Image im = videoController.getImageViews().get(0).getImage();
 
-        vc.update(0);
-        assertNotEquals(im, vc.getImageViews().get(0).getImage());
+        videoController.update(0);
+        assertNotEquals(im, videoController.getImageViews().get(0).getImage());
     }
 
     /**

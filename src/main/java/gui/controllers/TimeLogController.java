@@ -246,4 +246,12 @@ public class TimeLogController extends Controller {
     public long getChestTimestamp() {
         return chestTimestamp;
     }
+
+    /**
+     * Get the timerLabel (for testing purposes only).
+     * @return timerLabel
+     */
+    public Label getTimerLabel() {
+        return timerLabel;
+    }
 }
