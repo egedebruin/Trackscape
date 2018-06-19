@@ -118,7 +118,7 @@ public class MenuPane {
         standardConfig(standardFile);
 
         MenuItem manual = new MenuItem("Manual Configuration");
-        manualConfigPane.createManualConfig(manual, primaryStage);
+        manualConfigPane.createManualConfig(manual);
 
         config.getItems().addAll(configFile, standardFile, manual);
         return config;

@@ -46,9 +46,10 @@ public class ManualConfigPane {
      * Creates the manualConfig stage and panes.
      * @param manual the menuItem
      */
-    public void createManualConfig(final MenuItem manual, final Stage primaryStage) {
+    public void createManualConfig(final MenuItem manual) {
         manual.setOnAction(t -> {
             if (videoController.isClosed()) {
+                resetFillInPane();
                 manualStage.setTitle("Manual Escape Room Configuration");
 
                 fillInPane.setAlignment(Pos.CENTER);
@@ -136,6 +137,7 @@ public class ManualConfigPane {
      * @return the scrollPane
      */
     private ScrollPane createScrollPane() {
+
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setContent(fillInPane);
@@ -167,10 +169,21 @@ public class ManualConfigPane {
         });
     }
 
+    /**
+     * Reset the chest section of the fillInPane only.
+     */
     private void resetChestFillIn() {
-        fillInPane.getChildren().remove(9,fillInPane.getChildren().size());
+        final int chestSectionStartIndex = 9;
+        fillInPane.getChildren().remove(chestSectionStartIndex, fillInPane.getChildren().size());
 
         roomController.resetProgressObject();
+    }
+
+    /**
+     * Reset the fillInPane to clear previous content completely.
+     */
+    private void resetFillInPane() {
+        fillInPane.getChildren().clear();
     }
 
     /**

@@ -371,6 +371,9 @@ public class RoomController extends Controller {
         return configured;
     }
 
+    /**
+     * Resets the progress to null
+     */
     public void resetProgressObject() {
         progress = null;
         this.configured = false;
