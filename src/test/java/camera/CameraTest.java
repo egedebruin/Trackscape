@@ -144,6 +144,18 @@ class CameraTest {
     }
 
     /**
+     * Test roomId getter and setter.
+     */
+    @Test
+    void getSetRoomIdTest() {
+        camera = new Camera(null, null);
+        assertEquals(-1, camera.getRoomId());
+
+        camera.setRoomId(1);
+        assertEquals(1, camera.getRoomId());
+    }
+
+    /**
      * Method that loops till the end of a the videolink video.
      */
     private void loopToEndOfVideo() {

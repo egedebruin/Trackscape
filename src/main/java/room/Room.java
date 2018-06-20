@@ -241,11 +241,19 @@ public class Room {
         this.informationHandler = newHandler;
     }
 
+    /**
+     * Get the start time of this room.
+     * @return the start time
+     */
     public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
+    /**
+     * Set the start time of this room.
+     * @param newTime the new start time
+     */
+    public void setStartTime(final long newTime) {
+        this.startTime = newTime;
     }
 }

@@ -174,4 +174,12 @@ public class CameraActivity {
     public void setStarted(final boolean newStarted) {
         this.started = newStarted;
     }
+
+    /**
+     * Set the new last activity.
+     * @param newActivity the new activity
+     */
+    public void setLastActivity(final double newActivity) {
+        this.lastActivity = newActivity;
+    }
 }

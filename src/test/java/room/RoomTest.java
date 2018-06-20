@@ -57,6 +57,7 @@ public class RoomTest {
         assertEquals(1, room.getPort());
         assertNull(room.getInformationHandler());
         assertEquals(cameraLinks, room.getLinkList());
+        assertEquals(-1, room.getStartTime());
     }
 
     /**
@@ -84,6 +85,9 @@ public class RoomTest {
 
         room.setInformationHandler(informationHandler);
         assertEquals(informationHandler, room.getInformationHandler());
+
+        room.setStartTime(1);
+        assertEquals(1, room.getStartTime());
     }
 
     /**
