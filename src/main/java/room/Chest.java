@@ -28,7 +28,6 @@ public class Chest {
     }
 
     private Status chestState;
-    private MatOfPoint positionInFrame;
     private long targetDurationInSec;
     private long timeFound = -1;
     private long beginTime;
@@ -74,7 +73,6 @@ public class Chest {
     private void updateStatus(final long previousTimeFound) {
         if (chestState == WAITING_FOR_SECTION_TO_START) {
             chestState = Status.TO_BE_OPENED;
-            positionInFrame = new MatOfPoint();
             timeFound = -1;
             beginTime = previousTimeFound;
         } else if (chestState == Status.TO_BE_OPENED
@@ -174,7 +172,7 @@ public class Chest {
      * @param timestamp timestamp in nanotime
      */
     public void setTimeFound(final long timestamp) {
-        this.timeFound = timestamp;
+        this.timeFound = Math.max(timestamp, beginTime);
     }
 
     /**
