@@ -2,13 +2,16 @@ package gui.controllers;
 
 import com.sun.javafx.application.PlatformImpl;
 import handlers.CameraHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -34,31 +37,43 @@ public class TimerManagerTest {
     }
 
     /**
+     * Construct the TimerManager.
+     */
+    @BeforeEach
+    void initializeTimerManager() {
+        PlatformImpl.startup(() -> { });
+
+        videoController = new VideoController();
+        videoController.setCameraHandler(new CameraHandler());
+
+        timeLogController = new TimeLogController();
+        timeLogController.setInformationBox(new TextArea());
+        timeLogController.setTimerLabel(new Label());
+        timeLogController.setApproveButton(new Button());
+        timeLogController.setNotApproveButton(new Button());
+        timeLogController.setImageView(new ImageView());
+        timeLogController.setTimeStamp(new Label());
+        timeLogController.setQuestion(new Label());
+
+        roomController = new RoomController();
+        roomController.configure("files/test/testConfig.json");
+
+        timerManager = new TimerManager(roomController, timeLogController, videoController);
+    }
+
+    /**
      * Test whether timer gets started and stopped correctly.
      */
     @Test
     void startAndStopTimerTest() {
-        PlatformImpl.startup(() -> {
-        });
+        timerManager.startTimer();
+        assertTrue(videoController.isClosed());
+        assertNotNull(roomController.getProgress());
+        assertNotEquals(timeLogController.getTimerLabel().getText(), "00:00:00");
 
-        PlatformImpl.runLater(() -> {
-            videoController = new VideoController();
-            videoController.setCameraHandler(new CameraHandler());
-            timeLogController = new TimeLogController();
-            timeLogController.setInformationBox(new TextArea());
-            roomController = new RoomController();
-
-            timerManager = new TimerManager(roomController, timeLogController, videoController);
-
-            timerManager.startTimer();
-            assertTrue(videoController.isClosed());
-            assertNotNull(roomController.getProgress());
-            assertNotEquals(timeLogController.getTimerLabel(), "00:00:00");
-
-            timerManager.stopTimer();
-            assertFalse(videoController.isClosed());
-            assertNull(roomController.getProgress());
-            assertEquals(timeLogController.getTimerLabel(), "00:00:00");
-        });
+        timerManager.stopTimer();
+        assertTrue(videoController.isClosed());
+        assertNull(roomController.getProgress());
+        assertEquals(timeLogController.getTimerLabel().getText(), "00:00:00");
     }
 }
