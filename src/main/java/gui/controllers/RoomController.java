@@ -71,7 +71,7 @@ public class RoomController extends Controller {
 
     @Override
     public void update(final long now) {
-        if (progress != null) {
+        if (progress != null && getCameraHandler().getBeginTime() != -1) {
             progress.updateProgress();
             fillProgress(progress.getFillCount());
             changeTime(now);
@@ -192,10 +192,10 @@ public class RoomController extends Controller {
         if (chestList.size() > 0 && getCameraHandler().getBeginTime() != -1) {
             for (int i = 0; i < chestList.size(); i++) {
                 Chest currentChest = chestList.get(i);
-                long time = elapsedTime - getCameraHandler().getBeginTime();
+                long time = elapsedTime - currentChest.getBeginTime();
 
                 if (currentChest.getChestState() == Chest.Status.OPENED) {
-                    time = currentChest.getTimeFound() - getCameraHandler().getBeginTime();
+                    time = currentChest.getTimeFound() - currentChest.getBeginTime();
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
                 } else if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
