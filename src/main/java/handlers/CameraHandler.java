@@ -321,4 +321,12 @@ public class CameraHandler {
     public boolean isChestFound() {
         return chestFound;
     }
+
+    /**
+     * Get the animationTimers for the streams.
+     * @return list of animationTimers
+     */
+    public List<AnimationTimer> getTimers() {
+        return timers;
+    }
 }
