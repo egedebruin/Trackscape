@@ -1,6 +1,7 @@
 package gui;
 
 import com.sun.javafx.application.PlatformImpl;
+import java.util.concurrent.TimeUnit;
 import javafx.scene.image.ImageView;
 import org.junit.jupiter.api.Test;
 import org.opencv.core.CvType;
@@ -51,9 +52,8 @@ public class UtilTest {
      */
     @Test
     void getTimeStringTest() {
-        final int oneSecondInNanos = 1000000000;
-        assertEquals(Util.getTimeString(oneSecondInNanos, true), "00:00:01");
-        assertEquals(Util.getTimeString(oneSecondInNanos, false), "00:01");
+        assertEquals(Util.getTimeString(TimeUnit.SECONDS.toNanos(1), true), "00:00:01");
+        assertEquals(Util.getTimeString(TimeUnit.SECONDS.toNanos(1), false), "00:01");
     }
 
     /**
