@@ -323,4 +323,8 @@ public class CameraHandler {
     public boolean isChestFound() {
         return chestFound;
     }
+
+    public void setBeginTime(long beginTime) {
+        this.beginTime = beginTime;
+    }
 }
