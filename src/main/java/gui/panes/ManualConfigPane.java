@@ -120,13 +120,13 @@ public class ManualConfigPane {
      */
     private void createTotalDurationLine(final TextField totalDurationField) {
         final Label totalDuration = createLabel("Total duration of the escape room: ", false);
-        final Label minutes = createLabel(" min", false);
+        final Label seconds = createLabel(" sec", false);
 
         totalDurationField.setMaxWidth(maxWidth);
 
         fillInPane.add(totalDuration, 0, 2);
         fillInPane.add(totalDurationField, 1, 2);
-        fillInPane.add(minutes, 2, 2);
+        fillInPane.add(seconds, 2, 2);
     }
 
     /**
@@ -359,10 +359,8 @@ public class ManualConfigPane {
                 durationIntList.add(Integer.parseInt(
                         durationList.get(i).getText().trim()));
             }
-            final int sixtySeconds = 60;
-            int totalDurationInSec = totalDuration * sixtySeconds;
             roomController.manualConfig(players, filledInChests,
-                    totalDurationInSec, sectionIntList, durationIntList);
+                    totalDuration, sectionIntList, durationIntList);
             manualStage.close();
             manualStage.setScene(null);
         } catch (NumberFormatException e) {
