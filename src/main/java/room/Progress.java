@@ -45,11 +45,9 @@ public class Progress {
                     final int totalDuration, final ArrayList<Integer> sectionList,
                     final ArrayList<Integer> durationList) {
         ArrayList<Chest> chestList = new ArrayList<>();
-        int previous = 0;
         for (int i = 0; i < chests; i++) {
-            Chest chest = new Chest(sectionList.get(i), previous + durationList.get(i));
+            Chest chest = new Chest(sectionList.get(i), durationList.get(i));
             chestList.add(chest);
-            previous += durationList.get(i);
         }
         final int roomId = 36;
         final int portNumber = 8080;
