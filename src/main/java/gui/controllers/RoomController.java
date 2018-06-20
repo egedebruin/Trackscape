@@ -252,16 +252,14 @@ public class RoomController extends Controller {
         List<Chest> chestList = progress.getRoom().getChestList();
         Chest chest = chestList.get(pos);
         if (chest.getChestState() == Chest.Status.TO_BE_OPENED
-            && !(TimeUnit.NANOSECONDS.toSeconds(time)
-            <= chest.getTargetDurationInSec())) {
+            && !(TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec())) {
             if (chestTimeStampList.get(pos).getTextFill().equals(Color.GREEN)) {
                 snoozeHint = false;
             }
             chestTimeStampList.get(pos).setTextFill(Color.RED);
         } else if ((chest.getChestState() == Chest.Status.TO_BE_OPENED
             && (TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec()))
-            || (chest.getChestState() == Chest.Status.OPENED
-            && TimeUnit.NANOSECONDS.toSeconds(time)
+            || (chest.getChestState() == Chest.Status.OPENED && TimeUnit.NANOSECONDS.toSeconds(time)
             < chest.getTargetDurationInSec())) {
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
@@ -278,7 +276,7 @@ public class RoomController extends Controller {
             long seconds = TimeUnit.NANOSECONDS.toSeconds(time - getCameraHandler().getBeginTime());
             for (Chest chest : chestList) {
                 if (chest.getChestState() == Chest.Status.TO_BE_OPENED
-                    && !(seconds <= chest.getWarningTimeInSec())) {
+                    && seconds > chest.getWarningTimeInSec()) {
                     return true;
                 }
             }
