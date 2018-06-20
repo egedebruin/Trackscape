@@ -37,7 +37,7 @@ public class Progress {
      * Constructor.
      * @param players the amount of players in the game
      * @param chests the amount of chests in the game
-     * @param totalDuration the total duration of the game
+     * @param totalDuration the total duration of the game in seconds
      * @param sectionList the list with the amount of sections per chest
      * @param durationList the list with the duration for each chest
      */

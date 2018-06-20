@@ -23,7 +23,7 @@ public class Room {
      * @param nOPeople  the number of people
      * @param cameraLinks the links for the cameras
      * @param chests a list of chests
-     * @param duration the target duration
+     * @param duration the target duration in seconds
      * @param portNumber the port number
      */
     public Room(final long roomid, final int nOPeople, final List<String> cameraLinks,

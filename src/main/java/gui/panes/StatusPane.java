@@ -27,6 +27,7 @@ public class StatusPane {
      */
     private RoomController roomController;
     private FlowPane statusPane;
+    private Label totalTime;
     private Label gameStatus;
     private Label numOfChestsOpened;
     private Label activity;
@@ -113,7 +114,7 @@ public class StatusPane {
         VBox progressPane = new VBox();
         progressPane.setPrefWidth(prefWidth);
         progressPane.setAlignment(Pos.CENTER_LEFT);
-        progressPane.getChildren().addAll(status, gameStatus,
+        progressPane.getChildren().addAll(status, totalTime, gameStatus,
             numOfChestsOpened, activity, createChestTimePane());
 
         return progressPane;
@@ -124,7 +125,12 @@ public class StatusPane {
      */
     private void initializeProgressLabels() {
         final int buttonWidth = 20;
+        final int sixtySeconds = 60;
 
+        totalTime = new Label(" Time to escape: "
+                + roomController.getProgress().getRoom().getTargetDuration() / sixtySeconds
+                + " minutes");
+        totalTime.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
         gameStatus = new Label(" Game will start soon");
         gameStatus.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
         numOfChestsOpened = new Label(" Chests opened: 0 / "

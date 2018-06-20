@@ -120,13 +120,13 @@ public class ManualConfigPane {
      */
     private void createTotalDurationLine(final TextField totalDurationField) {
         final Label totalDuration = createLabel("Total duration of the escape room: ", false);
-        final Label seconds = createLabel(" sec", false);
+        final Label minutes = createLabel(" min", false);
 
         totalDurationField.setMaxWidth(maxWidth);
 
         fillInPane.add(totalDuration, 0, 2);
         fillInPane.add(totalDurationField, 1, 2);
-        fillInPane.add(seconds, 2, 2);
+        fillInPane.add(minutes, 2, 2);
     }
 
     /**
@@ -159,6 +159,7 @@ public class ManualConfigPane {
             resetChestFillIn();
             if (!chestField.getText().isEmpty() && !playerField.getText().isEmpty()
                     && !totalDurationField.getText().isEmpty()) {
+                proceed.setText("Adjust Settings");
                 proceedAction(chestField, playerField, totalDurationField, error, proceed);
             } else {
                 error.setVisible(true);
@@ -342,7 +343,7 @@ public class ManualConfigPane {
      * @param durationList the list with textFields of duration
      * @param players the amount of players
      * @param filledInChests the amount of filled in chests
-     * @param totalDuration the total duration of the escape room
+     * @param totalDuration the total duration of the escape room in minutes
      * @param submitError the submit error
      */
     private void submitAction(final ArrayList<TextField> sectionList,
@@ -358,8 +359,10 @@ public class ManualConfigPane {
                 durationIntList.add(Integer.parseInt(
                         durationList.get(i).getText().trim()));
             }
+            final int sixtySeconds = 60;
+            int totalDurationInSec = totalDuration * sixtySeconds;
             roomController.manualConfig(players, filledInChests,
-                    totalDuration, sectionIntList, durationIntList);
+                    totalDurationInSec, sectionIntList, durationIntList);
             manualStage.close();
             manualStage.setScene(null);
         } catch (NumberFormatException e) {
