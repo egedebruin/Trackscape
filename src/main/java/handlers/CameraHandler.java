@@ -323,7 +323,11 @@ public class CameraHandler {
     public boolean isChestFound() {
         return chestFound;
     }
-    
+
+    /**
+     * Set a new beginTimer for this cameraHandler.
+     * @param newTime the new begin timer
+     */
     public void setBeginTime(final long newTime) {
         this.beginTime = newTime;
     }

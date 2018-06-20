@@ -48,6 +48,9 @@ public class TimeLogControllerTest {
         assertNotNull(timeLogController.getCameraHandler().getInformationHandler());
     }
 
+    /**
+     * Test the changeTime method.
+     */
     @Test
     void changeTimeTest() {
         PlatformImpl.startup(() -> { });
@@ -63,9 +66,13 @@ public class TimeLogControllerTest {
         assertEquals("00:00:02", testLabel.getText());
     }
 
+    /**
+     * Test that addInformation adds information to area.
+     */
     @Test
     void addInformationTest() {
-        PlatformImpl.startup(() -> { });
+        PlatformImpl.startup(() -> {
+        });
         CameraHandler camHandler = new CameraHandler();
         camHandler.setBeginTime(0);
         Controller.setCameraHandler(camHandler);
@@ -78,6 +85,9 @@ public class TimeLogControllerTest {
         assertTrue(textArea.getText().contains("ajax"));
     }
 
+    /**
+     * Test confirm and not confirm chest adds and removes button.
+     */
     @Test
     void confirmAndNotConfirmChestTest() {
         PlatformImpl.startup(() -> { });
@@ -102,6 +112,9 @@ public class TimeLogControllerTest {
         assertFalse(textArea.getText().contains("chest"));
     }
 
+    /**
+     * Test checkInformation checks for new information.
+     */
     @Test
     void checkInformationTest() {
         PlatformImpl.startup(() -> { });
@@ -121,6 +134,9 @@ public class TimeLogControllerTest {
         assertTrue(textArea.getText().isEmpty());
     }
 
+    /**
+     * Test checkMatInformation creates buttons when new mat included.
+     */
     @Test
     void checkMatTest() {
         PlatformImpl.startup(() -> { });
