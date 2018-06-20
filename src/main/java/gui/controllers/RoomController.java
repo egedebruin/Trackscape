@@ -264,7 +264,6 @@ public class RoomController extends Controller {
             && TimeUnit.NANOSECONDS.toSeconds(time)
             < chest.getTargetDurationInSec())) {
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
-            snoozeHint = true;
         }
     }
 
