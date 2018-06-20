@@ -167,13 +167,11 @@ public class JsonHandler {
         if (array == null) {
             return new ArrayList<>();
         }
-        int totalDuration = 0;
         for (Object o : array) {
             JSONObject object = (JSONObject) o;
             int sections = Math.toIntExact((long) object.get("sections"));
             int targetDuration = Math.toIntExact((long) object.get("targetDuration"));
-            totalDuration += targetDuration;
-            Chest chest = new Chest(sections, totalDuration);
+            Chest chest = new Chest(sections, targetDuration);
             chests.add(chest);
         }
         return chests;
