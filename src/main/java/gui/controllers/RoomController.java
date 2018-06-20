@@ -254,6 +254,9 @@ public class RoomController extends Controller {
         if (chest.getChestState() == Chest.Status.TO_BE_OPENED
             && !(TimeUnit.NANOSECONDS.toSeconds(time)
             <= chest.getTargetDurationInSec())) {
+            if (chestTimeStampList.get(pos).getTextFill().equals(Color.GREEN)) {
+                snoozeHint = false;
+            }
             chestTimeStampList.get(pos).setTextFill(Color.RED);
         } else if ((chest.getChestState() == Chest.Status.TO_BE_OPENED
             && (TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec()))
