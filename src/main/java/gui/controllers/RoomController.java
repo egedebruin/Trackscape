@@ -258,8 +258,7 @@ public class RoomController extends Controller {
         } else if ((chest.getChestState() == Chest.Status.TO_BE_OPENED
             && (TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec()))
             || (chest.getChestState() == Chest.Status.OPENED
-            && TimeUnit.NANOSECONDS.toSeconds(
-                chest.getTimeFound() - getCameraHandler().getBeginTime())
+            && TimeUnit.NANOSECONDS.toSeconds(time)
             < chest.getTargetDurationInSec())) {
             behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
