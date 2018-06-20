@@ -1,10 +1,8 @@
 package room;
 
-import com.sun.javafx.application.PlatformImpl;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -168,13 +166,10 @@ class ProgressTest {
      */
     @Test
     void testStopServer() {
-        PlatformImpl.startup(() -> { });
-        PlatformImpl.runLater(() -> {
-            Progress progress = new Progress(testConfigFile, 0);
-            assertTrue(progress.getApiHandler().getServer().isStarted());
-            progress.stopServer();
-            assertFalse(progress.getApiHandler().getServer().isStarted());
-        });
+        Progress progress = new Progress(testConfigFile, 0);
+        assertTrue(progress.getApiHandler().getServer().isStarted());
+        progress.stopServer();
+        assertFalse(progress.getApiHandler().getServer().isStarted());
     }
 
     /**

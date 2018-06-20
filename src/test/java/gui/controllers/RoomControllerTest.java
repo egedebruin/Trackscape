@@ -33,9 +33,10 @@ public class RoomControllerTest {
      */
     @Test
     void configureTest() {
+        PlatformImpl.startup(() -> { });
+
         RoomController controller = new RoomController();
         final int numberOfChests = 3;
-        PlatformImpl.startup(() -> { });
         CameraHandler camHandler = new CameraHandler();
         controller.setCameraHandler(camHandler);
         assertNull(controller.getProgress());
@@ -45,6 +46,8 @@ public class RoomControllerTest {
         assertNotNull(controller.getProgress());
         assertEquals(controller.getChestTimeStampList().size(), numberOfChests);
         assertTrue(controller.isConfigured());
+
+        controller.getProgress().getApiHandler().stopServer();
     }
 
     /**
@@ -52,19 +55,22 @@ public class RoomControllerTest {
      */
     @Test
     void closeControllerTest() {
-        RoomController controller = new RoomController();
         PlatformImpl.startup(() -> { });
-        CameraHandler camHandler = new CameraHandler();
-            controller.setCameraHandler(camHandler);
-            controller.configure(testConfigFile);
-            assertTrue(controller.isConfigured());
-            assertNotNull(controller.getProgress());
 
-            controller.closeController();
-            assertFalse(controller.isConfigured());
-            assertNull(controller.getProgress());
-            assertFalse(controller.isBehindSchedule());
-            assertFalse(controller.getSnoozeHint());
+        RoomController controller = new RoomController();
+        CameraHandler camHandler = new CameraHandler();
+        controller.setCameraHandler(camHandler);
+        controller.configure(testConfigFile);
+        assertTrue(controller.isConfigured());
+        assertNotNull(controller.getProgress());
+
+        controller.getProgress().getApiHandler().stopServer();
+
+        controller.closeController();
+        assertFalse(controller.isConfigured());
+        assertNull(controller.getProgress());
+        assertFalse(controller.isBehindSchedule());
+        assertFalse(controller.getSnoozeHint());
     }
 
     /**

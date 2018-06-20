@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,11 +49,11 @@ public class TimerManagerTest {
         timeLogController = new TimeLogController();
         timeLogController.setInformationBox(new TextArea());
         timeLogController.setTimerLabel(new Label());
+        timeLogController.setTimeStamp(new Label());
+        timeLogController.setQuestion(new Label());
         timeLogController.setApproveButton(new Button());
         timeLogController.setNotApproveButton(new Button());
         timeLogController.setImageView(new ImageView());
-        timeLogController.setTimeStamp(new Label());
-        timeLogController.setQuestion(new Label());
 
         roomController = new RoomController();
         roomController.configure("files/test/testConfig.json");
@@ -71,6 +71,7 @@ public class TimerManagerTest {
         assertNotNull(roomController.getProgress());
         assertNotEquals(timeLogController.getTimerLabel().getText(), "00:00:00");
 
+        roomController.getProgress().getApiHandler().stopServer();
         timerManager.stopTimer();
         assertTrue(videoController.isClosed());
         assertNull(roomController.getProgress());

@@ -2,8 +2,11 @@ package gui.controllers;
 
 import com.sun.javafx.application.PlatformImpl;
 import handlers.CameraHandler;
+import javafx.application.Platform;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -47,7 +50,6 @@ public class VideoControllerTest {
      */
     @Test
     void updateTest() {
-        PlatformImpl.startup(() -> { });
         VideoController videoController = new VideoController();
         videoController.setCameraHandler(new CameraHandler());
         assertTrue(videoController.isClosed());
@@ -95,16 +97,18 @@ public class VideoControllerTest {
      */
     @Test
     void createStream() {
-//        PlatformImpl.startup(() -> { });
-//        VideoController vc = new VideoController();
-//        CameraHandler camHandler = new CameraHandler();
-//        vc.setCameraHandler(camHandler);
-//        TextField tf = new TextField();
-//        tf.setText(videoLink);
-//
-//        assertEquals(vc.getCameras(), 0);
-//        vc.createStream(new Stage(), tf);
-//        assertEquals(vc.getCameras(), 1);
+        PlatformImpl.startup(() -> { });
+        VideoController vc = new VideoController();
+        CameraHandler camHandler = new CameraHandler();
+        vc.setCameraHandler(camHandler);
+        TextField tf = new TextField();
+        tf.setText(videoLink);
+
+        Platform.runLater(() -> {
+        assertEquals(vc.getCameras(), 0);
+        vc.createStream(new Stage(), tf);
+        assertEquals(vc.getCameras(), 1);
+        });
     }
 
     /**
@@ -112,7 +116,6 @@ public class VideoControllerTest {
      */
     @Test
     void createVideoTest() {
-        PlatformImpl.startup(() -> { });
         VideoController vc = new VideoController();
         CameraHandler camHandler = new CameraHandler();
         vc.setCameraHandler(camHandler);
