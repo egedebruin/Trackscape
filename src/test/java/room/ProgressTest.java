@@ -1,5 +1,6 @@
 package room;
 
+import com.sun.javafx.application.PlatformImpl;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -167,10 +168,13 @@ class ProgressTest {
      */
     @Test
     void testStopServer() {
-        Progress progress = new Progress(testConfigFile, 0);
-        assertTrue(progress.getApiHandler().getServer().isStarted());
-        progress.stopServer();
-        assertFalse(progress.getApiHandler().getServer().isStarted());
+        PlatformImpl.startup(() -> { });
+        PlatformImpl.runLater(() -> {
+            Progress progress = new Progress(testConfigFile, 0);
+            assertTrue(progress.getApiHandler().getServer().isStarted());
+            progress.stopServer();
+            assertFalse(progress.getApiHandler().getServer().isStarted());
+        });
     }
 
     /**

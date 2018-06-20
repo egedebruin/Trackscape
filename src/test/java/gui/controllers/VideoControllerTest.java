@@ -118,12 +118,16 @@ public class VideoControllerTest {
      */
     @Test
     void createVideoTest() {
-        VideoController vc = new VideoController();
-        CameraHandler camHandler = new CameraHandler();
-        vc.setCameraHandler(camHandler);
-        assertEquals(vc.getCameras(), 0);
-        vc.createVideo(file);
-        assertEquals(vc.getCameras(), 1);
+        PlatformImpl.startup(() -> { });
+        PlatformImpl.runLater(() -> {
+            VideoController vc = new VideoController();
+            CameraHandler camHandler = new CameraHandler();
+            vc.setCameraHandler(camHandler);
+
+            assertEquals(vc.getCameras(), 0);
+            vc.createVideo(file);
+            assertEquals(vc.getCameras(), 1);
+        });
     }
 
     /**

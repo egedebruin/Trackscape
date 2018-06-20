@@ -1,11 +1,16 @@
 package gui.controllers;
 
+import com.sun.javafx.application.PlatformImpl;
+import handlers.CameraHandler;
 import javafx.scene.layout.GridPane;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -30,17 +35,19 @@ public class RoomControllerTest {
      */
     @Test
     void configureTest() {
-//        final int numberOfChests = 3;
-//        PlatformImpl.startup(() -> { });
-//        CameraHandler camHandler = new CameraHandler();
-//        controller.setCameraHandler(camHandler);
-//        assertNull(controller.getProgress());
-//        assertFalse(controller.isConfigured());
-//
-//        controller.configure(testConfigFile);
-//        assertNotNull(controller.getProgress());
-//        assertEquals(controller.getChestTimeStampList().size(), numberOfChests);
-//        assertTrue(controller.isConfigured());
+        final int numberOfChests = 3;
+        PlatformImpl.startup(() -> { });
+        PlatformImpl.runLater(() -> {
+            CameraHandler camHandler = new CameraHandler();
+            controller.setCameraHandler(camHandler);
+            assertNull(controller.getProgress());
+            assertFalse(controller.isConfigured());
+
+            controller.configure(testConfigFile);
+            assertNotNull(controller.getProgress());
+            assertEquals(controller.getChestTimeStampList().size(), numberOfChests);
+            assertTrue(controller.isConfigured());
+        });
     }
 
     /**
@@ -48,18 +55,20 @@ public class RoomControllerTest {
      */
     @Test
     void closeControllerTest() {
-//        PlatformImpl.startup(() -> { });
-//        CameraHandler camHandler = new CameraHandler();
-//        controller.setCameraHandler(camHandler);
-//        controller.configure(testConfigFile);
-//        assertTrue(controller.isConfigured());
-//        assertNotNull(controller.getProgress());
-//
-//        controller.closeController();
-//        assertFalse(controller.isConfigured());
-//        assertNull(controller.getProgress());
-//        assertFalse(controller.isBehindSchedule());
-//        assertFalse(controller.getSnoozeHint());
+        PlatformImpl.startup(() -> { });
+        PlatformImpl.runLater(() -> {
+            CameraHandler camHandler = new CameraHandler();
+            controller.setCameraHandler(camHandler);
+            controller.configure(testConfigFile);
+            assertTrue(controller.isConfigured());
+            assertNotNull(controller.getProgress());
+
+            controller.closeController();
+            assertFalse(controller.isConfigured());
+            assertNull(controller.getProgress());
+            assertFalse(controller.isBehindSchedule());
+            assertFalse(controller.getSnoozeHint());
+        });
     }
 
     /**
