@@ -81,6 +81,23 @@ public class CameraActivityTest {
     }
 
     /**
+     * Test calculateRatio method.
+     */
+    @Test
+    void calculateRatioTest() {
+        String link = "files" + File.separator + "webcast.mov";
+        VideoCapture videoCapture = new VideoCapture(link);
+        Camera camera = new Camera(videoCapture, link);
+        CameraActivity activity = camera.getActivity();
+        assertEquals(0, activity.calculateRatio());
+
+        activity.getActivityList().get(CameraActivity.FRAMES).add(1.0);
+        activity.setLastActivity(2);
+
+        assertEquals(1, activity.calculateRatio());
+    }
+
+    /**
      * Loads a set amount of frames for the given camera.
      * @param camera the camera that gets its frame loaded
      */
@@ -90,5 +107,6 @@ public class CameraActivityTest {
             camera.loadFrame();
         }
     }
+
 
 }

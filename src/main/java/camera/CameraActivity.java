@@ -111,6 +111,11 @@ public class CameraActivity {
      */
     public double calculateRatio() {
         List<Double> activities = activityList.get(FRAMES);
+
+        if (activities.isEmpty()) {
+            return 0;
+        }
+
         int i = 0;
 
         for (Double activity : activities) {
@@ -168,5 +173,13 @@ public class CameraActivity {
      */
     public void setStarted(final boolean newStarted) {
         this.started = newStarted;
+    }
+
+    /**
+     * Set the new last activity.
+     * @param newActivity the new activity
+     */
+    public void setLastActivity(final double newActivity) {
+        this.lastActivity = newActivity;
     }
 }

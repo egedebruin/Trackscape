@@ -118,9 +118,9 @@ class CameraTest {
     void isChangedTrueTest() {
         cameraHandler = new CameraHandler();
         Camera cam = cameraHandler.addCamera(videoLink);
-        cameraHandler.processFrames();
-        cameraHandler.processFrames();
-        assertTrue(cameraHandler.isChanged());
+        cameraHandler.processFrames(-1);
+        cameraHandler.processFrames(-1);
+        assertTrue(cameraHandler.isChanged(-1));
     }
 
     /**
@@ -144,17 +144,29 @@ class CameraTest {
     }
 
     /**
+     * Test roomId getter and setter.
+     */
+    @Test
+    void getSetRoomIdTest() {
+        camera = new Camera(null, null);
+        assertEquals(-1, camera.getRoomId());
+
+        camera.setRoomId(1);
+        assertEquals(1, camera.getRoomId());
+    }
+
+    /**
      * Method that loops till the end of a the videolink video.
      */
     private void loopToEndOfVideo() {
         cameraHandler = new CameraHandler();
         Camera cam = cameraHandler.addCamera(videoLink);
         //sets isChanged to true
-        cameraHandler.processFrames();
-        cameraHandler.processFrames();
+        cameraHandler.processFrames(-1);
+        cameraHandler.processFrames(-1);
         //loop trough the video until last frame is acquired twice
         while (cam.isChanged()) {
-            cameraHandler.processFrames();
+            cameraHandler.processFrames(-1);
         }
     }
 

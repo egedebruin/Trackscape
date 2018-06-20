@@ -32,7 +32,6 @@ public class CameraHandler {
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
-    private Activity active = Activity.ZERO;
     private List<AnimationTimer> timers = new ArrayList<>();
 
     /**
@@ -104,10 +103,10 @@ public class CameraHandler {
 
     /**
      * Get new frames from the cameras.
-     *
+     * @param roomId the roomId to get the frames from
      * @return The new frames as a list of Mat.
      */
-    public List<Mat> processFrames() {
+    public List<Mat> processFrames(final int roomId) {
         final int frequency = 10;
         clearTimers();
 
@@ -122,12 +121,11 @@ public class CameraHandler {
                 Thread thread = new Thread(() -> processFrame(camera, newFrame));
                 thread.start();
             }
-            frames.add(newFrame);
+            if (roomId == camera.getRoomId()) {
+                frames.add(newFrame);
+            }
         }
 
-        if (active != Activity.ZERO) {
-            changeActivity();
-        }
         return frames;
     }
 
@@ -172,7 +170,6 @@ public class CameraHandler {
         if (activity.getLastActivity() > ACTIVITY_THRESHOLD && beginTime == -1) {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
-            active = Activity.LOW;
             for (Camera cam : cameraList) {
                 cam.getActivity().setStarted(true);
             }
@@ -198,34 +195,34 @@ public class CameraHandler {
             }
         }
     }
+
     /**
-     * Change the activity with the last known activity.
+     * Get the activity.
+     * @param roomId the roomId to get the activity from.
+     * @return The activity.
      */
-    public void changeActivity() {
+    public Activity getActive(final int roomId) {
         final double oneThird = 0.33;
         final double twoThird = 0.67;
 
         double ratio = 0;
-        for (int i = 0; i < cameraList.size(); i++) {
-            Camera camera = cameraList.get(i);
-            ratio += camera.getActivity().calculateRatio();
+        for (Camera camera : cameraList) {
+            if (camera.getRoomId() == roomId) {
+                ratio += camera.getActivity().calculateRatio();
+            }
         }
         ratio = ratio / (double) cameraList.size();
 
-        if (ratio < oneThird) {
-            active = Activity.LOW;
-        } else if (ratio < twoThird) {
-            active = Activity.MEDIUM;
-        } else {
+        Activity active = Activity.ZERO;
+        if (ratio > 0) {
             active = Activity.HIGH;
+            if (ratio < oneThird) {
+                active = Activity.LOW;
+            } else if (ratio < twoThird) {
+                active = Activity.MEDIUM;
+            }
         }
-    }
 
-    /**
-     * Get the activity.
-     * @return The activity.
-     */
-    public Activity getActive() {
         return active;
     }
 
@@ -273,11 +270,12 @@ public class CameraHandler {
 
     /**
      * Returns whether a camera is changed or not.
+     * @param roomId the room id.
      * @return True if all cameras are changed, false otherwise.
      */
-    public boolean isChanged() {
+    public boolean isChanged(final int roomId) {
         for (Camera camera : cameraList) {
-            if (!camera.isChanged()) {
+            if (camera.getRoomId() == roomId && !camera.isChanged()) {
                 return false;
             }
         }

@@ -33,11 +33,11 @@ class CameraChestDetectorTest {
     void includeChestContoursInFrameCallTest() throws InterruptedException {
         CameraHandler ch = new CameraHandler();
         ch.addCamera(shortVideoLinkWithBoxes);
-        ch.processFrames();
+        ch.processFrames(-1);
 
         boolean found = false;
-        while (ch.isChanged()) {
-            ch.processFrames();
+        while (ch.isChanged(-1)) {
+            ch.processFrames(-1);
             if (ch.isChestFound()) {
                 found = true;
                 break;
