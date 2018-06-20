@@ -1,5 +1,7 @@
 package room;
 
+import gui.controllers.Controller;
+
 /**
  * Class that represents an opened chest.
  */
@@ -14,6 +16,9 @@ public class OpenedChest extends Chest {
    public OpenedChest() {
        super(NOSUBSECTION, TARGETTIME);
        setApprovedChestFoundByHost();
+       if (Controller.getCameraHandler() != null) {
+           setTimeFound(Controller.getCameraHandler().getBeginTime());
+       }
    }
 
 }
