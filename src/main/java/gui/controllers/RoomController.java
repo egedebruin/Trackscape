@@ -105,7 +105,7 @@ public class RoomController extends Controller {
      * Logic for when a new item is clicked in the progressbar.
      * @param index the index of the new item
      */
-    private void newItemDone(final int index) {
+    public void newItemDone(final int index) {
         int oldChests = progress.getRoom().getChestsOpened();
         int newChests = progress.newProgress(index);
         for (int i = oldChests + 1; i < newChests + 1; i++) {
@@ -118,7 +118,7 @@ public class RoomController extends Controller {
      * Logic for when items are removed.
      * @param index the index of the new item
      */
-    private void itemsRemoved(final int index) {
+    public void itemsRemoved(final int index) {
         int oldChests = progress.getRoom().getChestsOpened();
         int newChests = progress.newProgress(index);
         for (int i = oldChests; i > newChests; i--) {
@@ -163,7 +163,7 @@ public class RoomController extends Controller {
     /**
      * Update the activity Label.
      */
-    private void updateActivity() {
+    public void updateActivity() {
         String activeString = "" + getCameraHandler().getActive();
         activityStatus.setText(" Current activity: " + activeString.toLowerCase());
     }
