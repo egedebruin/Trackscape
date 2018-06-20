@@ -2,7 +2,6 @@ package gui.controllers;
 
 import com.sun.javafx.application.PlatformImpl;
 import handlers.CameraHandler;
-import javafx.scene.layout.GridPane;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -17,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Test class for RoomController.
  */
 public class RoomControllerTest {
-    private RoomController controller = new RoomController();
     private String testConfigFile = "files/test/testConfig.json";
 
      static {
@@ -35,19 +33,18 @@ public class RoomControllerTest {
      */
     @Test
     void configureTest() {
+        RoomController controller = new RoomController();
         final int numberOfChests = 3;
         PlatformImpl.startup(() -> { });
-        PlatformImpl.runLater(() -> {
-            CameraHandler camHandler = new CameraHandler();
-            controller.setCameraHandler(camHandler);
-            assertNull(controller.getProgress());
-            assertFalse(controller.isConfigured());
+        CameraHandler camHandler = new CameraHandler();
+        controller.setCameraHandler(camHandler);
+        assertNull(controller.getProgress());
+        assertFalse(controller.isConfigured());
 
-            controller.configure(testConfigFile);
-            assertNotNull(controller.getProgress());
-            assertEquals(controller.getChestTimeStampList().size(), numberOfChests);
-            assertTrue(controller.isConfigured());
-        });
+        controller.configure(testConfigFile);
+        assertNotNull(controller.getProgress());
+        assertEquals(controller.getChestTimeStampList().size(), numberOfChests);
+        assertTrue(controller.isConfigured());
     }
 
     /**
@@ -55,9 +52,9 @@ public class RoomControllerTest {
      */
     @Test
     void closeControllerTest() {
+        RoomController controller = new RoomController();
         PlatformImpl.startup(() -> { });
-        PlatformImpl.runLater(() -> {
-            CameraHandler camHandler = new CameraHandler();
+        CameraHandler camHandler = new CameraHandler();
             controller.setCameraHandler(camHandler);
             controller.configure(testConfigFile);
             assertTrue(controller.isConfigured());
@@ -68,7 +65,6 @@ public class RoomControllerTest {
             assertNull(controller.getProgress());
             assertFalse(controller.isBehindSchedule());
             assertFalse(controller.getSnoozeHint());
-        });
     }
 
     /**
@@ -76,21 +72,26 @@ public class RoomControllerTest {
      */
     @Test
     void startHintTimerTest() {
+        RoomController controller = new RoomController();
         assertFalse(controller.getSnoozeHint());
         controller.startHintTimer();
         assertTrue(controller.getSnoozeHint());
     }
 
     /**
-     * Test methods that concern the progess bar.
+     * Test methods that concern the progress bar.
      */
     @Test
     void progressBarTest() {
-        GridPane progressBar = new GridPane();
-        controller.setProgressBar(progressBar);
-
-        // need to fill progressbar with correct configuration
-
+//        CameraHandler camHandler = new CameraHandler();
+//        controller.setCameraHandler(camHandler);
+//        ProgressBar pg = new ProgressBar(controller);
+//
+//        GridPane progressBar = pg.createProgressBarPane();
+//        controller.setProgressBar(progressBar);
+//
+//        pg.constructProgressBar();
+//        pg.createProgressBarPane();
     }
 
 }

@@ -323,8 +323,16 @@ public class CameraHandler {
     public boolean isChestFound() {
         return chestFound;
     }
+    
+    public void setBeginTime(final long newTime) {
+        this.beginTime = newTime;
+    }
 
-    public void setBeginTime(long beginTime) {
-        this.beginTime = beginTime;
+    /**
+     * Get the animationTimers for the streams.
+     * @return list of animationTimers
+     */
+    public List<AnimationTimer> getTimers() {
+        return timers;
     }
 }
