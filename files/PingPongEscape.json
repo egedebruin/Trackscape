@@ -6,7 +6,7 @@
         "link": "rtsp://192.168.0.217:554/stream1"
       },
       {
-        "link": "rtsp://192.168.0.159:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream"
+        "link": "rtsp://192.168.0.157:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream"
       }
     ],
     "people": 2,
