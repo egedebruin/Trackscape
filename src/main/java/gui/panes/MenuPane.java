@@ -130,7 +130,7 @@ public class MenuPane {
      * @return the add extra media menu
      */
     private Menu createExtraMedia(final Stage primaryStage) {
-        Menu extraMedia = new Menu("Add Media");
+        Menu extraMedia = new Menu("Add Video Source");
 
         MenuItem openVideo = new MenuItem("Add Video File...");
         openVideo(openVideo, primaryStage);
