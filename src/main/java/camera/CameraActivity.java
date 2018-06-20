@@ -111,6 +111,11 @@ public class CameraActivity {
      */
     public double calculateRatio() {
         List<Double> activities = activityList.get(FRAMES);
+
+        if (activities.isEmpty()) {
+            return 0;
+        }
+
         int i = 0;
 
         for (Double activity : activities) {

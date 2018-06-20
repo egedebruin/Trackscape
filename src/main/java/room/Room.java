@@ -12,6 +12,7 @@ public class Room {
     private List<Chest> chestList;
     private int numberOfPeople;
     private long targetDurationInSec;
+    private long startTime = -1;
     private List<String> linkList;
     private int port;
     private InformationHandler informationHandler;
@@ -238,5 +239,13 @@ public class Room {
      */
     public void setInformationHandler(final InformationHandler newHandler) {
         this.informationHandler = newHandler;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 }

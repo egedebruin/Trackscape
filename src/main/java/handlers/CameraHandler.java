@@ -32,7 +32,6 @@ public class CameraHandler {
     private boolean allChestsDetected = false;
     private long beginTime = -1;
     private boolean chestFound = false;
-    private Activity active = Activity.ZERO;
     private List<AnimationTimer> timers = new ArrayList<>();
 
     /**
@@ -171,7 +170,6 @@ public class CameraHandler {
         if (activity.getLastActivity() > ACTIVITY_THRESHOLD && beginTime == -1) {
             beginTime = nanoTime();
             informationHandler.addInformation("Detected activity");
-            active = Activity.LOW;
             for (Camera cam : cameraList) {
                 cam.getActivity().setStarted(true);
             }
@@ -207,15 +205,16 @@ public class CameraHandler {
         final double oneThird = 0.33;
         final double twoThird = 0.67;
 
-        if (active != Activity.ZERO) {
-            double ratio = 0;
-            for (Camera camera : cameraList) {
-                if (camera.getRoomId() == roomId) {
-                    ratio += camera.getActivity().calculateRatio();
-                }
+        double ratio = 0;
+        for (Camera camera : cameraList) {
+            if (camera.getRoomId() == roomId) {
+                ratio += camera.getActivity().calculateRatio();
             }
-            ratio = ratio / (double) cameraList.size();
+        }
+        ratio = ratio / (double) cameraList.size();
 
+        Activity active = Activity.ZERO;
+        if (ratio > 0) {
             active = Activity.HIGH;
             if (ratio < oneThird) {
                 active = Activity.LOW;

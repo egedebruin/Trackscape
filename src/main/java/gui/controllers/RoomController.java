@@ -171,6 +171,9 @@ public class RoomController extends Controller {
      */
     private void updateActivity() {
         String activeString = "" + getCameraHandler().getActive(getCurrentRoomId());
+        if (!activeString.toLowerCase().equals("zero") && progress.getRoom().getStartTime() == -1) {
+            progress.getRoom().setStartTime(System.nanoTime());
+        }
         activityStatus.setText(" Current activity: " + activeString.toLowerCase());
     }
 
@@ -198,13 +201,13 @@ public class RoomController extends Controller {
      */
     public void changeTime(final long elapsedTime) {
         List<Chest> chestList = progress.getRoom().getChestList();
-        if (chestList.size() > 0 && getCameraHandler().getBeginTime() != -1) {
+        if (chestList.size() > 0 && progress.getRoom().getStartTime() != -1) {
             for (int i = 0; i < chestList.size(); i++) {
                 Chest currentChest = chestList.get(i);
-                long time = elapsedTime - getCameraHandler().getBeginTime();
+                long time = elapsedTime - progress.getRoom().getStartTime();
 
                 if (currentChest.getChestState() == Chest.Status.OPENED) {
-                    time = currentChest.getTimeFound() - getCameraHandler().getBeginTime();
+                    time = currentChest.getTimeFound() - progress.getRoom().getStartTime();
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
                 } else if (currentChest.getChestState() == Chest.Status.TO_BE_OPENED) {
                     chestTimeStampList.get(i).setText(Util.getTimeString(time, false));
@@ -222,8 +225,8 @@ public class RoomController extends Controller {
      * @param elapsedTime The time of the room.
      */
     public void changeInformation(final long elapsedTime) {
-        if (getCameraHandler().getBeginTime() != -1) {
-            long time = elapsedTime - getCameraHandler().getBeginTime();
+        if (progress.getRoom().getStartTime() != -1) {
+            long time = elapsedTime - progress.getRoom().getStartTime();
             if (time > TimeUnit.SECONDS.toNanos(progress.getRoom().getTargetDuration())) {
                 gameStatus.setText(" Time is up! Game has ended.");
                 gameStatus.setTextFill(Color.RED);
@@ -265,7 +268,7 @@ public class RoomController extends Controller {
             && (TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec()))
             || (chest.getChestState() == Chest.Status.OPENED
             && TimeUnit.NANOSECONDS.toSeconds(
-                chest.getTimeFound() - getCameraHandler().getBeginTime())
+                chest.getTimeFound() - progress.getRoom().getStartTime())
             < chest.getTargetDurationInSec())) {
             behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
