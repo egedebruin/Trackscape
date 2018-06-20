@@ -16,7 +16,7 @@ public class OpenedChest extends Chest {
    public OpenedChest() {
        super(NOSUBSECTION, TARGETTIME);
        setApprovedChestFoundByHost();
-       if(Controller.getCameraHandler() != null) {
+       if (Controller.getCameraHandler() != null) {
            setTimeFound(Controller.getCameraHandler().getBeginTime());
        }
    }

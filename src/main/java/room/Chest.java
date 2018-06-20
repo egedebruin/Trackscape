@@ -1,7 +1,5 @@
 package room;
 
-import org.opencv.core.MatOfPoint;
-
 import static room.Chest.Status.WAITING_FOR_SECTION_TO_START;
 
 /**
