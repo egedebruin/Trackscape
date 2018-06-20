@@ -2,8 +2,6 @@ package gui.controllers;
 
 import gui.Util;
 import handlers.InformationHandler;
-import java.awt.image.BufferedImage;
-import java.util.concurrent.TimeUnit;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+
+import java.awt.image.BufferedImage;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class for the TimeLogController, to control the time and log.
@@ -30,6 +31,7 @@ public class TimeLogController extends Controller {
     private Label timeStamp;
     private Mat img;
     private long lastChest = -1;
+    private boolean storeChestImages = true;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
@@ -112,8 +114,10 @@ public class TimeLogController extends Controller {
     public void confirmedChest(final String chestsFound) {
         final long timeOut = TimeUnit.SECONDS.toNanos(5);
         addInformation("Found chest " + chestsFound, chestTimestamp);
-        Imgcodecs.imwrite("files/chests/correct/"
-            + TimeUnit.NANOSECONDS.toMillis(chestTimestamp) + ".png", img);
+        if (storeChestImages) {
+            Imgcodecs.imwrite("files/chests/correct/"
+                + TimeUnit.NANOSECONDS.toMillis(chestTimestamp) + ".png", img);
+        }
         lastChest = chestTimestamp + timeOut;
         clearButtons();
     }
@@ -122,8 +126,10 @@ public class TimeLogController extends Controller {
      * Turns button invisible without notification of found chest.
      */
     public void unConfirm() {
-        Imgcodecs.imwrite("files/chests/incorrect/"
-            + TimeUnit.NANOSECONDS.toMillis(chestTimestamp) + ".png", img);
+        if (storeChestImages) {
+            Imgcodecs.imwrite("files/chests/incorrect/"
+                + TimeUnit.NANOSECONDS.toMillis(chestTimestamp) + ".png", img);
+        }
         clearButtons();
     }
 
