@@ -1,7 +1,5 @@
 package room;
 
-import org.opencv.core.MatOfPoint;
-
 import static room.Chest.Status.WAITING_FOR_SECTION_TO_START;
 
 /**
@@ -28,10 +26,10 @@ public class Chest {
     }
 
     private Status chestState;
-    private MatOfPoint positionInFrame;
     private long targetDurationInSec;
     private long warningTimeInSec;
     private long timeFound = -1;
+    private long beginTime;
     private int numberOfSubSections;
     private boolean[] subsectionCompleted;
     private boolean approvedChestFoundByHost;
@@ -71,13 +69,13 @@ public class Chest {
      * status can switch    from:           to:
      *                      Waiting         To_Be_Opened
      *                      To_be_Opened    Opened
-     *
+     * @param previousTimeFound the time at which the previous chest was found
      */
-    private void updateStatus() {
+    private void updateStatus(final long previousTimeFound) {
         if (chestState == WAITING_FOR_SECTION_TO_START) {
             chestState = Status.TO_BE_OPENED;
-            positionInFrame = new MatOfPoint();
             timeFound = -1;
+            beginTime = previousTimeFound;
         } else if (chestState == Status.TO_BE_OPENED
             && (approvedChestFoundByHost || countSubsectionsCompleted() == numberOfSubSections)) {
             chestState = Status.OPENED;
@@ -99,7 +97,7 @@ public class Chest {
      */
     public void updateStatus(final Chest previousChest) {
         if (previousChest.getChestState() == Status.OPENED) {
-            updateStatus();
+            updateStatus(previousChest.getTimeFound());
         }
     }
 
@@ -175,7 +173,15 @@ public class Chest {
      * @param timestamp timestamp in nanotime
      */
     public void setTimeFound(final long timestamp) {
-        this.timeFound = timestamp;
+        this.timeFound = Math.max(timestamp, beginTime);
+    }
+
+    /**
+     * Get the begin time of the chest.
+     * @return the begin time
+     */
+    public long getBeginTime() {
+        return beginTime;
     }
 
     /**
