@@ -42,3 +42,7 @@ http://localhost:8080/chest?opened=true
 
 A section can also be a chest. When all sections of the to be opened chest are already done and the next section is completed,
 the chest will be opened.
+
+**Potential for Machine Learning**
+
+The application stores data about potential chests that the user has identified as chests or as non-chests. This data can be used for a machine learning algorithm, which could be used to optimize the detection of chests in the future.
