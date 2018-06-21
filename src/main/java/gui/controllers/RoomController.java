@@ -42,7 +42,7 @@ public class RoomController extends Controller {
     }
 
     /**
-     * Configures everything needed.
+     * Configure everything needed to start observing the game fin the application.
      */
     private void configure() {
         for (String link : progress.getRoom().getLinkList()) {
