@@ -20,7 +20,6 @@ import java.util.List;
  * Class that creates the ManualConfigPane in a new Scene.
  */
 class ManualConfigPane {
-
     private VideoController videoController;
     private RoomController roomController;
     private Stage manualStage;
@@ -77,8 +76,8 @@ class ManualConfigPane {
         final TextField chestField = new TextField();
         final TextField totalDurationField = new TextField();
 
-        createPlayersLine(playerField);
-        createChestsLine(chestField);
+        createChestOrPlayerLine(playerField, false);
+        createChestOrPlayerLine(chestField, true);
         createTotalDurationLine(totalDurationField);
 
         Button proceed = new Button("Proceed");
@@ -91,29 +90,21 @@ class ManualConfigPane {
     }
 
     /**
-     * Adds the line to the pane to fill in the amount of players.
-     * @param playerField the field in which the amount of players need to be filled in
+     * Adds the line to the pane to fill in the amount of chests/players.
+     * @param objectField the field in which the amount of chests/players need to be filled in
+     * @param isChest boolean value that indicates whether textfield is from chests or players.
      */
-    private void createPlayersLine(final TextField playerField) {
-        final Label players = createLabel("Amount of players: ", false);
-
-        playerField.setMaxWidth(maxWidth);
-
-        fillInPane.add(players, 0, 0);
-        fillInPane.add(playerField, 1, 0);
-    }
-
-    /**
-     * Adds the line to the pane to fill in the amount of chests.
-     * @param chestField the field in which the amount of chests need to be filled in
-     */
-    private void createChestsLine(final TextField chestField) {
-        final Label chests = createLabel("Amount of chests: ", false);
-
-        chestField.setMaxWidth(maxWidth);
-
-        fillInPane.add(chests, 0, 1);
-        fillInPane.add(chestField, 1, 1);
+    private void createChestOrPlayerLine(final TextField objectField, final boolean isChest) {
+        objectField.setMaxWidth(maxWidth);
+        if (isChest) {
+            final Label objects = createLabel("Amount of chests: ", false);
+            fillInPane.add(objects, 0, 1);
+            fillInPane.add(objectField, 1, 1);
+        } else {
+            final Label players = createLabel("Amount of players: ", false);
+            fillInPane.add(players, 0, 0);
+            fillInPane.add(objectField, 1, 0);
+        }
     }
 
     /**
@@ -136,7 +127,6 @@ class ManualConfigPane {
      * @return the scrollPane
      */
     private ScrollPane createScrollPane() {
-
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setContent(fillInPane);
@@ -314,7 +304,6 @@ class ManualConfigPane {
     private TextField createTextField() {
         TextField sectionField = new TextField();
         sectionField.setMaxWidth(maxWidth);
-
         return sectionField;
     }
 
@@ -326,7 +315,6 @@ class ManualConfigPane {
     private Button createSubmitButton(final int filledInChests) {
         Button submit = new Button("Submit");
         submit.setFont(font);
-
 
         fillInPane.add(submit, 0, filledInChests * MENU_ITEMS_PER_CHEST + MENU_ITEMS_PER_CHEST);
 
@@ -402,5 +390,4 @@ class ManualConfigPane {
             submitError.setVisible(true);
         }
     }
-
 }
