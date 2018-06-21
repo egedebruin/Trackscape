@@ -2,7 +2,9 @@ package gui.panes;
 
 import gui.controllers.RoomController;
 import gui.controllers.VideoController;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,9 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class that creates the ManualConfigPane in a new Scene.
@@ -358,15 +357,6 @@ class ManualConfigPane {
             ArrayList<Integer> sectionIntList = new ArrayList<>();
             ArrayList<Integer> durationIntList = new ArrayList<>();
             for (int i = 0; i < sectionList.size(); i++) {
-
-                // Checks if all fields are filled in.
-                if (sectionList.get(i).getText().isEmpty()
-                        || durationList.get(i).getText().isEmpty()) {
-                    submitError.setText("Please fill in all fields.");
-                    submitError.setVisible(true);
-                    return;
-                }
-
                 sectionIntList.add(Integer.parseInt(sectionList.get(i).getText().trim()));
                 durationIntList.add(Integer.parseInt(durationList.get(i).getText().trim()));
             }
