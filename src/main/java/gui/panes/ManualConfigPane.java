@@ -155,7 +155,7 @@ class ManualConfigPane {
                 proceed.setText("Adjust Settings");
                 proceedAction(chestField, playerField, totalDurationField, error);
             } else {
-                error.setText("Please fill in all field.");
+                error.setText("Please fill in all fields.");
                 error.setVisible(true);
             }
         });
@@ -353,7 +353,7 @@ class ManualConfigPane {
      * @return the error label
      */
     private Label createErrorLabel() {
-        Label errorLabel = new Label("Please fill in a number!");
+        Label errorLabel = new Label("Please fill in all fields.");
         errorLabel.setVisible(false);
         return errorLabel;
     }
@@ -363,31 +363,44 @@ class ManualConfigPane {
      * @param sectionList the list with textFields of sections
      * @param durationList the list with textFields of duration
      * @param players the amount of players
-     * @param filledInChests the amount of filled in chests
+     * @param chests the amount of filled in chests
      * @param totalDuration the total duration of the escape room in minutes
      * @param submitError the submit error
      */
     private void submitAction(final ArrayList<TextField> sectionList,
                               final ArrayList<TextField> durationList,
-                              final int players, final int filledInChests, final int totalDuration,
+                              final int players, final int chests, final int totalDuration,
                               final Label submitError) {
         try {
             ArrayList<Integer> sectionIntList = new ArrayList<>();
             ArrayList<Integer> durationIntList = new ArrayList<>();
             for (int i = 0; i < sectionList.size(); i++) {
+
+                // Checks if all fields are filled in.
+                if (sectionList.get(i).getText().isEmpty()
+                        || durationList.get(i).getText().isEmpty()) {
+                    submitError.setText("Please fill in all fields.");
+                    submitError.setVisible(true);
+                    return;
+                }
+
                 sectionIntList.add(Integer.parseInt(sectionList.get(i).getText().trim()));
                 durationIntList.add(Integer.parseInt(durationList.get(i).getText().trim()));
             }
+
+            // Check if only positive numbers are filled in
             if (!(checkForNegativeNumbersSubmit(sectionIntList, submitError)
                     || checkForNegativeNumbersSubmit(durationIntList, submitError))) {
 
-                roomController.manualConfig(players, filledInChests,
+                roomController.manualConfig(players, chests,
                         totalDuration, sectionIntList, durationIntList);
                 manualStage.close();
                 manualStage.setScene(null);
             }
         } catch (NumberFormatException e) {
+            submitError.setText("Please fill in a number in each field.");
             submitError.setVisible(true);
         }
     }
 }
+
