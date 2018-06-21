@@ -2,6 +2,7 @@ package gui.panes;
 
 import gui.controllers.RoomController;
 import gui.controllers.VideoController;
+import java.util.Arrays;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -167,31 +168,13 @@ class ManualConfigPane {
      * @param error the label that shows an error if an int is negative
      * @return true iff at least one int is negative.
      */
-    private boolean checkForNegativeNumbersSubmit(final List<Integer> numbers, final Label error) {
+    private boolean checkForNegativeNumbers(final List<Integer> numbers, final Label error) {
         for (int i : numbers) {
-            if (i < 0) {
-                error.setText("Please fill in positive numbers only.");
+            if (i <= 0) {
+                error.setText("Please fill in numbers greater than 0 only.");
                 error.setVisible(true);
                 return true;
             }
-        }
-        return false;
-    }
-
-    /**
-     * Checks if all numbers that are filled in are positive.
-     * @param chests amount of chests as was filled in
-     * @param players amount of players as was filled in
-     * @param totalDuration total duration as was filled in
-     * @param error the label that shows the error if necessary
-     * @return true iff one or more numbers are < 0
-     */
-    private boolean checkForNegativeNumbersProceed(final int chests, final int players,
-                                                   final int totalDuration, final Label error) {
-        if (chests < 0 || players < 0 || totalDuration < 0) {
-            error.setText("Please fill in positive numbers only.");
-            error.setVisible(true);
-            return true;
         }
         return false;
     }
@@ -223,24 +206,24 @@ class ManualConfigPane {
     private void proceedAction(final TextField chestField, final TextField playerField,
                               final TextField totalDurationField, final Label error) {
         try {
-            int filledInChests = Integer.parseInt(chestField.getText());
+            int chests = Integer.parseInt(chestField.getText());
             int players = Integer.parseInt(playerField.getText().trim());
             int totalDuration = Integer.parseInt(totalDurationField.getText().trim());
 
-            if (!checkForNegativeNumbersProceed(filledInChests, players, totalDuration, error)) {
+            if (!checkForNegativeNumbers(Arrays.asList(chests, players, totalDuration), error)) {
 
                 error.setVisible(false);
 
                 ArrayList<TextField> sectionList = new ArrayList<>();
                 ArrayList<TextField> durationList = new ArrayList<>();
 
-                createProceedItems(filledInChests, sectionList, durationList);
+                createProceedItems(chests, sectionList, durationList);
 
-                Button submit = createSubmitButton(filledInChests);
-                Label submitError = createSubmitError(filledInChests);
+                Button submit = createSubmitButton(chests);
+                Label submitError = createSubmitError(chests);
 
                 submit.setOnAction(t2 -> submitAction(sectionList, durationList, players,
-                        filledInChests, totalDuration, submitError));
+                        chests, totalDuration, submitError));
             }
         } catch (NumberFormatException e) {
             error.setText("Please fill in numbers only.");
@@ -378,8 +361,8 @@ class ManualConfigPane {
                 sectionIntList.add(Integer.parseInt(sectionList.get(i).getText().trim()));
                 durationIntList.add(Integer.parseInt(durationList.get(i).getText().trim()));
             }
-            if (!(checkForNegativeNumbersSubmit(sectionIntList, submitError)
-                    || checkForNegativeNumbersSubmit(durationIntList, submitError))) {
+            if (!(checkForNegativeNumbers(sectionIntList, submitError)
+                    || checkForNegativeNumbers(durationIntList, submitError))) {
 
                 roomController.manualConfig(players, filledInChests,
                         totalDuration, sectionIntList, durationIntList);
