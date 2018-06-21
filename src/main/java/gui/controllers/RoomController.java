@@ -354,7 +354,7 @@ public class RoomController extends Controller {
     }
 
     /**
-     * Return whether players are behind schedule.
+     * Return whether players are behind schedule or not.
      * @return behindSchedule.
      */
     boolean isBehindSchedule() {
@@ -362,7 +362,7 @@ public class RoomController extends Controller {
     }
 
     /**
-     * Return whether hint is snoozed.
+     * Return whether hint is snoozed or not.
      * @return snoozeHint
      */
     boolean getSnoozeHint() {

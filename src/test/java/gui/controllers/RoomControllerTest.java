@@ -2,14 +2,13 @@ package gui.controllers;
 
 import com.sun.javafx.application.PlatformImpl;
 import handlers.CameraHandler;
-import java.util.List;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -81,7 +80,7 @@ public class RoomControllerTest {
     }
 
     /**
-     * Test whether the hintTimer starts correctly.
+     * Test whether the hintTimer starts correctly or not.
      */
     @Test
     void startHintTimerTest() {
