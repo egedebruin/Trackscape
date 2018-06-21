@@ -97,8 +97,8 @@ class ManualConfigPane {
     private void createChestOrPlayerLine(final TextField objectField, final boolean isChest) {
         objectField.setMaxWidth(maxWidth);
         if (isChest) {
-            final Label objects = createLabel("Amount of chests: ", false);
-            fillInPane.add(objects, 0, 1);
+            final Label chests = createLabel("Amount of chests: ", false);
+            fillInPane.add(chests, 0, 1);
             fillInPane.add(objectField, 1, 1);
         } else {
             final Label players = createLabel("Amount of players: ", false);
