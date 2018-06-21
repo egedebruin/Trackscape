@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that creates the ManualConfigPane in a new Scene.
@@ -160,12 +161,49 @@ class ManualConfigPane {
             resetChestFillIn();
             if (!chestField.getText().isEmpty() && !playerField.getText().isEmpty()
                     && !totalDurationField.getText().isEmpty()) {
+
                 proceed.setText("Adjust Settings");
                 proceedAction(chestField, playerField, totalDurationField, error);
             } else {
+                error.setText("Please fill in all field.");
                 error.setVisible(true);
             }
         });
+    }
+
+    /**
+     * Checks if a integer in a list is negative.
+     * @param numbers a list of integers
+     * @param error the label that shows an error if an int is negative
+     * @return true iff at least one int is negative.
+     */
+    private boolean checkForNegativeNumbersSubmit(final List<Integer> numbers, final Label error) {
+        for (int i : numbers) {
+            if (i < 0) {
+                error.setText("Please fill in positive numbers only.");
+                error.setVisible(true);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if all numbers that are filled in are positive.
+     * @param chests amount of chests as was filled in
+     * @param players amount of players as was filled in
+     * @param totalDuration total duration as was filled in
+     * @param error the label that shows the error if necessary
+     * @return true iff one or more numbers are < 0
+     */
+    private boolean checkForNegativeNumbersProceed(final int chests, final int players,
+                                                   final int totalDuration, final Label error) {
+        if (chests < 0 || players < 0 || totalDuration < 0) {
+            error.setText("Please fill in positive numbers only.");
+            error.setVisible(true);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -199,20 +237,23 @@ class ManualConfigPane {
             int players = Integer.parseInt(playerField.getText().trim());
             int totalDuration = Integer.parseInt(totalDurationField.getText().trim());
 
-            error.setVisible(false);
+            if (!checkForNegativeNumbersProceed(filledInChests, players, totalDuration, error)) {
 
-            ArrayList<TextField> sectionList = new ArrayList<>();
-            ArrayList<TextField> durationList = new ArrayList<>();
+                error.setVisible(false);
 
-            createProceedItems(filledInChests, sectionList, durationList);
+                ArrayList<TextField> sectionList = new ArrayList<>();
+                ArrayList<TextField> durationList = new ArrayList<>();
 
-            Button submit = createSubmitButton(filledInChests);
-            Label submitError = createSubmitError(filledInChests);
+                createProceedItems(filledInChests, sectionList, durationList);
 
-            submit.setOnAction(t2 -> submitAction(sectionList, durationList, players,
-                    filledInChests, totalDuration, submitError));
+                Button submit = createSubmitButton(filledInChests);
+                Label submitError = createSubmitError(filledInChests);
 
+                submit.setOnAction(t2 -> submitAction(sectionList, durationList, players,
+                        filledInChests, totalDuration, submitError));
+            }
         } catch (NumberFormatException e) {
+            error.setText("Please fill in numbers only.");
             error.setVisible(true);
         }
     }
@@ -346,15 +387,17 @@ class ManualConfigPane {
             ArrayList<Integer> sectionIntList = new ArrayList<>();
             ArrayList<Integer> durationIntList = new ArrayList<>();
             for (int i = 0; i < sectionList.size(); i++) {
-                sectionIntList.add(Integer.parseInt(
-                        sectionList.get(i).getText().trim()));
-                durationIntList.add(Integer.parseInt(
-                        durationList.get(i).getText().trim()));
+                sectionIntList.add(Integer.parseInt(sectionList.get(i).getText().trim()));
+                durationIntList.add(Integer.parseInt(durationList.get(i).getText().trim()));
             }
-            roomController.manualConfig(players, filledInChests,
-                    totalDuration, sectionIntList, durationIntList);
-            manualStage.close();
-            manualStage.setScene(null);
+            if (!(checkForNegativeNumbersSubmit(sectionIntList, submitError)
+                    || checkForNegativeNumbersSubmit(durationIntList, submitError))) {
+
+                roomController.manualConfig(players, filledInChests,
+                        totalDuration, sectionIntList, durationIntList);
+                manualStage.close();
+                manualStage.setScene(null);
+            }
         } catch (NumberFormatException e) {
             submitError.setVisible(true);
         }
