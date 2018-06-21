@@ -33,12 +33,18 @@ public class RoomController extends Controller {
     private boolean configured;
 
     /**
-     * Creates a new camerahandler depending on the config.
-     * @param configFile The configfile for this room.
+     * Creates a new progress depending on the config.
+     * @param configFile the configFile for this room.
      */
     public void configure(final String configFile) {
         progress = new Progress(configFile);
+        configure();
+    }
 
+    /**
+     * Configure everything needed to start observing the game fin the application.
+     */
+    private void configure() {
         for (String link : progress.getRoom().getLinkList()) {
             getCameraHandler().addCamera(link, progress.getRoom().getChestList().size());
         }
@@ -55,6 +61,24 @@ public class RoomController extends Controller {
         configured = true;
     }
 
+    /**
+     * Creates a new Room from manual configuration.
+     * @param players the amount of players in the game
+     * @param chests the amount of chests in the game
+     * @param totalDuration the total duration of the game in seconds
+     * @param sectionList the list with the amount of sections per chest
+     * @param durationList the list with the duration for each chest
+     */
+    public void manualConfig(final int players, final int chests,
+                             final int totalDuration, final ArrayList<Integer> sectionList,
+                             final ArrayList<Integer> durationList) {
+        progress = new Progress(players, chests, totalDuration, sectionList, durationList);
+        configure();
+    }
+
+    /**
+     * Close the controller when the stream is closed.
+     */
     @Override
     public void closeController() {
         snoozeHint = false;
@@ -367,5 +391,13 @@ public class RoomController extends Controller {
      */
     boolean getSnoozeHint() {
         return snoozeHint;
+    }
+
+    /**
+     * Resets the progress to null.
+     */
+    public void resetProgressObject() {
+        progress = null;
+        this.configured = false;
     }
 }
