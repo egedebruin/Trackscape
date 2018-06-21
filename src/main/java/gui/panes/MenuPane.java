@@ -32,6 +32,7 @@ public class MenuPane {
      * Class parameters.
      */
     private MediaPane mediaPane;
+    private ManualConfigPane manualConfigPane;
     private Label cameraStatus;
     private TimeLogController timeLogController;
     private VideoController videoController;
@@ -52,6 +53,7 @@ public class MenuPane {
                     final TimeLogController timeLogControl, final VideoController videoControl,
                     final MediaPane pane) {
         this.mediaPane = pane;
+        this.manualConfigPane = new ManualConfigPane(videoControl, roomControl);
         roomController = roomControl;
         timerManager = timerManagerControl;
         timeLogController = timeLogControl;
@@ -115,7 +117,10 @@ public class MenuPane {
         MenuItem standardFile = new MenuItem("Use Standard Configuration");
         standardConfig(standardFile);
 
-        config.getItems().addAll(configFile, standardFile);
+        MenuItem manual = new MenuItem("Manual Configuration");
+        manualConfigPane.createManualConfig(manual);
+
+        config.getItems().addAll(configFile, standardFile, manual);
         return config;
     }
 
@@ -125,7 +130,7 @@ public class MenuPane {
      * @return the add extra media menu
      */
     private Menu createExtraMedia(final Stage primaryStage) {
-        Menu extraMedia = new Menu("Manual Configuration");
+        Menu extraMedia = new Menu("Add Video Source");
 
         MenuItem openVideo = new MenuItem("Add Video File...");
         openVideo(openVideo, primaryStage);
