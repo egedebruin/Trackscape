@@ -79,7 +79,7 @@ public class StatusPane {
         final int hgap = 30;
 
         Label cameras = new Label(""
-            + roomController.getProgress().getRoom().getLinkList().size());
+            + roomController.getCameras());
         cameras.setGraphic(Util.createImageViewLogo("icons\\camIcon", buttonWidth));
         Label persons = new Label(""
             + roomController.getProgress().getRoom().getNumberOfPeople());
