@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Class that creates the ManualConfigPane in a new Scene.
  */
-public class ManualConfigPane {
+class ManualConfigPane {
 
     private VideoController videoController;
     private RoomController roomController;
@@ -33,7 +33,7 @@ public class ManualConfigPane {
      * @param vControl the videoController
      * @param rControl the roomController
      */
-    public ManualConfigPane(final VideoController vControl, final RoomController rControl) {
+    ManualConfigPane(final VideoController vControl, final RoomController rControl) {
         this.videoController = vControl;
         this.roomController = rControl;
         this.manualStage = new Stage();
@@ -47,7 +47,7 @@ public class ManualConfigPane {
      * Creates the manualConfig stage and panes.
      * @param manual the menuItem
      */
-    public void createManualConfig(final MenuItem manual) {
+    void createManualConfig(final MenuItem manual) {
         manual.setOnAction(t -> {
             if (videoController.isClosed()) {
                 resetFillInPane();
@@ -161,7 +161,7 @@ public class ManualConfigPane {
             if (!chestField.getText().isEmpty() && !playerField.getText().isEmpty()
                     && !totalDurationField.getText().isEmpty()) {
                 proceed.setText("Adjust Settings");
-                proceedAction(chestField, playerField, totalDurationField, error, proceed);
+                proceedAction(chestField, playerField, totalDurationField, error);
             } else {
                 error.setVisible(true);
             }
@@ -191,11 +191,9 @@ public class ManualConfigPane {
      * @param playerField the field in which the amount of players is filled in
      * @param totalDurationField the field in which the total duration is filled in
      * @param error the fixed error message label
-     * @param proceed the proceed button
      */
     private void proceedAction(final TextField chestField, final TextField playerField,
-                              final TextField totalDurationField, final Label error,
-                              final Button proceed) {
+                              final TextField totalDurationField, final Label error) {
         try {
             int filledInChests = Integer.parseInt(chestField.getText());
             int players = Integer.parseInt(playerField.getText().trim());
@@ -211,10 +209,8 @@ public class ManualConfigPane {
             Button submit = createSubmitButton(filledInChests);
             Label submitError = createSubmitError(filledInChests);
 
-            submit.setOnAction(t2 -> {
-                submitAction(sectionList, durationList, players, filledInChests, totalDuration,
-                        submitError);
-            });
+            submit.setOnAction(t2 -> submitAction(sectionList, durationList, players,
+                    filledInChests, totalDuration, submitError));
 
         } catch (NumberFormatException e) {
             error.setVisible(true);
