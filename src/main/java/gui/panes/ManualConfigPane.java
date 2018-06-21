@@ -26,6 +26,7 @@ public class ManualConfigPane {
     private GridPane fillInPane;
     private Font font;
     private final int maxWidth = 60;
+    private static final int MENU_ITEMS_PER_CHEST = 5;
 
     /**
      * Constructor for ManualConfigPane.
@@ -229,7 +230,6 @@ public class ManualConfigPane {
     private void createProceedItems(final int filledInChests,
                                     final ArrayList<TextField> sectionList,
                                     final ArrayList<TextField> durationList) {
-        final int skipFive = 5;
         for (int i = 1; i <= filledInChests; i++) {
             Label settings = createLabel("Settings for chest " + i, true);
             Label sections = createLabel("Amount of sections: ", false);
@@ -242,13 +242,13 @@ public class ManualConfigPane {
             sectionList.add(sectionField);
             durationList.add(durationField);
 
-            int line = (i - 1) * skipFive;
-            fillInPane.add(settings, 0, line + skipFive);
-            fillInPane.add(sections, 0, line + skipFive + 1);
-            fillInPane.add(sectionField, 1, line + skipFive + 1);
-            fillInPane.add(targetDuration, 0, line + skipFive + 2);
-            fillInPane.add(durationField, 1, line + skipFive + 2);
-            fillInPane.add(seconds, 2, line + skipFive + 2);
+            int line = (i - 1) * MENU_ITEMS_PER_CHEST;
+            fillInPane.add(settings, 0, line + MENU_ITEMS_PER_CHEST);
+            fillInPane.add(sections, 0, line + MENU_ITEMS_PER_CHEST + 1);
+            fillInPane.add(sectionField, 1, line + MENU_ITEMS_PER_CHEST + 1);
+            fillInPane.add(targetDuration, 0, line + MENU_ITEMS_PER_CHEST + 2);
+            fillInPane.add(durationField, 1, line + MENU_ITEMS_PER_CHEST + 2);
+            fillInPane.add(seconds, 2, line + MENU_ITEMS_PER_CHEST + 2);
         }
     }
 
@@ -290,10 +290,8 @@ public class ManualConfigPane {
         Button submit = new Button("Submit");
         submit.setFont(font);
 
-        final int skipThree = 5;
-        final int skipFive = 5;
 
-        fillInPane.add(submit, 0, filledInChests * skipThree + skipFive);
+        fillInPane.add(submit, 0, filledInChests * MENU_ITEMS_PER_CHEST + MENU_ITEMS_PER_CHEST);
 
         return submit;
     }
@@ -319,10 +317,8 @@ public class ManualConfigPane {
     private Label createSubmitError(final int filledInChests) {
         Label submitError = createErrorLabel();
 
-        final int skipThree = 5;
-        final int skipSix = 6;
-
-        fillInPane.add(submitError, 0, filledInChests * skipThree + skipSix);
+        fillInPane.add(submitError, 0,
+                filledInChests * MENU_ITEMS_PER_CHEST + MENU_ITEMS_PER_CHEST + 1);
 
         return submitError;
     }
