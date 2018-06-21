@@ -90,7 +90,7 @@ class ManualConfigPane {
     }
 
     /**
-     * Adds the line to the pane to fill in the amount of chests/players.
+     * Adds the fields to the pane to fill in the amount of chests/players.
      * @param objectField the field in which the amount of chests/players need to be filled in
      * @param isChest boolean value that indicates whether textfield is from chests or players.
      */
@@ -108,7 +108,7 @@ class ManualConfigPane {
     }
 
     /**
-     * Adds the line to the pane to fill in the total duration of the escape room.
+     * Adds the field to the pane to fill in the total duration of the escape room.
      * @param totalDurationField the field in which the total duration need to be filled in
      */
     private void createTotalDurationLine(final TextField totalDurationField) {
