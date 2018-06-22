@@ -247,7 +247,10 @@ public class RoomController extends Controller {
                 gameStatus.setTextFill(Color.RED);
             } else {
                 setProgressBarActive();
-                gameStatus.setText(" Game has started");
+                long timeLeft =
+                    TimeUnit.SECONDS.toNanos(getProgress().getRoom().getTargetDuration()) - time;
+                String text = " Time Left: " + Util.getTimeString(timeLeft, true);
+                gameStatus.setText(text);
                 gameStatus.setTextFill(Color.FORESTGREEN);
             }
         }
