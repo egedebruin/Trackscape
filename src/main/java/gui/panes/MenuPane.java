@@ -119,7 +119,7 @@ public class MenuPane {
 
         MenuItem manual = new MenuItem("Manual Configuration");
         manual.setOnAction(t -> {
-            if (videoController.isClosed()) {
+            if (videoController.isClosed() && !roomController.isConfigured()) {
                 manualConfigPane.createManualConfig();
             }
         });
