@@ -83,3 +83,7 @@ Stylesheet for warningPane.
     -fx-border-radius: 25px;
     -fx-background-radius: 25px;
 }
+
+.scroll{
+    -fx-base: transparent;
+}
