@@ -118,7 +118,11 @@ public class MenuPane {
         standardConfig(standardFile);
 
         MenuItem manual = new MenuItem("Manual Configuration");
-        manualConfigPane.createManualConfig(manual);
+        manual.setOnAction(t -> {
+            if (videoController.isClosed()) {
+                manualConfigPane.createManualConfig();
+            }
+        });
 
         config.getItems().addAll(configFile, standardFile, manual);
         return config;

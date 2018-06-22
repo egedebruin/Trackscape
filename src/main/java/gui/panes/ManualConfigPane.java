@@ -1,7 +1,6 @@
 package gui.panes;
 
 import gui.controllers.RoomController;
-import gui.controllers.VideoController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -20,7 +18,6 @@ import javafx.stage.Stage;
  * Class that creates the ManualConfigPane in a new Scene.
  */
 class ManualConfigPane {
-    private VideoController videoController;
     private RoomController roomController;
     private Stage manualStage;
     private GridPane fillInPane;
@@ -30,11 +27,9 @@ class ManualConfigPane {
 
     /**
      * Constructor for ManualConfigPane.
-     * @param vControl the videoController
      * @param rControl the roomController
      */
-    ManualConfigPane(final VideoController vControl, final RoomController rControl) {
-        this.videoController = vControl;
+    ManualConfigPane(final RoomController rControl) {
         this.roomController = rControl;
         this.manualStage = new Stage();
         this.fillInPane = new GridPane();
@@ -45,27 +40,22 @@ class ManualConfigPane {
 
     /**
      * Creates the manualConfig stage and panes.
-     * @param manual the menuItem
      */
-    void createManualConfig(final MenuItem manual) {
-        manual.setOnAction(t -> {
-            if (videoController.isClosed()) {
-                resetFillInPane();
-                manualStage.setTitle("Manual Escape Room Configuration");
+    void createManualConfig() {
+        resetFillInPane();
+        manualStage.setTitle("Manual Escape Room Configuration");
 
-                fillInPane.setAlignment(Pos.CENTER);
+        fillInPane.setAlignment(Pos.CENTER);
 
-                createPaneItems();
-                ScrollPane scrollPane = createScrollPane();
+        createPaneItems();
+        ScrollPane scrollPane = createScrollPane();
 
-                final int width = 500;
-                final int height = 500;
-                Scene manualConfigScene = new Scene(scrollPane, width, height);
+        final int width = 500;
+        final int height = 500;
+        Scene manualConfigScene = new Scene(scrollPane, width, height);
 
-                manualStage.setScene(manualConfigScene);
-                manualStage.show();
-            }
-        });
+        manualStage.setScene(manualConfigScene);
+        manualStage.show();
     }
 
     /**
