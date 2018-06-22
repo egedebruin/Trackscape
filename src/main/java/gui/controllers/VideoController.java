@@ -1,16 +1,18 @@
 package gui.controllers;
 
 import gui.Util;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for the VideoController, to control the video shown.
@@ -19,6 +21,7 @@ public class VideoController extends Controller {
 
     private boolean closed;
     private List<ImageView> imageViews = new ArrayList<>();
+    private Button playButton;
 
     /**
      * Constructor for the VideoController.
@@ -65,6 +68,7 @@ public class VideoController extends Controller {
         }
         getCameraHandler().closeHandler();
         closed = true;
+        playButton.setVisible(true);
     }
 
     /**
@@ -112,5 +116,13 @@ public class VideoController extends Controller {
      */
     public void setClosed(final boolean newClosed) {
         this.closed = newClosed;
+    }
+
+    /**
+     * Set the playButton so the mediaBar playButton can be controlled from here.
+     * @param play the button that starts the game observation
+     */
+    public void setPlayButton(final Button play) {
+        this.playButton = play;
     }
 }

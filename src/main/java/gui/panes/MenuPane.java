@@ -28,9 +28,6 @@ import java.io.File;
  * Class that creates the MenuPane for the VideoPane.
  */
 public class MenuPane {
-    /**
-     * Class parameters.
-     */
     private MediaPane mediaPane;
     private ManualConfigPane manualConfigPane;
     private Label cameraStatus;
@@ -114,13 +111,13 @@ public class MenuPane {
         MenuItem configFile = new MenuItem("Load Configuration File...");
         openConfig(configFile, primaryStage);
 
-        MenuItem standardFile = new MenuItem("Use Standard Configuration");
-        standardConfig(standardFile);
-
         MenuItem manual = new MenuItem("Manual Configuration");
         manualConfigPane.createManualConfig(manual);
 
-        config.getItems().addAll(configFile, standardFile, manual);
+        MenuItem standardFile = new MenuItem("Use Standard Configuration");
+        standardConfig(standardFile);
+
+        config.getItems().addAll(configFile, manual, standardFile);
         return config;
     }
 
@@ -313,5 +310,4 @@ public class MenuPane {
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
     }
-
 }
