@@ -221,7 +221,7 @@ public class RoomControllerTest {
         pane.getChildren().add(pane2);
         controller.setStatusPane(pane);
 
-        controller.updateWarningPane();
+        controller.updateWarningPane(System.nanoTime());
         assertFalse(pane2.isVisible());
 
         controller.getProgress().getApiHandler().stopServer();
