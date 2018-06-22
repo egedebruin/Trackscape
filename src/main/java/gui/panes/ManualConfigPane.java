@@ -255,7 +255,7 @@ class ManualConfigPane {
 
         Label sections = createLabel("Amount of sections: ", false);
         Label targetDuration = createLabel("The target duration: ", false);
-        Label warning = createLabel("The warning time: ", false);
+        Label warning = createLabel("Time until warning: ", false);
         Label settings = createLabel("Settings for chest " + chestNumber, true);
         Label seconds = createLabel(" sec", false);
         Label seconds2 = createLabel(" sec", false);
@@ -264,11 +264,11 @@ class ManualConfigPane {
         fillInPane.add(settings, 0, line + MENU_ITEMS_PER_CHEST);
         fillInPane.add(sections, 0, line + MENU_ITEMS_PER_CHEST + 1);
         fillInPane.add(sectionField, 1, line + MENU_ITEMS_PER_CHEST + 1);
-        fillInPane.add(targetDuration, 0, line + MENU_ITEMS_PER_CHEST + 2);
-        fillInPane.add(durationField, 1, line + MENU_ITEMS_PER_CHEST + 2);
+        fillInPane.add(warning, 0, line + MENU_ITEMS_PER_CHEST + 2);
+        fillInPane.add(warningField, 1, line + MENU_ITEMS_PER_CHEST + 2);
         fillInPane.add(seconds, 2, line + MENU_ITEMS_PER_CHEST + 2);
-        fillInPane.add(warning, 0, line + MENU_ITEMS_PER_CHEST + third);
-        fillInPane.add(warningField, 1, line + MENU_ITEMS_PER_CHEST + third);
+        fillInPane.add(targetDuration, 0, line + MENU_ITEMS_PER_CHEST + third);
+        fillInPane.add(durationField, 1, line + MENU_ITEMS_PER_CHEST + third);
         fillInPane.add(seconds2, 2, line + MENU_ITEMS_PER_CHEST + third);
     }
 
