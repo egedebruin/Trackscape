@@ -91,22 +91,6 @@ public class RoomControllerTest {
     }
 
     /**
-     * Test methods that concern the progress bar.
-     */
-    @Test
-    void progressBarTest() {
-//        CameraHandler camHandler = new CameraHandler();
-//        controller.setCameraHandler(camHandler);
-//        ProgressBar pg = new ProgressBar(controller);
-//
-//        GridPane progressBar = pg.createProgressBarPane();
-//        controller.setProgressBar(progressBar);
-//
-//        pg.constructProgressBar();
-//        pg.createProgressBarPane();
-    }
-
-    /**
      * Test newItemDone method.
      */
     @Test
