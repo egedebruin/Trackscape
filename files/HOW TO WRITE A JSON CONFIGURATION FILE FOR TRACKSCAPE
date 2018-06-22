@@ -26,20 +26,24 @@ JSON FILE STARTS BELOW:
         "sections": <THE AMOUNT OF PUZZLES THAT NEED TO BE SOLVED BEFORE PLAYERS CAN OPEN A CHEST>,
         "targetDuration": <DURATION IN SECONDS
                           AFTER THIS TIME HAS PASSED THE PLAYERS TAKE "TOO LONG" TO FINISH THIS SECTION>
+        "warningTime": <TIME WHEN A WARNING NEEDS TO BE SHOWN TO THE GAME HOST>
     }
     */
     "chests": [
       {
         "sections": 2,
-        "targetDuration": 120
+        "targetDuration": 120,
+        "warningTime": 60
       },
       {
         "sections": 3,
-        "targetDuration": 220
+        "targetDuration": 220,
+        "warningTime": 60
       },
       {
         "sections": 1,
-        "targetDuration": 30
+        "targetDuration": 30,
+        "warningTime": 10
       }
     ],
     //This target duration is the total amount of time in seconds players get to escape the entire escape room

@@ -50,7 +50,7 @@ public class MenuPane {
                     final TimeLogController timeLogControl, final VideoController videoControl,
                     final MediaPane pane) {
         this.mediaPane = pane;
-        this.manualConfigPane = new ManualConfigPane(videoControl, roomControl);
+        this.manualConfigPane = new ManualConfigPane(roomControl);
         roomController = roomControl;
         timerManager = timerManagerControl;
         timeLogController = timeLogControl;
@@ -112,7 +112,11 @@ public class MenuPane {
         openConfig(configFile, primaryStage);
 
         MenuItem manual = new MenuItem("Manual Configuration");
-        manualConfigPane.createManualConfig(manual);
+        manual.setOnAction(t -> {
+            if (videoController.isClosed() && !roomController.isConfigured()) {
+                manualConfigPane.createManualConfig();
+            }
+        });
 
         MenuItem standardFile = new MenuItem("Use Standard Configuration");
         standardConfig(standardFile);
@@ -175,7 +179,6 @@ public class MenuPane {
                     lastKnownDirectoryProperty.setValue(file.getParentFile());
                 }
                 setCameraStatus();
-
             }
         });
     }
@@ -296,6 +299,11 @@ public class MenuPane {
             text = "1 camera is currently ready to be activated.";
         } else {
             text = videoController.getCameras() + " cameras are currently ready to be activated.";
+        }
+        if (roomController.isConfigured()) {
+            text = "Configuration completed. " + text;
+        } else {
+            text = "No configuration used. " + text;
         }
         cameraStatus = new Label(text);
         StackPane stackPane = new StackPane();

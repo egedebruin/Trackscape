@@ -64,15 +64,15 @@ public class RoomController extends Controller {
     /**
      * Creates a new Room from manual configuration.
      * @param players the amount of players in the game
-     * @param chests the amount of chests in the game
      * @param totalDuration the total duration of the game in seconds
      * @param sectionList the list with the amount of sections per chest
      * @param durationList the list with the duration for each chest
+     * @param warning the list with the warning time for each chest
      */
-    public void manualConfig(final int players, final int chests,
-                             final int totalDuration, final ArrayList<Integer> sectionList,
-                             final ArrayList<Integer> durationList) {
-        progress = new Progress(players, chests, totalDuration, sectionList, durationList);
+    public void manualConfig(final int players, final int totalDuration,
+                             final List<Integer> sectionList, final List<Integer> durationList,
+                             final List<Integer> warning) {
+        progress = new Progress(players, totalDuration, sectionList, durationList, warning);
         configure();
     }
 
@@ -104,7 +104,7 @@ public class RoomController extends Controller {
             // Update the progressPane
             updateChests(progress.getRoom().getChestsOpened());
             updateActivity();
-            updateWarningPane();
+            updateWarningPane(now);
         }
     }
 
@@ -255,10 +255,11 @@ public class RoomController extends Controller {
 
     /**
      * Update the warning pane, show if needed and hide if not needed.
+     * @param time the current time
      */
-    void updateWarningPane() {
+    public void updateWarningPane(final long time) {
         // When people are behind on schedule
-        if (behindSchedule && !snoozeHint && !progress.allChestsOpened()) {
+        if (checkBehindSchedule(time) && !snoozeHint && !progress.allChestsOpened()) {
             // Get the warningPane of the statusPane and set it on visible
             statusPane.getChildren().get(2).setVisible(true);
         } else {
@@ -275,18 +276,37 @@ public class RoomController extends Controller {
         List<Chest> chestList = progress.getRoom().getChestList();
         Chest chest = chestList.get(pos);
         if (chest.getChestState() == Chest.Status.TO_BE_OPENED
-            && !(TimeUnit.NANOSECONDS.toSeconds(time)
-            <= chest.getTargetDurationInSec())) {
-            behindSchedule = true;
+            && !(TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec())) {
+            if (chestTimeStampList.get(pos).getTextFill().equals(Color.GREEN)) {
+                snoozeHint = false;
+            }
             chestTimeStampList.get(pos).setTextFill(Color.RED);
         } else if ((chest.getChestState() == Chest.Status.TO_BE_OPENED
             && (TimeUnit.NANOSECONDS.toSeconds(time) <= chest.getTargetDurationInSec()))
-            || (chest.getChestState() == Chest.Status.OPENED
-            && TimeUnit.NANOSECONDS.toSeconds(time)
+            || (chest.getChestState() == Chest.Status.OPENED && TimeUnit.NANOSECONDS.toSeconds(time)
             < chest.getTargetDurationInSec())) {
-            behindSchedule = false;
             chestTimeStampList.get(pos).setTextFill(Color.GREEN);
         }
+    }
+
+    /**
+     * Check if a warning pane needs to be shown.
+     * @param time the current time
+     * @return true if warning pane needs to be shown, false otherwise
+     */
+    private boolean checkBehindSchedule(final long time) {
+        if (getCameraHandler().getBeginTime() != -1) {
+            List<Chest> chestList = progress.getRoom().getChestList();
+            for (Chest chest : chestList) {
+                long seconds = TimeUnit.NANOSECONDS.toSeconds(time - chest.getBeginTime());
+                if (chest.getChestState() == Chest.Status.TO_BE_OPENED
+                    && (seconds > chest.getWarningTimeInSec()
+                    || seconds > chest.getTargetDurationInSec())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
