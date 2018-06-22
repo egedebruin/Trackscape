@@ -26,7 +26,7 @@ class ManualConfigPane {
     private GridPane fillInPane;
     private Font font;
     private final int maxWidth = 60;
-    private static final int MENU_ITEMS_PER_CHEST = 5;
+    private static final int MENU_ITEMS_PER_CHEST = 6;
 
     /**
      * Constructor for ManualConfigPane.
@@ -155,8 +155,7 @@ class ManualConfigPane {
                 proceed.setText("Adjust Settings");
                 proceedAction(chestField, playerField, totalDurationField, error);
             } else {
-                error.setText("Please fill in all fields.");
-                error.setVisible(true);
+                createErrorMessage(error);
             }
         });
     }
@@ -167,7 +166,7 @@ class ManualConfigPane {
      * @param error the label that shows an error if an int is negative
      * @return true iff at least one int is negative.
      */
-    private boolean checkForNegativeNumbers(final List<Integer> numbers, final Label error) {
+    private boolean checkNegativeNumbers(final List<Integer> numbers, final Label error) {
         for (int i : numbers) {
             if (i <= 0) {
                 error.setText("Please fill in numbers greater than 0 only.");
@@ -209,24 +208,23 @@ class ManualConfigPane {
             int players = Integer.parseInt(playerField.getText().trim());
             int totalDuration = Integer.parseInt(totalDurationField.getText().trim());
 
-            if (!checkForNegativeNumbers(Arrays.asList(chests, players, totalDuration), error)) {
+            if (!checkNegativeNumbers(Arrays.asList(chests, players, totalDuration), error)) {
 
                 error.setVisible(false);
 
                 ArrayList<TextField> sectionList = new ArrayList<>();
                 ArrayList<TextField> durationList = new ArrayList<>();
+                ArrayList<TextField> warningList = new ArrayList<>();
 
-                createProceedItems(chests, sectionList, durationList);
+                createProceedItems(chests, sectionList, durationList, warningList);
 
-                Button submit = createSubmitButton(chests);
                 Label submitError = createSubmitError(chests);
 
-                submit.setOnAction(t2 -> submitAction(sectionList, durationList, players,
-                        chests, totalDuration, submitError));
+                createSubmitButton(chests).setOnAction(t2 -> submitAction(sectionList, durationList,
+                    warningList, players, chests, totalDuration, submitError));
             }
         } catch (NumberFormatException e) {
-            error.setText("Please fill in numbers only.");
-            error.setVisible(true);
+            createErrorMessage(error);
         }
     }
 
@@ -235,30 +233,53 @@ class ManualConfigPane {
      * @param filledInChests the amount of chests filled in
      * @param sectionList the list with textFields of the amount of sections of a chest
      * @param durationList the list with textFields of the duration of a chest
+     * @param warningList the list with textFields of the warning of a chest
      */
     private void createProceedItems(final int filledInChests,
                                     final ArrayList<TextField> sectionList,
-                                    final ArrayList<TextField> durationList) {
+                                    final ArrayList<TextField> durationList,
+                                    final ArrayList<TextField> warningList) {
         for (int i = 1; i <= filledInChests; i++) {
-            Label settings = createLabel("Settings for chest " + i, true);
-            Label sections = createLabel("Amount of sections: ", false);
-            Label targetDuration = createLabel("The target duration: ", false);
-            Label seconds = createLabel(" sec", false);
 
             TextField sectionField = createTextField();
             TextField durationField = createTextField();
+            TextField warningField = createTextField();
 
             sectionList.add(sectionField);
             durationList.add(durationField);
-
-            int line = (i - 1) * MENU_ITEMS_PER_CHEST;
-            fillInPane.add(settings, 0, line + MENU_ITEMS_PER_CHEST);
-            fillInPane.add(sections, 0, line + MENU_ITEMS_PER_CHEST + 1);
-            fillInPane.add(sectionField, 1, line + MENU_ITEMS_PER_CHEST + 1);
-            fillInPane.add(targetDuration, 0, line + MENU_ITEMS_PER_CHEST + 2);
-            fillInPane.add(durationField, 1, line + MENU_ITEMS_PER_CHEST + 2);
-            fillInPane.add(seconds, 2, line + MENU_ITEMS_PER_CHEST + 2);
+            warningList.add(warningField);
+            fillChestPane(sectionField, durationField, warningField, i);
         }
+    }
+
+    /**
+     * Create the questions for the chests.
+     * @param sectionField the amount of sections of a chest
+     * @param durationField the duration of a chest
+     * @param warningField the warning time of a chest
+     * @param chestNumber the chest number
+     */
+    private void fillChestPane(final TextField sectionField, final TextField durationField,
+                               final TextField warningField, final int chestNumber) {
+        final int third = 3;
+
+        Label sections = createLabel("Amount of sections: ", false);
+        Label targetDuration = createLabel("The target duration: ", false);
+        Label warning = createLabel("The warning time: ", false);
+        Label settings = createLabel("Settings for chest " + chestNumber, true);
+        Label seconds = createLabel(" sec", false);
+        Label seconds2 = createLabel(" sec", false);
+
+        int line = (chestNumber - 1) * MENU_ITEMS_PER_CHEST;
+        fillInPane.add(settings, 0, line + MENU_ITEMS_PER_CHEST);
+        fillInPane.add(sections, 0, line + MENU_ITEMS_PER_CHEST + 1);
+        fillInPane.add(sectionField, 1, line + MENU_ITEMS_PER_CHEST + 1);
+        fillInPane.add(targetDuration, 0, line + MENU_ITEMS_PER_CHEST + 2);
+        fillInPane.add(durationField, 1, line + MENU_ITEMS_PER_CHEST + 2);
+        fillInPane.add(seconds, 2, line + MENU_ITEMS_PER_CHEST + 2);
+        fillInPane.add(warning, 0, line + MENU_ITEMS_PER_CHEST + third);
+        fillInPane.add(warningField, 1, line + MENU_ITEMS_PER_CHEST + third);
+        fillInPane.add(seconds2, 2, line + MENU_ITEMS_PER_CHEST + third);
     }
 
     /**
@@ -344,35 +365,46 @@ class ManualConfigPane {
      * Handles the action after clicking on the submit button.
      * @param sectionList the list with textFields of sections
      * @param durationList the list with textFields of duration
+     * @param warningList the list with textFields of warnings
      * @param players the amount of players
      * @param chests the amount of filled in chests
-     * @param totalDuration the total duration of the escape room in minutes
-     * @param submitError the submit error
+     * @param duration the total duration of the escape room in minutes
+     * @param error the submit error
      */
     private void submitAction(final ArrayList<TextField> sectionList,
                               final ArrayList<TextField> durationList,
-                              final int players, final int chests, final int totalDuration,
-                              final Label submitError) {
+                              final ArrayList<TextField> warningList,
+                              final int players, final int chests, final int duration,
+                              final Label error) {
         try {
-            ArrayList<Integer> sectionIntList = new ArrayList<>();
-            ArrayList<Integer> durationIntList = new ArrayList<>();
-            for (int i = 0; i < sectionList.size(); i++) {
-                sectionIntList.add(Integer.parseInt(sectionList.get(i).getText().trim()));
-                durationIntList.add(Integer.parseInt(durationList.get(i).getText().trim()));
+            ArrayList<Integer> sectionInt = new ArrayList<>();
+            ArrayList<Integer> durationInt = new ArrayList<>();
+            ArrayList<Integer> warningInt = new ArrayList<>();
+            for (int i = 0; i < chests; i++) {
+                sectionInt.add(Integer.parseInt(sectionList.get(i).getText().trim()));
+                durationInt.add(Integer.parseInt(durationList.get(i).getText().trim()));
+                warningInt.add(Integer.parseInt(warningList.get(i).getText().trim()));
             }
             // Check if only positive numbers are filled in
-            if (!(checkForNegativeNumbers(sectionIntList, submitError)
-                    || checkForNegativeNumbers(durationIntList, submitError))) {
+            if (!(checkNegativeNumbers(sectionInt, error) | checkNegativeNumbers(durationInt, error)
+                | checkNegativeNumbers(warningInt, error))) {
 
-                roomController.manualConfig(players, chests,
-                        totalDuration, sectionIntList, durationIntList);
+                roomController.manualConfig(players, duration, sectionInt, durationInt, warningInt);
                 manualStage.close();
                 manualStage.setScene(null);
             }
         } catch (NumberFormatException e) {
-            submitError.setText("Please fill in a number in each field.");
-            submitError.setVisible(true);
+            createErrorMessage(error);
         }
+    }
+
+    /**
+     * Creates an error message.
+     * @param submitError the label of the error message
+     */
+    private void createErrorMessage(final Label submitError) {
+        submitError.setText("Please fill in a number in each field.");
+        submitError.setVisible(true);
     }
 }
 

@@ -64,15 +64,15 @@ public class RoomController extends Controller {
     /**
      * Creates a new Room from manual configuration.
      * @param players the amount of players in the game
-     * @param chests the amount of chests in the game
      * @param totalDuration the total duration of the game in seconds
      * @param sectionList the list with the amount of sections per chest
      * @param durationList the list with the duration for each chest
+     * @param warning the list with the warning time for each chest
      */
-    public void manualConfig(final int players, final int chests,
-                             final int totalDuration, final ArrayList<Integer> sectionList,
-                             final ArrayList<Integer> durationList) {
-        progress = new Progress(players, chests, totalDuration, sectionList, durationList);
+    public void manualConfig(final int players, final int totalDuration,
+                             final List<Integer> sectionList, final List<Integer> durationList,
+                             final List<Integer> warning) {
+        progress = new Progress(players, totalDuration, sectionList, durationList, warning);
         configure();
     }
 
@@ -297,8 +297,8 @@ public class RoomController extends Controller {
     private boolean checkBehindSchedule(final long time) {
         if (getCameraHandler().getBeginTime() != -1) {
             List<Chest> chestList = progress.getRoom().getChestList();
-            long seconds = TimeUnit.NANOSECONDS.toSeconds(time - getCameraHandler().getBeginTime());
             for (Chest chest : chestList) {
+                long seconds = TimeUnit.NANOSECONDS.toSeconds(time - chest.getBeginTime());
                 if (chest.getChestState() == Chest.Status.TO_BE_OPENED
                     && seconds > chest.getWarningTimeInSec()) {
                     return true;
