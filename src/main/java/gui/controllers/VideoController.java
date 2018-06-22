@@ -72,14 +72,6 @@ public class VideoController extends Controller {
     }
 
     /**
-     * Check if the stream is closed.
-     * @return True if stream is closed, false otherwise.
-     */
-    public boolean isClosed() {
-        return closed;
-    }
-
-    /**
      * Method to show a popup in which
      * you can specify a stream url to initialize a connection.
      *
@@ -100,6 +92,14 @@ public class VideoController extends Controller {
     public void createVideo(final File file) {
         String fileUrl = file.toString();
         getCameraHandler().addCamera(fileUrl);
+    }
+
+    /**
+     * Get the current imageViews.
+     * @return imageViews
+     */
+    public List<ImageView> getImageViews() {
+        return imageViews;
     }
 
     /**
@@ -125,4 +125,15 @@ public class VideoController extends Controller {
     public void setPlayButton(final Button play) {
         this.playButton = play;
     }
+
+
+    /**
+     * Check if the stream is closed.
+     * @return True if stream is closed, false otherwise.
+     */
+    public boolean isClosed() {
+        return closed;
+    }
+
 }
+

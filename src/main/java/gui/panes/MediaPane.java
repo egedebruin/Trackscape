@@ -1,11 +1,9 @@
 package gui.panes;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 import java.io.File;
 
@@ -14,17 +12,21 @@ import java.io.File;
  */
 public class MediaPane {
 
-    private FlowPane mediaPane = new FlowPane();
+    private ScrollPane mediaPane = new ScrollPane();
 
     /**
      * Create the pane that holds all imageViewers.
      * @return mediaPlayerPane
      */
-    public Pane createImageViewerPane() {
-        final int inset = 5;
-        mediaPane.setPadding(new Insets(0, inset, inset, inset));
+    public ScrollPane createImageViewerPane() {
+
+        mediaPane.setFitToHeight(true);
+        mediaPane.setFitToWidth(true);
+        mediaPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        mediaPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         showCameraIcon();
-        mediaPane.setAlignment(Pos.CENTER);
+        mediaPane.getStyleClass().clear();
+        mediaPane.getStyleClass().add("scroll");
         return mediaPane;
     }
 
@@ -40,15 +42,19 @@ public class MediaPane {
         startImage.setFitWidth(width);
         startImage.setPreserveRatio(true);
         startImage.setImage(cameraIcon);
-        mediaPane.getChildren().clear();
-        mediaPane.getChildren().add(startImage);
+
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(startImage);
+
+        mediaPane.setContent(stackPane);
+
     }
 
     /**
      * Get the mediaPlayerPane.
      * @return mediaPlayerPane the pane on which the mediaPlayer is shown
      */
-    public Pane getMediaPlayerPane() {
+    public ScrollPane getMediaPlayerPane() {
         return mediaPane;
     }
 }

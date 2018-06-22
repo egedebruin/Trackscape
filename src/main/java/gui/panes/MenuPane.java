@@ -298,8 +298,9 @@ public class MenuPane {
             text = videoController.getCameras() + " cameras are currently ready to be activated.";
         }
         cameraStatus = new Label(text);
-        mediaPane.getMediaPlayerPane().getChildren().clear();
-        mediaPane.getMediaPlayerPane().getChildren().add(cameraStatus);
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(cameraStatus);
+        mediaPane.getMediaPlayerPane().setContent(stackPane);
     }
 
     /**
@@ -307,7 +308,6 @@ public class MenuPane {
      */
     public void endStream() {
         timerManager.stopTimer();
-        mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
     }
 }
