@@ -53,7 +53,7 @@ public class MenuPane {
                     final TimeLogController timeLogControl, final VideoController videoControl,
                     final MediaPane pane) {
         this.mediaPane = pane;
-        this.manualConfigPane = new ManualConfigPane(videoControl, roomControl);
+        this.manualConfigPane = new ManualConfigPane(roomControl);
         roomController = roomControl;
         timerManager = timerManagerControl;
         timeLogController = timeLogControl;
