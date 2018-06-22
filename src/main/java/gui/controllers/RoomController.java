@@ -25,6 +25,7 @@ public class RoomController extends Controller {
     private Pane progressBar;
     private Pane statusPane;
     private Label gameStatus;
+    private Label timeLeft;
     private Label numOfChestsOpened;
     private Label activityStatus;
     private boolean snoozeHint = false;
@@ -247,11 +248,12 @@ public class RoomController extends Controller {
                 gameStatus.setTextFill(Color.RED);
             } else {
                 setProgressBarActive();
-                long timeLeft =
+                long timeToEscape =
                     TimeUnit.SECONDS.toNanos(getProgress().getRoom().getTargetDuration()) - time;
-                String text = " Time left: " + Util.getTimeString(timeLeft, true);
-                gameStatus.setText(text);
+                String text = " Time left: " + Util.getTimeString(timeToEscape, true);
+                timeLeft.setText(text);
                 gameStatus.setTextFill(Color.FORESTGREEN);
+                gameStatus.setText(" Game has started");
             }
         }
     }
@@ -386,5 +388,13 @@ public class RoomController extends Controller {
     public void resetProgressObject() {
         progress = null;
         this.configured = false;
+    }
+
+    /**
+     * Set the label that displays the time left to escape.
+     * @param timeLeftLabel the label
+     */
+    public void setTimeLeft(final Label timeLeftLabel) {
+        this.timeLeft = timeLeftLabel;
     }
 }
