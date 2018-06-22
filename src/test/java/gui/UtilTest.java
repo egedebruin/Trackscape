@@ -66,7 +66,7 @@ public class UtilTest {
         final int imageViewWidth = 50;
         ImageView iv = Util.createImageViewLogo(logo, imageViewWidth);
 
-        assertEquals(iv.getFitWidth(), imageViewWidth, 0.0);
+        assertEquals(iv.getFitWidth(), imageViewWidth);
         assertTrue(iv.isPreserveRatio());
         assertNotNull(iv.getImage());
     }

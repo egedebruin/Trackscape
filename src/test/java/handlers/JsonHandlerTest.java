@@ -91,8 +91,7 @@ public class JsonHandlerTest {
     @Test
     void incorrectRoomIdTest() {
         handler = new JsonHandler(jsonFile);
-        assertThrows(NullPointerException.class,
-            () -> handler.getAmountPeople(2));
+        assertEquals(handler.getAmountPeople(2), 0);
     }
 
     /**
