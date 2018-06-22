@@ -129,7 +129,7 @@ public class RoomController extends Controller {
      * Logic for when a new item is clicked in the progressbar.
      * @param index the index of the new item
      */
-    private void newItemDone(final int index) {
+    void newItemDone(final int index) {
         int oldChests = progress.getRoom().getChestsOpened();
         int newChests = progress.newProgress(index);
         for (int i = oldChests + 1; i < newChests + 1; i++) {
@@ -142,7 +142,7 @@ public class RoomController extends Controller {
      * Logic for when items are removed.
      * @param index the index of the new item
      */
-    private void itemsRemoved(final int index) {
+    void itemsRemoved(final int index) {
         int oldChests = progress.getRoom().getChestsOpened();
         int newChests = progress.newProgress(index);
         for (int i = oldChests; i > newChests; i--) {
@@ -172,7 +172,7 @@ public class RoomController extends Controller {
      * Fills the progressbar up to the current stage.
      * @param stage the current progress stage of the game
      */
-    public void fillProgress(final int stage) {
+    void fillProgress(final int stage) {
         for (int k = 0; k < progressBar.getChildren().size(); k++) {
             progressBar.getChildren().get(k).getStyleClass().clear();
             if (k <= stage) {
@@ -187,7 +187,7 @@ public class RoomController extends Controller {
     /**
      * Update the activity Label.
      */
-    private void updateActivity() {
+    void updateActivity() {
         String activeString = "" + getCameraHandler().getActive();
         activityStatus.setText(" Current activity: " + activeString.toLowerCase());
     }
@@ -196,7 +196,7 @@ public class RoomController extends Controller {
      * Updates the amount of chests present in the room.
      * @param chests the amount of chests
      */
-    public void updateChests(final int chests) {
+    void updateChests(final int chests) {
         numOfChestsOpened.setText(" Chests opened: " + chests + "/"
             + getProgress().getRoom().getChestList().size());
         if (progress.allChestsOpened()) {
@@ -214,7 +214,7 @@ public class RoomController extends Controller {
      *
      * @param elapsedTime the elapsed time
      */
-    public void changeTime(final long elapsedTime) {
+    void changeTime(final long elapsedTime) {
         List<Chest> chestList = progress.getRoom().getChestList();
         if (chestList.size() > 0 && getCameraHandler().getBeginTime() != -1) {
             for (int i = 0; i < chestList.size(); i++) {
@@ -239,7 +239,7 @@ public class RoomController extends Controller {
      * Change information about if room is ended.
      * @param elapsedTime The time of the room.
      */
-    public void changeInformation(final long elapsedTime) {
+    void changeInformation(final long elapsedTime) {
         if (getCameraHandler().getBeginTime() != -1) {
             long time = elapsedTime - getCameraHandler().getBeginTime();
             if (time > TimeUnit.SECONDS.toNanos(progress.getRoom().getTargetDuration())) {
@@ -309,6 +309,33 @@ public class RoomController extends Controller {
     }
 
     /**
+     * Make the warningPane invisible until time is up and players are still behind.
+     */
+    public void startHintTimer() {
+        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
+
+        snoozeHint = true;
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                snoozeHint = false;
+            }
+        };
+        Timer hintTimer = new Timer();
+        // Wait 30 seconds before showing another warning
+        hintTimer.schedule(task, timeUntilWarning);
+    }
+
+    /**
+     * Set the progressBar on inactive.
+     */
+    private void setProgressBarActive() {
+        for (Node child : progressBar.getChildren()) {
+            child.setDisable(false);
+        }
+    }
+
+    /**
      * Get the progress object.
      * @return The progress object.
      */
@@ -321,15 +348,6 @@ public class RoomController extends Controller {
      */
     public void setProgressBar(final GridPane newProgressBar) {
         this.progressBar = newProgressBar;
-    }
-
-    /**
-     * Set the progressBar on inactive.
-     */
-    private void setProgressBarActive() {
-        for (Node child : progressBar.getChildren()) {
-            child.setDisable(false);
-        }
     }
 
     /**
@@ -371,29 +389,27 @@ public class RoomController extends Controller {
     }
 
     /**
-     * Make the warningPane invisible until time is up and players are still behind.
-     */
-    public void startHintTimer() {
-        final long timeUntilWarning = TimeUnit.SECONDS.toMillis(30);
-
-        snoozeHint = true;
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                snoozeHint = false;
-            }
-        };
-        Timer hintTimer = new Timer();
-        // Wait 30 seconds before showing another warning
-        hintTimer.schedule(task, timeUntilWarning);
-    }
-
-    /**
      * If the room is configured.
      * @return true if configured, false otherwise
      */
     public boolean isConfigured() {
         return configured;
+    }
+
+    /**
+     * Return whether players are behind schedule or not.
+     * @return behindSchedule.
+     */
+    boolean isBehindSchedule() {
+        return behindSchedule;
+    }
+
+    /**
+     * Return whether hint is snoozed or not.
+     * @return snoozeHint
+     */
+    boolean getSnoozeHint() {
+        return snoozeHint;
     }
 
     /**
