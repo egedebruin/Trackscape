@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
 import java.io.File;
@@ -30,6 +31,7 @@ public class MediaBar {
     private MediaPane mediaPane;
     private StatusPane statusPane;
     private ProgressBar progressBar;
+    private static final int IMAGEVIEW_HEIGHT = 300;
 
     /**
      * Constructor for MediaBar.
@@ -135,10 +137,6 @@ public class MediaBar {
      * Initializes the imageViews with a black image.
      */
     private void initializeImageViewers() {
-        final int height = 300;
-
-        mediaPane.getMediaPlayerPane().getChildren().clear();
-
         imageViews.clear();
         for (int k = 0; k < videoController.getCameras(); k++) {
             imageViews.add(new ImageView());
@@ -148,14 +146,18 @@ public class MediaBar {
             + "\\src\\main\\java\\gui\\images\\black.png");
         Image black = new Image(streamEnd.toURI().toString());
 
-        for (int i = 0; i < imageViews.size(); i++) {
-            imageViews.get(i).setImage(black);
-            imageViews.get(i).setFitHeight(height);
-            imageViews.get(i).setPreserveRatio(true);
-            imageViews.get(i).setSmooth(true);
-            imageViews.get(i).setCache(false);
+        for (ImageView imageView : imageViews) {
+            imageView.setImage(black);
+            imageView.setFitHeight(IMAGEVIEW_HEIGHT);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            imageView.setCache(false);
         }
-        mediaPane.getMediaPlayerPane().getChildren().addAll(imageViews);
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.getChildren().addAll(imageViews);
+        flowPane.setAlignment(Pos.CENTER);
+        mediaPane.getMediaPlayerPane().setContent(flowPane);
     }
 
     /**
