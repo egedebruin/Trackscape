@@ -182,7 +182,6 @@ public class MenuPane {
                     lastKnownDirectoryProperty.setValue(file.getParentFile());
                 }
                 setCameraStatus();
-
             }
         });
     }
