@@ -249,7 +249,7 @@ public class RoomController extends Controller {
                 setProgressBarActive();
                 long timeLeft =
                     TimeUnit.SECONDS.toNanos(getProgress().getRoom().getTargetDuration()) - time;
-                String text = " Time Left: " + Util.getTimeString(timeLeft, true);
+                String text = " Time left: " + Util.getTimeString(timeLeft, true);
                 gameStatus.setText(text);
                 gameStatus.setTextFill(Color.FORESTGREEN);
             }
