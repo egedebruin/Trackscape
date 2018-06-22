@@ -39,15 +39,11 @@ public class VideoController extends Controller {
         List<Mat> frames = getCameraHandler().processFrames();
         List<Image> processedFrames = new ArrayList<>();
 
-        if (!getCameraHandler().isChanged()) {
-            closed = true;
-        } else {
-            for (Mat frame : frames) {
-                BufferedImage bufferedFrame = Util.matToBufferedImage(frame);
-                processedFrames.add(SwingFXUtils.toFXImage(bufferedFrame, null));
-            }
-            closed = false;
+        for (Mat frame : frames) {
+            BufferedImage bufferedFrame = Util.matToBufferedImage(frame);
+            processedFrames.add(SwingFXUtils.toFXImage(bufferedFrame, null));
         }
+        closed = false;
         return processedFrames;
     }
 

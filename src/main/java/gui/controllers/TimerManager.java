@@ -38,10 +38,6 @@ public class TimerManager {
             @Override
             public void handle(final long now) {
                 videoController.update(now);
-                if (videoController.isClosed()) {
-                    stopTimer();
-                    return;
-                }
                 roomController.update(now);
                 timeLogController.update(now);
             }
