@@ -44,7 +44,7 @@ public class TimerManagerTest {
         PlatformImpl.startup(() -> { });
 
         videoController = new VideoController();
-        videoController.setCameraHandler(new CameraHandler());
+        Controller.setCameraHandler(new CameraHandler());
 
         timeLogController = new TimeLogController();
         timeLogController.setInformationBox(new TextArea());

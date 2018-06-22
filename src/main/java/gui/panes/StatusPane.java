@@ -199,9 +199,7 @@ public class StatusPane {
         Button okButton = new Button();
         okButton.setGraphic(Util.createImageViewLogo("buttons\\okButton", buttonWidth));
         okButton.setCursor(Cursor.HAND);
-        okButton.setOnAction(event -> {
-            roomController.startHintTimer();
-        });
+        okButton.setOnAction(event -> roomController.startHintTimer());
 
         warningPane.setAlignment(Pos.CENTER);
         warningPane.getChildren().addAll(warningView, warningLabel, okButton);

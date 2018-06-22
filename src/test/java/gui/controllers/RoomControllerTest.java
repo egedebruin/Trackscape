@@ -43,7 +43,7 @@ public class RoomControllerTest {
         RoomController controller = new RoomController();
         final int numberOfChests = 3;
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         assertNull(controller.getProgress());
         assertFalse(controller.isConfigured());
 
@@ -65,7 +65,7 @@ public class RoomControllerTest {
 
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
         assertTrue(controller.isConfigured());
         assertNotNull(controller.getProgress());
@@ -101,7 +101,7 @@ public class RoomControllerTest {
 
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         controller.newItemDone(itemsDone);
@@ -121,7 +121,7 @@ public class RoomControllerTest {
 
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         controller.itemsRemoved(itemsDone);
@@ -140,7 +140,7 @@ public class RoomControllerTest {
 
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         Label label = new Label();
@@ -161,7 +161,7 @@ public class RoomControllerTest {
 
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         Label label = new Label();
@@ -182,7 +182,7 @@ public class RoomControllerTest {
 
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         Label label = new Label();
@@ -211,7 +211,7 @@ public class RoomControllerTest {
 
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         Pane pane = new Pane();
@@ -238,7 +238,7 @@ public class RoomControllerTest {
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
         camHandler.setBeginTime(1);
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         GridPane pane = new GridPane();
@@ -266,7 +266,7 @@ public class RoomControllerTest {
         RoomController controller = new RoomController();
         CameraHandler camHandler = new CameraHandler();
         camHandler.setBeginTime(1);
-        controller.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         controller.configure(testConfigFile);
 
         controller.setProgressBar(new GridPane());

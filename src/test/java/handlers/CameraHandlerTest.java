@@ -18,8 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CameraHandlerTest {
 
     private final String videoLink = "files" + File.separator + "webcast.mov";
-    private final String bigBunny =
-        "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
 
     static {
         // These should be at the start of the application,
@@ -164,11 +162,11 @@ class CameraHandlerTest {
 
     /**
      * Test that a stream timer is added when a stream is added.
-     * @throws InterruptedException exception when interrupted
      */
     @Test
-    void testStreamTimer() throws InterruptedException {
+    void testStreamTimer() {
         CameraHandler ch = new CameraHandler();
+        String bigBunny = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
         ch.addCamera(bigBunny);
         assertEquals(1, ch.getTimers().size());
         ch.getTimers().get(0).handle(System.nanoTime());

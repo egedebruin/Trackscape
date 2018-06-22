@@ -45,7 +45,7 @@ public class TimeLogControllerTest {
         TimeLogController timeLogController = new TimeLogController();
 
         assertNotNull(timeLogController);
-        assertNotNull(timeLogController.getCameraHandler().getInformationHandler());
+        assertNotNull(Controller.getCameraHandler().getInformationHandler());
     }
 
     /**
@@ -147,7 +147,7 @@ public class TimeLogControllerTest {
 
         Mat mat = Imgcodecs.imread("files/test/subt3.png");
 
-        camHandler.getInformationHandler().addMatrix(new Pair(mat, (long) 2));
+        camHandler.getInformationHandler().addMatrix(new Pair<>(mat, (long) 2));
 
         Button button = new Button();
         controller.setInformationBox(new TextArea());

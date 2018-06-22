@@ -95,7 +95,7 @@ public final class Util {
             + "\\src\\main\\java\\gui\\images\\" + fileName + ".png");
         Image img = new Image(streamEnd.toURI().toString());
         ImageView logo = new ImageView();
-        logo.setFitWidth(buttonWidth);
+        logo.setFitHeight(buttonWidth);
         logo.setPreserveRatio(true);
         logo.setImage(img);
         return logo;

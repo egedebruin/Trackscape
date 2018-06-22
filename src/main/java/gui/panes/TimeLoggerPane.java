@@ -110,16 +110,15 @@ public class TimeLoggerPane {
     /**
      * Create the children for the confirmChestPane.
      * @param confirmChestPane the pane for the approveArea
-     * @return the confirmChestPane
      */
-    private Pane createNodesForApproveArea(final Pane confirmChestPane) {
-        final int viewHeight = 70;
+    private void createNodesForApproveArea(final Pane confirmChestPane) {
+        final int buttonWidth = 70;
 
         Label question = new Label("      Is this a newly opened chest?      ");
         ImageView imageView = new ImageView();
         Label timeStamp = new Label();
-        Button approveButton = createApproveButton(viewHeight);
-        Button disapproveButton = createDisapproveButton(viewHeight);
+        Button approveButton = createApproveButton(buttonWidth);
+        Button disapproveButton = createDisapproveButton(buttonWidth);
 
         confirmChestPane.getChildren().addAll(imageView, timeStamp, question,
             approveButton, disapproveButton);
@@ -134,28 +133,28 @@ public class TimeLoggerPane {
         timeLogController.setImageView(imageView);
         timeLogController.setTimeStamp(timeStamp);
 
-        return confirmChestPane;
     }
 
     /**
      * Create the approve button.
-     * @param viewHeight the height of the ImageView
+     * @param buttonWidth the height of the ImageView
      * @return ApproveButton
      */
-    private Button createApproveButton(final int viewHeight) {
+    private Button createApproveButton(final int buttonWidth) {
         Button approveButton = new Button();
-        approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
+        approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", buttonWidth));
         approveButton.setCursor(Cursor.HAND);
-        return addFunctionalityApproveButton(approveButton, viewHeight);
+        return addFunctionalityApproveButton(approveButton, buttonWidth);
     }
 
     /**
      * Add functionality to the approveButton when something happens to it.
      * @param approveButton the button
-     * @param viewHeight the height of the image set on the button
+     * @param buttonWidth the height of the image set on the button
      * @return the approveButton
      */
-    private Button addFunctionalityApproveButton(final Button approveButton, final int viewHeight) {
+    private Button addFunctionalityApproveButton(final Button approveButton,
+                                                 final int buttonWidth) {
         approveButton.setOnAction(event -> {
             String chestsFound = "";
             if (roomController.isConfigured()) {
@@ -164,45 +163,43 @@ public class TimeLoggerPane {
             }
             timeLogController.confirmedChest(chestsFound);
         });
-        approveButton.setOnMouseEntered(event -> {
-            approveButton.setGraphic(Util.createImageViewLogo(
-                "buttons\\approveActive", viewHeight));
-        });
-        approveButton.setOnMouseExited(event -> {
-            approveButton.setGraphic(Util.createImageViewLogo("buttons\\approve", viewHeight));
-        });
+        approveButton.setOnMouseEntered(event -> approveButton.setGraphic(Util.createImageViewLogo(
+            "buttons\\approveActive", buttonWidth)));
+        approveButton.setOnMouseExited(event -> approveButton.setGraphic(
+                Util.createImageViewLogo("buttons\\approve", buttonWidth)));
         return approveButton;
     }
 
     /**
      * Create the disapprove button.
-     * @param viewHeight the height of the imageView
+     * @param buttonWidth the height of the imageView
      * @return notApprove button
      */
-    private Button createDisapproveButton(final int viewHeight) {
+    private Button createDisapproveButton(final int buttonWidth) {
         Button disapproveButton = new Button();
-        disapproveButton.setGraphic(Util.createImageViewLogo("buttons\\disapprove", viewHeight));
+
+        disapproveButton.setGraphic(Util.createImageViewLogo("buttons\\disapprove", buttonWidth));
         disapproveButton.setCursor(Cursor.HAND);
-        return addFunctionalityDisapproveButton(disapproveButton, viewHeight);
+
+        return addFunctionalityDisapproveButton(disapproveButton, buttonWidth);
     }
 
     /**
      * Add functionality to the disapproveButton when something happens to it.
      * @param disapproveButton the button
-     * @param viewHeight the height of the image set on the button
+     * @param buttonWidth the height of the image set on the button
      * @return the disapproveButton
      */
     private Button addFunctionalityDisapproveButton(
-        final Button disapproveButton, final int viewHeight) {
+        final Button disapproveButton, final int buttonWidth) {
+
         disapproveButton.setOnAction(event -> timeLogController.unConfirm());
-        disapproveButton.setOnMouseEntered(event -> {
-            disapproveButton.setGraphic(Util.createImageViewLogo(
-                "buttons\\disapproveActive", viewHeight));
-        });
-        disapproveButton.setOnMouseExited(event -> {
-            disapproveButton.setGraphic(
-                Util.createImageViewLogo("buttons\\disapprove", viewHeight));
-        });
+
+        disapproveButton.setOnMouseEntered(event -> disapproveButton.setGraphic(
+                Util.createImageViewLogo("buttons\\disapproveActive", buttonWidth)));
+
+        disapproveButton.setOnMouseExited(event -> disapproveButton.setGraphic(
+            Util.createImageViewLogo("buttons\\disapprove", buttonWidth)));
 
         return disapproveButton;
     }

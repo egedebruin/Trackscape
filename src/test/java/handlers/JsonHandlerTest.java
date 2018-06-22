@@ -32,7 +32,6 @@ public class JsonHandlerTest {
      */
     private final String jsonFile = "files/test/testConfig.json";
     private final String jsonFile2 = "files/test/testConfig2.json";
-    private final String emptyJsonFile = "files/test/empty.json";
     private final int jsonPeople = 5;
     private final int jsonChests = 3;
     private JsonHandler handler;
@@ -122,6 +121,7 @@ public class JsonHandlerTest {
      */
     @Test
     void createSingleRoomEmptyTest() {
+        String emptyJsonFile = "files/test/empty.json";
         handler = new JsonHandler(emptyJsonFile);
         Room room = handler.createSingleRoom();
         assertNotNull(room);

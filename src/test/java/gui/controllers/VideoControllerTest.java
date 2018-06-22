@@ -51,13 +51,13 @@ public class VideoControllerTest {
     @Test
     void updateTest() {
         VideoController videoController = new VideoController();
-        videoController.setCameraHandler(new CameraHandler());
+        Controller.setCameraHandler(new CameraHandler());
         assertTrue(videoController.isClosed());
 
         videoController.createVideo(file);
         assertEquals(videoController.getCameras(), 1);
 
-        ArrayList<ImageView> ivs = new ArrayList();
+        ArrayList<ImageView> ivs = new ArrayList<>();
         ivs.add(new ImageView());
         videoController.setImageViews(ivs);
         assertTrue(videoController.isClosed());
@@ -79,7 +79,7 @@ public class VideoControllerTest {
         PlatformImpl.startup(() -> { });
         VideoController vc = new VideoController();
         CameraHandler camHandler = new CameraHandler();
-        vc.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
 
         vc.closeController();
         assertTrue(vc.isClosed());
@@ -100,7 +100,7 @@ public class VideoControllerTest {
         PlatformImpl.startup(() -> { });
         VideoController vc = new VideoController();
         CameraHandler camHandler = new CameraHandler();
-        vc.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
         TextField tf = new TextField();
         tf.setText(videoLink);
 
@@ -118,7 +118,7 @@ public class VideoControllerTest {
     void createVideoTest() {
         VideoController vc = new VideoController();
         CameraHandler camHandler = new CameraHandler();
-        vc.setCameraHandler(camHandler);
+        Controller.setCameraHandler(camHandler);
 
         assertEquals(vc.getCameras(), 0);
         vc.createVideo(file);

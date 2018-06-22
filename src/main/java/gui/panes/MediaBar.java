@@ -62,7 +62,6 @@ public class MediaBar {
         final int bottom = 25;
         final int left = 10;
         final int spacing = 0;
-        final int buttonWidth = 70;
 
         // Create mediaBar for video options
         HBox mediaBar = new HBox();
@@ -70,17 +69,18 @@ public class MediaBar {
         mediaBar.setPadding(new Insets(top, right, bottom, left));
         mediaBar.setSpacing(spacing);
 
-        mediaBar.getChildren().addAll(createPlayButton(buttonWidth));
+        mediaBar.getChildren().addAll(createPlayButton());
 
         return mediaBar;
     }
 
     /**
      * Create the playButton for the mediaBar.
-     * @param buttonWidth the width of the button
      * @return playButton
      */
-    private Button createPlayButton(final int buttonWidth) {
+    private Button createPlayButton() {
+        final int buttonWidth = 70;
+
         playButton = new Button();
         playButton.getStyleClass().add("media-buttons");
         playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth));
