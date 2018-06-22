@@ -325,6 +325,14 @@ public class CameraHandler {
     }
 
     /**
+     * Set a new beginTimer for this cameraHandler.
+     * @param newTime the new begin timer
+     */
+    public void setBeginTime(final long newTime) {
+        this.beginTime = newTime;
+    }
+
+    /**
      * Get the animationTimers for the streams.
      * @return list of animationTimers
      */
