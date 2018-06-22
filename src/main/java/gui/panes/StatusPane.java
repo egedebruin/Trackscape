@@ -125,7 +125,7 @@ public class StatusPane {
 
         gameStatus = new Label(" Game will start soon");
         gameStatus.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
-        timeLeft = new Label(" Time left: " + Util.getTimeString(TimeUnit.SECONDS.toNanos(
+        timeLeft = new Label(" Game duration: " + Util.getTimeString(TimeUnit.SECONDS.toNanos(
             roomController.getProgress().getRoom().getTargetDuration()), true));
         timeLeft.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
         numOfChestsOpened = new Label(" Chests opened: 0 / "
