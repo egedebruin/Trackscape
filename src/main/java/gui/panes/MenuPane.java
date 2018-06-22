@@ -304,6 +304,11 @@ public class MenuPane {
         } else {
             text = videoController.getCameras() + " cameras are currently ready to be activated.";
         }
+        if (roomController.isConfigured()) {
+            text = "Configuration completed. " + text;
+        } else {
+            text = "No configuration used. " + text;
+        }
         cameraStatus = new Label(text);
         mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.getMediaPlayerPane().getChildren().add(cameraStatus);
