@@ -311,7 +311,6 @@ public class MenuPane {
      */
     public void endStream() {
         timerManager.stopTimer();
-//        mediaPane.getMediaPlayerPane().getChildren().clear();
         mediaPane.showCameraIcon();
     }
 
