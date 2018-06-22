@@ -300,7 +300,8 @@ public class RoomController extends Controller {
             for (Chest chest : chestList) {
                 long seconds = TimeUnit.NANOSECONDS.toSeconds(time - chest.getBeginTime());
                 if (chest.getChestState() == Chest.Status.TO_BE_OPENED
-                    && seconds > chest.getWarningTimeInSec()) {
+                    && (seconds > chest.getWarningTimeInSec()
+                    || seconds > chest.getTargetDurationInSec())) {
                     return true;
                 }
             }
