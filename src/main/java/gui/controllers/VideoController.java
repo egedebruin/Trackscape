@@ -2,6 +2,7 @@ package gui.controllers;
 
 import gui.Util;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,12 +21,14 @@ public class VideoController extends Controller {
 
     private boolean closed;
     private List<ImageView> imageViews = new ArrayList<>();
+    private Button playButton;
 
     /**
      * Constructor for the VideoController.
      */
     public VideoController() {
         closed = true;
+        playButton = new Button();
     }
 
     /**
@@ -66,6 +69,7 @@ public class VideoController extends Controller {
         }
         getCameraHandler().closeHandler();
         closed = true;
+        playButton.setVisible(true);
     }
 
     /**
@@ -116,6 +120,15 @@ public class VideoController extends Controller {
     }
 
     /**
+     * Set the playButton so the mediaBar playButton can be controlled from here.
+     * @param play the button that starts the game observation
+     */
+    public void setPlayButton(final Button play) {
+        this.playButton = play;
+    }
+
+
+    /**
      * Check if the stream is closed.
      * @return True if stream is closed, false otherwise.
      */
@@ -124,3 +137,4 @@ public class VideoController extends Controller {
     }
 
 }
+

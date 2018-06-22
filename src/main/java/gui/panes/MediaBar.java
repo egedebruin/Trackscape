@@ -20,10 +20,6 @@ import java.util.ArrayList;
  * Class that creates the MediaBar for the VideoPane.
  */
 public class MediaBar {
-
-    /**
-     * Class parameters.
-     */
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private VideoController videoController;
     private TimerManager timerManager;
@@ -31,7 +27,9 @@ public class MediaBar {
     private MediaPane mediaPane;
     private StatusPane statusPane;
     private ProgressBar progressBar;
+    private Button playButton;
     private static final int IMAGEVIEW_HEIGHT = 300;
+
 
     /**
      * Constructor for MediaBar.
@@ -66,13 +64,13 @@ public class MediaBar {
         final int spacing = 0;
         final int buttonWidth = 70;
 
-        // Create mediabar for video options
+        // Create mediaBar for video options
         HBox mediaBar = new HBox();
         mediaBar.setAlignment(Pos.CENTER);
         mediaBar.setPadding(new Insets(top, right, bottom, left));
         mediaBar.setSpacing(spacing);
 
-        mediaBar.getChildren().addAll(createPlayButton(buttonWidth), createStopButton(buttonWidth));
+        mediaBar.getChildren().addAll(createPlayButton(buttonWidth));
 
         return mediaBar;
     }
@@ -83,7 +81,7 @@ public class MediaBar {
      * @return playButton
      */
     private Button createPlayButton(final int buttonWidth) {
-        final Button playButton = new Button();
+        playButton = new Button();
         playButton.getStyleClass().add("media-buttons");
         playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth));
         playButton.setCursor(Cursor.HAND);
@@ -93,6 +91,7 @@ public class MediaBar {
             "buttons\\playActive", buttonWidth)));
         playButton.setOnMouseExited(event
             -> playButton.setGraphic(Util.createImageViewLogo("buttons\\play", buttonWidth)));
+        videoController.setPlayButton(playButton);
         return playButton;
     }
 
@@ -112,25 +111,8 @@ public class MediaBar {
             initializeStatus();
             timerManager.startTimer();
             videoController.setImageViews(imageViews);
+            playButton.setVisible(false);
         }
-    }
-
-    /**
-     * Create the stopButton for the mediaBar.
-     * @param buttonWidth the width of the button
-     * @return stopButton
-     */
-    private Button createStopButton(final int buttonWidth) {
-        final Button stopButton = new Button();
-        stopButton.getStyleClass().add("media-buttons");
-        stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth));
-        stopButton.setCursor(Cursor.HAND);
-        stopButton.setOnAction(event -> menuPane.endStream());
-        stopButton.setOnMouseEntered(event
-            -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stopActive", buttonWidth)));
-        stopButton.setOnMouseExited(event
-            -> stopButton.setGraphic(Util.createImageViewLogo("buttons\\stop", buttonWidth)));
-        return stopButton;
     }
 
     /**
@@ -175,5 +157,4 @@ public class MediaBar {
         statusPane.getStatusPane().getChildren().clear();
         statusPane.initializeStatusPane();
     }
-
 }
