@@ -13,15 +13,18 @@
     "chests": [
       {
         "sections": 2,
-        "targetDuration": 180
+        "targetDuration": 180,
+        "warningTime": 120
       },
       {
         "sections": 2,
-        "targetDuration": 90
+        "targetDuration": 90,
+        "warningTime": 60
       },
       {
         "sections": 3,
-        "targetDuration": 240
+        "targetDuration": 240,
+        "warningTime": 180
       }
     ],
     "targetDuration": 600,
