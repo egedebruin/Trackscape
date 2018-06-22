@@ -46,7 +46,10 @@ public class JsonHandler {
     public List<String> getCameraLinks(final long roomId) {
         JSONObject room = getRoomById(roomId);
         List<String> cameras = new ArrayList<>();
-        JSONArray array = (JSONArray) room.get("cameras");
+        JSONArray array = null;
+        if (room != null) {
+            array = (JSONArray) room.get("cameras");
+        }
         if (array == null) {
             return new ArrayList<>();
         }
@@ -64,7 +67,10 @@ public class JsonHandler {
      */
     public int getAmountPeople(final long roomId) {
         JSONObject room = getRoomById(roomId);
-        Object res = room.get("people");
+        Object res = null;
+        if (room != null) {
+            res = room.get("people");
+        }
         if (res == null) {
             return 0;
         }
@@ -79,7 +85,10 @@ public class JsonHandler {
      */
     public int getTargetDuration(final long roomId) {
         JSONObject room = getRoomById(roomId);
-        Object res = room.get("targetDuration");
+        Object res = null;
+        if (room != null) {
+            res = room.get("targetDuration");
+        }
         if (res == null) {
             return 0;
         }
@@ -94,7 +103,10 @@ public class JsonHandler {
      */
     public int getPortNumber(final long roomId) {
         JSONObject room = getRoomById(roomId);
-        Object res = room.get("port");
+        Object res = null;
+        if (room != null) {
+            res = room.get("port");
+        }
         if (res == null) {
             return APIHandler.DEFAULT_PORT;
         }
@@ -163,7 +175,10 @@ public class JsonHandler {
     public List<Chest> createChests(final long roomId) {
         JSONObject room = getRoomById(roomId);
         List<Chest> chests = new ArrayList<>();
-        JSONArray array = (JSONArray) room.get("chests");
+        JSONArray array = null;
+        if (room != null) {
+            array = (JSONArray) room.get("chests");
+        }
         if (array == null) {
             return new ArrayList<>();
         }

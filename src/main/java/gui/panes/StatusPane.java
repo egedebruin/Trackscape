@@ -22,12 +22,10 @@ import java.util.concurrent.TimeUnit;
  * Class that constructs the StatusPane for the VideoPane.
  */
 public class StatusPane {
-    /**
-     * Class parameters.
-     */
     private RoomController roomController;
     private FlowPane statusPane;
     private Label gameStatus;
+    private Label timeLeft;
     private Label numOfChestsOpened;
     private Label activity;
 
@@ -113,7 +111,7 @@ public class StatusPane {
         VBox progressPane = new VBox();
         progressPane.setPrefWidth(prefWidth);
         progressPane.setAlignment(Pos.CENTER_LEFT);
-        progressPane.getChildren().addAll(status, gameStatus,
+        progressPane.getChildren().addAll(status, gameStatus, timeLeft,
             numOfChestsOpened, activity, createChestTimePane());
 
         return progressPane;
@@ -127,13 +125,17 @@ public class StatusPane {
 
         gameStatus = new Label(" Game will start soon");
         gameStatus.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
-        numOfChestsOpened = new Label(" Chests opened: 0 / "
+        timeLeft = new Label(" Game duration: " + Util.getTimeString(TimeUnit.SECONDS.toNanos(
+            roomController.getProgress().getRoom().getTargetDuration()), true));
+        timeLeft.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
+        numOfChestsOpened = new Label(" Chests opened: 0/"
             + roomController.getProgress().getRoom().getChestList().size());
         numOfChestsOpened.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
         activity = new Label(" Current activity: low");
         activity.setGraphic(Util.createImageViewLogo("//icons//star", buttonWidth));
 
         roomController.setGameStatus(gameStatus);
+        roomController.setTimeLeft(timeLeft);
         roomController.setNumOfChestsOpened(numOfChestsOpened);
         roomController.setActivityStatus(activity);
     }
@@ -175,7 +177,6 @@ public class StatusPane {
             chestTimePane.add(timeLabel, 1, (i + 1));
             chestTimePane.add(targetLabel, 2, (i + 1));
         }
-
         return chestTimePane;
     }
 
@@ -198,9 +199,7 @@ public class StatusPane {
         Button okButton = new Button();
         okButton.setGraphic(Util.createImageViewLogo("buttons\\okButton", buttonWidth));
         okButton.setCursor(Cursor.HAND);
-        okButton.setOnAction(event -> {
-            roomController.startHintTimer();
-        });
+        okButton.setOnAction(event -> roomController.startHintTimer());
 
         warningPane.setAlignment(Pos.CENTER);
         warningPane.getChildren().addAll(warningView, warningLabel, okButton);

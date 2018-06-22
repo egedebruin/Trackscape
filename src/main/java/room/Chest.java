@@ -22,7 +22,7 @@ public class Chest {
         /**
          * The chest before this one is not opened yet.
          */
-        WAITING_FOR_SECTION_TO_START;
+        WAITING_FOR_SECTION_TO_START
     }
 
     private Status chestState;

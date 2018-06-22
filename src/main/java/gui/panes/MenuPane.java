@@ -30,7 +30,6 @@ import java.io.File;
 public class MenuPane {
     private MediaPane mediaPane;
     private ManualConfigPane manualConfigPane;
-    private Label cameraStatus;
     private TimeLogController timeLogController;
     private VideoController videoController;
     private TimerManager timerManager;
@@ -305,7 +304,7 @@ public class MenuPane {
         } else {
             text = "No configuration used. " + text;
         }
-        cameraStatus = new Label(text);
+        Label cameraStatus = new Label(text);
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(cameraStatus);
         mediaPane.getMediaPlayerPane().setContent(stackPane);

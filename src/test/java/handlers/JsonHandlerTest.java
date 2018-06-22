@@ -32,7 +32,6 @@ public class JsonHandlerTest {
      */
     private final String jsonFile = "files/test/testConfig.json";
     private final String jsonFile2 = "files/test/testConfig2.json";
-    private final String emptyJsonFile = "files/test/empty.json";
     private final int jsonPeople = 5;
     private final int jsonChests = 3;
     private JsonHandler handler;
@@ -92,8 +91,7 @@ public class JsonHandlerTest {
     @Test
     void incorrectRoomIdTest() {
         handler = new JsonHandler(jsonFile);
-        assertThrows(NullPointerException.class,
-            () -> handler.getAmountPeople(2));
+        assertEquals(handler.getAmountPeople(2), 0);
     }
 
     /**
@@ -122,6 +120,7 @@ public class JsonHandlerTest {
      */
     @Test
     void createSingleRoomEmptyTest() {
+        String emptyJsonFile = "files/test/empty.json";
         handler = new JsonHandler(emptyJsonFile);
         Room room = handler.createSingleRoom();
         assertNotNull(room);

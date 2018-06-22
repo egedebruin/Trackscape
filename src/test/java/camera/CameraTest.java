@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import handlers.CameraHandler;
 import java.io.File;
 import java.time.Duration;
+
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -79,7 +81,7 @@ class CameraTest {
         Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
         Camera cam2 = new Camera(new VideoCapture(), "linkToCamTwo",
             DEFAULTNOOFCHEST);
-        assertFalse(cam1.equals(cam2));
+        assertNotEquals(cam1, cam2);
     }
 
     /**
@@ -89,7 +91,7 @@ class CameraTest {
     void equalsFalseNoCameraTest() {
         Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
         CameraChestDetector cameraChest = new CameraChestDetector();
-        assertFalse(cam1.equals(cameraChest));
+        assertNotEquals(cam1, cameraChest);
     }
 
     /**
@@ -99,7 +101,7 @@ class CameraTest {
     void equalsTrueDifObjTest() {
         Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
         Camera cam2 = new Camera(new VideoCapture(), "linkToCamOne");
-        assertTrue(cam1.equals(cam2));
+        assertEquals(cam1, cam2);
     }
 
     /**
@@ -108,7 +110,7 @@ class CameraTest {
     @Test
     void equalsTrueSameObjTest() {
         Camera cam1 = new Camera(new VideoCapture(), "linkToCamOne");
-        assertTrue(cam1.equals(cam1));
+        assertEquals(cam1, cam1);
     }
 
     /**
@@ -117,7 +119,6 @@ class CameraTest {
     @Test
     void isChangedTrueTest() {
         cameraHandler = new CameraHandler();
-        Camera cam = cameraHandler.addCamera(videoLink);
         cameraHandler.processFrames();
         cameraHandler.processFrames();
         assertTrue(cameraHandler.isChanged());

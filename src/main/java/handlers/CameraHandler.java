@@ -206,8 +206,7 @@ public class CameraHandler {
         final double twoThird = 0.67;
 
         double ratio = 0;
-        for (int i = 0; i < cameraList.size(); i++) {
-            Camera camera = cameraList.get(i);
+        for (Camera camera : cameraList) {
             ratio += camera.getActivity().calculateRatio();
         }
         ratio = ratio / (double) cameraList.size();
