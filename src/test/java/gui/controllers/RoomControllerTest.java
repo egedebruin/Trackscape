@@ -187,6 +187,7 @@ public class RoomControllerTest {
 
         Label label = new Label();
         controller.setGameStatus(label);
+        controller.setTimeLeft(new Label());
         camHandler.setBeginTime(0);
         controller.setProgressBar(new GridPane());
 
@@ -270,13 +271,12 @@ public class RoomControllerTest {
 
         controller.setProgressBar(new GridPane());
         controller.setGameStatus(new Label());
+        controller.setTimeLeft(new Label());
         controller.setNumOfChestsOpened(new Label());
         controller.setActivityStatus(new Label());
 
         Pane pane = new Pane();
-        pane.getChildren().add(new Pane());
-        pane.getChildren().add(new Pane());
-        pane.getChildren().add(new Pane());
+        pane.getChildren().addAll(new Pane(), new Pane(), new Pane());
 
         controller.setStatusPane(pane);
         controller.update(1);
