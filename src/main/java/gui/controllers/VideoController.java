@@ -28,6 +28,7 @@ public class VideoController extends Controller {
      */
     public VideoController() {
         closed = true;
+        playButton = new Button();
     }
 
     /**
