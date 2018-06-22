@@ -249,7 +249,9 @@ public class RoomController extends Controller {
             } else {
                 setProgressBarActive();
                 long timeToEscape =
-                    TimeUnit.SECONDS.toNanos(getProgress().getRoom().getTargetDuration()) - time;
+                    TimeUnit.SECONDS.toNanos(
+                            getProgress().getRoom().getTargetDuration() -
+                            TimeUnit.NANOSECONDS.toSeconds(time));
                 String text = " Time left: " + Util.getTimeString(timeToEscape, true);
                 timeLeft.setText(text);
                 gameStatus.setTextFill(Color.FORESTGREEN);
