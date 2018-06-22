@@ -1,15 +1,15 @@
 package room;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-
 import handlers.InformationHandler;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for the class Room.
@@ -92,7 +92,7 @@ public class RoomTest {
      * Test if setNextChestOpened opens next chest.
      */
     @Test
-    void setNextChestOpened() {
+    void testSetNextChestOpened() {
         chestList.add(new Chest(1, TARGETTIME, WARNINGTIME));
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
@@ -106,7 +106,7 @@ public class RoomTest {
      * Test if setNextSectionOpened opens next section.
      */
     @Test
-    void setNextSectionOpened() {
+    void testSetNextSectionOpened() {
         chestList.add(new Chest(1, TARGETTIME, WARNINGTIME));
         room = new Room(0, 2, cameraLinks, chestList, 1, 1);
         assertEquals(chestList.get(0).getChestState(), Chest.Status.WAITING_FOR_SECTION_TO_START);
