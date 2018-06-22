@@ -5,7 +5,6 @@ import gui.controllers.RoomController;
 import gui.controllers.TimeLogController;
 import gui.controllers.VideoController;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -49,7 +48,7 @@ public class VideoPane {
      * @param primaryStage starting stage
      * @return videoPane
      */
-    public Pane createVideoPane(final Stage primaryStage) {
+    public BorderPane createVideoPane(final Stage primaryStage) {
         BorderPane videoPane = new BorderPane();
 
         // Create the pane that will be in the center of the videopane
