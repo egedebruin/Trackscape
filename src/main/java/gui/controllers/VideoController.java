@@ -1,16 +1,17 @@
 package gui.controllers;
 
 import gui.Util;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for the VideoController, to control the video shown.
@@ -68,14 +69,6 @@ public class VideoController extends Controller {
     }
 
     /**
-     * Check if the stream is closed.
-     * @return True if stream is closed, false otherwise.
-     */
-    public boolean isClosed() {
-        return closed;
-    }
-
-    /**
      * Method to show a popup in which
      * you can specify a stream url to initialize a connection.
      *
@@ -99,6 +92,14 @@ public class VideoController extends Controller {
     }
 
     /**
+     * Get the current imageViews.
+     * @return imageViews
+     */
+    public List<ImageView> getImageViews() {
+        return imageViews;
+    }
+
+    /**
      * Set the imageViews.
      * @param newViews the new imageViews
      */
@@ -113,4 +114,13 @@ public class VideoController extends Controller {
     public void setClosed(final boolean newClosed) {
         this.closed = newClosed;
     }
+
+    /**
+     * Check if the stream is closed.
+     * @return True if stream is closed, false otherwise.
+     */
+    public boolean isClosed() {
+        return closed;
+    }
+
 }

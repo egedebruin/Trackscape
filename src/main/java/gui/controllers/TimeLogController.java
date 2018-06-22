@@ -31,7 +31,7 @@ public class TimeLogController extends Controller {
     private Label timeStamp;
     private Mat img;
     private long lastChest = -1;
-    private boolean storeChestImages = true;
+    private boolean storeChestImages = false;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
@@ -258,5 +258,13 @@ public class TimeLogController extends Controller {
      */
     public long getChestTimestamp() {
         return chestTimestamp;
+    }
+
+    /**
+     * Get the timerLabel (for testing purposes only).
+     * @return timerLabel
+     */
+    public Label getTimerLabel() {
+        return timerLabel;
     }
 }
