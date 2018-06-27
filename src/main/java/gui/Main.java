@@ -18,7 +18,7 @@ public class Main extends Application {
      * Class parameters.
      */
     private File css = new File(System.getProperty("user.dir")
-        + "\\src\\main\\java\\gui\\stylesheet.css");
+        + "\\stylesheet.css");
     private String stylesheet = "file:///"
         + css.getAbsolutePath().replace("\\", "/");
 

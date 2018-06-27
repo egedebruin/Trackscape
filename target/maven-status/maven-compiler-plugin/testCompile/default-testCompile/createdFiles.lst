@@ -1,0 +1,6 @@
+api\APIHandlerTest.class
+api\APIChestHandlerTest.class
+api\APISectionHandlerTest.class
+room\ProgressTest.class
+room\ChestTest.class
+room\RoomTest.class

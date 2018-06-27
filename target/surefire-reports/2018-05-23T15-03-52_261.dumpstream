@@ -1,0 +1,15 @@
+# Created on 2018-05-23T15:03:52.263
+OpenCV(3.4.1) Error: Assertion failed (m.dims >= 2) in cv::Mat::Mat, file C:\build\master_winpack-bindings-win64-vc14-static\opencv\modules\core\src\matrix.cpp, line 400
+
+# Created on 2018-05-23T15:03:52.721
+warning: Error opening file (/build/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:834)
+
+# Created on 2018-05-23T15:03:52.731
+warning: WrongVideoLink (/build/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:835)
+
+# Created on 2018-05-23T15:03:52.744
+warning: Error opening file (/build/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:834)
+
+# Created on 2018-05-23T15:03:52.757
+warning: WrongVideoLink (/build/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:835)
+

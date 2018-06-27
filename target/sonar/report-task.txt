@@ -1,0 +1,7 @@
+organization=egedebruin-github
+projectKey=bep.trackscape:Trackscape
+serverUrl=https://sonarcloud.io
+serverVersion=7.2.0.12516
+dashboardUrl=https://sonarcloud.io/dashboard/index/bep.trackscape:Trackscape
+ceTaskId=AWOxinfHCe6eSPJhzGmz
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWOxinfHCe6eSPJhzGmz
