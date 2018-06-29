@@ -11,13 +11,22 @@ This product aims to assist hosts of Escape Rooms in the process of observing pl
 
 **Instructions for OpenCV**
 
+Windows:
 * Download OpenCV from https://opencv.org/releases.html
     * For Windows: Choose 3.4.1 Win Pack
 * Run downloaded .exe and extract files in self-selected map
 * Copy opencv\build\java\x64\opencv_java341.dll to Trackscape/libs
 * Copy opencv\build\bin\opencv_ffmpeg341_64.dll to Trackscape/libs
 
-[**OpenCV javafx examples**](https://github.com/opencv-java/opencv-java-tutorials)
+Mac:
+* Download OpenCV (somewhere somehow)
+* Copy lib file to Trackscape/libs
+
+**Instructions for creating executable**
+
+* Run maven install
+* Copy lib files in /libs to /target/libs
+* Run Trackscape-0.1-jar-with-dependencies.jar
 
 
 **Instructions for working with the API**

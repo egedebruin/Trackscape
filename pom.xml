@@ -115,23 +115,6 @@
                 <version>3.1.0</version>
                 <executions>
                     <execution>
-                        <id>copy-libs</id>
-                        <!-- here the phase you need -->
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/libs</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>libs</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-images</id>
                         <!-- here the phase you need -->
                         <phase>validate</phase>
