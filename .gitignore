@@ -23,6 +23,7 @@ hs_err_pid*
 # IntelliJ shizzle
 *.iml
 .idea/
+target/
 
 # OpenCV shizzle
 #*.dll
