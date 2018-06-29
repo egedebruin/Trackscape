@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="gui.controllers.TimerManagerTest" time="1.031" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="gui.controllers.TimerManagerTest" time="1.043" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -18,7 +18,7 @@
     <property name="user.country" value="NL"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_171\jre\bin"/>
-    <property name="sun.java.command" value="C:\Users\Egel\AppData\Local\Temp\surefire4569177371681249664\surefirebooter6271190614691011114.jar C:\Users\Egel\AppData\Local\Temp\surefire4569177371681249664 2018-06-27T13-38-20_212-jvmRun1 surefire6998006211744741228tmp surefire_03513117323409451661tmp"/>
+    <property name="sun.java.command" value="C:\Users\Egel\AppData\Local\Temp\surefire1914778618598288625\surefirebooter1239390739556256319.jar C:\Users\Egel\AppData\Local\Temp\surefire1914778618598288625 2018-06-29T12-25-59_367-jvmRun1 surefire7143651562039550463tmp surefire_05351074378144803989tmp"/>
     <property name="surefire.test.class.path" value="C:\Users\Egel\Documents\Repositories\Trackscape\target\test-classes;C:\Users\Egel\Documents\Repositories\Trackscape\target\classes;C:\Users\Egel\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.3.0-M1\junit-jupiter-api-5.3.0-M1.jar;C:\Users\Egel\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\Egel\.m2\repository\org\opentest4j\opentest4j\1.1.0\opentest4j-1.1.0.jar;C:\Users\Egel\.m2\repository\org\junit\platform\junit-platform-commons\1.3.0-M1\junit-platform-commons-1.3.0-M1.jar;C:\Users\Egel\.m2\repository\org\openpnp\opencv\3.2.0-1\opencv-3.2.0-1.jar;C:\Users\Egel\.m2\repository\nu\pattern\opencv\2.4.9-7\opencv-2.4.9-7.jar;C:\Users\Egel\.m2\repository\org\jfree\jfreechart\1.0.14\jfreechart-1.0.14.jar;C:\Users\Egel\.m2\repository\org\jfree\jcommon\1.0.17\jcommon-1.0.17.jar;C:\Users\Egel\.m2\repository\xml-apis\xml-apis\1.3.04\xml-apis-1.3.04.jar;C:\Users\Egel\.m2\repository\com\lowagie\itext\2.1.5\itext-2.1.5.jar;C:\Users\Egel\.m2\repository\bouncycastle\bcmail-jdk14\138\bcmail-jdk14-138.jar;C:\Users\Egel\.m2\repository\bouncycastle\bcprov-jdk14\138\bcprov-jdk14-138.jar;C:\Users\Egel\.m2\repository\com\googlecode\json-simple\json-simple\1.1.1\json-simple-1.1.1.jar;C:\Users\Egel\.m2\repository\junit\junit\4.10\junit-4.10.jar;C:\Users\Egel\.m2\repository\org\hamcrest\hamcrest-core\1.1\hamcrest-core-1.1.jar;C:\Users\Egel\.m2\repository\org\eclipse\jetty\jetty-server\9.4.10.v20180503\jetty-server-9.4.10.v20180503.jar;C:\Users\Egel\.m2\repository\javax\servlet\javax.servlet-api\3.1.0\javax.servlet-api-3.1.0.jar;C:\Users\Egel\.m2\repository\org\eclipse\jetty\jetty-http\9.4.10.v20180503\jetty-http-9.4.10.v20180503.jar;C:\Users\Egel\.m2\repository\org\eclipse\jetty\jetty-util\9.4.10.v20180503\jetty-util-9.4.10.v20180503.jar;C:\Users\Egel\.m2\repository\org\eclipse\jetty\jetty-io\9.4.10.v20180503\jetty-io-9.4.10.v20180503.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\Egel"/>
@@ -31,7 +31,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="C:\Users\Egel\AppData\Local\Temp\surefire4569177371681249664\surefirebooter6271190614691011114.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Egel\AppData\Local\Temp\surefire1914778618598288625\surefirebooter1239390739556256319.jar"/>
     <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_171\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_171\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_171\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_171\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_171\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_171\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_171\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_171\jre\classes"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -61,5 +61,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="52.0"/>
   </properties>
-  <testcase name="startAndStopTimerTest" classname="gui.controllers.TimerManagerTest" time="1.031"/>
+  <testcase name="startAndStopTimerTest" classname="gui.controllers.TimerManagerTest" time="1.043"/>
 </testsuite>

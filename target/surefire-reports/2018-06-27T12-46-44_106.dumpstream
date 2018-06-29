@@ -1,6 +1,0 @@
-# Created on 2018-06-27T12:46:44.106
-warning: Error opening file (/build/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:834)
-
-# Created on 2018-06-27T12:46:44.121
-warning: WrongVideoLink (/build/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:835)
-

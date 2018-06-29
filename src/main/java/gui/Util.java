@@ -92,7 +92,7 @@ public final class Util {
      */
     public static ImageView createImageViewLogo(final String fileName, final int buttonWidth) {
         File streamEnd = new File(System.getProperty("user.dir")
-            + "\\src\\main\\java\\gui\\images\\" + fileName + ".png");
+            + "\\images\\" + fileName + ".png");
         Image img = new Image(streamEnd.toURI().toString());
         ImageView logo = new ImageView();
         logo.setFitWidth(buttonWidth);

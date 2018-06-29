@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: handlers.CameraHandlerTest
 -------------------------------------------------------------------------------
-Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.997 s - in handlers.CameraHandlerTest
+Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.257 s - in handlers.CameraHandlerTest
