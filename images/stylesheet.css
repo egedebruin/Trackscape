@@ -2,11 +2,11 @@
     -fx-font-size: 16pt;
     -fx-font-family: "Verdana";
     -fx-base: rgb(132, 145, 47);
-    -fx-background-image: url("././images/backgrounds/blocks.jpg");
+    -fx-background-image: url("././backgrounds/blocks.jpg");
 }
 
 .top{
-    -fx-background-image: url("././images/backgrounds/stuff.jpg");
+    -fx-background-image: url("././backgrounds/stuff.jpg");
 }
 
 .grid-lines{
@@ -40,7 +40,7 @@ Stylesheet for approve buttons
 Stylesheets for the menu bar
  */
 .menu-bar{
-    -fx-background-image: url("././images/backgrounds/red.PNG");
+    -fx-background-image: url("././backgrounds/red.PNG");
     -fx-font-size: 15pt;
 }
 .menu .label{
