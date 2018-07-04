@@ -29,9 +29,9 @@ public class TimeLogController extends Controller {
     private ImageView imageView;
     private long chestTimestamp = -1;
     private Label timeStamp;
-    private Mat img;
+    private Mat img = new Mat();
     private long lastChest = -1;
-    private boolean storeChestImages = false;
+    private boolean storeChestImages = true;
 
     /**
      * Constructor for the TimeLogController, sets a new informationHandler.
