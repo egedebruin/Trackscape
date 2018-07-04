@@ -17,9 +17,9 @@ import java.util.List;
  * Class for describing a chest found in a camerastream/video/image.
  */
 public class CameraChestDetector extends CameraObjectDetector {
-    private static final Scalar CHEST_COLOUR_LOWER = new Scalar(17, 150, 80);
-    private static final Scalar CHEST_COLOUR_UPPER = new Scalar(35, 255, 205);
-    private static final double MIN_CHEST_AREA = 550;
+    private static final Scalar CHEST_COLOUR_LOWER = new Scalar(17, 150, 75);
+    private static final Scalar CHEST_COLOUR_UPPER = new Scalar(37, 255, 215);
+    private static final double MIN_CHEST_AREA = 540;
     private Boolean isOpened = false;
 
     /**
